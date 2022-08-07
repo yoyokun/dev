@@ -1,0 +1,167 @@
+{
+	"pages": [
+		{
+			"path" : "pages/login/login",
+			"name":"login",
+			"meta":{
+				"title": "登录"
+			},
+			"style" : {
+				"navigationBarTitleText": "登录",
+				"enablePullDownRefresh": false,
+				"app-plus": {
+					"titleNView": false
+				}
+			}
+		}
+		,{
+			"path": "pages/index/index",
+			"name":"index",
+			"meta":{
+				"title": "工作台"
+			},
+			"style": {
+				"navigationBarTitleText": "工作台",
+				"enablePullDownRefresh": false
+			}
+		}
+		,{
+			"path" : "pages/information/information",
+			"name":"information",
+			"meta":{
+				"title": "消息"
+			},
+			"style" : {
+				"navigationBarTitleText": "消息",
+				"enablePullDownRefresh": false
+			}	
+		}
+		,{
+			"path" : "pages/schedule/schedule",
+			"name":"schedule",
+			"meta":{
+				"title": "待办"
+			},
+			"style" : {
+				"navigationBarTitleText": "待办",
+				"enablePullDownRefresh": false
+			}	
+		}
+		,{
+			"path" : "pages/personal/personal",
+			"name":"personal",
+			"meta":{
+				"title": "我的"
+			},
+			"style" : {
+				"navigationBarTitleText": "我的",
+				"enablePullDownRefresh": false
+			}
+		}
+		,{
+			"path" : "pages/secretKey/secretKey",
+			"name":"secretKey",
+			"meta":{
+				"title": "秘钥"
+			},
+			"style" : {
+				"navigationBarTitleText": "秘钥",
+				"enablePullDownRefresh": false
+			}	
+		}
+		,{
+			"path" : "pages/forgetPassword/forgetPassword",
+			"style" : {
+				"navigationBarTitleText": "忘记密码",
+				"enablePullDownRefresh": false
+			}
+		}
+  ],
+	"subPackages": [
+		{
+			"root": "personalCenter",
+			"pages": [
+				{
+					"path": "editInfo/editInfo",
+					"style": {
+						"navigationBarTitleText": "基础信息",
+						"enablePullDownRefresh": false
+					}	
+				}  
+				,{
+					"path" : "editPhone/editPhone",
+					"style" : {
+						"navigationBarTitleText": "修改手机号",
+						"enablePullDownRefresh": false
+					}
+				}
+				,{
+					"path" : "editPassword/editPassword",
+					"style" : {
+						"navigationBarTitleText": "修改密码",
+						"enablePullDownRefresh": false
+					}
+				}
+				,{
+					"path" : "jobDetails/jobDetails",
+					"style" : {
+						"navigationBarTitleText": "岗位详情",
+						"enablePullDownRefresh": false
+					}
+				}
+				,{
+					"path" : "printSettings/printSettings",
+					"style" : {
+						"navigationBarTitleText": "打印设置",
+						"enablePullDownRefresh": false
+					}
+				}
+				,{
+					"path" : "agreement/agreement",
+					"style" : {
+						"navigationBarTitleText": "关于气讯通",
+						"enablePullDownRefresh": false
+					}
+				}
+			]
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "气讯通",
+		"navigationBarBackgroundColor": "#2A82E4",
+		"backgroundColor": "#FFFFFF",
+		"pageOrientation": "portrait", // 横屏配置，全局屏幕旋转设置(仅 APP/微信/QQ小程序)，支持 auto / portrait / landscape
+		"enablePullDownRefresh": true
+		// "h5": {
+		// 	"titleNView": false // 去掉H5的顶部导航
+		// }
+	},
+	"tabBar": {
+		"color": "#707070",
+		"selectedColor": "#2A82E4",
+		"backgroundColor": "#FAFAFA",
+		"borderStyle": "black",
+		"list": [{
+			"pagePath": "pages/index/index",
+			"text": "工作台",
+			"iconPath": "static/icon/index.png",
+			"selectedIconPath": "static/icon/indexActive.png"
+		}, {
+			"pagePath": "pages/information/information",
+			"text": "消息",
+			"iconPath": "static/icon/information.png",
+			"selectedIconPath": "static/icon/informationActive.png"
+		}, {
+			"pagePath": "pages/schedule/schedule",
+			"text": "待办",
+			"iconPath": "static/icon/schedule.png",
+			"selectedIconPath": "static/icon/scheduleActive.png"
+		}, {
+			"pagePath": "pages/personal/personal",
+			"text": "我的",
+			"iconPath": "static/icon/personal.png",
+			"selectedIconPath": "static/icon/personalActive.png"
+		}]
+	}
+}

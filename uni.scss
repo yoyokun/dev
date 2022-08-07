@@ -1,0 +1,18 @@
+/**
+ * 下方引入的为uView UI的集成样式文件，为scss预处理器，其中包含了一些"u-"开头的自定义变量
+ * 使用的时候，请将下面的一行复制到您的uniapp项目根目录的uni.scss中即可
+ * uView自定义的css类名和scss变量，均以"u-"开头，不会造成冲突，请放心使用
+ * 无需引入，uni-app在编译时，会自动引入此文件
+ * uni.scss会编译到每个scss文件中 
+ */
+@import '@/uni_modules/uview-ui/theme.scss';
+@import '@/styles/mixin.scss';
+uni-modal{
+	z-index: 99999 !important;
+}
+uni-modal .uni-modal{
+	border-radius: 16rpx;
+}
+page{
+	font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+}

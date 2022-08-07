@@ -1,0 +1,13 @@
+
+@mixin flexMixin($direction:row,$justify:space-between,$align:center) {
+  display: flex;
+  align-items: $align;
+  justify-content: $justify;
+  flex-direction: $direction;
+}
+
+@mixin ellipsisMixin($space:nowrap,$text:ellipsis) {
+	white-space: $space;
+	overflow: hidden;
+	text-overflow: $text;
+}
