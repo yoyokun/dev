@@ -238,3 +238,31 @@ export function salesBusinessFindById(data = {}, message = '', custom = {}) {
 		}
   })
 }
+// 获取消息公告
+export function sysMessageMyMessages(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/sysMessage/myMessages',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
+// 查阅消息
+export function sysMessageReadMessage(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/sysMessage/readMessage',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}

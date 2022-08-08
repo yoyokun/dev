@@ -44,7 +44,7 @@
 			},
 			"style" : {
 				"navigationBarTitleText": "待办",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": true
 			}	
 		}
 		,{
@@ -76,7 +76,7 @@
 				"enablePullDownRefresh": false
 			}
 		}
-  ],
+	],
 	"subPackages": [
 		{
 			"root": "personalCenter",
@@ -120,6 +120,18 @@
 					"path" : "agreement/agreement",
 					"style" : {
 						"navigationBarTitleText": "关于气讯通",
+						"enablePullDownRefresh": false
+					}
+				}
+			]
+		},
+		{
+			"root": "userCenter",
+			"pages": [
+				{
+					"path": "auditInfo/auditInfo",
+					"style": {
+						"navigationBarTitleText": "审批详情",
 						"enablePullDownRefresh": false
 					}
 				}

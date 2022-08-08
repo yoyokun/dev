@@ -8,7 +8,7 @@ const state = {
 	// 地图key
 	mapKey: "d863f0d7263c912d2b36ccd5eac84314",
 	webMapKey: "e9c3c384d5bcdf64fb8b5ee9c0c0a947",
-	onePageRow: '10',
+	onePageRow: '15',
 }
 
 const mutations = {

@@ -8,7 +8,7 @@ module.exports = {
 	},
 	// 公共模块
 	common: {
-		
+		noData: '没有更多了'
 	},
 	// 登录页面
 	login: {

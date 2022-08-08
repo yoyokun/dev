@@ -62,6 +62,7 @@ function service(options = {}) {
 		})
 	}
 	options.url = `http://${atob(base64Url)}${options.url}`
+	console.log(options.url)
 	// #endif
 
 	return new Promise((resolved, rejected) => {
