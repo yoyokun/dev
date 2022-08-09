@@ -1,7 +1,7 @@
 <template>
 	<view class="auditInfo">
 		<u-steps :current="active">
-			<u-steps-item v-for="item in auditRecordVos" :title="item.levelName" :key="item.auditTime" :desc="item.auditTime"></u-steps-item>
+			<u-steps-item v-for="item in auditRecordVos" :title="item.levelName" :key="item.auditTime" :desc="item.auditTime | dayjs"></u-steps-item>
 		</u-steps>
 	</view>
 </template>
@@ -63,6 +63,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+.auditInfo{
+	padding: 0 30rpx;
+}
 </style>
