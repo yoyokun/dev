@@ -1,3 +1,4 @@
+import auditInfo from './zh/auditInfo'
 module.exports = {
 	// tabbar
 	tabbar: {
@@ -197,5 +198,29 @@ module.exports = {
 	// 服务协议
 	agreement: {
 		aboutTitleText: '关于气讯通'
-	}
+	},
+	// 审批事项
+	auditList: {
+		titleText: '审批事项',
+		tabSwitch: [
+			{
+			  id: 1,
+			  name: '要我审批'
+			},
+			{
+			  id: 2,
+			  name: '我发起的'
+			},
+			{
+			  id: 3,
+			  name: '抄送给我'
+			},
+			{
+			  id: 4,
+			  name: '审批历史'
+			}
+		]
+	},
+	// 审核详情
+	auditInfo: auditInfo
 }

@@ -95,6 +95,19 @@ page{
 		height: 40rpx;
 	}
 }
+// tab固定
+.tab{
+	background: rgba(255, 255, 255, 1);
+	width: 100%;
+	position: fixed;
+	top:0rpx;
+	z-index: 999;
+	border-bottom: 1rpx solid #e5e5e5;
+	::v-deep .u-tabs__wrapper__nav__line{
+		bottom: 0rpx;
+		height: 4rpx !important;
+	}
+}
 // 待办 消息
 .schedule{
 	width: 100%;
