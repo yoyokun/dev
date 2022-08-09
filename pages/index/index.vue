@@ -5,7 +5,7 @@
 				{{ item.groupsName }}
 			</view>
 			<view class="content">
-				<view class="box" v-for="subItem in item.sysAuthorities" :key="subItem.id">
+				<view class="box" v-for="subItem in item.sysAuthorities" :key="subItem.id" @click="goto(subItem.path)">
 					<image class="icon" mode="aspectFit" :src="'/static/image/' + subItem.icon + '.png'"></image>
 					<view class="text">{{ subItem.name }}</view>
 				</view>

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { auditTaskFindById } from '@/api/lpgManageAppApi.js'
+import { auditTaskFindById, auditLevelGetPushMans } from '@/api/lpgManageAppApi.js'
 export default {
 	data() {
 		return {
@@ -23,6 +23,11 @@ export default {
 		if (this.editId) {
 			this.getInfo(this.editId)
 		}
+	},
+	onShow() {
+		uni.setNavigationBarTitle({
+			title: this.$t('auditInfo.titleText')
+		});
 	},
 	methods: {
 		// 详情

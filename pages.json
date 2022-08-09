@@ -135,6 +135,13 @@
 						"enablePullDownRefresh": false
 					}
 				}
+				,{
+					"path" : "auditList/auditList",
+					"style" : {
+						"navigationBarTitleText": "审批事项",
+						"enablePullDownRefresh": false
+					}
+				}
 			]
 		}
 	],

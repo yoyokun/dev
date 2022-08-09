@@ -266,3 +266,59 @@ export function sysMessageReadMessage(data = {}, message = '', custom = {}) {
 		}
   })
 }
+// 要我审批
+export function auditTaskWaitAuditTask(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/auditTask/waitAuditTask',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
+// 审批历史
+export function auditTaskHistoryTask(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/auditTask/historyTask',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
+// 抄送给我
+export function auditTaskCopyTask(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/auditTask/copyTask',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
+// 我发起的
+export function auditTaskInitiateTask(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/auditTask/initiateTask',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
