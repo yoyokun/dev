@@ -182,5 +182,11 @@
 			"iconPath": "static/icon/personal.png",
 			"selectedIconPath": "static/icon/personalActive.png"
 		}]
-	}
+	},
+	"easycom": {
+		  "autoscan": true,
+		  "custom": {
+			"^u-(.*)": "uni_modules/uview-ui/components/u-$1/u-$1.vue"//匹配uView-ui
+		  }
+		}
 }
