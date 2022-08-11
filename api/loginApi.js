@@ -182,3 +182,73 @@ export function sysConfigGetByKey(data = {}, message = '', custom = {}) {
 		}
 	})
 }
+// 管理员 保存或修改
+export function sysManagerSaveOrEdit(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/control/sysManager/saveOrEdit',
+    method: 'POST',
+    data,
+    message,
+    custom: {
+    	auth: custom?.auth || true, // 是否需要token
+    	toast: custom?.toast || true, // 弹框
+    	catch: custom?.catch || false // catch返回
+    }
+  })
+}
+// 管理员 删除
+export function sysManagerDeleteByIds(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/control/sysManager/deleteByIds',
+    method: 'POST',
+    data,
+    message,
+    custom: {
+    	auth: custom?.auth || true, // 是否需要token
+    	toast: custom?.toast || true, // 弹框
+    	catch: custom?.catch || false // catch返回
+    }
+  })
+}
+// 管理员  根据id查询信息
+export function sysManagerFindById(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/sysManager/findById',
+    method: 'POST',
+    data,
+    message,
+    custom: {
+    	auth: custom?.auth || true, // 是否需要token
+    	toast: custom?.toast || true, // 弹框
+    	catch: custom?.catch || false // catch返回
+    }
+  })
+}
+// 管理员  根据条件查询列表信息 adminType=3 查询超级管理员
+export function sysManagerFindList(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/sysManager/findList',
+    method: 'POST',
+    data,
+    message,
+    custom: {
+    	auth: custom?.auth || true, // 是否需要token
+    	toast: custom?.toast || true, // 弹框
+    	catch: custom?.catch || false // catch返回
+    }
+  })
+}
+// 管理员  选择岗位角色
+export function sysOrgWithRole(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/sysOrg/withRole',
+    method: 'POST',
+    data,
+    message,
+    custom: {
+    	auth: custom?.auth || true, // 是否需要token
+    	toast: custom?.toast || true, // 弹框
+    	catch: custom?.catch || false // catch返回
+    }
+  })
+}

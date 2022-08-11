@@ -40,7 +40,7 @@ export default {
 					labelText: this.$t('editPhone.form.oldPhone'),
 					fieldName: 'oldPhone',
 					borderBottom: false,
-					readonly: true
+					disabled: true
 				},
 				{
 					type: 'text',

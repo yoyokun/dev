@@ -16,6 +16,14 @@ Vue.config.productionTip = false
 Vue.prototype.$store = store
 Vue.prototype.$bigDecimal = BigDecimal
 Vue.prototype.$navigateTo = utils.navigateTo; // 跳转页面
+// 给原型链上增加一个分割字符串的方法
+// eslint-disable-next-line no-extend-native
+String.prototype.Split = function(s) {
+  return this.split(s).filter(item => item !== '')
+}
+// 拖动排序
+import VueDraggable from '@/common/vuedraggable/src/vuedraggable'  
+Vue.component('draggable', VueDraggable)
 
 
 App.mpType = 'app'

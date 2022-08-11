@@ -20,8 +20,7 @@
 					type="text" 
 					v-if="item.type === 'text' || item.type === 'chooseText'"
 					v-model="formData[item.fieldName]" 
-					:readonly="item.readonly"
-					:disabled="item.disabled"
+					:readonly="item.disabled"
 					:inputAlign="item.inputAlign"
 					:border="item.inputBorder"
 					:maxlength="item.maxlength"
@@ -32,7 +31,6 @@
 				<view class="chooseBtn" v-if="item.type === 'chooseText'">
 					<u-button
 						:text="item.btnText || $t('common.editForm.chooseText')" 
-						:readonly="item.readonly"
 						:disabled="item.disabled"
 						@click="chooseChange(item)">
 					</u-button>
@@ -43,8 +41,7 @@
 					v-if="item.type === 'password'"
 					v-model="formData[item.fieldName]" 
 					:inputAlign="item.inputAlign"
-					:readonly="item.readonly"
-					:disabled="item.disabled"
+					:readonly="item.disabled"
 					:border="item.inputBorder"
 					:maxlength="item.maxlength?item.maxlength:30"
 					:placeholder="item.placeholder"
@@ -56,8 +53,7 @@
 					v-if="item.type === 'number'"
 					v-model="formData[item.fieldName]" 
 					:inputAlign="item.inputAlign"
-					:readonly="item.readonly"
-					:disabled="item.disabled"
+					:readonly="item.disabled"
 					:border="item.inputBorder"
 					:maxlength="item.maxlength?item.maxlength:30"
 					:placeholder="item.placeholder"
@@ -67,24 +63,23 @@
 				<u--textarea 
 					v-if="item.type === 'textarea'"
 					v-model="formData[item.fieldName]" 
-					:readonly="item.readonly"
 					:disabled="item.disabled"
 					:border="item.inputBorder"
 					:maxlength="item.maxlength?item.maxlength:30"
 					:placeholder="item.placeholder"
+					confirmType="done"
 					@change="handleFiltrate(item.fieldName)"
 				></u--textarea>
 				<!-- 省市区 -->
 				<view :class="['datePicker',item.inputAlign]" v-if="item.type === 'cascader'">
 					<uni-data-picker
 						v-model="formData[item.fieldName]" 
-						:readonly="item.readonly"
-						:disabled="item.disabled"
+						:readonly="item.disabled"
 						:localdata="item.options"
 						:placeholder="item.placeholder"
 						:map="{ text:'label',value:'value' }"
 						:popup-title="item.placeholder"
-						@change="chooseProvinces"
+						@change="chooseProvinces($event,item.fieldName)"
 					/>
 					<u-icon name="arrow-right" color="#666666" size="15"></u-icon>
 				</view>
@@ -92,19 +87,44 @@
 				<view v-if="item.type === 'switch'" :class="['switch',item.inputAlign]">
 					<u-switch
 						v-model="formData[item.fieldName]" 
-						:readonly="item.readonly"
 						:disabled="item.disabled"
 						:activeValue="item.activeValue"
 						:inactiveValue="item.inactiveValue"
 						@change="handleFiltrate(item.fieldName)"
 					/>
 				</view>
-				<!--日期时间选择-->
+				<!--日期时间选择 太多坑，放弃使用-->
+		<!-- 		<view :class="['formCell',item.inputAlign]" v-if="item.type === 'date' || item.type === 'datetime'">
+					<u-cell
+						v-if="formData[item.fieldName]" 
+						:value="formData[item.fieldName]" 
+						:isLink="true" 
+						:border="false" 
+						@click="!item.disabled ? item.showOptions = true : ''"></u-cell>
+					<u-cell 
+						v-else 
+						:value="item.placeholder" 
+						:isLink="true" 
+						:border="false" 
+						@click="!item.disabled ? item.showOptions = true : ''" 
+					></u-cell>
+					<u-datetime-picker
+						:show="item.showOptions" 
+						v-model="formData[item.fieldName]"
+						:mode="item.type"
+						:minDate="item.minDate"
+						:maxDate="item.maxDate"
+						:closeOnClickOverlay="true"
+						@close="item.showOptions = false"
+						@cancel="item.showOptions = false"
+						@confirm="datetimePicker($event,item.fieldName, index)"	
+					></u-datetime-picker>
+				</view> -->
+				<!-- 日期时间选择 -->
 				<view :class="['datePicker',item.inputAlign]" v-if="item.type === 'date' || item.type === 'datetime'">
 					<uni-datetime-picker
 						:type="item.type"
 						v-model="formData[item.fieldName]" 
-						:readonly="item.readonly"
 						:disabled="item.disabled"
 						:placeholder="item.placeholder"
 						@change="handleFiltrate(item.fieldName)"	
@@ -112,23 +132,19 @@
 					<u-icon name="arrow-right" color="#666666" size="15"></u-icon>
 				</view>
 				<!-- action-sheet 操作菜单  -->
-				<view :class="item.inputAlign" v-if="item.type === 'actionSheet'">
+				<view :class="['formCell',item.inputAlign]" v-if="item.type === 'actionSheet'">
 					<u-cell 
 						v-if="formData[item.fieldName]" 
 						:value="formData[item.fieldName] | getName(item.options)" 
 						:isLink="true" 
-						:readonly="item.readonly"
-						:disabled="item.disabled"
 						:border="false" 
-						@click="item.showOptions = true"></u-cell>
+						@click="!item.disabled ? item.showOptions = true : ''"></u-cell>
 					<u-cell 
 						v-else 
 						:value="item.placeholder" 
 						:isLink="true" 
-						:readonly="item.readonly"
-						:disabled="item.disabled"
 						:border="false" 
-						@click="item.showOptions = true" 
+						@click="!item.disabled ? item.showOptions = true : ''" 
 					></u-cell>
 					<u-action-sheet 
 						:actions="item.options" 
@@ -142,11 +158,10 @@
 					</u-action-sheet>
 				</view>
 				<!-- 上传图片 -->
-				<view :class="item.inputAlign" v-if="item.type === 'upload'">
+				<view :class="['formUpload',item.inputAlign]" v-if="item.type === 'upload'">
 					<u-upload
 						:fileList="formData[item.fieldName]"
 						:disabled="item.disabled"
-						:readonly="item.readonly"
 						@afterRead="afterRead"
 						@delete="deletePic($event,item.disabled)"
 						:name="item.fieldName"
@@ -233,11 +248,14 @@ export default {
 						borderBottom: v.borderBottom ? v.borderBottom : v.borderBottom === undefined,
 						labelWidth: v.labelWidth ? v.labelWidth : this.labelWidth,
 						maxlength: v.maxlength ? v.maxlength : 50,
-						readonly: v.readonly ? v.readonly : false,
+						disabled: v.disabled ? v.disabled : false,
+						showOptions: v.showOptions ? v.showOptions : false,
 						inputBorder: v.inputBorder ? v.inputBorder : 'none',
 						inputAlign: v.inputAlign ? v.inputAlign : 'left',
+						isProvinces: v.isProvinces ? v.isProvinces : false
 					})
 				})
+				console.log(this.renderDataSource)
 			},
 			deep: true,
 			immediate: true
@@ -251,7 +269,8 @@ export default {
 					Object.keys(formDataValue).forEach(key => {
 						// 判断 key 是否存在
 						if (key in this.formData) {
-							if(key === 'provinces' && formDataValue[key].length){
+							const findIndex = this.renderDataSource.findIndex(item=>item.fieldName === key)
+							if(this.renderDataSource[findIndex].isProvinces && formDataValue[key].length){
 								// 省市区 转换成code
 								const provincesCode = TextToCode[formDataValue[key][0]]
 								const provincesCode1 = TextToCode[formDataValue[key][0]][formDataValue[key][1]]
@@ -283,7 +302,7 @@ export default {
 			const obj = {}
 			const rules = {}
 			this.formDataSource.forEach(v => {
-				if(v.fieldName === 'provinces' && v.defaultValue.length){
+				if(v.isProvinces && v.defaultValue.length){
 					// 省市区 转换成code
 					const provincesCode = TextToCode[v.defaultValue[0]]
 					const provincesCode1 = TextToCode[v.defaultValue[0]][v.defaultValue[1]]
@@ -321,8 +340,9 @@ export default {
 				if (value && typeof value === 'string') {
 					value = value.trim()
 				}
+				const findIndex = this.renderDataSource.findIndex(item=>item.fieldName === key)
 				// 处理省市区数据
-				if (key === 'provinces') {
+				if (this.renderDataSource[findIndex].isProvinces) {
 					tempObj.province = value.length ? CodeToText[value[0]] : ''
 					tempObj.city = value.length ? CodeToText[value[1]] : ''
 					tempObj.area = value.length ? CodeToText[value[2]] : ''
@@ -385,16 +405,16 @@ export default {
 			}
 		},
 		// 选择省市区
-		chooseProvinces(e) {
+		chooseProvinces(e, fieldName) {
 		  const value = e.detail.value
 		  const provincesCode = []
 		  value.forEach(v => {
 		    provincesCode.push(v.value)
 		  })
-		  this.formData.provinces = provincesCode
+		  this.formData[fieldName] = provincesCode
 			// 对部分字段校验
-			this.$refs.form.validateField('provinces')
-			this.handleFiltrate('provinces')
+			this.$refs.form.validateField(fieldName)
+			this.handleFiltrate(fieldName)
 		},
 		// 选择
 		chooseChange(item) {
@@ -405,9 +425,20 @@ export default {
 		},
 		// ActionSheet 操作菜单 选择
 		selectClick(e,name){
-			console.log(e)
-			console.log(name)
 			this.formData[name] = e.value
+			// 对部分字段校验
+			this.$refs.form.validateField(name)
+			this.handleFiltrate(name)
+		},
+		// 日期
+		async datetimePicker(e,name,index) {
+			const timeFormat = uni.$u.timeFormat;
+			if(e.mode === 'date'){
+				this.formData[name] = await timeFormat(e.value, 'yyyy-mm-dd');
+			} else if(e.mode === 'datetime'){
+				this.formData[name] = await timeFormat(e.value, 'yyyy-mm-dd hh:mm');
+			}
+			this.renderDataSource[index].showOptions = false
 			// 对部分字段校验
 			this.$refs.form.validateField(name)
 			this.handleFiltrate(name)
@@ -422,9 +453,23 @@ export default {
 <style lang="scss" scoped>
 .datePicker{
 	display: flex;
+	width: 100%;
+}
+.formCell{
+	width: 100%;
+}
+::v-deep .formCell .u-cell__body{
+	justify-content: space-between;
+}
+::v-deep .formCell .u-cell__value{
+	text-align: left;
+	flex: 1;
+}
+::v-deep .formCell .u-cell__body__content{
+	flex: inherit;
 }
 ::v-deep .uni-data-tree .input-value-border{
-	padding: 0rpx 8rpx !important;
+	padding: 0rpx 8rpx 0 0 !important;
 	border: none;
 }
 ::v-deep .uni-data-tree .input-value{
@@ -445,7 +490,7 @@ export default {
 }
 ::v-deep .uni-date .uni-date__x-input{
 	height: 26px;
-	padding: 0 8rpx;
+	padding: 0 8rpx 0 0;
 }
 ::v-deep .uni-date .uni-date-x{
 	padding: 0;
@@ -458,6 +503,29 @@ export default {
 }
 ::v-deep .u-cell__body .u-icon__icon--info{
 	color: #666666;
+}
+::v-deep .u-form-item__body__right__content__slot{
+	flex-direction: row !important;
+	flex-wrap: wrap;
+}
+/deep/ uni-data-picker{
+	width: 100% !important;
+}
+::v-deep .u-textarea{
+	padding: 0rpx;
+}
+.chooseBtn /deep/ button {
+	background: rgba(42, 130, 228, 1) !important;
+	box-shadow: 0rpx 4rpx 8rpx rgba(219, 236, 255, 1) !important;
+	border-radius: 12rpx !important;
+	color: rgba(255, 255, 255, 1) !important;
+	font-size: 24rpx !important;
+	width: 200rpx !important;
+	height: 60rpx !important;
+	line-height: 60rpx !important;
+	padding: 0 16rpx !important;
+	margin: 0rpx !important;
+	display: inline-flex !important;
 }
 // 表单添加
 .edit-form{
@@ -510,7 +578,16 @@ export default {
 		width: 100%;
 		@include flexMixin(row,flex-end)
 	}
+	/deep/ .u-textarea__field{
+		background: rgba(245, 245, 245, 1) !important;
+		border-radius: 8rpx !important;
+		padding: 10rpx 14rpx !important;
+		min-height: 72rpx !important;
+		line-height: 44rpx !important;
+		box-sizing: border-box !important;
+	}
 }
+// 右边
 .right{
 	width: 100%;
 }
@@ -531,35 +608,11 @@ export default {
 	justify-content: end;
 	padding-right: 20rpx;
 }
+::v-deep .formCell.right .u-cell__value{
+	text-align: right;
+}
 .right.switch{
 	display: flex;
 	justify-content: end;
-}
-::v-deep .u-form-item__body__right__content__slot{
-	flex-direction: row !important;
-}
-/deep/ uni-data-picker{
-	width: 100% !important;
-}
-/deep/ .u-textarea__field{
-	background: rgba(245, 245, 245, 1) !important;
-	border-radius: 8rpx !important;
-	padding: 10rpx 14rpx !important;
-	min-height: 72rpx !important;
-	line-height: 44rpx !important;
-	box-sizing: border-box !important;
-}
-.chooseBtn /deep/ button {
-	background: rgba(42, 130, 228, 1) !important;
-	box-shadow: 0rpx 4rpx 8rpx rgba(219, 236, 255, 1) !important;
-	border-radius: 12rpx !important;
-	color: rgba(255, 255, 255, 1) !important;
-	font-size: 24rpx !important;
-	width: 200rpx !important;
-	height: 60rpx !important;
-	line-height: 60rpx !important;
-	padding: 0 16rpx !important;
-	margin: 0rpx !important;
-	display: inline-flex !important;
 }
 </style>

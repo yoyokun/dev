@@ -57,3 +57,9 @@
 ::v-deep .uni-input-input{
 	color: rgb(48, 49, 51);
 }
+::v-deep .u-textarea--disabled{
+	background: transparent !important;
+}
+::v-deep .uni-date-editor--x__disabled{
+	opacity: 1;
+}
