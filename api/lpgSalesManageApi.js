@@ -59,3 +59,48 @@ export function financeMoneyBillLogFindById(data = {}, message = '', custom = {}
 	}
   })
 }
+
+// 库存盘点管理 根据id查询信息
+export function stockCheckLogFindById(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/sales/stockCheckLog/findById',
+    method: 'post',
+    data,
+	message,
+	custom: {
+		auth: custom?.auth || true, // 是否需要token
+		toast: custom?.toast || true, // 弹框
+		catch: custom?.catch || true // catch返回
+	}
+  })
+}
+
+// 采购入库单 根据id查询信息
+export function purInStorageFindById(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/sales/purInStorage/findById',
+    method: 'post',
+    data,
+	message,
+	custom: {
+		auth: custom?.auth || true, // 是否需要token
+		toast: custom?.toast || true, // 弹框
+		catch: custom?.catch || true // catch返回
+	}
+  })
+}
+
+// 充装转换管理 根据id查询信息
+export function fillingChangeLogFindById(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/sales/fillingChangeLog/findById',
+    method: 'post',
+    data,
+	message,
+	custom: {
+		auth: custom?.auth || true, // 是否需要token
+		toast: custom?.toast || true, // 弹框
+		catch: custom?.catch || true // catch返回
+	}
+  })
+}

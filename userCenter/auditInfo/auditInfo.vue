@@ -19,6 +19,16 @@
 			<gathering-info v-if="info.formKey === 'cashMoneyBillLog'" :edit-id="info.linkId" />
 			<!--付款单-->
 			<payment-info v-if="info.formKey === 'payMoneyBillLog'" :edit-id="info.linkId" />
+			<!--调价单-->
+			<price-plan-info v-if="info.formKey === 'pricePlan'" :edit-id="info.linkId" />
+			<!--盘点单-->
+			<stock-taking-info v-if="info.formKey === 'stockCheck'" :edit-id="info.linkId" />
+			<!--充装转换-->
+			<filling-change-info v-if="info.formKey === 'fillingChangeLog'" :edit-id="info.linkId" />
+			<!--采购入库-->
+			<pur-good-tank-car-house-info v-if="info.formKey === 'purInStorage'" :edit-id="info.linkId" />
+			<!--单据详情-->
+			<goods-info v-if="info.formKey === 'goods'" :edit-id="info.linkId" />
 		</view>
 		<view class="time-line" v-if="auditRecordVosReverse.length">
 			<view class="time-line-tle">{{$t('auditInfo.trendsTle')}}</view>
@@ -59,6 +69,10 @@
 	import CopeInfo from './common/copeInfo'
 	import GatheringInfo from './common/gatheringInfo'
 	import PaymentInfo from './common/paymentInfo'
+	import PricePlanInfo from './common/pricePlanInfo'
+	import FillingChangeInfo from './common/fillingChangeInfo'
+	import PurGoodTankCarHouseInfo from './common/purGoodTankCarHouseInfo'
+	import GoodsInfo from './common/goodsInfo'
 	export default {
 		components: {
 			BusinessInfo,
@@ -68,6 +82,10 @@
 			CopeInfo,
 			GatheringInfo,
 			PaymentInfo,
+			PricePlanInfo,
+			FillingChangeInfo,
+			PurGoodTankCarHouseInfo,
+			GoodsInfo,
 		},
 		data() {
 			return {
@@ -150,12 +168,11 @@
 			background: white;
 			border-radius: 16rpx;
 			box-shadow: 0rpx 4rpx 8rpx 0rpx rgba(42, 130, 228, 0.15);
-			height: 600rpx;
-			overflow-y: scroll;
-
+			// height: 600rpx;
+			// overflow-y: scroll;
 			.basic {
-				padding: 10rpx 20rpx;
-
+				padding: 20rpx 20rpx;
+				
 				.basic-item {
 					font-size: 28rpx;
 
@@ -212,7 +229,9 @@
 			font-size: 28rpx;
 			.time-line-tle{
 				font-weight: bold;
+				padding: 10rpx 0;
 				padding-bottom: 30rpx;
+				
 			}
 			.item-list{
 				&:last-child{
@@ -248,7 +267,7 @@
 								width: 100rpx;
 								height: 100rpx;
 								margin-right: 12rpx;
-								::v-deep .u-image,::v-deep .u-image__image{
+								::v-deep .u-image,::v-deep .u-image__image,::v-deep .u-image__error,::v-deep .u-image__loading{
 									width: 100%!important;
 									height: 100%!important;
 								}

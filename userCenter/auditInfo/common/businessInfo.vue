@@ -99,6 +99,12 @@
 					</view>
 				</view>
 				<view class="basic-item">
+					<view class="basic-tle">{{$t('auditInfo.businessInfo.basic.goodsTle')}}</view>
+					<view class="basic-box">
+						<UTable :table-column="tableColumn" :table-data="salesTransferDetailList"></UTable>
+					</view>
+				</view>
+				<view class="basic-item">
 					<view class="basic-tle">{{$t('auditInfo.businessInfo.basic.deliverTle')}}</view>
 					<view class="basic-box">
 						<view class="item">
@@ -171,6 +177,20 @@
 					</view>
 				</view>
 			</view>
+			<view class="basic source" v-show="current == 1">
+				<view class="basic-item"  v-if="editId">
+					<view class="basic-tle">{{$t('auditInfo.businessInfo.source.sendTle')}}</view>
+					<view class="basic-box">
+						<service-cylinder-info node-type="confirmDelivery" :link-id="editId" />
+					</view>
+				</view>
+				<view class="basic-item" v-if="editId">
+					<view class="basic-tle">{{$t('auditInfo.businessInfo.source.recycleTle')}}</view>
+					<view class="basic-box">
+						<service-cylinder-info node-type="recycleCylinder" :link-id="editId" />
+					</view>
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -182,9 +202,11 @@
 	import {
 		UnixToDate
 	} from '@/utils/util'
+	import UTable from './uTable'
+	import ServiceCylinderInfo from './serviceCylinderInfo'
 	export default {
 		name: 'BusinessInfo',
-		components: {},
+		components: {UTable,ServiceCylinderInfo},
 		// 过滤器
 		filters: {
 			linkType(value) {
@@ -295,6 +317,7 @@
 				width: 100%;
 				height: 44px;
 				background: white;
+				z-index: 2;
 			}
 		}
 	}
