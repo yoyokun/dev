@@ -322,3 +322,33 @@ export function auditTaskInitiateTask(data = {}, message = '', custom = {}) {
 		}
   })
 }
+
+// 钢瓶流转记录 钢瓶流转记录
+export function cylinderFlowFindFlowList(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/cylinderFlow/findFlowList',
+    method: 'post',
+    data,
+	message,
+	custom: {
+		auth: custom?.auth || true, // 是否需要token
+		toast: custom?.toast || true, // 弹框
+		catch: custom?.catch || true // catch返回
+	}
+  })
+}
+
+// 属性参数分类 分类属性选择器
+export function sysPropertyClassifySelectPropertyBox(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/sysPropertyClassify/selectPropertyBox',
+    method: 'post',
+    data,
+	message,
+	custom: {
+		auth: custom?.auth || true, // 是否需要token
+		toast: custom?.toast || true, // 弹框
+		catch: custom?.catch || true // catch返回
+	}
+  })
+}
