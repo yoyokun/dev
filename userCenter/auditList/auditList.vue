@@ -60,9 +60,9 @@ export default {
 
   },
 	onShow() {
-		// uni.setNavigationBarTitle({
-		// 	title: this.$t('auditList.titleText')
-		// });
+		uni.setNavigationBarTitle({
+			title: this.$t('auditList.titleText')
+		});
 	},
   methods: {
 		// 切换
@@ -123,5 +123,7 @@ page{
 }
 </style>
 <style lang="scss" scoped>
-
+.schedule{
+	padding-top: 90rpx;
+}
 </style>

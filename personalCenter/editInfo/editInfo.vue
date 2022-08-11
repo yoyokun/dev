@@ -108,6 +108,7 @@ export default {
 					fieldName: 'nativePlace',
 					placeholder: this.$t('editInfo.form.nativePlacePlace'),
 					inputAlign: 'right',
+					isProvinces: true,
 					options: regionData,
 					defaultValue: []
 				},
@@ -174,7 +175,8 @@ export default {
       if (res) {
         const headPhoto = this.$options.filters.pictureJsonParse(res.headPhoto)
         const idPhoto = this.$options.filters.pictureJsonParse(res.idPhoto)
-				 res.birthdayStr = res.birthday ? formatDate(res.birthday) : ''
+				res.nativePlace = res.nativePlace.split(',')
+				res.birthdayStr = res.birthday ? formatDate(res.birthday) : ''
         headPhoto.forEach(v => {
           v.extname = 'txt'
         })
@@ -192,6 +194,7 @@ export default {
 			this.$refs.dialogForm.handleSubmit(async(data) => {
 				data.headPhoto = (Array.isArray(data.headPhoto) && data.headPhoto.length) ? JSON.stringify(data.headPhoto) : ''
 				data.idPhoto = (Array.isArray(data.idPhoto) && data.idPhoto.length) ? JSON.stringify(data.idPhoto) : ''
+				data.nativePlace = data.nativePlace.length ? [data.province,data.city,data.area].join(',') : ''
 				const { returnValue: res } = await sysManagerEditManager(data)
 				if (res) {
 					this.$refs.uToast.show({
@@ -253,10 +256,8 @@ export default {
 			margin: 0rpx;
 		}
 		.btn{
-			position: absolute;
-			bottom: 100rpx;
 			width: 632rpx;
-			margin: 0 32rpx;
+			margin: 60rpx auto;
 		}
 	}
 }

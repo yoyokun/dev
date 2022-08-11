@@ -3,8 +3,8 @@
 		<view v-if="empty">
 			<view class="schedule">
 				<view v-for="(item,index) in dataList" :key="index" class="box" @click="getInfo(item)">
-					<image v-if="item.taskType === 1" src="/static/image/AJJL.png" mode="widthFix" class="icon"></image>
-					<image v-if="item.taskType === 2" src="/static/image/AJJL.png" mode="widthFix" class="icon"></image>
+					<image v-if="item.taskType === 1" src="/static/image/approval.png" mode="widthFix" class="icon"></image>
+					<image v-if="item.taskType === 2" src="/static/image/work.png" mode="widthFix" class="icon"></image>
 					<view class="content">
 						<view class="title">
 							<view class="name">{{ item.formName }}</view>
@@ -38,6 +38,11 @@ export default {
   onLoad() {
 
   },
+	onShow() {
+		uni.setNavigationBarTitle({
+			title: this.$t('schedule.titleText')
+		});
+	},
   methods: {
     // 获取列表
     async findDataList() {

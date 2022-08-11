@@ -9,6 +9,15 @@ module.exports = {
 	},
 	// 公共模块
 	common: {
+		noData: '没有更多了',
+		searchPlaceholder: '请输入关键字',
+		searchText: '确定',
+		deleteTitle: '删除',
+		deleteContent: '确定要删除该数据吗?',
+		stateObj: {
+			1: '启用',
+			2: '禁用'
+		},
 		editForm: {
 			chooseText: '选择',
 			cancelText: '取消'
@@ -199,6 +208,10 @@ module.exports = {
 	agreement: {
 		aboutTitleText: '关于气讯通'
 	},
+	// 待办事项
+	schedule: {
+		titleText: '待办事项',
+	},
 	// 审批事项
 	auditList: {
 		titleText: '审批事项',
@@ -222,5 +235,108 @@ module.exports = {
 		]
 	},
 	// 审核详情
-	auditInfo: auditInfo
+	auditInfo: auditInfo,
+	// 成员
+	addManager: {
+		titleText: '添加成员',
+		titleTextEdit: '编辑成员',
+		titleTextInfo: '成员详情',
+		form: {
+			empNo: '成员编号',
+			empNoPlace: '请输入成员编号',
+			empNoMessage: '成员编号格式有误,只能输入数字或字母',
+			name: '成员姓名',
+			namePlace: '请输入成员姓名',
+			sex: '成员性别',
+			sexPlace: '请选择成员性别',
+			phone: '手机号码',
+			phonePlace: '请输入联系电话',
+			phoneMessage: '联系电话格式有误',
+			account: '登录账号',
+			accountPlace: '请输入登录账号',
+			customerAuth: '客户隔离',
+			customerAuthPlace: '客户隔离',
+			birthdayStr: '成员生日',
+			birthdayStrPlace: '请选择成员生日',
+			nativePlace: '籍贯',
+			nativePlacePlace: '请选择籍贯',
+			education: '学历',
+			educationPlace: '请选择学历',
+			state: '状态',
+			statePlace: '请选择状态',
+			price: '配额',
+			pricePlace: '请输入配额',
+			idNumber: '身份证号',
+			idNumberPlace: '请输入身份证号',
+			remarks: '备注',
+			remarksPlace: '请输入备注',
+			idPhoto: '证件照片',
+			headPhoto: '头像',
+			headPhotoPlace: '请上传头像',
+			identitiesList: '岗位角色',
+			addIdentities: '添加身份',
+			addIdentitiesPlace: '请添加身份',
+			orgLabel: '组织',
+			customerAuthOptions: [
+				{
+					name: '隔离',
+					value: 1
+				},
+				{
+					name: '不隔离',
+					value: 2
+				}
+			],
+			sexOptions: [
+				{
+					name: '男',
+					value: '男'
+				},
+				{
+					name: '女',
+					value: '女'
+				},
+				{
+					name: '保密',
+					value: '保密'
+				}
+			],
+			educationOptions: [
+				{
+					name: '本科',
+					value: '本科'
+				},
+				{
+					name: '大专',
+					value: '大专'
+				},
+				{
+					name: '中专',
+					value: '中专'
+				},
+				{
+					name: '高中',
+					value: '高中'
+				},
+				{
+					name: '初中',
+					value: '初中'
+				}
+			]
+		},
+		save: '保存',
+		edit: '编辑',
+		delete: '删除'
+	},
+	// 岗位角色
+	postRole: {
+		titleText: '岗位角色',
+		save: '确定'
+	},
+	// 成员列表
+	managerList: {
+		titleText: '成员信息',
+		totalNum: '成员总数',
+		addManager: '添加'
+	}
 }

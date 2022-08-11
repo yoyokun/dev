@@ -76,7 +76,7 @@
 				"enablePullDownRefresh": false
 			}
 		}
-	],
+  ],
 	"subPackages": [
 		{
 			"root": "personalCenter",
@@ -139,6 +139,32 @@
 					"path" : "auditList/auditList",
 					"style" : {
 						"navigationBarTitleText": "审批事项",
+						"enablePullDownRefresh": false
+					}
+				}
+			]
+		},
+		{
+			"root": "infoManage",
+			"pages": [
+				{
+					"path" : "addManager/addManager",
+					"style" : {
+						"navigationBarTitleText": "添加成员",
+						"enablePullDownRefresh": false
+					}	
+				}
+				,{
+					"path" : "managerList/managerList",
+					"style" : {
+						"navigationBarTitleText": "成员列表",
+						"enablePullDownRefresh": true
+					}
+				}
+				,{
+					"path" : "postRole/postRole",
+					"style" : {
+						"navigationBarTitleText": "岗位角色",
 						"enablePullDownRefresh": false
 					}
 				}
