@@ -29,6 +29,8 @@
 			<pur-good-tank-car-house-info v-if="info.formKey === 'purInStorage'" :edit-id="info.linkId" />
 			<!--单据详情-->
 			<goods-info v-if="info.formKey === 'goods'" :edit-id="info.linkId" />
+			<!--价格策略-->
+			<price-strategy-info v-if="info.formKey === 'priceStrategy'" :edit-id="info.linkId" />
 		</view>
 		<view class="time-line" v-if="auditRecordVosReverse.length">
 			<view class="time-line-tle">{{$t('auditInfo.trendsTle')}}</view>
@@ -73,6 +75,7 @@
 	import FillingChangeInfo from './common/fillingChangeInfo'
 	import PurGoodTankCarHouseInfo from './common/purGoodTankCarHouseInfo'
 	import GoodsInfo from './common/goodsInfo'
+	import PriceStrategyInfo from './common/priceStrategyInfo'
 	export default {
 		components: {
 			BusinessInfo,
@@ -86,6 +89,7 @@
 			FillingChangeInfo,
 			PurGoodTankCarHouseInfo,
 			GoodsInfo,
+			PriceStrategyInfo,
 		},
 		data() {
 			return {

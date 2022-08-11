@@ -546,4 +546,39 @@ module.exports = {
 			state:'参数状态',
 		},
 	},
+	// 价格策略
+	priceStrategyInfo:{
+		basicTle:'基本信息',
+		goodsTle:'商品信息',
+		attrTle:'属性参数',
+		strategyNo:'策略编号',
+		strategyName:'策略名称',
+		orgName:'应用组织',
+		remarks:'策略描述',
+		classifyName:'所属分类',
+		creator:'操作员',
+		createTime:'更新时间',
+		tableColumn:{
+			goodsNo:'商品编码',
+			goodsName:'商品名称',
+			brandName:'品牌',
+			goodsClassifyName:'商品分类',
+			standardName:'规格',
+			unitsName:'单位',
+			propertyNames:'属性参数',
+			listPrice:'挂牌价',
+			costPrice:'成本价',
+		},
+		toDataPropertyColumn:{
+			propertyClassifyStr:'属性分类',
+			propertyValue:'属性参数',
+			price:'加减价（元）',
+			state:'参数状态',
+		},
+		stateText:{
+			1: '启用',
+			2: '禁用'
+		},
+	},
+	
 }

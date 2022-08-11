@@ -176,12 +176,23 @@
 								</view>
 							</view>
 							<UTable :table-column="tableColumnProperty" :table-data="info.goodsDetailVoList">
+								<!-- #ifdef H5 || APP-PLUS -->
 								<view slot="state" slot-scope="row">
 									{{ row.data.state | stateProperty }}
 								</view>
 								<view slot="curStock" slot-scope="row">
 									{{ parseFloat(row.data.curStock) }}
 								</view>
+								<!-- #endif -->
+								<!-- #ifdef MP-->
+								<view slot="state" slot-scope="{row}">
+									{{ row.data.state | stateProperty }}
+								</view>
+								<view slot="curStock" slot-scope="{row}">
+									{{ parseFloat(row.data.curStock) }}
+								</view>
+								<!-- #endif -->
+								
 							</UTable>
 						</block>
 					</view>
