@@ -1,6 +1,7 @@
 import { request } from '@/utils/request'
 const baseURL = '/LPGManage'
-// 定义登录账号的
+/* 定义登录账号以及登录账号的增删改查 */
+
 // 登录
 export function login(data = {}, message = '', custom = {}) {
   return request({

@@ -1,5 +1,7 @@
 import { request } from '@/utils/request'
 const baseURL = '/LPGManage'
+/* 定义个人中心、信息管理、客户管理、商品管理、价格策略、钢瓶流转等公共模块接口 */
+
 // 待办信息列表
 export function sysTaskMyTaskApp(data = {}, message = '', custom = {}) {
   return request({
@@ -14,7 +16,7 @@ export function sysTaskMyTaskApp(data = {}, message = '', custom = {}) {
 		}
   })
 }
-// 审批信息详情
+// 审核任务 根据id查询信息
 export function auditTaskFindById(data = {}, message = '', custom = {}) {
   return request({
     url: baseURL + '/admin/info/auditTask/findById',
@@ -28,7 +30,7 @@ export function auditTaskFindById(data = {}, message = '', custom = {}) {
 		}
   })
 }
-// 审批抄送人
+// 审核任务 获取审核设置抄送人员
 export function auditLevelGetPushMans(data = {}, message = '', custom = {}) {
   return request({
     url: baseURL + '/admin/info/auditLevel/getPushMans',
@@ -42,7 +44,7 @@ export function auditLevelGetPushMans(data = {}, message = '', custom = {}) {
 		}
   })
 }
-// 确定审批
+// 审核任务 审批任务
 export function auditTaskAuditTask(data = {}, message = '', custom = {}) {
   return request({
     url: baseURL + '/admin/info/auditTask/auditTask',
@@ -56,7 +58,7 @@ export function auditTaskAuditTask(data = {}, message = '', custom = {}) {
 		}
   })
 }
-// 获取商品信息
+// 商品管理 根据id查询信息
 export function goodsFindById(data = {}, message = '', custom = {}) {
   return request({
     url: baseURL + '/admin/info/goods/findById',
@@ -70,7 +72,7 @@ export function goodsFindById(data = {}, message = '', custom = {}) {
 		}
   })
 }
-// 获取调价单信息
+// 调价单管理 根据id查询信息
 export function pricePlanFindById(data = {}, message = '', custom = {}) {
   return request({
     url: baseURL + '/admin/info/pricePlan/findById',
@@ -84,7 +86,7 @@ export function pricePlanFindById(data = {}, message = '', custom = {}) {
 		}
   })
 }
-// 调价单商品
+// 调价单管理 查询商品
 export function pricePlanDetailFindList(data = {}, message = '', custom = {}) {
   return request({
     url: baseURL + '/admin/info/pricePlanDetail/findList',
@@ -98,7 +100,7 @@ export function pricePlanDetailFindList(data = {}, message = '', custom = {}) {
 		}
   })
 }
-// 价格策略信息
+// 价格策略管理 根据id查询信息
 export function priceStrategyFindById(data = {}, message = '', custom = {}) {
   return request({
     url: baseURL + '/admin/info/priceStrategy/findById',
@@ -112,122 +114,10 @@ export function priceStrategyFindById(data = {}, message = '', custom = {}) {
 		}
   })
 }
-// 获取价格策略商品信息
+// 商品管理 根据条件查询列表信息
 export function goodsFindList(data = {}, message = '', custom = {}) {
   return request({
     url: baseURL + '/admin/info/goods/findList',
-    method: 'post',
-    data,
-		message,
-		custom: {
-			auth: custom?.auth || true, // 是否需要token
-			toast: custom?.toast || true, // 弹框
-			catch: custom?.catch || true // catch返回
-		}
-  })
-}
-// 获取应收/付单详情
-export function financeMoneyLogFindById(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/sales/financeMoneyLog/findById',
-    method: 'post',
-    data,
-		message,
-		custom: {
-			auth: custom?.auth || true, // 是否需要token
-			toast: custom?.toast || true, // 弹框
-			catch: custom?.catch || true // catch返回
-		}
-  })
-}
-// 获取收款单详情
-export function financeMoneyBillLogFindById(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/sales/financeMoneyBillLog/findById',
-    method: 'post',
-    data,
-		message,
-		custom: {
-			auth: custom?.auth || true, // 是否需要token
-			toast: custom?.toast || true, // 弹框
-			catch: custom?.catch || true // catch返回
-		}
-  })
-}
-// 获取出入库单信息
-export function stockBillLogFindById(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/sales/stockBillLog/findById',
-    method: 'post',
-    data,
-		message,
-		custom: {
-			auth: custom?.auth || true, // 是否需要token
-			toast: custom?.toast || true, // 弹框
-			catch: custom?.catch || true // catch返回
-		}
-  })
-}
-// 获取资金期初信息
-export function financeAccountRecordFindById(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/sales/financeAccountRecord/findById',
-    method: 'post',
-    data,
-		message,
-		custom: {
-			auth: custom?.auth || true, // 是否需要token
-			toast: custom?.toast || true, // 弹框
-			catch: custom?.catch || true // catch返回
-		}
-  })
-}
-// 获取充装转换信息
-export function fillingChangeLogFindById(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/sales/fillingChangeLog/findById',
-    method: 'post',
-    data,
-		message,
-		custom: {
-			auth: custom?.auth || true, // 是否需要token
-			toast: custom?.toast || true, // 弹框
-			catch: custom?.catch || true // catch返回
-		}
-  })
-}
-// 获取退款单详情
-export function salesOrderRefundFindById(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/sales/salesOrderRefund/findById',
-    method: 'post',
-    data,
-		message,
-		custom: {
-			auth: custom?.auth || true, // 是否需要token
-			toast: custom?.toast || true, // 弹框
-			catch: custom?.catch || true // catch返回
-		}
-  })
-}
-// 获取退款单详情商品信息
-export function salesOrderFindList(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/sales/salesOrder/findList',
-    method: 'post',
-    data,
-		message,
-		custom: {
-			auth: custom?.auth || true, // 是否需要token
-			toast: custom?.toast || true, // 弹框
-			catch: custom?.catch || true // catch返回
-		}
-  })
-}
-// 获取退款单详情商品信息
-export function salesBusinessFindById(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/sales/salesBusiness/findById',
     method: 'post',
     data,
 		message,
@@ -322,33 +212,31 @@ export function auditTaskInitiateTask(data = {}, message = '', custom = {}) {
 		}
   })
 }
-
 // 钢瓶流转记录 钢瓶流转记录
 export function cylinderFlowFindFlowList(data = {}, message = '', custom = {}) {
   return request({
     url: baseURL + '/admin/info/cylinderFlow/findFlowList',
     method: 'post',
     data,
-	message,
-	custom: {
-		auth: custom?.auth || true, // 是否需要token
-		toast: custom?.toast || true, // 弹框
-		catch: custom?.catch || true // catch返回
-	}
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
   })
 }
-
 // 属性参数分类 分类属性选择器
 export function sysPropertyClassifySelectPropertyBox(data = {}, message = '', custom = {}) {
   return request({
     url: baseURL + '/admin/info/sysPropertyClassify/selectPropertyBox',
     method: 'post',
     data,
-	message,
-	custom: {
-		auth: custom?.auth || true, // 是否需要token
-		toast: custom?.toast || true, // 弹框
-		catch: custom?.catch || true // catch返回
-	}
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
   })
 }
