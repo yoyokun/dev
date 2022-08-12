@@ -104,3 +104,18 @@ export function fillingChangeLogFindById(data = {}, message = '', custom = {}) {
 	}
   })
 }
+
+// 销售订单管理 根据id查询信息
+export function salesOrderFindById(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/sales/salesOrder/findById',
+    method: 'post',
+    data,
+	message,
+	custom: {
+		auth: custom?.auth || true, // 是否需要token
+		toast: custom?.toast || true, // 弹框
+		catch: custom?.catch || true // catch返回
+	}
+  })
+}

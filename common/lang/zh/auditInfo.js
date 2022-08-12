@@ -546,4 +546,183 @@ module.exports = {
 			state:'参数状态',
 		},
 	},
+	// 价格策略
+	priceStrategyInfo:{
+		basicTle:'基本信息',
+		goodsTle:'商品信息',
+		attrTle:'属性参数',
+		strategyNo:'策略编号',
+		strategyName:'策略名称',
+		orgName:'应用组织',
+		remarks:'策略描述',
+		classifyName:'所属分类',
+		creator:'操作员',
+		createTime:'更新时间',
+		tableColumn:{
+			goodsNo:'商品编码',
+			goodsName:'商品名称',
+			brandName:'品牌',
+			goodsClassifyName:'商品分类',
+			standardName:'规格',
+			unitsName:'单位',
+			propertyNames:'属性参数',
+			listPrice:'挂牌价',
+			costPrice:'成本价',
+		},
+		toDataPropertyColumn:{
+			propertyClassifyStr:'属性分类',
+			propertyValue:'属性参数',
+			price:'加减价（元）',
+			state:'参数状态',
+		},
+		stateText:{
+			1: '启用',
+			2: '禁用'
+		},
+	},
+	// 出入库单
+	singleOutputInfo:{
+		basicTle:'基本信息',
+		orderTle:'子单信息',
+		billNo:'出入库单号',
+		orgName:'组织',
+		stockFormType:'来源类型',
+		stockFormTypeTxt:{
+			1: '客户',
+			2: '供应商',
+			3: '组织'
+		},
+		customerName:'来源名称',
+		linkBillNo:'关联单据号',
+		linkType:'关联单据类型',
+		linkTypeTxt:{
+			check: '盘点单',
+			order: '订单',
+			transfer: '调拨单',
+			purchase: '采购'
+		},
+		licenseNo:'车牌号',
+		deliverMan:'运输员',
+		remarks:'备注信息',
+		filePath:'附件',
+		subBillNo:'库存单号',
+		inOutName:'出入库原因',
+		inOutNameTxt:['入库','出库'],
+		tableColumn:{
+			goodsNo:'商品编码',
+			goodsName:'商品名称',
+			brandName:'品牌',
+			goodsClassifyName:'商品分类',
+			standardName:'规格',
+			unitsName:'单位',
+			propertyNames:'属性参数',
+			stockNum:'库存数量',
+		},
+	},
+	// 退款单
+	refundInfo:{
+		tabs:[{
+			name:'基本信息'
+		},{
+			name:'溯源信息'
+		}],
+		basicTle:'基本信息',
+		orderTle:'订单信息',
+		refundTle:'售后信息',
+		moneyTle:'收费项',
+		sourceTle:'溯源信息',
+		orgName:'退款组织',
+		billNo:'单号',
+		formType:'往来类型',
+		formTypeTxt:{
+			1: '客户',
+			2: '供应商',
+			3: '组织 '
+		},
+		customerNo:'客户编号',
+		customerName:'客户名称',
+		customerPhone:'联系电话',
+		checkState:'订单状态',
+		checkStateTxt:{
+			1: '待提交',
+			2: '待审核',
+			3: '已审核',
+			4: '未通过',
+			5: '已作废'
+		},
+		creator:'开单人',
+		createTime:'开单时间',
+		totalMoney:'退款金额（元）',
+		refundTime:'退款时间',
+		linkBillNo:'关联单号',
+		linkType:'单据类型',
+		linkTypeTxt:{
+			order: '订单',
+			transfer: '调拨单',
+			purchase: '采购 '
+		},
+		operator:'操作人',
+		operationTime:'操作时间',
+		orderStateTxt:{
+			1: '待支付',
+			2: '已结算',
+			3: '已完成',
+			4: '已关闭',
+			5: '已作废 '
+		},
+		payTypeTxt:{
+			1: '线上支付',
+			2: '线下支付',
+			3: '货到付款 '
+		},
+		deliveryStateTxt:{
+			1: '待接单',
+			2: '待发货',
+			3: '配送中',
+			4: '已送达'
+		},
+		tableColumn:{
+			billNo:'订单编号',
+			orderTime:'销售时间',
+			totalWeight:'销售重量(kg)',
+			totalMoney:'订单金额（元）',
+			orderState:'订单状态',
+			deliveryState:'物流状态',
+			payType:'支付类型',
+			collectionTypeName:'支付方式',
+			remarks:'备注',
+		},
+		tableColumnRefund:{
+			goodsName:'商品名称',
+			linkGoodsName:'关联商品名称',
+			linkPropertyNames:'属性参数',
+			standardName:'规格',
+			unitsName:'单位',
+			unitPrice:'单价',
+			totalNum:'总数',
+			totalMoney:'总金额',
+			refundNum:'数量',
+			refundMoney:'金额',
+			remarks:'备注',
+		},
+	},
+	// 销售单
+	salesOrdersInfo:{
+		tabs:[{
+			name:'基本信息'
+		},{
+			name:'订单信息'
+		},{
+			name:'回瓶信息'
+		},{
+			name:'溯源信息'
+		}],
+		basicTle:'基础信息',
+		customTle:'客户信息',
+		deliveryTle:'运输信息',
+		orderTle:'订单折扣',
+		orderNums:'子单编号',
+		refundTle:'送达钢瓶',
+		refundTle:'送达钢瓶',
+	},
 }

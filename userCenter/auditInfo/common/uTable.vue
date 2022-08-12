@@ -10,7 +10,7 @@
 						<!-- #ifdef H5 || APP-PLUS -->
 						<slot :name="`${col.slot}`" :data="item"></slot>
 						<!-- #endif -->
-						<!-- #ifdef MP-WEIXIN-->
+						<!-- #ifdef MP-->
 						<slot name="{{col.slot}}" :data="item"></slot>
 						<!-- #endif -->
 					</block>
