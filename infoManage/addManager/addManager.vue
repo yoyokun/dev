@@ -41,8 +41,8 @@
 					<u-button :text="$t('addManager.save')" type="primary" hairline shape="circle" @click="submitForm"></u-button>
 				</view>
 				<view class="btn" v-else>
-					<u-button :text="$t('addManager.edit')" type="primary" hairline shape="circle" plain @click="handleEdit"></u-button>
-					<u-button class="m-l20" :text="$t('addManager.delete')" type="error" hairline shape="circle" plain @click="handleDelete"></u-button>
+					<u-button v-permission="{ permission:'app_managerList_edit'}" :text="$t('addManager.edit')" type="primary" hairline shape="circle" plain @click="handleEdit"></u-button>
+					<u-button v-permission="{ permission:'app_managerList_delete'}" class="m-l20" :text="$t('addManager.delete')" type="error" hairline shape="circle" plain @click="handleDelete"></u-button>
 				</view>
 			</template>
 		</edit-form>

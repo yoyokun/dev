@@ -58,7 +58,8 @@
                 "idfa" : false
             },
             "sdkConfigs" : {
-                "ad" : {}
+                "ad" : {},
+                "payment" : {}
             },
             "icons" : {
                 "android" : {
@@ -159,6 +160,7 @@
                 "/LPGManage" : {
                     // "target" : "http://qxth5.cygmgs.com/", //目标接口域名
                     "target" : "http://192.168.0.218:8099", //目标接口域名
+
                     // "target" : "http://192.168.0.194:8085", //目标接口域名
                     // "target" : "http://192.168.0.205:8040", //目标接口域名
                     "changeOrigin" : true, //是否跨域

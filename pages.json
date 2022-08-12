@@ -168,7 +168,16 @@
 						"enablePullDownRefresh": false
 					}
 				}
-			]
+			    ,{
+                    "path" : "workList/workList",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "工单列表",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 		}
 	],
 	"globalStyle": {
