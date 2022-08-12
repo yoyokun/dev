@@ -338,5 +338,55 @@ module.exports = {
 		titleText: '成员信息',
 		totalNum: '成员总数',
 		addManager: '添加'
+	},
+	// 工单列表
+	workList: {
+		titleText: '工单列表',
+		totalNum: '总数',
+		addWork: '添加',
+		customerName: '往来名称',
+		channel: '渠道',
+		formName: '工单类型',
+		levelName: '工单等级',
+		stateObj: {
+			1: '待分派',
+			2: '待接受',
+			3: '已接受',
+			4: '已拒绝',
+			5: '已作废',
+			6: '已超时',
+			7: '已完成'
+		}
+	},
+	// 添加工单
+	addWork: {
+		titleText: '添加工单',
+		titleTextEdit: '编辑工单',
+		titleTextInfo: '工单详情',
+		form: {
+			formKey: '工单类型',
+			formKeyPlace: '请选择工单类型',
+			customerId: '客户名称',
+			customerIdPlace: '请选择客户名称',
+			unitId: '风险单元',
+			unitIdPlace: '请选择风险单元',
+			actionTimeStr: '开始时间',
+			actionTimeStrPlace: '请选择开始时间',
+			cutoff: '时效(h)',
+			cutoffPlace: '请输入时效',
+			makeTimeStr: '预约时间',
+			makeTimeStrPlace: '请选择预约时间',
+			levelId: '工单等级',
+			levelIdPlace: '请选择工单等级',
+			toOrgId: '处理组织',
+			toOrgIdPlace: '请选择处理组织',
+			toManagerId: '处理员',
+			toManagerIdPlace: '请选择处理员',
+			remarks: '备注信息',
+			remarksPlace: '请输入备注信息',
+		},
+		save: '保存',
+		edit: '编辑',
+		delete: '删除'
 	}
 }

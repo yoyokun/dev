@@ -240,3 +240,165 @@ export function sysPropertyClassifySelectPropertyBox(data = {}, message = '', cu
 		}
   })
 }
+// 审核设置单据列表  根据条件查询列表信息
+export function auditFormFindList(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/auditForm/findList',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
+// 数据字典 根据条件查询列表信息
+export function sysFieldFindList(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/sysField/findList',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
+// 组织  根据条件查询列表信息
+export function sysOrgFindList(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/sysOrg/findList',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
+// 工单管理 根据条件查询列表信息
+export function auditWorkFindList(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/auditWork/findList',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
+// 工单管理 根据id查询信息
+export function auditWorkFindById(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/auditWork/findById',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
+// 工单管理 保存或修改
+export function auditWorkSaveOrEdit(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/control/auditWork/saveOrEdit',
+    method: 'post',
+    data
+  })
+}
+// 工单管理 删除
+export function auditWorkDeleteByIds(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/control/auditWork/deleteByIds',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
+// 工单管理 作废
+export function auditWorkInvalidWork(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/control/auditWork/invalidWork',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
+// 工单管理 分派
+export function auditWorkAssignWork(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/control/auditWork/assignWork',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
+// 工单管理 我的工单
+export function auditWorkMyWorks(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/auditWork/myWorks',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
+// 工单管理 拒绝工单
+export function auditWorkRefuseWork(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/auditWork/refuseWork',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
+// 工单管理 接受工单
+export function auditWorkAcceptWork(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/auditWork/acceptWork',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}

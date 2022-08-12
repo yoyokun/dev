@@ -30,7 +30,7 @@
 						</view>
 					</view>
 					<view :class="['right', item.state === 2 ? 'red' : '']">
-						{{item.state | state(that)}}
+						{{item.state | state}}
 					</view>
 				</view>
 			</view>
@@ -47,6 +47,7 @@
 </template>
 
 <script>
+let that = null
 import { sysManagerFindList } from '@/api/loginApi.js'
 import paginationMixin from '@/common/paginationMixin.js'
 export default {
@@ -60,10 +61,13 @@ export default {
 	mixins: [paginationMixin],
 	// 过滤器
 	filters: {
-		state(value, that) {
+		state(value) {
 			const stateObj = that.$t('common.stateObj')
 			return stateObj[value] || ''
 		}
+	},
+	created(){
+		that = this
 	},
   onLoad() {
 

@@ -177,6 +177,15 @@
                 }
                 
                 }
+                ,{
+                    "path" : "addWork/addWork",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "添加工单",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
             ]
 		}
 	],

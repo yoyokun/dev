@@ -83,7 +83,7 @@
 					/>
 					<u-icon name="arrow-right" color="#666666" size="15"></u-icon>
 				</view>
-				<!-- 单选 -->
+				<!-- switch单选 -->
 				<view v-if="item.type === 'switch'" :class="['switch',item.inputAlign]">
 					<u-switch
 						v-model="formData[item.fieldName]" 
@@ -156,6 +156,32 @@
 						@select="selectClick($event,item.fieldName)"
 						@close="item.showOptions = false">
 					</u-action-sheet>
+				</view>
+				<!-- picker 滑动单选  -->
+				<view :class="['formCell',item.inputAlign]" v-if="item.type === 'picker'">
+					<u-cell 
+						v-if="formData[item.fieldName]" 
+						:value="formData[item.fieldName] | getName(item.options)" 
+						:isLink="true" 
+						:border="false" 
+						@click="!item.disabled ? item.showOptions = true : ''"></u-cell>
+					<u-cell 
+						v-else 
+						:value="item.placeholder" 
+						:isLink="true" 
+						:border="false" 
+						@click="!item.disabled ? item.showOptions = true : ''" 
+					></u-cell>
+					<u-picker
+						:show="item.showOptions" 
+						:closeOnClickOverlay="true" 
+						:defaultIndex="item.defaultIndex || [0]" 
+						:columns="[item.options]" 
+						:keyName="item.keyName || 'name'" 
+						@confirm="pickerConfirm($event,item.fieldName,index)" 
+						@close="item.showOptions = false"
+						@cancel="item.showOptions = false">
+					</u-picker>
 				</view>
 				<!-- 上传图片 -->
 				<view :class="['formUpload',item.inputAlign]" v-if="item.type === 'upload'">
@@ -323,6 +349,7 @@ export default {
 			this.$nextTick(() => {
 				this.$refs.form.setRules(this.rules)
 			});
+			console.log(this.formData)
 		},
 		// 处理表单数据
 		handleParams(obj) {
@@ -429,6 +456,14 @@ export default {
 			// 对部分字段校验
 			this.$refs.form.validateField(name)
 			this.handleFiltrate(name)
+		},
+		// picker 选择
+		pickerConfirm(e,name,index){
+			this.formData[name] = e.value[0].value
+			// 对部分字段校验
+			this.$refs.form.validateField(name)
+			this.handleFiltrate(name)
+			this.renderDataSource[index].showOptions = false
 		},
 		// 日期
 		async datetimePicker(e,name,index) {

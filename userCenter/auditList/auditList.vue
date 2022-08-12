@@ -22,7 +22,7 @@
 		<view v-if="empty">
 			<view class="schedule">
 				<view v-for="(item,index) in dataList" :key="index" class="box" @click="getInfo(item)">
-					<image src="/static/image/AJJL.png" mode="widthFix" class="icon"></image>
+					<image src="/static/image/approval.png" mode="widthFix" class="icon"></image>
 					<view class="content">
 						<view class="title">
 							<view class="name">{{ item.formName }}</view>
