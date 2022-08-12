@@ -31,6 +31,12 @@
 			<goods-info v-if="info.formKey === 'goods'" :edit-id="info.linkId" />
 			<!--价格策略-->
 			<price-strategy-info v-if="info.formKey === 'priceStrategy'" :edit-id="info.linkId" />
+			<!--出入库单-->
+			<single-output-info v-if="info.formKey === 'stockInOut'" :edit-id="info.linkId" />
+			<!--退款单-->
+			<refund-info v-if="info.formKey === 'salesOrderRefund'" :edit-id="info.linkId" />
+			<!-- 销售单 -->
+			<sales-orders-info v-if="info.formKey === 'salesOrder'" :edit-id="info.linkId" />
 		</view>
 		<view class="time-line" v-if="auditRecordVosReverse.length">
 			<view class="time-line-tle">{{$t('auditInfo.trendsTle')}}</view>
@@ -76,6 +82,9 @@
 	import PurGoodTankCarHouseInfo from './common/purGoodTankCarHouseInfo'
 	import GoodsInfo from './common/goodsInfo'
 	import PriceStrategyInfo from './common/priceStrategyInfo'
+	import SingleOutputInfo from './common/singleOutputInfo'
+	import RefundInfo from './common/refundInfo'
+	import SalesOrdersInfo from './common/salesOrdersInfo'
 	export default {
 		components: {
 			BusinessInfo,
@@ -90,6 +99,8 @@
 			PurGoodTankCarHouseInfo,
 			GoodsInfo,
 			PriceStrategyInfo,
+			SingleOutputInfo,
+			SalesOrdersInfo,
 		},
 		data() {
 			return {
@@ -217,6 +228,15 @@
 									height: 100rpx;
 									margin-right: 12rpx;
 									margin-top: 12rpx;
+								}
+								.down-list{
+									text:first-child{
+										margin-right: 10rpx;
+									}
+									text:last-child{
+										color: #2979ff;
+										cursor: pointer;
+									}
 								}
 							}
 						}

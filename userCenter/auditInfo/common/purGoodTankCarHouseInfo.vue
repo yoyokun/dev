@@ -202,13 +202,5 @@
 	}
 </script>
 <style lang="scss" scoped>
-	.down-list{
-		text:first-child{
-			margin-right: 10rpx;
-		}
-		text:last-child{
-			color: #2979ff;
-			cursor: pointer;
-		}
-	}
+	
 </style>
