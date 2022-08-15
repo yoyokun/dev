@@ -55,7 +55,7 @@
 import { regionData } from 'element-china-area-data'
 import { sysManagerSaveOrEdit, sysManagerFindById, sysManagerDeleteByIds } from '@/api/loginApi.js'
 import EditForm from '@/components/editForm/index.vue'
-import { formatDate, getNowDate } from '@/utils/util.js'
+import { formatDate } from '@/utils/util.js'
 export default {
 	components:{
 		EditForm
@@ -71,10 +71,10 @@ export default {
 					fieldName: 'empNo',
 					placeholder: this.$t('addManager.form.empNoPlace'),
 					maxlength: 30,
-					required: true, 
+					required: true,
 					rules: [
 						{
-							required: true, 
+							required: true,
 							message: this.$t('addManager.form.empNoPlace'),
 							trigger: ['change','blur']
 						},
@@ -95,10 +95,10 @@ export default {
 					fieldName: 'name',
 					placeholder: this.$t('addManager.form.namePlace'),
 					maxlength: 30,
-					required: true, 
+					required: true,
 					rules: [
 						{
-							required: true, 
+							required: true,
 							message: this.$t('addManager.form.namePlace'),
 							trigger: ['change','blur']
 						}
@@ -109,13 +109,13 @@ export default {
 					labelText: this.$t('addManager.form.sex'),
 					fieldName: 'sex',
 					placeholder: this.$t('addManager.form.sexPlace'),
-					required: true, 
+					required: true,
 					showOptions: false,
 					options: this.$t('addManager.form.sexOptions'),
 					defaultValue: this.$t('addManager.form.sexOptions')[0].value,
 					rules: [
 						{
-							required: true, 
+							required: true,
 							message: this.$t('addManager.form.sexPlace'),
 							trigger: ['change','blur']
 						}
@@ -127,10 +127,10 @@ export default {
 					fieldName: 'phone',
 					placeholder: this.$t('addManager.form.phonePlace'),
 					maxlength: 11,
-					required: true, 
+					required: true,
 					rules: [
 						{
-							required: true, 
+							required: true,
 							message: this.$t('addManager.form.phonePlace'),
 							trigger: ['change','blur']
 						},
@@ -150,11 +150,11 @@ export default {
 					labelText: this.$t('addManager.form.account'),
 					fieldName: 'account',
 					placeholder: this.$t('addManager.form.accountPlace'),
-					required: true, 
+					required: true,
 					maxlength: 12,
 					rules: [
 						{
-							required: true, 
+							required: true,
 							message: this.$t('addManager.form.accountPlace'),
 							trigger: ['change','blur']
 						}
@@ -173,8 +173,7 @@ export default {
 					type: 'date',
 					labelText: this.$t('addManager.form.birthdayStr'),
 					fieldName: 'birthdayStr',
-					placeholder: this.$t('addManager.form.birthdayStrPlace'),
-					defaultValue: ''
+					placeholder: this.$t('addManager.form.birthdayStrPlace')
 				},
 				{
 					type: 'cascader',
@@ -191,22 +190,21 @@ export default {
 					fieldName: 'education',
 					placeholder: this.$t('addManager.form.educationPlace'),
 					showOptions: false,
-					options: this.$t('addManager.form.educationOptions'),
-					defaultValue: ''
+					options: this.$t('addManager.form.educationOptions')
 				},
 				{
 					type: 'switch',
 					labelText: this.$t('addManager.form.state'),
 					fieldName: 'state',
 					inputAlign: 'right',
-					required: true, 
+					required: true,
 					activeValue: 1,
 					inactiveValue: 2,
 					defaultValue: 1,
 					rules: [
 						{
 							type: 'number',
-							required: true, 
+							required: true,
 							message: this.$t('addManager.form.statePlace'),
 							trigger: ['change','blur']
 						}
@@ -239,11 +237,11 @@ export default {
 					fieldName: 'headPhoto',
 					limit: 1,
 					defaultValue: [],
-					required: true, 
+					required: true,
 					rules: [
 						{
 							type: 'array',
-							required: true, 
+							required: true,
 							message: this.$t('addManager.form.headPhotoPlace'),
 							trigger: ['change','blur']
 						}

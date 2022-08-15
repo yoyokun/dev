@@ -1,10 +1,20 @@
 import {
-	sysPropertyClassifySelectPropertyBox
+	sysPropertyClassifySelectPropertyBox,
+	auditFormFindList,
+	sysFieldFindList,
+	sysOrgFindList
 } from '@/api/lpgManageAppApi'
+import { sysManagerFindList } from '@/api/loginApi.js'
+import { riskUnitFindList } from '@/api/lpgSecurityManageApi.js'
 export const settingMixin = {
 	data() {
-	    return {
+	  return {
 			propertyClassifySelectProperty:[],  //属性分类
+			workType: [], // 工单类型
+			workLevel: [], // 工单等级
+			orgList: [], // 组织列表
+			managerList: [], // 人员列表
+			riskUnitList: [], // 风险单元
 		}
 	},
 	methods: {
@@ -31,6 +41,68 @@ export const settingMixin = {
 			childs.push(obj)
 		  })
 		  return childs
+		},
+		// 获取工单类型剔除等于2的
+		async getWorkType(obj = {}, type = 'formKey') {
+			const { returnValue: res } = await auditFormFindList(Object.assign({}, { dataType: 'work' }, obj))
+			const workType = []
+			res.forEach(v => {
+				if (v.auditSwitch === 1) {
+					workType.push({
+						name: v.name,
+						value: v[type]
+					})
+				}
+			})
+			this.workType = workType
+		},
+		// 获取工单等级
+		async getWorkLevel(obj = {}, type = 'id') {
+			const { returnValue: res } = await sysFieldFindList(Object.assign({}, { groups: 'audit_work_level' }, obj))
+			const workLevel = []
+			res.forEach(v => {
+				workLevel.push({
+					name: v.name,
+					value: v[type]
+				})
+			})
+			this.workLevel = workLevel
+		},
+		// 查询组织（查询自己及以下组织）下拉结构
+		async getOrgList(obj = {}, type = 'id') {
+			const { returnValue: res } = await sysOrgFindList(obj || {})
+			const orgList = []
+			res.forEach(v => {
+				orgList.push({
+					name: v.name,
+					value: v[type]
+				})
+			})
+			this.orgList = orgList
+		},
+		// 获取人员
+		async getManagerFindList(obj, type = 'id') {
+			const { returnValue: res } = await sysManagerFindList(obj || {})
+			const managerList = []
+			res.forEach((v, i) => {
+				managerList.push({
+					name: v.name,
+					value: v[type]
+				})
+			})
+			this.managerList = managerList
+		},
+		// 获取风险单元
+		async getRiskUnitList(data = {}, type = 'id') {
+			const { returnValue: res } = await riskUnitFindList(data)
+			const riskUnitList = []
+			res.forEach(v => {
+				riskUnitList.push({
+					name: v.name,
+					value: v[type]
+				})
+			})
+			this.riskUnitList = riskUnitList
 		},
 	}
 }
