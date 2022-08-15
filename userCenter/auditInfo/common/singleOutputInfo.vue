@@ -1,79 +1,36 @@
 <template>
-	<view class="audit-info-content">
-		<view class="basic">
-			<view class="basic-item">
-				<view class="basic-tle">{{$t('auditInfo.singleOutputInfo.basicTle')}}</view>
-				<view class="basic-box">
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.singleOutputInfo.billNo')}}</view>
-						<view class="desc">{{info.billNo}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.singleOutputInfo.orgName')}}</view>
-						<view class="desc">{{info.orgName}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.singleOutputInfo.stockFormType')}}</view>
-						<view class="desc">{{info.stockFormType | stockFormType}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.singleOutputInfo.customerName')}}</view>
-						<view class="desc">{{info.customerName}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.singleOutputInfo.linkBillNo')}}</view>
-						<view class="desc">{{info.linkBillNo}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.singleOutputInfo.linkType')}}</view>
-						<view class="desc">{{info.linkType | linkType}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.singleOutputInfo.licenseNo')}}</view>
-						<view class="desc">{{info.licenseNo}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.singleOutputInfo.deliverMan')}}</view>
-						<view class="desc">{{info.deliverMan}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.singleOutputInfo.remarks')}}</view>
-						<view class="desc">{{info.remarks}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.singleOutputInfo.filePath')}}</view>
-						<view class="desc">
-							<image class="img" v-for="item in info.filePath" :key="item.id" :src="item.url"></image>
-						</view>
-					</view>
-				</view>
-			</view>
-			<view class="basic-item">
-				<view class="basic-tle">{{$t('auditInfo.singleOutputInfo.orderTle')}}</view>
-				<view class="basic-box" v-for="item in stockInoutLogList" :key="item.id">
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.singleOutputInfo.subBillNo')}}</view>
-						<view class="desc">{{info.subBillNo}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.singleOutputInfo.inOutName')}}</view>
-						<view class="desc">{{item.inOutName + (item.inOutType === 1 ? $t('auditInfo.singleOutputInfo.inOutNameTxt')[0] : $t('auditInfo.singleOutputInfo.inOutNameTxt')[1])}}</view>
-					</view>
-					<UTable :table-column="tableColumn" :table-data="item.stockInoutLogDetailsList"></UTable>
-				</view>
-			</view>
-		</view>
+	<view class="basic">
+		<description-list :title="$t('auditInfo.singleOutputInfo.basicTle')">
+			<description :label="$t('auditInfo.singleOutputInfo.billNo')">{{ info.billNo }}</description>
+			<description :label="$t('auditInfo.singleOutputInfo.orgName')">{{ info.orgName }}</description>
+			<description :label="$t('auditInfo.singleOutputInfo.stockFormType')">{{ info.stockFormType | stockFormType }}</description>
+			<description :label="$t('auditInfo.singleOutputInfo.customerName')">{{ info.customerName }}</description>
+			<description :label="$t('auditInfo.singleOutputInfo.linkBillNo')">{{ info.linkBillNo }}</description>
+			<description :label="$t('auditInfo.singleOutputInfo.linkType')">{{ info.linkType | linkType }}</description>
+			<description :label="$t('auditInfo.singleOutputInfo.licenseNo')">{{ info.licenseNo }}</description>
+			<description :label="$t('auditInfo.singleOutputInfo.deliverMan')">{{ info.deliverMan }}</description>
+			<description :label="$t('auditInfo.singleOutputInfo.remarks')">{{ info.remarks }}</description>
+			<description :label="$t('auditInfo.singleOutputInfo.filePath')">
+				<image class="img" v-for="item in info.filePath" :key="item.id" :src="item.url"></image>
+			</description>
+		</description-list>
+		<description-list :title="$t('auditInfo.singleOutputInfo.orderTle')">
+			<block v-for="item in stockInoutLogList" :key="item.id">
+				<description :label="$t('auditInfo.singleOutputInfo.subBillNo')">{{ info.subBillNo }}</description>
+				<description :label="$t('auditInfo.singleOutputInfo.inOutName')">{{item.inOutName + (item.inOutType === 1 ? $t('auditInfo.singleOutputInfo.inOutNameTxt')[0] : $t('auditInfo.singleOutputInfo.inOutNameTxt')[1])}}</description>
+				<us-table :table-column="tableColumn" :table-data="item.stockInoutLogDetailsList"></us-table>
+			</block>
+		</description-list>
 	</view>
 </template>
 <script>
 	let that = null
 	import {
 		stockBillLogFindById
-	} from '@/api/lpgManageAppApi'
-	import UTable from './uTable'
+	} from '@/api/lpgSalesManageApi.js'
 	export default {
 		name: 'SingleOutputInfo',
-		components: {UTable},
+		components: {},
 		// 过滤器
 		filters: {
 			stockFormType(value) {

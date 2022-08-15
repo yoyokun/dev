@@ -1,196 +1,66 @@
 <template>
-	<view class="business-info">
-		<view class="audit-info-content">
-			<view class="tabs">
-				<view class="tabs-content">
-					<u-tabs :scrollable="false" :list="busMenu" :current="current" :itemStyle="{flex:'1',height:'44px'}"
-						@change="changeTabs"></u-tabs>
-				</view>
+	<view>
+		<view class="tabs">
+			<view class="tabs-content">
+				<u-tabs :scrollable="false" :list="busMenu" :current="current" :itemStyle="{flex:'1',height:'44px'}"
+					@change="changeTabs"></u-tabs>
 			</view>
+		</view>
 
-			<view class="basic" v-show="current == 0">
-				<view class="basic-item">
-					<view class="basic-tle">{{$t('auditInfo.businessInfo.basic.basicTle')}}</view>
-					<view class="basic-box">
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.orgName')}}</view>
-							<view class="desc">{{info.orgName}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.billNo')}}</view>
-							<view class="desc">{{info.billNo}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.formType')}}</view>
-							<view class="desc">{{info.formType | formType}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.customerNo')}}</view>
-							<view class="desc">{{info.customerNo}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.customerName')}}</view>
-							<view class="desc">{{info.customerName}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.checkState')}}</view>
-							<view class="desc">{{info.checkState | checkState}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.goodsTotalMoney')}}</view>
-							<view class="desc">{{info.goodsTotalMoney}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.payItemsMoney')}}</view>
-							<view class="desc">{{info.payItemsMoney}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.couponTotalMoney')}}</view>
-							<view class="desc">{{info.couponTotalMoney}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.totalMoney')[0]}}</view>
-							<view class="desc">{{info.totalMoney}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.creator')}}</view>
-							<view class="desc">{{info.creator}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.billTime')}}</view>
-							<view class="desc">{{info.billTime | dayjs}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.totalMoney')[1]}}</view>
-							<view class="desc">{{info.totalMoney}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.totalWeight')}}</view>
-							<view class="desc">{{info.totalWeight}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.totalNum')}}</view>
-							<view class="desc">{{info.totalNum}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.linkBillNo')}}</view>
-							<view class="desc">{{info.linkBillNo}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.linkType')}}</view>
-							<view class="desc">{{info.linkType}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.printCount')}}</view>
-							<view class="desc">{{info.printCount}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.remarks')}}</view>
-							<view class="desc">{{info.remarks}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.operator')}}</view>
-							<view class="desc">{{info.operator}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.operationTime')}}</view>
-							<view class="desc">{{info.operationTime | dayjs}}</view>
-						</view>
-					</view>
-				</view>
-				<view class="basic-item">
-					<view class="basic-tle">{{$t('auditInfo.businessInfo.basic.goodsTle')}}</view>
-					<view class="basic-box">
-						<UTable :table-column="tableColumn" :table-data="salesTransferDetailList"></UTable>
-					</view>
-				</view>
-				<view class="basic-item">
-					<view class="basic-tle">{{$t('auditInfo.businessInfo.basic.deliverTle')}}</view>
-					<view class="basic-box">
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.pickMode')}}</view>
-							<view class="desc">{{salesOrderTransport.pickMode | pickMode}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.bookingTime')}}</view>
-							<view class="desc">
-								{{salesOrderTransport.bookingTime ? UnixToDate(salesOrderTransport.bookingTime) : ''}}
-							</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.licenseNo')}}</view>
-							<view class="desc">{{salesOrderTransport.licenseNo}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.deliverMan')}}</view>
-							<view class="desc">{{salesOrderTransport.deliverMan}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.addressSplicing')}}</view>
-							<view class="desc">{{salesOrderTransport | addressSplicing}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.payItemsMoney')}}</view>
-							<view class="desc">{{info.billNo}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.payItemsName')}}</view>
-							<view class="desc">{{info.billNo}}</view>
-						</view>
-					</view>
-				</view>
-				<view class="basic-item">
-					<view class="basic-tle">{{$t('auditInfo.businessInfo.basic.orderTle')}}</view>
-					<view class="basic-box">
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.couponNo')}}</view>
-							<view class="desc">{{ info.coupon ? info.coupon.couponNo : '' }}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.couponMoney')}}</view>
-							<view class="desc">{{info.couponMoney}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.integralValue')}}</view>
-							<view class="desc">{{info.integralValue}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.integralMoney')}}</view>
-							<view class="desc">{{info.integralMoney}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.disCountMoney')}}</view>
-							<view class="desc">{{info.disCountMoney}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.disCountRate')}}</view>
-							<view class="desc">{{info.disCountRate}}%</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.couponTotalMoney')}}</view>
-							<view class="desc">{{info.couponTotalMoney}}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.businessInfo.basic.totalMoney')[2]}}</view>
-							<view class="desc">{{info.totalMoney}}</view>
-						</view>
-					</view>
-				</view>
-			</view>
-			<view class="basic source" v-show="current == 1">
-				<view class="basic-item"  v-if="editId">
-					<view class="basic-tle">{{$t('auditInfo.businessInfo.source.sendTle')}}</view>
-					<view class="basic-box">
-						<service-cylinder-info node-type="confirmDelivery" :link-id="editId" />
-					</view>
-				</view>
-				<view class="basic-item" v-if="editId">
-					<view class="basic-tle">{{$t('auditInfo.businessInfo.source.recycleTle')}}</view>
-					<view class="basic-box">
-						<service-cylinder-info node-type="recycleCylinder" :link-id="editId" />
-					</view>
-				</view>
-			</view>
+		<view class="basic" v-show="current == 0">
+			<description-list :title="$t('auditInfo.businessInfo.basicTle')">
+				<description :label="$t('auditInfo.businessInfo.orgName')">{{ info.orgName }}</description>
+				<description :label="$t('auditInfo.businessInfo.billNo')">{{ info.billNo }}</description>
+				<description :label="$t('auditInfo.businessInfo.formType')">{{ info.formType | formType }}</description>
+				<description :label="$t('auditInfo.businessInfo.customerNo')">{{ info.customerNo }}</description>
+				<description :label="$t('auditInfo.businessInfo.customerName')">{{ info.customerName }}</description>
+				<description :label="$t('auditInfo.businessInfo.checkState')">{{ info.checkState | checkState }}</description>
+				<description :label="$t('auditInfo.businessInfo.goodsTotalMoney')">{{ info.goodsTotalMoney }}</description>
+				<description :label="$t('auditInfo.businessInfo.payItemsMoney')">{{ info.payItemsMoney }}</description>
+				<description :label="$t('auditInfo.businessInfo.couponTotalMoney')">{{ info.couponTotalMoney }}</description>
+				<description :label="$t('auditInfo.businessInfo.totalMoney')[0]">{{ info.totalMoney }}</description>
+				<description :label="$t('auditInfo.businessInfo.creator')">{{ info.creator }}</description>
+				<description :label="$t('auditInfo.businessInfo.billTime')">{{ info.billTime | dayjs }}</description>
+				<description :label="$t('auditInfo.businessInfo.totalMoney')[1]">{{ info.totalMoney }}</description>
+				<description :label="$t('auditInfo.businessInfo.totalWeight')">{{ info.totalWeight }}</description>
+				<description :label="$t('auditInfo.businessInfo.totalNum')">{{ info.totalNum }}</description>
+				<description :label="$t('auditInfo.businessInfo.linkBillNo')">{{ info.linkBillNo }}</description>
+				<description :label="$t('auditInfo.businessInfo.linkType')">{{ info.linkType }}</description>
+				<description :label="$t('auditInfo.businessInfo.printCount')">{{ info.printCount }}</description>
+				<description :label="$t('auditInfo.businessInfo.remarks')">{{ info.remarks }}</description>
+				<description :label="$t('auditInfo.businessInfo.operator')">{{ info.operator }}</description>
+				<description :label="$t('auditInfo.businessInfo.operationTime')">{{ info.operationTime | dayjs }}</description>
+			</description-list>
+			<description-list :title="$t('auditInfo.businessInfo.goodsTle')">
+				<us-table :table-column="tableColumn" :table-data="salesTransferDetailList"></us-table>
+			</description-list>
+			<description-list :title="$t('auditInfo.businessInfo.deliverTle')">
+				<description :label="$t('auditInfo.businessInfo.pickMode')">{{ info.pickMode | pickMode }}</description>
+				<description :label="$t('auditInfo.businessInfo.bookingTime')">{{salesOrderTransport.bookingTime ? UnixToDate(salesOrderTransport.bookingTime) : ''}}</description>
+				<description :label="$t('auditInfo.businessInfo.licenseNo')">{{ info.licenseNo }}</description>
+				<description :label="$t('auditInfo.businessInfo.deliverMan')">{{ info.deliverMan }}</description>
+				<description :label="$t('auditInfo.businessInfo.addressSplicing')">{{ info.addressSplicing }}</description>
+				<description :label="$t('auditInfo.businessInfo.payItemsMoney')">{{ info.payItemsMoney }}</description>
+				<description :label="$t('auditInfo.businessInfo.payItemsName')">{{ info.payItemsName }}</description>
+			</description-list>
+			<description-list :title="$t('auditInfo.businessInfo.orderTle')">
+				<description :label="$t('auditInfo.businessInfo.couponNo')">{{ info.coupon ? info.coupon.couponNo : '' }}</description>
+				<description :label="$t('auditInfo.businessInfo.couponMoney')">{{ info.couponMoney }}</description>
+				<description :label="$t('auditInfo.businessInfo.integralValue')">{{ info.integralValue }}</description>
+				<description :label="$t('auditInfo.businessInfo.integralMoney')">{{ info.integralMoney }}</description>
+				<description :label="$t('auditInfo.businessInfo.disCountMoney')">{{ info.disCountMoney }}</description>
+				<description :label="$t('auditInfo.businessInfo.disCountRate')">{{ info.disCountRate }}</description>
+				<description :label="$t('auditInfo.businessInfo.couponTotalMoney')">{{ info.couponTotalMoney }}</description>
+				<description :label="$t('auditInfo.businessInfo.totalMoney')[2]">{{ info.totalMoney }}</description>
+			</description-list>
+		</view>
+		<view class="basic" v-show="current == 1">
+			<description-list v-if="editId" :title="$t('auditInfo.businessInfo.sendTle')">
+				<service-cylinder-info node-type="confirmDelivery" :link-id="editId" />
+			</description-list>
+			<description-list v-if="editId" :title="$t('auditInfo.businessInfo.recycleTle')">
+				<service-cylinder-info node-type="recycleCylinder" :link-id="editId" />
+			</description-list>
 		</view>
 	</view>
 </template>
@@ -202,27 +72,28 @@
 	import {
 		UnixToDate
 	} from '@/utils/util'
-	import UTable from './uTable'
 	import ServiceCylinderInfo from './serviceCylinderInfo'
 	export default {
 		name: 'BusinessInfo',
-		components: {UTable,ServiceCylinderInfo},
+		components: {
+			ServiceCylinderInfo
+		},
 		// 过滤器
 		filters: {
 			linkType(value) {
-				const stateObj = that.$t('auditInfo.businessInfo.basic.linkTypeTxt')
+				const stateObj = that.$t('auditInfo.businessInfo.linkTypeTxt')
 				return stateObj[value] || ''
 			},
 			checkState(value) {
-				const stateObj = that.$t('auditInfo.businessInfo.basic.checkStateTxt')
+				const stateObj = that.$t('auditInfo.businessInfo.checkStateTxt')
 				return stateObj[value] || ''
 			},
 			formType(value) {
-				const stateObj = that.$t('auditInfo.businessInfo.basic.formTypeTxt')
+				const stateObj = that.$t('auditInfo.businessInfo.formTypeTxt')
 				return stateObj[value] || ''
 			},
 			pickMode(value) {
-				const stateObj = that.$t('auditInfo.businessInfo.basic.pickModeTxt')
+				const stateObj = that.$t('auditInfo.businessInfo.pickModeTxt')
 				return stateObj[value] || ''
 			}
 		},
@@ -235,11 +106,7 @@
 		data() {
 			return {
 				// tabs菜单
-				busMenu: [{
-					name: this.$t('auditInfo.businessInfo.tabs.basicTle'),
-				}, {
-					name: this.$t('auditInfo.businessInfo.tabs.sourceTle'),
-				}],
+				busMenu: this.$t('auditInfo.businessInfo.tabs'),
 				current: 0, // tabs索引
 				type: '1',
 				UnixToDate: UnixToDate,
@@ -253,7 +120,7 @@
 		computed: {
 
 		},
-		created(){
+		created() {
 			that = this
 		},
 		mounted() {
@@ -283,6 +150,7 @@
 						payItemsName.push(`${v.payItemsName}:${v.payItemsMoney},共${v.payItemsTotalMoney} `)
 					})
 					res.payItemsName = payItemsName.join(',')
+					this.info = res
 					this.tableColumn = res.printSetVo && res.printSetVo.tableColumn
 					res.salesBusinessDetailList.forEach(v => {
 						v.goodsPath = v.goodsPath.length ? (JSON.parse(v.goodsPath).length ? JSON.parse(v
@@ -307,18 +175,4 @@
 	}
 </script>
 <style lang="scss" scoped>
-	.business-info {
-		position: relative;
-		.tabs {
-			height: 44px;
-			width: 100%;
-			.tabs-content {
-				position: absolute;
-				width: 100%;
-				height: 44px;
-				background: white;
-				z-index: 2;
-			}
-		}
-	}
 </style>

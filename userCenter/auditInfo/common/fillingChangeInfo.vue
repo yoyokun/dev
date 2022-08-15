@@ -1,74 +1,24 @@
 <template>
-	<view class="audit-info-content">
-		<view class="basic">
-			<view class="basic-item">
-				<view class="basic-tle">{{$t('auditInfo.fillingChangeInfo.basicTle')}}</view>
-				<view class="basic-box">
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.fillingChangeInfo.billNo')}}</view>
-						<view class="desc">{{info.billNo}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.fillingChangeInfo.orgName')}}</view>
-						<view class="desc">{{info.orgName}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.fillingChangeInfo.inOutName')}}</view>
-						<view class="desc">
-							{{ info.inOutName + (info.inOutType === 1 ? $t('auditInfo.fillingChangeInfo.inOutNameTxt')[0] : $t('auditInfo.fillingChangeInfo.inOutNameTxt')[1]) }}
-						</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.fillingChangeInfo.systemTotalNum')}}</view>
-						<view class="desc">{{info.systemTotalNum}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.fillingChangeInfo.realTotalNum')}}</view>
-						<view class="desc">{{info.realTotalNum}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.fillingChangeInfo.systemTotalWeight')}}</view>
-						<view class="desc">{{info.systemTotalWeight}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.fillingChangeInfo.realTotalWeight')}}</view>
-						<view class="desc">{{info.realTotalWeight}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.fillingChangeInfo.planTotalWeight')}}</view>
-						<view class="desc">
-							{{ $bigDecimal.round($bigDecimal.subtract(info.realTotalWeight, info.planTotalWeight), 2) }}
-						</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.fillingChangeInfo.checkState')}}</view>
-						<view class="desc">{{info.checkState | checkState}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.fillingChangeInfo.operator')}}</view>
-						<view class="desc">{{info.operator}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.fillingChangeInfo.operationTime')}}</view>
-						<view class="desc">{{info.operationTime | dayjs}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.fillingChangeInfo.remarks')}}</view>
-						<view class="desc">{{info.remarks}}</view>
-					</view>
-				</view>
+	<view class="basic">
+		<description-list :title="$t('auditInfo.fillingChangeInfo.basicTle')">
+			<description :label="$t('auditInfo.fillingChangeInfo.billNo')">{{ info.billNo }}</description>
+			<description :label="$t('auditInfo.fillingChangeInfo.orgName')">{{ info.orgName }}</description>
+			<description :label="$t('auditInfo.fillingChangeInfo.inOutName')">{{ info.inOutName + (info.inOutType === 1 ? $t('auditInfo.fillingChangeInfo.inOutNameTxt')[0] : $t('auditInfo.fillingChangeInfo.inOutNameTxt')[1]) }}</description>
+			<description :label="$t('auditInfo.fillingChangeInfo.systemTotalNum')">{{ info.systemTotalNum }}</description>
+			<description :label="$t('auditInfo.fillingChangeInfo.realTotalNum')">{{ info.realTotalNum }}</description>
+			<description :label="$t('auditInfo.fillingChangeInfo.systemTotalWeight')">{{ info.systemTotalWeight }}</description>
+			<description :label="$t('auditInfo.fillingChangeInfo.realTotalWeight')">{{ info.realTotalWeight }}</description>
+			<description :label="$t('auditInfo.fillingChangeInfo.planTotalWeight')">{{ $bigDecimal.round($bigDecimal.subtract(info.realTotalWeight, info.planTotalWeight), 2) }}</description>
+			<description :label="$t('auditInfo.fillingChangeInfo.checkState')">{{ info.checkState | checkState }}</description>
+			<description :label="$t('auditInfo.fillingChangeInfo.operator')">{{ info.operator }}</description>
+			<description :label="$t('auditInfo.fillingChangeInfo.operationTime')">{{ info.operationTime | dayjs }}</description>
+		</description-list>
+		<description-list :title="$t('auditInfo.fillingChangeInfo.tableTle')">
+			<view style="padding: 20rpx;">
+				<total :info-data="infoData"></total>
 			</view>
-			<view class="basic-item">
-				<view class="basic-tle">{{$t('auditInfo.fillingChangeInfo.tableTle')}}</view>
-				<view style="padding: 20rpx 0;">
-					<total :info-data="infoData"></total>
-				</view>
-
-				<view class="basic-box">
-					<UTable :table-column="tableColumn" :table-data="tableData"></UTable>
-				</view>
-			</view>
-		</view>
+			<us-table :table-column="tableColumn" :table-data="tableData"></us-table>
+		</description-list>
 	</view>
 </template>
 <script>
@@ -76,12 +26,10 @@
 	import {
 		fillingChangeLogFindById
 	} from '@/api/lpgSalesManageApi'
-	import UTable from './uTable'
 	import total from './total'
 	export default {
 		name: 'FillingChangeInfo',
 		components: {
-			UTable,
 			total,
 		},
 		// 过滤器
@@ -222,12 +170,14 @@
 			// 合计
 			getSummaries() {
 				let countArr = {}
-				this.tableData.forEach((val,key)=>{
-					this.tableColumn.forEach((item,index)=>{
-						if(index==0){
+				this.tableData.forEach((val, key) => {
+					this.tableColumn.forEach((item, index) => {
+						if (index == 0) {
 							countArr[item.prop] = this.$t('auditInfo.fillingChangeInfo.tableColumn.count')
-						}else if(['systemNum','realNum','planWeight','realWeight','profit'].indexOf(item.prop) != -1){
-							countArr[item.prop] = (countArr[item.prop]?countArr[item.prop]:0) + parseInt(val[item.prop])
+						} else if (['systemNum', 'realNum', 'planWeight', 'realWeight', 'profit'].indexOf(
+								item.prop) != -1) {
+							countArr[item.prop] = (countArr[item.prop] ? countArr[item.prop] : 0) +
+								parseInt(val[item.prop])
 						}
 					})
 				})

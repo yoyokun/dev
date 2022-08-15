@@ -4,7 +4,7 @@
 			<u-steps-item v-for="item in auditRecordVos" :title="item.levelName" :key="item.auditTime"
 				:desc="item.auditTime | dayjs"></u-steps-item>
 		</u-steps>
-		<view>
+		<view class="audit-info-content">
 			<!-- 业务单 -->
 			<business-info v-if="info.formKey === 'salesBusiness'" :edit-id="info.linkId" />
 			<!--资金期初-->
@@ -37,6 +37,12 @@
 			<refund-info v-if="info.formKey === 'salesOrderRefund'" :edit-id="info.linkId" />
 			<!-- 销售单 -->
 			<sales-orders-info v-if="info.formKey === 'salesOrder'" :edit-id="info.linkId" />
+			<!--采购申请-->
+			<pur-good-requisition-info v-if="info.formKey === 'purApply'" :edit-id="info.linkId" />
+			<!--采购单-->
+			<pur-good-order-info v-if="info.formKey === 'purOrder'" :edit-id="info.linkId" />
+			<!--采购计划-->
+			<pur-good-plan-info v-if="info.formKey === 'purPlan'" :edit-id="info.linkId" />
 		</view>
 		<view class="time-line" v-if="auditRecordVosReverse.length">
 			<view class="time-line-tle">{{$t('auditInfo.trendsTle')}}</view>
@@ -78,6 +84,7 @@
 	import GatheringInfo from './common/gatheringInfo'
 	import PaymentInfo from './common/paymentInfo'
 	import PricePlanInfo from './common/pricePlanInfo'
+	import StockTakingInfo from './common/stockTakingInfo'
 	import FillingChangeInfo from './common/fillingChangeInfo'
 	import PurGoodTankCarHouseInfo from './common/purGoodTankCarHouseInfo'
 	import GoodsInfo from './common/goodsInfo'
@@ -85,6 +92,9 @@
 	import SingleOutputInfo from './common/singleOutputInfo'
 	import RefundInfo from './common/refundInfo'
 	import SalesOrdersInfo from './common/salesOrdersInfo'
+	import PurGoodRequisitionInfo from './common/purGoodRequisitionInfo'
+	import PurGoodOrderInfo from './common/purGoodOrderInfo'
+	import PurGoodPlanInfo from './common/purGoodPlanInfo'
 	export default {
 		components: {
 			BusinessInfo,
@@ -95,12 +105,17 @@
 			GatheringInfo,
 			PaymentInfo,
 			PricePlanInfo,
+			StockTakingInfo,
 			FillingChangeInfo,
 			PurGoodTankCarHouseInfo,
 			GoodsInfo,
 			PriceStrategyInfo,
 			SingleOutputInfo,
+			RefundInfo,
 			SalesOrdersInfo,
+			PurGoodRequisitionInfo,
+			PurGoodOrderInfo,
+			PurGoodPlanInfo,
 		},
 		data() {
 			return {
@@ -176,70 +191,31 @@
 
 		.step {
 			margin-bottom: 30rpx;
-			// text-align: center;
 		}
-
-		::v-deep .audit-info-content {
+		description-list{
+			margin-bottom: 40rpx;
+		}
+		.audit-info-content {
 			background: white;
 			border-radius: 16rpx;
 			box-shadow: 0rpx 4rpx 8rpx 0rpx rgba(42, 130, 228, 0.15);
 			// height: 600rpx;
 			// overflow-y: scroll;
-			.basic {
-				padding: 20rpx 20rpx;
-				
-				.basic-item {
-					font-size: 28rpx;
-
-					&:last-child {
-						.basic-box {
-							.item:last-child {
-								border: none;
-							}
-						}
+			::v-deep .basic {
+				// padding: 20rpx 20rpx;
+				.img{
+					width: 100rpx;
+					height: 100rpx;
+					margin-right: 12rpx;
+					margin-top: 12rpx;
+				}
+				.down-list{
+					text:first-child{
+						margin-right: 10rpx;
 					}
-
-					.basic-tle {
-						padding: 0 20rpx;
-						height: 80rpx;
-						line-height: 80rpx;
-						font-weight: bold;
-						border-bottom: 1px solid #eee;
-					}
-
-					.basic-box {
-						.item {
-							border-bottom: 1px solid #eee;
-							min-height: 60rpx;
-							line-height: 60rpx;
-							padding: 0 20rpx;
-							display: flex;
-
-							.tle::after {
-								display: inline-block;
-								content: '：';
-							}
-
-							.desc {
-								width: 1px;
-								flex: 1;
-								.img{
-									width: 100rpx;
-									height: 100rpx;
-									margin-right: 12rpx;
-									margin-top: 12rpx;
-								}
-								.down-list{
-									text:first-child{
-										margin-right: 10rpx;
-									}
-									text:last-child{
-										color: #2979ff;
-										cursor: pointer;
-									}
-								}
-							}
-						}
+					text:last-child{
+						color: #2979ff;
+						cursor: pointer;
 					}
 				}
 			}
@@ -247,14 +223,14 @@
 		.time-line{
 			margin-top: 30rpx;
 			background: white;
-			padding: 30rpx;
+			padding: 20rpx 30rpx;
 			border-radius: 16rpx;
 			box-shadow: 0rpx 4rpx 8rpx 0rpx rgba(42, 130, 228, 0.15);
 			font-size: 28rpx;
 			.time-line-tle{
 				font-weight: bold;
-				padding: 10rpx 0;
-				padding-bottom: 30rpx;
+				// padding: 10rpx 0;
+				padding-bottom: 20rpx;
 				
 			}
 			.item-list{

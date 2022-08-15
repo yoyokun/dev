@@ -1,17 +1,15 @@
 <template>
-    <UTable
+    <us-table
       :table-column="tableColumn"
       :table-data="tableData"
-    ></UTable>
+    ></us-table>
 </template>
 <script>
-import UTable from './uTable'
 import { cylinderFlowFindFlowList } from '@/api/lpgManageAppApi'
 
 export default {
   name: 'ServiceCylinderInfo',
   components: {
-    UTable
   },
   // 过滤器
   filters: {

@@ -16,10 +16,10 @@ export default {
     const vnodes = []
     if (detail) {
       detail.forEach((v, i) => {
-        if (v.tag && v.tag === 'img') {
+        if (v.tag && v.tag.search(/image/i)!=-1) {
           const src = v.data.attrs.src
-          vnodes.push(<img onClick={() => priveImg(src)} class={['img']} src={src} />)
-        } else if (v.tag && v.tag === 'view') {
+          vnodes.push(<image onClick={() => priveImg(src)} class={['img']} src={src} />)
+        } else if (v.tag && v.tag.search(/view/i)!=-1) {
           vnodes.push(v)
         } else {
           vnodes.push(<text>{(v.text)}</text>)
