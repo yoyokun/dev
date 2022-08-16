@@ -24,7 +24,7 @@
 
 <script>
 	export default {
-		name: 'Utable',
+		name: 'UTable',
 		props: {
 			// 表头名称
 			tableColumn: {

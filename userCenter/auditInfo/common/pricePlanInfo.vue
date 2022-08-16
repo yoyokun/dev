@@ -1,56 +1,19 @@
 <template>
-	<view class="audit-info-content">
-		<view class="basic">
-			<view class="basic-item">
-				<view class="basic-tle">{{$t('auditInfo.pricePlanInfo.basicTle')}}</view>
-				<view class="basic-box">
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.pricePlanInfo.planNo')}}</view>
-						<view class="desc">{{info.planNo}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.pricePlanInfo.orgName')}}</view>
-						<view class="desc">{{info.orgName}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.pricePlanInfo.planName')}}</view>
-						<view class="desc">{{info.planName}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.pricePlanInfo.planType')}}</view>
-						<view class="desc">
-							{{info.planType === 1 ? $t('auditInfo.pricePlanInfo.planTypeTxt')[0] : $t('auditInfo.pricePlanInfo.planTypeTxt')[1]}}
-						</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.pricePlanInfo.planTime')}}</view>
-						<view class="desc">{{info.planTime?UnixToDate(info.planTime):''}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.pricePlanInfo.execTime')}}</view>
-						<view class="desc">{{info.execTime?UnixToDate(info.planTime):''}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.pricePlanInfo.creator')}}</view>
-						<view class="desc">{{info.creator}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.pricePlanInfo.createTime')}}</view>
-						<view class="desc">{{info.createTime | dayjs }}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.pricePlanInfo.operationTime')}}</view>
-						<view class="desc">{{info.operationTime | dayjs}}</view>
-					</view>
-				</view>
-			</view>
-			<view class="basic-item">
-				<!-- <view class="basic-tle">{{$t('auditInfo.pricePlanInfo.basicTle')}}</view> -->
-				<view class="basic-box">
-					<UTable :table-column="tableColumn" :table-data="tableData"></UTable>
-				</view>
-			</view>
-		</view>
+	<view class="basic">
+		<description-list :title="$t('auditInfo.pricePlanInfo.basicTle')">
+			<description :label="$t('auditInfo.pricePlanInfo.planNo')">{{ info.planNo }}</description>
+			<description :label="$t('auditInfo.pricePlanInfo.orgName')">{{ info.orgName }}</description>
+			<description :label="$t('auditInfo.pricePlanInfo.planName')">{{ info.planName }}</description>
+			<description :label="$t('auditInfo.pricePlanInfo.planType')">{{info.planType === 1 ? $t('auditInfo.pricePlanInfo.planTypeTxt')[0] : $t('auditInfo.pricePlanInfo.planTypeTxt')[1]}}</description>
+			<description :label="$t('auditInfo.pricePlanInfo.planTime')">{{info.planTime?UnixToDate(info.planTime):''}}</description>
+			<description :label="$t('auditInfo.pricePlanInfo.execTime')">{{info.execTime?UnixToDate(info.execTime):''}}</description>
+			<description :label="$t('auditInfo.pricePlanInfo.creator')">{{ info.creator }}</description>
+			<description :label="$t('auditInfo.pricePlanInfo.createTime')">{{ info.createTime | dayjs }}</description>
+			<description :label="$t('auditInfo.pricePlanInfo.operationTime')">{{ info.operationTime | dayjs }}</description>
+		</description-list>
+		<description-list>
+			<us-table :table-column="tableColumn" :table-data="tableData"></us-table>
+		</description-list>
 	</view>
 </template>
 <script>
@@ -58,13 +21,12 @@
 		pricePlanFindById,
 		pricePlanDetailFindList
 	} from '@/api/lpgManageAppApi'
-	import UTable from './uTable'
 	import {
 		UnixToDate
 	} from '@/utils/util'
 	export default {
 		name: 'ShopInfo',
-		components: {UTable},
+		components: {},
 		// 过滤器
 		filters: {},
 		props: {

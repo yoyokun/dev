@@ -156,3 +156,48 @@ export function salesOrderFindList(data = {}, message = '', custom = {}) {
 		}
   })
 }
+
+// 商品采购申请 根据id查询信息
+export function purApplyFindById(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/sales/purApply/findById',
+    method: 'post',
+    data,
+	message,
+	custom: {
+		auth: custom?.auth || true, // 是否需要token
+		toast: custom?.toast || true, // 弹框
+		catch: custom?.catch || true // catch返回
+	}
+  })
+}
+
+// 采购单 根据id查询信息
+export function purOrderFindById(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/sales/purOrder/findById',
+    method: 'post',
+    data,
+	message,
+	custom: {
+		auth: custom?.auth || true, // 是否需要token
+		toast: custom?.toast || true, // 弹框
+		catch: custom?.catch || true // catch返回
+	}
+  })
+}
+
+// 采购计划详情列表 根据id查询信息
+export function purPlanFindById(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/sales/purPlan/findById',
+    method: 'post',
+    data,
+	message,
+	custom: {
+		auth: custom?.auth || true, // 是否需要token
+		toast: custom?.toast || true, // 弹框
+		catch: custom?.catch || true // catch返回
+	}
+  })
+}

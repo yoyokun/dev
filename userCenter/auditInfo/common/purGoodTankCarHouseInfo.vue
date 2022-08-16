@@ -1,83 +1,31 @@
 <template>
-	<view class="audit-info-content">
-		<view class="basic">
-			<view class="basic-item">
-				<view class="basic-tle">{{$t('auditInfo.PurGoodTankCarHouseInfo.basicTle')}}</view>
-				<view class="basic-box">
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.PurGoodTankCarHouseInfo.billNo')}}</view>
-						<view class="desc">{{info.billNo}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.PurGoodTankCarHouseInfo.inDate')}}</view>
-						<view class="desc">{{info.inDate | dayjs('YYYY-MM-DD')}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.PurGoodTankCarHouseInfo.orderOrgName')}}</view>
-						<view class="desc">{{info.orderOrgName}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.PurGoodTankCarHouseInfo.takeManagerName')}}</view>
-						<view class="desc">{{info.takeManagerName}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.PurGoodTankCarHouseInfo.supplierName')}}</view>
-						<view class="desc">{{info.supplierName}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.PurGoodTankCarHouseInfo.supplyName')}}</view>
-						<view class="desc">{{info.supplyName}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.PurGoodTankCarHouseInfo.takeType')}}</view>
-						<view class="desc">{{info.takeType | takeType}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.PurGoodTankCarHouseInfo.vehicleNum')}}</view>
-						<view class="desc">{{info.vehicleNum}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.PurGoodTankCarHouseInfo.transportName')}}</view>
-						<view class="desc">{{info.transportName}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.PurGoodTankCarHouseInfo.license')}}</view>
-						<view class="desc">{{info.license}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.PurGoodTankCarHouseInfo.vehicleDriverName')}}</view>
-						<view class="desc">{{info.vehicleDriverName}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.PurGoodTankCarHouseInfo.escortName')}}</view>
-						<view class="desc">{{info.escortName}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.PurGoodTankCarHouseInfo.inoutReasonName')}}</view>
-						<view class="desc">{{info.inoutReasonName}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.PurGoodTankCarHouseInfo.remarks')}}</view>
-						<view class="desc">{{info.remarks}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.PurGoodTankCarHouseInfo.attachment')}}</view>
-						<view class="desc">
-							<view class="down-list" v-for="(item,index) in info.attachment" :key="item.id">
-								<text>{{ index+1 }}.{{ item.name }}</text>
-								<text @click="downFile(item.url)">{{$t('auditInfo.PurGoodTankCarHouseInfo.downloadTxt')}}</text>
-							</view>
-						</view>
-					</view>
+	<view class="basic">
+		<description-list :title="$t('auditInfo.PurGoodTankCarHouseInfo.basicTle')">
+			<description :label="$t('auditInfo.PurGoodTankCarHouseInfo.billNo')">{{ info.billNo }}</description>
+			<description :label="$t('auditInfo.PurGoodTankCarHouseInfo.inDate')">{{ info.inDate | dayjs('YYYY-MM-DD') }}</description>
+			<description :label="$t('auditInfo.PurGoodTankCarHouseInfo.orderOrgName')">{{ info.orderOrgName }}</description>
+			<description :label="$t('auditInfo.PurGoodTankCarHouseInfo.takeManagerName')">{{ info.takeManagerName }}</description>
+			<description :label="$t('auditInfo.PurGoodTankCarHouseInfo.supplierName')">{{ info.supplierName }}</description>
+			<description :label="$t('auditInfo.PurGoodTankCarHouseInfo.supplyName')">{{ info.supplyName }}</description>
+			<description :label="$t('auditInfo.PurGoodTankCarHouseInfo.takeType')">{{ info.takeType | takeType }}</description>
+			<description :label="$t('auditInfo.PurGoodTankCarHouseInfo.vehicleNum')">{{ info.vehicleNum }}</description>
+			<description :label="$t('auditInfo.PurGoodTankCarHouseInfo.transportName')">{{ info.transportName }}</description>
+			<description :label="$t('auditInfo.PurGoodTankCarHouseInfo.license')">{{ info.license }}</description>
+			<description :label="$t('auditInfo.PurGoodTankCarHouseInfo.vehicleDriverName')">{{ info.vehicleDriverName }}</description>
+			<description :label="$t('auditInfo.PurGoodTankCarHouseInfo.escortName')">{{ info.escortName }}</description>
+			<description :label="$t('auditInfo.PurGoodTankCarHouseInfo.inoutReasonName')">{{ info.inoutReasonName }}</description>
+			<description :label="$t('auditInfo.PurGoodTankCarHouseInfo.remarks')">{{ info.remarks }}</description>
+			<description :label="$t('auditInfo.PurGoodTankCarHouseInfo.attachment')">
+				<view class="down-list" v-for="(item,index) in info.attachment" :key="item.id">
+					<text>{{ index+1 }}.{{ item.name }}</text>
+					<text
+						@click="downFile(item.url)">{{$t('auditInfo.PurGoodTankCarHouseInfo.downloadTxt')}}</text>
 				</view>
-			</view>
-			<view class="basic-item">
-				<view class="basic-tle">{{$t('auditInfo.PurGoodTankCarHouseInfo.tableTle')}}</view>
-				<view class="basic-box">
-					<UTable :table-column="tableColumn" :table-data="purInStorageGoods"></UTable>
-				</view>
-			</view>
-		</view>
+			</description>
+		</description-list>
+		<description-list :title="$t('auditInfo.PurGoodTankCarHouseInfo.tableTle')">
+			<us-table :table-column="tableColumn" :table-data="purInStorageGoods"></us-table>
+		</description-list>
 	</view>
 </template>
 <script>
@@ -87,7 +35,7 @@
 	} from '@/api/lpgSalesManageApi'
 	import {
 		UnixToDate
-	} from '@/utils/util.js'
+	} from '@/utils/util'
 	export default {
 		name: 'PurGoodTankCarHouseInfo',
 		components: {},
@@ -202,5 +150,5 @@
 	}
 </script>
 <style lang="scss" scoped>
-	
+
 </style>

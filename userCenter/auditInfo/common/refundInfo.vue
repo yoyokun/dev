@@ -1,5 +1,5 @@
 <template>
-	<view class="audit-info-content">
+	<view>
 		<view class="tabs">
 			<view class="tabs-content">
 				<u-tabs :scrollable="false" :list="busMenu" :current="current" :itemStyle="{flex:'1',height:'44px'}"
@@ -8,130 +8,67 @@
 		</view>
 
 		<view class="basic" v-show="current == 0">
-			<view class="basic-item">
-				<view class="basic-tle">{{$t('auditInfo.refundInfo.basicTle')}}</view>
-				<view class="basic-box">
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.refundInfo.orgName')}}</view>
-						<view class="desc">{{info.orgName}}</view>
+			<description-list :title="$t('auditInfo.refundInfo.basicTle')">
+				<description :label="$t('auditInfo.refundInfo.orgName')">{{ info.orgName }}</description>
+				<description :label="$t('auditInfo.refundInfo.billNo')">{{ info.billNo }}</description>
+				<description :label="$t('auditInfo.refundInfo.formType')">{{ info.formType | formType }}</description>
+				<description :label="$t('auditInfo.refundInfo.customerNo')">{{ info.customerNo }}</description>
+				<description :label="$t('auditInfo.refundInfo.customerName')">{{ info.customerName }}</description>
+				<description :label="$t('auditInfo.refundInfo.customerPhone')">{{ info.customerPhone }}</description>
+				<description :label="$t('auditInfo.refundInfo.checkState')">{{ info.checkState | checkState }}</description>
+				<description :label="$t('auditInfo.refundInfo.creator')">{{ info.creator }}</description>
+				<description :label="$t('auditInfo.refundInfo.createTime')">{{ info.createTime | dayjs }}</description>
+				<description :label="$t('auditInfo.refundInfo.totalMoney')">{{ info.totalMoney }}</description>
+				<description :label="$t('auditInfo.refundInfo.refundTime')">{{info.refundTime ? UnixToDate(info.refundTime) : ''}}</description>
+				<description :label="$t('auditInfo.refundInfo.linkBillNo')">{{ info.linkBillNo }}</description>
+				<description :label="$t('auditInfo.refundInfo.linkType')">{{ info.linkType | linkType }}</description>
+				<description :label="$t('auditInfo.refundInfo.operator')">{{ info.operator }}</description>
+				<description :label="$t('auditInfo.refundInfo.operationTime')">{{ info.operationTime | dayjs }}</description>
+			</description-list>
+			<description-list :title="$t('auditInfo.refundInfo.orderTle')">
+				<us-table :table-column="tableColumn" :table-data="tableData">
+					<!-- #ifdef H5 || APP-PLUS -->
+					<view slot="orderState" slot-scope="row">
+						{{ row.data.orderState | orderState }}
 					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.refundInfo.billNo')}}</view>
-						<view class="desc">{{info.billNo}}</view>
+					<view slot="payType" slot-scope="row">
+						{{ row.data.payType | payType }}
 					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.refundInfo.formType')}}</view>
-						<view class="desc">{{info.formType | formType}}</view>
+					<view slot="deliveryState" slot-scope="row">
+						{{ row.data.deliveryState | deliveryState }}
 					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.refundInfo.customerNo')}}</view>
-						<view class="desc">{{info.customerNo}}</view>
+					<view slot="orderTime" slot-scope="row">
+						{{ row.data.orderTime ? UnixToDate(row.data.orderTime) : '' }}
 					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.refundInfo.customerName')}}</view>
-						<view class="desc">{{info.customerName}}</view>
+					<!-- #endif -->
+					<!-- #ifdef MP-->
+					<view slot="orderState" slot-scope="{row}">
+						{{ row.data.orderState | orderState }}
 					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.refundInfo.customerPhone')}}</view>
-						<view class="desc">{{info.customerPhone}}</view>
+					<view slot="payType" slot-scope="{row}">
+						{{ row.data.payType | payType }}
 					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.refundInfo.checkState')}}</view>
-						<view class="desc">{{info.checkState | checkState}}</view>
+					<view slot="deliveryState" slot-scope="{row}">
+						{{ row.data.deliveryState | deliveryState }}
 					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.refundInfo.creator')}}</view>
-						<view class="desc">{{info.creator}}</view>
+					<view slot="orderTime" slot-scope="{row}">
+						{{ row.data.orderTime ? UnixToDate(data.scope.orderTime) : '' }}
 					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.refundInfo.createTime')}}</view>
-						<view class="desc">{{info.createTime | dayjs}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.refundInfo.totalMoney')}}</view>
-						<view class="desc">{{info.totalMoney}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.refundInfo.refundTime')}}</view>
-						<view class="desc">{{info.refundTime ? UnixToDate(info.refundTime) : ''}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.refundInfo.linkBillNo')}}</view>
-						<view class="desc">{{info.linkBillNo}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.refundInfo.linkType')}}</view>
-						<view class="desc">{{info.linkType | linkType}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.refundInfo.operator')}}</view>
-						<view class="desc">{{info.operator}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.refundInfo.operationTime')}}</view>
-						<view class="desc">{{info.operationTime | dayjs}}</view>
-					</view>
-				</view>
-			</view>
-			<view class="basic-item">
-				<view class="basic-tle">{{$t('auditInfo.refundInfo.orderTle')}}</view>
-				<view class="basic-box">
-					<UTable :table-column="tableColumn" :table-data="tableData">
-						<!-- #ifdef H5 || APP-PLUS -->
-						<view slot="orderState" slot-scope="row">
-							{{ row.data.orderState | orderState }}
-						</view>
-						<view slot="payType" slot-scope="row">
-							{{ row.data.payType | payType }}
-						</view>
-						<view slot="deliveryState" slot-scope="row">
-							{{ row.data.deliveryState | deliveryState }}
-						</view>
-						<view slot="orderTime" slot-scope="row">
-							{{ row.data.orderTime ? UnixToDate(row.data.orderTime) : '' }}
-						</view>
-						<!-- #endif -->
-						<!-- #ifdef MP-->
-						<view slot="orderState" slot-scope="{row}">
-							{{ row.data.orderState | orderState }}
-						</view>
-						<view slot="payType" slot-scope="{row}">
-							{{ row.data.payType | payType }}
-						</view>
-						<view slot="deliveryState" slot-scope="{row}">
-							{{ row.data.deliveryState | deliveryState }}
-						</view>
-						<view slot="orderTime" slot-scope="{row}">
-							{{ row.data.orderTime ? UnixToDate(data.scope.orderTime) : '' }}
-						</view>
-						<!-- #endif -->
-					</UTable>
-				</view>
-			</view>
-			<view class="basic-item">
-				<view class="basic-tle">{{$t('auditInfo.refundInfo.refundTle')}}</view>
-				<view class="basic-box">
-					<UTable :table-column="tableColumnRefund" :table-data="tableDataRefund">
-					</UTable>
-				</view>
-			</view>
-			<view class="basic-item" v-if="salesOrderPayitemsList.length">
-				<view class="basic-tle">{{$t('auditInfo.refundInfo.moneyTle')}}</view>
-				<view class="basic-box">
-					<view class="item" v-for="(item,index) in salesOrderPayitemsList" :key="item.id">
-						<view class="tle">{{item.payItemsName}}</view>
-						<view class="desc">{{ item.payItemsMoney }}</view>
-					</view>
-				</view>
-			</view>
+					<!-- #endif -->
+				</us-table>
+			</description-list>
+			<description-list :title="$t('auditInfo.refundInfo.refundTle')">
+				<us-table :table-column="tableColumnRefund" :table-data="tableDataRefund">
+				</us-table>
+			</description-list>
+			<description-list v-if="salesOrderPayitemsList.length" :title="$t('auditInfo.refundInfo.moneyTle')">
+				<description v-for="(item,index) in salesOrderPayitemsList" :key="item.id" :label="item.payItemsName">{{ item.payItemsMoney }}</description>
+			</description-list>
 		</view>
 		<view class="basic source" v-show="current == 1">
-			<view class="basic-item"  v-if="editId">
-				<view class="basic-tle">{{$t('auditInfo.refundInfo.sourceTle')}}</view>
-				<view class="basic-box">
-					<service-cylinder-info node-type="recycleCylinder" :link-id="editId" />
-				</view>
-			</view>
+			<description-list v-if="editId" :title="$t('auditInfo.refundInfo.sourceTle')">
+				<service-cylinder-info node-type="recycleCylinder" :link-id="editId" />
+			</description-list>
 		</view>
 	</view>
 </template>
@@ -140,15 +77,14 @@
 	import {
 		salesOrderFindList,
 		salesOrderRefundFindById
-	} from '@/api/lpgManageAppApi'
+	} from '@/api/lpgSalesManageApi'
 	import {
 		UnixToDate
 	} from '@/utils/util'
-	import UTable from './uTable'
 	import ServiceCylinderInfo from './serviceCylinderInfo'
 	export default {
 		name: 'RefundInfo',
-		components: {UTable,ServiceCylinderInfo},
+		components: {ServiceCylinderInfo},
 		// 过滤器
 		filters: {
 			linkType(value) {

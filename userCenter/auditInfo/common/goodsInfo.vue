@@ -1,207 +1,118 @@
 <template>
-	<view class="business-info">
-		<view class="audit-info-content">
-			<view class="tabs">
-				<view class="tabs-content">
-					<u-tabs :scrollable="false" :list="busMenu" :current="current" :itemStyle="{flex:'1',height:'44px'}"
-						@change="changeTabs"></u-tabs>
-				</view>
+	<view>
+		<view class="tabs">
+			<view class="tabs-content">
+				<u-tabs :scrollable="false" :list="busMenu" :current="current" :itemStyle="{flex:'1',height:'44px'}"
+					@change="changeTabs"></u-tabs>
 			</view>
-			<view class="basic" v-show="current == 0">
-				<view class="basic-item">
-					<view class="basic-tle">{{$t('auditInfo.goodsInfo.basicTle')}}</view>
-					<view class="basic-box">
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.goodsInfo.goodsClassifyName')}}</view>
-							<view class="desc">{{ info.goodsClassifyName }}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.goodsInfo.goodsNo')}}</view>
-							<view class="desc">{{ info.goodsNo }}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.goodsInfo.goodsName')}}</view>
-							<view class="desc">{{ info.goodsName }}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.goodsInfo.brandName')}}</view>
-							<view class="desc">{{ info.brandName }}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.goodsInfo.orgName')}}</view>
-							<view class="desc">{{ info.orgName }}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.goodsInfo.sortNo')}}</view>
-							<view class="desc">{{ info.sortNo }}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.goodsInfo.remarks')}}</view>
-							<view class="desc">{{ info.remarks }}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.goodsInfo.goodsPath')}}</view>
-							<view class="desc">
-								<image class="img" v-for="item in info.goodsPath" :key="item.id" :src="item.url">
-								</image>
-							</view>
-						</view>
-					</view>
-				</view>
-				<view class="basic-item">
-					<view class="basic-tle">{{$t('auditInfo.goodsInfo.markTle')}}</view>
-					<view class="basic-box">
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.goodsInfo.virtualSales')}}</view>
-							<view class="desc">{{ info.virtualSales }}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.goodsInfo.businessTagName')}}</view>
-							<view class="desc">{{ info.businessTagName }}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.goodsInfo.isShowCustomerPrice')}}</view>
-							<view class="desc">
-								{{ info.isShowCustomerPrice?$t('auditInfo.goodsInfo.isShowCustomerPriceTxt')[0]:$t('auditInfo.goodsInfo.isShowCustomerPriceTxt')[1] }}
-							</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.goodsInfo.isShowInter')}}</view>
-							<view class="desc">
-								{{ info.isShowInter?$t('auditInfo.goodsInfo.isShowInterTxt')[0]:$t('auditInfo.goodsInfo.isShowInterTxt')[1] }}
-							</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.goodsInfo.isCostTag')}}</view>
-							<view class="desc">
-								{{ info.isCostTag?$t('auditInfo.goodsInfo.isCostTagTxt')[0]:$t('auditInfo.goodsInfo.isCostTagTxt')[1] }}
-							</view>
-						</view>
-					</view>
-				</view>
-				<view class="basic-item">
-					<view class="basic-tle">{{$t('auditInfo.goodsInfo.moneyTle')}}</view>
-					<view class="basic-box">
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.goodsInfo.taxRate')}}</view>
-							<view class="desc">{{ info.taxRate }}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.goodsInfo.saleRate')}}</view>
-							<view class="desc">{{ info.saleRate }}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.goodsInfo.computMethod')}}</view>
-							<view class="desc">{{ info.computMethod | computMethod }}</view>
-						</view>
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.goodsInfo.staffPre')}}</view>
-							<view class="desc">{{ info.staffPre }}</view>
-						</view>
-					</view>
-				</view>
-			</view>
-			<view class="basic" v-show="current == 1">
-				<view class="basic-item">
-					<view class="basic-tle">{{$t('auditInfo.goodsInfo.unitTle')}}</view>
-					<view class="basic-box">
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.goodsInfo.unitsName')}}</view>
-							<view class="desc">{{ info.unitsName }}</view>
-						</view>
-						<UTable :table-column="tableColumnAssist" :table-data="info.assistUnitsList">
-						</UTable>
-					</view>
-				</view>
-				<view class="basic-item">
-					<view class="basic-tle">{{$t('auditInfo.goodsInfo.stockTle')}}</view>
-					<view class="basic-box">
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.goodsInfo.stockWarn')}}</view>
-							<view class="desc">{{ info.stockWarn | stockWarn }}</view>
-						</view>
-						<block v-if="info.stockWarn">
-							<view class="item">
-								<view class="tle">{{$t('auditInfo.goodsInfo.stockWarnValue')}}</view>
-								<view class="desc">{{ info.stockWarnValue }}</view>
-							</view>
-							<view class="item">
-								<view class="tle">{{$t('auditInfo.goodsInfo.stockSendType')}}</view>
-								<view class="desc">{{ info.stockSendType | stockSendType }}</view>
-							</view>
-							<view class="item">
-								<view class="tle">{{$t('auditInfo.goodsInfo.stockSendName')}}</view>
-								<view class="desc">{{ info.stockSendName }}</view>
-							</view>
-						</block>
-					</view>
-				</view>
-				<view class="basic-item">
-					<view class="basic-tle">{{$t('auditInfo.goodsInfo.priceTle')}}</view>
-					<view class="basic-box">
-						<view class="item">
-							<view class="tle">{{$t('auditInfo.goodsInfo.isMorePrice')}}</view>
-							<view class="desc">{{ info.isMorePrice ? $t('auditInfo.goodsInfo.isMorePriceTxt')[0] : $t('auditInfo.goodsInfo.isMorePriceTxt')[1] }}</view>
-						</view>
-						<block v-if="!info.isMorePrice">
-							<view class="item">
-								<view class="tle">{{$t('auditInfo.goodsInfo.standardName')}}</view>
-								<view class="desc">{{ info.goodsDetailVoList&&info.goodsDetailVoList.length?info.goodsDetailVoList[0].standardName:'' }}</view>
-							</view>
-							<view class="item">
-								<view class="tle">{{$t('auditInfo.goodsInfo.listPrice')}}</view>
-								<view class="desc">{{ info.goodsDetailVoList&&info.goodsDetailVoList.length?parseFloat(info.goodsDetailVoList[0].listPrice):'' }}</view>
-							</view>
-							<view class="item">
-								<view class="tle">{{$t('auditInfo.goodsInfo.costPrice')}}</view>
-								<view class="desc">{{ info.goodsDetailVoList&&info.goodsDetailVoList.length?parseFloat(info.goodsDetailVoList[0].costPrice):'' }}</view>
-							</view>
-							<view class="item">
-								<view class="tle">{{$t('auditInfo.goodsInfo.curStock')}}</view>
-								<view class="desc">{{ info.goodsDetailVoList&&info.goodsDetailVoList.length?parseFloat(info.goodsDetailVoList[0].curStock):'' }}</view>
-							</view>
-						</block>
-						<block v-else>
-							<view class="item">
-								<view class="tle">{{$t('auditInfo.goodsInfo.toDataProperty')}}</view>
-								<view class="desc">
-									<view v-for="item in toDataProperty" :key="item.id">
-									  <view>
-										<view style="display: flex;align-items: center;" ><text>属性：</text><u-tag size="mini" :text="item.name" plain plainFill></u-tag></view>
-										<view style="display: flex;margin-top: 10rpx;">
-											<u-tag v-for="itemBox in item.children" :key="itemBox.id" size="mini" type="success" :text="itemBox.name" plain plainFill></u-tag>
-										</view>
-									  </view>
-									</view>
+		</view>
+		<view class="basic" v-show="current == 0">
+			<description-list :title="$t('auditInfo.goodsInfo.basicTle')">
+				<description :label="$t('auditInfo.goodsInfo.goodsClassifyName')">{{ info.goodsClassifyName }}
+				</description>
+				<description :label="$t('auditInfo.goodsInfo.goodsNo')">{{ info.goodsNo }}</description>
+				<description :label="$t('auditInfo.goodsInfo.goodsName')">{{ info.goodsName }}</description>
+				<description :label="$t('auditInfo.goodsInfo.brandName')">{{ info.brandName }}</description>
+				<description :label="$t('auditInfo.goodsInfo.orgName')">{{ info.orgName }}</description>
+				<description :label="$t('auditInfo.goodsInfo.sortNo')">{{ info.sortNo }}</description>
+				<description :label="$t('auditInfo.goodsInfo.remarks')">{{ info.remarks }}</description>
+				<description :label="$t('auditInfo.goodsInfo.goodsPath')">
+					<image class="img" v-for="item in info.goodsPath" :key="item.id" :src="item.url">
+				</description>
+			</description-list>
+			<description-list :title="$t('auditInfo.goodsInfo.markTle')">
+				<description :label="$t('auditInfo.goodsInfo.virtualSales')">{{ info.virtualSales }}</description>
+				<description :label="$t('auditInfo.goodsInfo.businessTagName')">{{ info.businessTagName }}</description>
+				<description :label="$t('auditInfo.goodsInfo.isShowCustomerPrice')">
+					{{ info.isShowCustomerPrice?$t('auditInfo.goodsInfo.isShowCustomerPriceTxt')[0]:$t('auditInfo.goodsInfo.isShowCustomerPriceTxt')[1] }}
+				</description>
+				<description :label="$t('auditInfo.goodsInfo.isShowInter')">
+					{{ info.isShowInter?$t('auditInfo.goodsInfo.isShowInterTxt')[0]:$t('auditInfo.goodsInfo.isShowInterTxt')[1] }}
+				</description>
+				<description :label="$t('auditInfo.goodsInfo.isCostTag')">
+					{{ info.isCostTag?$t('auditInfo.goodsInfo.isCostTagTxt')[0]:$t('auditInfo.goodsInfo.isCostTagTxt')[1] }}
+				</description>
+			</description-list>
+			<description-list :title="$t('auditInfo.goodsInfo.moneyTle')">
+				<description :label="$t('auditInfo.goodsInfo.taxRate')">{{ info.taxRate }}</description>
+				<description :label="$t('auditInfo.goodsInfo.saleRate')">{{ info.saleRate }}</description>
+				<description :label="$t('auditInfo.goodsInfo.computMethod')">{{ info.computMethod | computMethod }}
+				</description>
+				<description :label="$t('auditInfo.goodsInfo.staffPre')">{{ info.staffPre }}</description>
+			</description-list>
+		</view>
+		<view class="basic" v-show="current == 1">
+			<description-list :title="$t('auditInfo.goodsInfo.unitTle')">
+				<description :label="$t('auditInfo.goodsInfo.unitsName')">{{ info.unitsName }}</description>
+				<us-table :table-column="tableColumnAssist" :table-data="info.assistUnitsList"></us-table>
+			</description-list>
+			<description-list :title="$t('auditInfo.goodsInfo.stockTle')">
+				<description :label="$t('auditInfo.goodsInfo.stockWarn')">{{ info.stockWarn | stockWarn }}</description>
+				<block v-if="info.stockWarn">
+					<description :label="$t('auditInfo.goodsInfo.stockWarnValue')">{{ info.stockWarnValue }}
+					</description>
+					<description :label="$t('auditInfo.goodsInfo.stockSendType')">
+						{{ info.stockSendType | stockSendType }}
+					</description>
+					<description :label="$t('auditInfo.goodsInfo.stockSendName')">{{ info.stockSendName }}</description>
+				</block>
+			</description-list>
+			<description-list :title="$t('auditInfo.goodsInfo.priceTle')">
+				<description :label="$t('auditInfo.goodsInfo.isMorePrice')">
+					{{ info.isMorePrice ? $t('auditInfo.goodsInfo.isMorePriceTxt')[0] : $t('auditInfo.goodsInfo.isMorePriceTxt')[1] }}
+				</description>
+				<block v-if="!info.isMorePrice">
+					<description :label="$t('auditInfo.goodsInfo.standardName')">
+						{{ info.goodsDetailVoList&&info.goodsDetailVoList.length?info.goodsDetailVoList[0].standardName:'' }}
+					</description>
+					<description :label="$t('auditInfo.goodsInfo.listPrice')">
+						{{ info.goodsDetailVoList&&info.goodsDetailVoList.length?parseFloat(info.goodsDetailVoList[0].listPrice):'' }}
+					</description>
+					<description :label="$t('auditInfo.goodsInfo.costPrice')">
+						{{ info.goodsDetailVoList&&info.goodsDetailVoList.length?parseFloat(info.goodsDetailVoList[0].costPrice):'' }}
+					</description>
+					<description :label="$t('auditInfo.goodsInfo.curStock')">
+						{{ info.goodsDetailVoList&&info.goodsDetailVoList.length?parseFloat(info.goodsDetailVoList[0].curStock):'' }}
+					</description>
+				</block>
+				<block v-else>
+					<description :label="$t('auditInfo.goodsInfo.toDataProperty')">
+						<view v-for="item in toDataProperty" :key="item.id">
+							<view>
+								<view style="display: flex;align-items: center;"><text>属性：</text>
+									<u-tag size="mini" :text="item.name" plain plainFill></u-tag>
+								</view>
+								<view style="display: flex;margin-top: 10rpx;">
+									<u-tag v-for="itemBox in item.children" :key="itemBox.id" size="mini" type="success"
+										:text="itemBox.name" plain plainFill></u-tag>
 								</view>
 							</view>
-							<UTable :table-column="tableColumnProperty" :table-data="info.goodsDetailVoList">
-								<!-- #ifdef H5 || APP-PLUS -->
-								<view slot="state" slot-scope="row">
-									{{ row.data.state | stateProperty }}
-								</view>
-								<view slot="curStock" slot-scope="row">
-									{{ parseFloat(row.data.curStock) }}
-								</view>
-								<!-- #endif -->
-								<!-- #ifdef MP-->
-								<view slot="state" slot-scope="{row}">
-									{{ row.data.state | stateProperty }}
-								</view>
-								<view slot="curStock" slot-scope="{row}">
-									{{ parseFloat(row.data.curStock) }}
-								</view>
-								<!-- #endif -->
-								
-							</UTable>
-						</block>
-					</view>
-				</view>
-			</view>
-			<view class="basic" v-show="current == 2">
-				<view class="basic-item">
-					<rich-text :nodes="info.content"></rich-text>
-				</view>
+						</view>
+					</description>
+					<us-table :table-column="tableColumnProperty" :table-data="info.goodsDetailVoList">
+						<!-- #ifdef H5 || APP-PLUS -->
+						<view slot="state" slot-scope="row">
+							{{ row.data.state | stateProperty }}
+						</view>
+						<view slot="curStock" slot-scope="row">
+							{{ parseFloat(row.data.curStock) }}
+						</view>
+						<!-- #endif -->
+						<!-- #ifdef MP-->
+						<view slot="state" slot-scope="{row}">
+							{{ row.data.state | stateProperty }}
+						</view>
+						<view slot="curStock" slot-scope="{row}">
+							{{ parseFloat(row.data.curStock) }}
+						</view>
+						<!-- #endif -->
+					</us-table>
+				</block>
+			</description-list>
+		</view>
+		<view class="basic" v-show="current == 2">
+			<view style="padding: 20rpx;">
+				<rich-text :nodes="info.content"></rich-text>
 			</view>
 		</view>
 	</view>
@@ -214,12 +125,9 @@
 	import {
 		settingMixin
 	} from '@/common/settingMixin'
-	import UTable from './uTable'
 	export default {
 		name: 'ShopInfo',
-		components: {
-			UTable
-		},
+		components: {},
 		// 过滤器
 		filters: {
 			stateProperty(value) {
