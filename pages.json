@@ -233,6 +233,7 @@
 			"^u-(.*)": "uni_modules/uview-ui/components/u-$1/u-$1.vue",
 			"description-list": "@/components/descriptionList/index.vue",
 			"description": "@/components/descriptionList/description.vue",
+			"total": "@/components/total/total.vue",
 			"us-table": "@/components/UsTable/UsTable.vue"
 		  }
 		}

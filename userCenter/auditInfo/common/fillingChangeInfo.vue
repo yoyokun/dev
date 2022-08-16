@@ -26,11 +26,9 @@
 	import {
 		fillingChangeLogFindById
 	} from '@/api/lpgSalesManageApi'
-	import total from './total'
 	export default {
 		name: 'FillingChangeInfo',
 		components: {
-			total,
 		},
 		// 过滤器
 		filters: {
