@@ -30,7 +30,6 @@
 					<u-button 
 						v-if="formDataValue.state===1 || formDataValue.state===5" 
 						v-permission="{ permission:'app_workList_delete'}" 
-						class="m-l20" 
 						:text="$t('addWork.delete')" 
 						type="error" 
 						hairline 
@@ -53,7 +52,6 @@
 					<u-button 
 						v-if="formDataValue.state===2 || formDataValue.state===3 || formDataValue.state===4 || formDataValue.state===6"
 						v-permission="{ permission:'app_workList_invalid'}" 
-						class="m-l20" 
 						:text="$t('addWork.toVoid')" 
 						type="error" 
 						hairline 
@@ -82,13 +80,9 @@
 
 <script>
 import { auditWorkSaveOrEdit, auditWorkFindById, auditWorkDeleteByIds, auditWorkInvalidWork, auditWorkAssignWork } from '@/api/lpgManageAppApi.js'
-import EditForm from '@/components/editForm/index.vue'
 import { UnixToDate } from '@/utils/util.js'
 import { settingMixin } from '@/common/settingMixin.js'
 export default {
-	components:{
-		EditForm
-	},
 	mixins: [settingMixin],
   data() {
     return {
@@ -234,6 +228,7 @@ export default {
 				}
 			],
 			formDataValue: {},
+			info: {},
 			show: false,
 			invalidNote: '',
 			customerId: ''
@@ -331,6 +326,7 @@ export default {
 					this.formDataSource[2].show = false
 				}
 				this.formDataValue = res
+				this.info = res
       }
     },
     // 提交
@@ -486,6 +482,9 @@ export default {
 		width: 632rpx;
 		margin: 60rpx auto;
 		@include flexMixin();
+		.u-button{
+			margin: 0rpx 10rpx;
+		}
 	}
 	.addRole{
 		@include flexMixin(row,flex-end);

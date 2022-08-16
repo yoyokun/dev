@@ -142,7 +142,25 @@
 						"enablePullDownRefresh": false
 					}
 				}
-			]
+			    ,{
+                    "path" : "userWorkList/userWorkList",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "我的工单",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "userWorkInfo/userWorkInfo",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "查看工单",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 		},
 		{
 			"root": "infoManage",
@@ -246,13 +264,15 @@
 		}]
 	},
 	"easycom": {
-		  "autoscan": true,
-		  "custom": {
+		"autoscan": true,
+		"custom": {
 			"^u-(.*)": "uni_modules/uview-ui/components/u-$1/u-$1.vue",
 			"description-list": "@/components/descriptionList/index.vue",
 			"description": "@/components/descriptionList/description.vue",
 			"total": "@/components/total/total.vue",
-			"us-table": "@/components/UsTable/UsTable.vue"
-		  }
+			"us-table": "@/components/UsTable/UsTable.vue",
+			"edit-form": "@/components/editForm/editForm.vue",
+			"loading": "@/components/loading/loading.vue"
 		}
+	}
 }

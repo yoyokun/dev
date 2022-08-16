@@ -29,19 +29,21 @@
 
 <style lang="scss" scoped>
 	.item {
-		border-bottom: 1px solid #eee;
+		border-bottom: 1rpx solid #eee;
 		min-height: 60rpx;
 		line-height: 60rpx;
 		padding: 0 20rpx;
 		display: flex;
-
+		&:last-child{
+			border-bottom: none;
+		}
 		.tle::after {
 			display: inline-block;
 			content: '：';
 		}
 
 		.desc {
-			width: 1px;
+			width: 1rpx;
 			flex: 1;
 		}
 	}

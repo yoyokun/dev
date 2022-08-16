@@ -406,5 +406,37 @@ module.exports = {
 			2: '非居民'
 		},
 		save: '确定'
+	},
+	// 我的工单
+	userWorkList: {
+		titleText: '我的工单',
+		totalNum: '总数',
+		tabSwitch: [
+			{
+			  id: '',
+			  name: '全部'
+			},
+			{
+			  id: '2,3',
+			  name: '待办'
+			},
+			{
+			  id: '7',
+			  name: '已完成'
+			},
+			{
+			  id: '4,5,6',
+			  name: '其他'
+			}
+		]
+	},
+	// 我的工单详情
+	userWorkInfo: {
+		titleText: '查看工单',
+		accept: '接受',
+		refuse: '拒绝',
+		jump: '处理',
+		acceptTitle: '接收提示',
+		acceptContent: '确定要接收工单吗?'
 	}
 }

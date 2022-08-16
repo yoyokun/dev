@@ -28,11 +28,7 @@
 </template>
 
 <script>
-import EditForm from '@/components/editForm/index.vue'
 export default {
-	components:{
-		EditForm
-	},
   data() {
     return {
 			formDataSource: [

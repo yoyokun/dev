@@ -54,12 +54,8 @@
 <script>
 import { regionData } from 'element-china-area-data'
 import { sysManagerSaveOrEdit, sysManagerFindById, sysManagerDeleteByIds } from '@/api/loginApi.js'
-import EditForm from '@/components/editForm/index.vue'
 import { formatDate } from '@/utils/util.js'
 export default {
-	components:{
-		EditForm
-	},
   data() {
     return {
 			isSave: true,
