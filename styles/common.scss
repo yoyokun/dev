@@ -4,6 +4,12 @@ page{
 .m-l20{
 	margin-left: 20rpx;
 }
+.m-l10{
+	margin-left: 10rpx;
+}
+.m-t10{
+	margin-top: 10rpx;
+}
 // 公共样式
 .container {
 	height: 100%;
@@ -38,6 +44,55 @@ page{
 .blue{
 	color: rgba(42, 130, 228, 1) !important;
 }
+// tag 黄色
+.tag{
+	padding: 0rpx 10rpx;
+	min-width: 90rpx;
+	text-align: center;
+	background: rgba(255, 255, 255, 1);
+	border: 1rpx solid rgba(255, 141, 26, 1);
+	border-radius: 8rpx;
+	color: rgba(255, 141, 26, 1);
+	font-size: 24rpx;
+	line-height: 40rpx;
+}
+// tag 灰色
+.utag{
+	min-width: 90rpx;
+	padding: 0rpx 10rpx;
+	text-align: center;
+	background: rgba(255, 255, 255, 1);
+	border: 1rpx solid rgba(128, 128, 128, 1);
+	border-radius: 8rpx;
+	color: rgba(128, 128, 128, 1);
+	font-size: 24rpx;
+	line-height: 40rpx;
+}
+// tag 蓝色
+.ptag{
+	min-width: 90rpx;
+	padding: 0rpx 10rpx;
+	text-align: center;
+	background: rgba(239.7, 246.84, 255, 0.45);
+	border: 1rpx solid rgba(42, 130, 228, 1);
+	border-radius: 8rpx;
+	color: rgba(42, 130, 228, 1);
+	font-size: 24rpx;
+	line-height: 40rpx;
+}
+// tag 红色
+.rtag{
+	min-width: 90rpx;
+	padding: 0rpx 10rpx;
+	text-align: center;
+	background: rgba(255, 255, 255, 0.45);
+	border: 1rpx solid rgba(255, 87, 51, 1);
+	border-radius: 8rpx;
+	color: rgba(255, 87, 51, 1);
+	font-size: 24rpx;
+	line-height: 40rpx;
+}
+
 /* 分页 */
 .loading {
 	margin-top: 10rpx;
@@ -222,4 +277,9 @@ page{
 			box-sizing: border-box;
 		}
 	}
+}
+// 作废弹框
+.viod-content{
+	width: 100%;
+	@include flexMixin(row,flex-start,flex-start);
 }

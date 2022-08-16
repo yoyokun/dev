@@ -186,6 +186,24 @@
                 }
                 
                 }
+                ,{
+                    "path" : "chooseCustomer/chooseCustomer",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "选择客户",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "customerInfo/customerInfo",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "客户详情",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
             ]
 		}
 	],

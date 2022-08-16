@@ -20,7 +20,9 @@
 				<view v-for="(item,index) in dataList" :key="index" class="box" @click="goto('/infoManage/addWork/addWork',{ editId: item.id })">
 					<view class="top">
 						<view class="number">{{item.workNo}}</view>
-						<view class="state">{{item.state | state}}</view>
+						<view v-if="item.state === 5 || item.state === 6" class="state red">{{item.state | state}}</view>
+						<view v-else-if="item.state === 1 || item.state === 2  || item.state === 3 || item.state === 4" class="state blue">{{item.state | state}}</view>
+						<view v-else class="state ">{{item.state | state}}</view>
 					</view>
 					<view class="content">
 						<view class="detail"><text class="name">{{$t('workList.customerName')}}</text><text class="value">{{item.customerName}}</text></view>
@@ -49,7 +51,6 @@ import paginationMixin from '@/common/paginationMixin.js'
 export default {
   data() {
     return {
-			that: this,
 			keyword: '',
 			totals: 0
     }
@@ -78,6 +79,7 @@ export default {
     async findDataList() {
       const data = {
 				keyword: this.keyword,
+				isShow: 1,
         page: this.pagination.getCurrentPage(),
         size: this.pagination.getCurrentSize()
       }

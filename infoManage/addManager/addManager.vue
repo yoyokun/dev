@@ -72,6 +72,7 @@ export default {
 					placeholder: this.$t('addManager.form.empNoPlace'),
 					maxlength: 30,
 					required: true,
+					disabled: false,
 					rules: [
 						{
 							required: true,

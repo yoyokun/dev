@@ -14,6 +14,8 @@ module.exports = {
 		searchText: '确定',
 		deleteTitle: '删除',
 		deleteContent: '确定要删除该数据吗?',
+		voidTitle: '作废提示',
+		voidContentPlace: '请输入作废描述',
 		stateObj: {
 			1: '启用',
 			2: '禁用'
@@ -363,6 +365,7 @@ module.exports = {
 		titleText: '添加工单',
 		titleTextEdit: '编辑工单',
 		titleTextInfo: '工单详情',
+		titleTextAssign: '分派工单',
 		form: {
 			formKey: '工单类型',
 			formKeyPlace: '请选择工单类型',
@@ -387,6 +390,21 @@ module.exports = {
 		},
 		save: '保存',
 		edit: '编辑',
-		delete: '删除'
+		delete: '删除',
+		assignment: '分派',
+		toVoid: '作废'
+	},
+	// 选择客户
+	chooseCustomer: {
+		titleText: '选择客户',
+		stateObj: {
+			1: '启用',
+			2: '禁用'
+		},
+		classifyObj: {
+			1: '居民',
+			2: '非居民'
+		},
+		save: '确定'
 	}
 }
