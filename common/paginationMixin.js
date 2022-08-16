@@ -1,9 +1,5 @@
 import { Pagination } from '@/utils/pagination.js'
-import Loading from '@/components/loading/index.vue'
 export default {
-	components: {
-	  Loading
-	},
 	data() {
 		return {
 			pagination: {}, // 分页

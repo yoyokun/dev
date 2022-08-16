@@ -315,7 +315,13 @@ export function auditWorkSaveOrEdit(data = {}, message = '', custom = {}) {
   return request({
     url: baseURL + '/admin/info/control/auditWork/saveOrEdit',
     method: 'post',
-    data
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
   })
 }
 // 工单管理 删除
@@ -445,5 +451,19 @@ export function priceStrategyUpdateCustomerPriceStrategyState(data = {}, message
 		toast: custom?.toast || true, // 弹框
 		catch: custom?.catch || true // catch返回
 	}
+  })
+}
+// 客户管理 客户列表
+export function userCustomerFindList(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/userCustomer/findList',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
   })
 }

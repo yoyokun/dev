@@ -6,35 +6,88 @@
 			classForm="normalForm"
 			:form-data-source="formDataSource"
 			:form-data-value="formDataValue"
+			@change="changeForm"
+			@chooseCustomer="chooseCustomer"
 			>
 			<template v-slot:extra>
 				<view class="btn" v-if="isSave">
-					<u-button :text="$t('addWork.save')" type="primary" hairline shape="circle" @click="submitForm"></u-button>
+					<u-button v-if="isAssign" :text="$t('addWork.assignment')" type="primary" hairline shape="circle" @click="submitForm(1)"></u-button>
+					<u-button v-else :text="$t('addWork.save')" type="primary" hairline shape="circle" @click="submitForm(2)"></u-button>
 				</view>
 				<view class="btn" v-else>
-					<u-button v-permission="{ permission:'app_workList_edit'}" :text="$t('addWork.edit')" type="primary" hairline shape="circle" plain @click="handleEdit"></u-button>
-					<u-button v-permission="{ permission:'app_workList_delete'}" class="m-l20" :text="$t('addWork.delete')" type="error" hairline shape="circle" plain @click="handleDelete"></u-button>
+					<!-- 编辑 -->
+					<u-button 
+						v-if="formDataValue.state===1" 
+						v-permission="{ permission:'app_workList_edit'}" 
+						:text="$t('addWork.edit')" 
+						type="primary" 
+						hairline 
+						shape="circle" 
+						plain 
+						@click="handleEdit">
+					</u-button>
+					<!-- 删除 -->
+					<u-button 
+						v-if="formDataValue.state===1 || formDataValue.state===5" 
+						v-permission="{ permission:'app_workList_delete'}" 
+						:text="$t('addWork.delete')" 
+						type="error" 
+						hairline 
+						shape="circle" 
+						plain 
+						@click="handleDelete">
+					</u-button>
+					<!-- 分派 -->
+					<u-button
+						v-if="formDataValue.state===1 || formDataValue.state===4 || formDataValue.state===6"
+						v-permission="{ permission:'app_workList_assignment'}" 
+						:text="$t('addWork.assignment')" 
+						type="primary" 
+						hairline 
+						shape="circle" 
+						plain 
+						@click="handleUpdate">
+					</u-button>
+					<!-- 作废 -->
+					<u-button 
+						v-if="formDataValue.state===2 || formDataValue.state===3 || formDataValue.state===4 || formDataValue.state===6"
+						v-permission="{ permission:'app_workList_invalid'}" 
+						:text="$t('addWork.toVoid')" 
+						type="error" 
+						hairline 
+						shape="circle" 
+						plain 
+						@click="handleVoid">
+					</u-button>
 				</view>
 			</template>
 		</edit-form>
+		<!-- 作废 -->
+		<u-modal :show="show" :title="$t('common.voidTitle')" :showCancelButton="true"  @confirm="confirm" @cancel="show = false" @close="show = false">
+			<view class="viod-content">
+				<u--textarea
+					v-model="invalidNote" 
+					maxlength="100"
+					:placeholder="$t('common.voidContentPlace')"
+					confirmType="done"
+				></u--textarea>
+			</view>
+		</u-modal>
 		<!-- 请求 toast 提示 -->
 		<u-toast ref='uToast'></u-toast>
 	</view>
 </template>
 
 <script>
-import { auditWorkSaveOrEdit, auditWorkFindById, auditWorkDeleteByIds } from '@/api/lpgManageAppApi.js'
-import EditForm from '@/components/editForm/index.vue'
-import { formatDate } from '@/utils/util.js'
+import { auditWorkSaveOrEdit, auditWorkFindById, auditWorkDeleteByIds, auditWorkInvalidWork, auditWorkAssignWork } from '@/api/lpgManageAppApi.js'
+import { UnixToDate } from '@/utils/util.js'
 import { settingMixin } from '@/common/settingMixin.js'
 export default {
-	components:{
-		EditForm
-	},
 	mixins: [settingMixin],
   data() {
     return {
 			isSave: true,
+			isAssign: false, // 分派
 			editId: '',
 			formDataSource: [
 				{
@@ -44,6 +97,7 @@ export default {
 					placeholder: this.$t('addWork.form.formKeyPlace'),
 					required: true,
 					showOptions: false,
+					disabled: false,
 					options: [],
 					rules: [
 						{
@@ -54,12 +108,15 @@ export default {
 					]
 				},
 				{
-					type: 'text',
+					type: 'chooseBtn',
 					labelText: this.$t('addWork.form.customerId'),
-					fieldName: 'customerId',
+					fieldName: 'customerName',
 					placeholder: this.$t('addWork.form.customerIdPlace'),
 					maxlength: 30,
 					required: true,
+					show: true,
+					disabled: false,
+					func: 'chooseCustomer',
 					rules: [
 						{
 							required: true,
@@ -76,6 +133,8 @@ export default {
 					required: true,
 					showOptions: false,
 					options: [],
+					show: false,
+					disabled: false,
 					rules: [
 						{
 							required: true,
@@ -84,41 +143,15 @@ export default {
 						}
 					]
 				},
-        {
-          type: 'datetime',
-          labelText: this.$t('addWork.form.actionTimeStr'),
-          fieldName: 'actionTimeStr',
-          placeholder: this.$t('addWork.form.actionTimeStrPlace')
-        },
 				{
-					type: 'number',
-					labelText: this.$t('addWork.form.cutoff'),
-					fieldName: 'cutoff',
-					placeholder: this.$t('addWork.form.cutoffPlace'),
+				  type: 'picker',
+				  labelText: this.$t('addWork.form.levelId'),
+				  fieldName: 'levelId',
+				  placeholder: this.$t('addWork.form.levelIdPlace'),
+				  showOptions: false,
 					required: true,
-					maxlength: 12,
-					rules: [
-						{
-							required: true,
-							message: this.$t('addWork.form.cutoffPlace'),
-							trigger: ['change','blur']
-						}
-					]
-				},
-				{
-					type: 'datetime',
-					labelText: this.$t('addWork.form.makeTimeStr'),
-					fieldName: 'makeTimeStr',
-					placeholder: this.$t('addWork.form.makeTimeStrPlace')
-				},
-        {
-          type: 'picker',
-          labelText: this.$t('addWork.form.levelId'),
-          fieldName: 'levelId',
-          placeholder: this.$t('addWork.form.levelIdPlace'),
-          showOptions: false,
-					required: true,
-          options: [],
+				  options: [],
+					disabled: false,
 					rules: [
 						{
 							required: true,
@@ -126,15 +159,33 @@ export default {
 							trigger: ['change','blur']
 						}
 					]
-        },
-        {
-          type: 'picker',
-          labelText: this.$t('addWork.form.toOrgId'),
-          fieldName: 'toOrgId',
-          placeholder: this.$t('addWork.form.toOrgIdPlace'),
-          showOptions: false,
+				},
+				{
+					type: 'number',
+					labelText: this.$t('addWork.form.cutoff'),
+					fieldName: 'cutoff',
+					placeholder: this.$t('addWork.form.cutoffPlace'),
 					required: true,
-          options: [],
+					maxlength: 12,
+					disabled: false,
+					rules: [
+						{
+							type: 'number',
+							required: true,
+							message: this.$t('addWork.form.cutoffPlace'),
+							trigger: ['change','blur']
+						}
+					]
+				},
+				{
+				  type: 'picker',
+				  labelText: this.$t('addWork.form.toOrgId'),
+				  fieldName: 'toOrgId',
+				  placeholder: this.$t('addWork.form.toOrgIdPlace'),
+				  showOptions: false,
+					required: true,
+				  options: [],
+					disabled: false,
 					rules: [
 						{
 							required: true,
@@ -142,54 +193,79 @@ export default {
 							trigger: ['change','blur']
 						}
 					]
-        },
+				},
 				{
 					type: 'picker',
 					labelText: this.$t('addWork.form.toManagerId'),
 					fieldName: 'toManagerId',
 					placeholder: this.$t('addWork.form.toManagerIdPlace'),
 					showOptions: false,
+					disabled: false,
 					options: []
+				},
+				{
+				  type: 'datetime',
+				  labelText: this.$t('addWork.form.actionTimeStr'),
+				  fieldName: 'actionTimeStr',
+					disabled: false,
+				  placeholder: this.$t('addWork.form.actionTimeStrPlace')
+				},
+				{
+					type: 'datetime',
+					labelText: this.$t('addWork.form.makeTimeStr'),
+					fieldName: 'makeTimeStr',
+					disabled: false,
+					placeholder: this.$t('addWork.form.makeTimeStrPlace')
 				},
 				{
 					type: 'textarea',
 					labelText: this.$t('addWork.form.remarks'),
 					fieldName: 'remarks',
+					disabled: false,
 					placeholder: this.$t('addWork.form.remarksPlace'),
 					borderBottom: false,
 					maxlength: 100
 				}
 			],
 			formDataValue: {},
-			toData: [] // 选中的组织
+			info: {},
+			show: false,
+			invalidNote: '',
+			customerId: ''
 		}
   },
   async onLoad(options) {
 		this.editId = options.editId || ''
-		await this.init()
 		if (this.editId) {
 			this.isSave = false
 			uni.setNavigationBarTitle({
 				title: this.$t('addWork.titleTextInfo')
 			});
+		} else {
+			this.isSave = true
+			uni.setNavigationBarTitle({
+				title: this.$t('addWork.titleText')
+			});
+		}
+		await this.init()
+		if (this.editId) {
 			this.formDataSource.forEach(v=>{
 				v.disabled = true
 			})
 			this.getInfo()
 		} else {
-			this.isSave = true
 			this.formDataValue = {
 				toOrgId: this.userInfo.orgId
 			}
-			uni.setNavigationBarTitle({
-				title: this.$t('addWork.titleText')
-			});
 		}
   },
 	onShow() {
 		// 添加监听事件
-		uni.$once('chooseData', (data) => {
-			this.toData = data
+		uni.$once('chooseCustomer', (data) => {
+			this.customerId = data.id
+			this.formDataValue = {
+				customerName: data.customerName
+			}
 		})
 	},
   methods: {
@@ -203,39 +279,101 @@ export default {
 			this.formDataSource[2].options = this.riskUnitList
 			// 获取工单等级
 			await this.getWorkLevel()
-			this.formDataSource[6].options = this.workLevel
+			this.formDataSource[3].options = this.workLevel
 			// 获取处理组织
 			await this.getOrgList()
-			this.formDataSource[7].options = this.orgList
+			this.formDataSource[5].options = this.orgList
 			// 获取人员
 			await this.getManagerFindList({ orgId: this.userInfo.orgId })
-			this.formDataSource[8].options = this.managerList
+			this.formDataSource[6].options = this.managerList
+		},
+		// 表单改变
+		async changeForm(obj) {
+			const queryParams = obj.queryParams
+			const name = obj.name // 改变的字段
+			if (name === 'toOrgId' && queryParams.toOrgId) {
+				// 处理组织改变，处理员要重新选择
+				await this.getManagerFindList({ orgId: queryParams.toOrgId })
+				this.formDataSource[6].options = this.managerList
+				// 重置处理员
+				queryParams.toManagerId = ''
+				this.formDataValue = queryParams
+			} else if (name === 'formKey' && queryParams.formKey) {
+				if (queryParams.formKey === 'polling') {
+					// 巡检单 选择风险单元
+					this.formDataSource[1].show = false
+					this.formDataSource[2].show = true
+				} else {
+					// 选择客户
+					this.formDataSource[1].show = true
+					this.formDataSource[2].show = false
+				}
+			}
 		},
     // 详情
     async getInfo() {
 			const { returnValue: res } = await auditWorkFindById({ id: this.editId })
       if (res) {
-				res.birthdayStr = res.birthday ? formatDate(res.birthday) : ''
+				res.actionTimeStr = res.actionTime ? UnixToDate(res.actionTime) : ''
+				res.makeTimeStr = res.makeTime ? UnixToDate(res.makeTime) : ''
+				if (res.formKey === 'polling') {
+					// 巡检单
+					res.unitId = res.customerId
+					this.formDataSource[1].show = false
+					this.formDataSource[2].show = true
+				} else {
+					this.formDataSource[1].show = true
+					this.formDataSource[2].show = false
+				}
 				this.formDataValue = res
+				this.info = res
       }
     },
     // 提交
-    submitForm() {
-			this.$refs.dialogForm.handleSubmit(async(data) => {
-				data.id = this.editId || ''
-				const { returnValue: res, message } = await auditWorkSaveOrEdit(data)
-				if (res) {
-					this.$refs.uToast.show({
-						type: 'success',
-						message: message,
-					})
-					setTimeout(() => {
-						uni.navigateBack({
-							delta: 1
+    submitForm(type) {
+			if(type === 1) {
+				// 分派
+				this.$refs.dialogForm.handleSubmit(async(data) => {
+					data.id = this.editId || ''
+					if (data.formKey === 'polling') {
+						data.customerId = data.unitId
+					} else {
+						data.customerId = this.customerId
+					}
+					const { returnValue: res, message } = await auditWorkAssignWork(data)
+					if (res) {
+						this.$refs.uToast.show({
+							type: 'success',
+							message: message,
 						})
-					}, 2000)
-				}
-			})
+						setTimeout(() => {
+							uni.navigateBack({
+								delta: 1
+							})
+						}, 2000)
+					}
+				})
+			} else {
+				// 添加编辑
+				this.$refs.dialogForm.handleSubmit(async(data) => {
+					data.id = this.editId || ''
+					if (data.formKey === 'polling') {
+						data.customerId = data.unitId
+					}
+					const { returnValue: res, message } = await auditWorkSaveOrEdit(data)
+					if (res) {
+						this.$refs.uToast.show({
+							type: 'success',
+							message: message,
+						})
+						setTimeout(() => {
+							uni.navigateBack({
+								delta: 1
+							})
+						}, 2000)
+					}
+				})
+			}
     },
 		// 删除
 		handleDelete() {
@@ -260,6 +398,45 @@ export default {
 				}
 			})
 		},
+		// 作废
+		handleVoid() {
+			this.show = true
+			this.invalidNote = ''
+		},
+		// 作废确认
+		async confirm() {
+			if (!this.invalidNote) {
+				uni.$u.toast(this.$t('common.voidContentPlace'))
+				return false
+			}
+			const { returnValue: res, message } = await auditWorkInvalidWork({ id: this.editId, invalidNote: this.invalidNote })
+			if(res){
+				this.$refs.uToast.show({
+					type: 'success',
+					message: message,
+				})
+				setTimeout(() => {
+				  uni.navigateBack({
+				    delta: 1
+				  })
+				}, 2000)
+			}
+		},
+		// 分派
+		handleUpdate() {
+			this.isSave = true
+			this.isAssign = true
+			uni.setNavigationBarTitle({
+				title: this.$t('addWork.titleTextAssign')
+			});
+			this.formDataSource.forEach((v,i)=>{
+				if(i > 3 && i !== 8){
+					v.disabled = false
+				} else {
+					v.show = false
+				}
+			})
+		},
 		// 编辑
 		handleEdit() {
 			this.isSave = true
@@ -268,6 +445,13 @@ export default {
 			});
 			this.formDataSource.forEach(v=>{
 				v.disabled = false
+			})
+		},
+		// 选择客户
+		chooseCustomer() {
+			this.goto('/infoManage/chooseCustomer/chooseCustomer',{
+				customerId: this.customerId,
+				orgId: this.userInfo.orgId
 			})
 		}
   },
@@ -298,6 +482,9 @@ export default {
 		width: 632rpx;
 		margin: 60rpx auto;
 		@include flexMixin();
+		.u-button{
+			margin: 0rpx 10rpx;
+		}
 	}
 	.addRole{
 		@include flexMixin(row,flex-end);

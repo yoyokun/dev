@@ -8,19 +8,21 @@
 			ref="form">
 			<u-form-item
 				v-for="(item,index) in renderDataSource" 
+				v-if="item.show"
 				:key="index"
 				:label="item.labelText"
 				:prop="item.fieldName"
 				:required="item.required"
 				:borderBottom="item.borderBottom"
 				:labelWidth="item.labelWidth"
+				@click="chooseChange(item)"
 				>
 				<!--文本框-->
 				<u--input 
 					type="text" 
-					v-if="item.type === 'text' || item.type === 'chooseText'"
+					v-if="item.type === 'text' || item.type === 'chooseText' || item.type === 'chooseBtn'"
 					v-model="formData[item.fieldName]" 
-					:readonly="item.disabled"
+					:readonly="item.disabled || item.type === 'chooseBtn'"
 					:inputAlign="item.inputAlign"
 					:border="item.inputBorder"
 					:maxlength="item.maxlength"
@@ -35,6 +37,7 @@
 						@click="chooseChange(item)">
 					</u-button>
 				</view>
+				<u-icon @click="chooseChange(item)" v-if="item.type === 'chooseBtn'" name="arrow-right" color="#666666" size="15"></u-icon>
 				<!--密码框-->
 				<u--input
 					type="password" 
@@ -269,8 +272,8 @@ export default {
 		// 监听 formDataSource 改变
 		formDataSource: {
 			handler() {
-				this.renderDataSource = this.formDataSource.map(v => {
-					return Object.assign(v, {
+				this.renderDataSource = this.formDataSource.map((v,index) => {
+					return Object.assign({ show: true }, v, {
 						borderBottom: v.borderBottom ? v.borderBottom : v.borderBottom === undefined,
 						labelWidth: v.labelWidth ? v.labelWidth : this.labelWidth,
 						maxlength: v.maxlength ? v.maxlength : 50,
@@ -279,7 +282,7 @@ export default {
 						inputBorder: v.inputBorder ? v.inputBorder : 'none',
 						inputAlign: v.inputAlign ? v.inputAlign : 'left',
 						isProvinces: v.isProvinces ? v.isProvinces : false
-					})
+					}, { defaultIndex: this.renderDataSource[index] ? this.renderDataSource[index].defaultIndex : [0] })
 				})
 				console.log(this.renderDataSource)
 			},
@@ -296,6 +299,12 @@ export default {
 						// 判断 key 是否存在
 						if (key in this.formData) {
 							const findIndex = this.renderDataSource.findIndex(item=>item.fieldName === key)
+							if(this.renderDataSource[findIndex].type === 'picker'){
+								// 选中
+								const options = this.renderDataSource[findIndex].options
+								const findIndex1 = options.findIndex(item=>item.value === formDataValue[key])
+								this.renderDataSource[findIndex].defaultIndex = [findIndex1]
+							}
 							if(this.renderDataSource[findIndex].isProvinces && formDataValue[key].length){
 								// 省市区 转换成code
 								const provincesCode = TextToCode[formDataValue[key][0]]

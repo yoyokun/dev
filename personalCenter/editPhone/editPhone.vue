@@ -25,11 +25,7 @@
 
 <script>
 import { sysManagerEditPhoneSendCode, sysManagerEditPhone } from '@/api/loginApi.js'
-import EditForm from '@/components/editForm/index.vue'
 export default {
-	components:{
-		EditForm
-	},
   data() {
     return {
       sendCodeDisabled: false,

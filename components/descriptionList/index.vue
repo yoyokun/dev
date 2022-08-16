@@ -36,7 +36,7 @@
 			height: 80rpx;
 			line-height: 80rpx;
 			font-weight: bold;
-			border-bottom: 1px solid #eee;
+			border-bottom: 1rpx solid #eee;
 		}
 
 		.basic-box {}
