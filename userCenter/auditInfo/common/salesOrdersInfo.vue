@@ -1,249 +1,87 @@
 <template>
-	<view class="audit-info-content">
+	<view>
 		<view class="tabs">
 			<view class="tabs-content">
-				<u-tabs :scrollable="false" :list="busMenu" :current="current" :itemStyle="{flex:'1',height:'44px'}"
-					@change="changeTabs"></u-tabs>
+				<u-tabs :scrollable="false" :list="busMenu" :current="current" :itemStyle="{flex:'1',height:'44px'}" @change="changeTabs"></u-tabs>
 			</view>
 		</view>
-
+		
 		<view class="basic" v-show="current == 0">
-			<view class="basic-item">
-				<view class="basic-tle">{{$t('auditInfo.salesOrdersInfo.basicTle')}}</view>
-				<view class="basic-box">
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.billNo')}}</view>
-						<view class="desc">{{info.billNo}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.orderSource')}}</view>
-						<view class="desc">{{info.orderSource | orderSource}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.goodsTotalMoney')}}</view>
-						<view class="desc">{{info.goodsTotalMoney}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.payItemsMoney')}}</view>
-						<view class="desc">{{info.payItemsMoney}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.couponTotalMoney')}}</view>
-						<view class="desc">{{info.couponTotalMoney}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.totalMoney')}}</view>
-						<view class="desc">{{info.totalMoney}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.orderState')}}</view>
-						<view class="desc">{{info.orderState | orderState}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.deliveryState')}}</view>
-						<view class="desc">{{info.deliveryState}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.payState')}}</view>
-						<view class="desc">{{info.payState | payState}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.payType')}}</view>
-						<view class="desc">{{info.payType | payType}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.payTypeName')}}</view>
-						<view class="desc">{{info.payTypeName}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.orderTime')}}</view>
-						<view class="desc">{{info.orderTime ? UnixToDate(info.orderTime) : ''}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.createTime')}}</view>
-						<view class="desc">{{info.createTime | dayjs}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.finishTime')}}</view>
-						<view class="desc">{{info.finishTime ? UnixToDate(info.finishTime) : ''}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.operationTime')}}</view>
-						<view class="desc">{{info.operationTime ? UnixToDate(info.operationTime) : ''}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.remarks')}}</view>
-						<view class="desc">{{info.remarks}}</view>
-					</view>
-				</view>
-			</view>
-			<view class="basic-item">
-				<view class="basic-tle">{{$t('auditInfo.salesOrdersInfo.customTle')}}</view>
-				<view class="basic-box">
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.customerNo')}}</view>
-						<view class="desc">{{info.customerNo}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.customerName')}}</view>
-						<view class="desc">{{info.customerName}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.customerPhone')}}</view>
-						<view class="desc">{{salesOrderExtend.customerPhone}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.customerAccount')}}</view>
-						<view class="desc">{{salesOrderExtend.customerAccount}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.customerClassify')}}</view>
-						<view class="desc">{{salesOrderExtend.customerClassify | customerClassify}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.regionName')}}</view>
-						<view class="desc">{{salesOrderExtend.regionName}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.customerTypeName')}}</view>
-						<view class="desc">{{salesOrderExtend.customerTypeName}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.propertyNames')}}</view>
-						<view class="desc">{{salesOrderExtend.propertyNames}}</view>
-					</view>
-				</view>
-			</view>
-			<view class="basic-item">
-				<view class="basic-tle">{{$t('auditInfo.salesOrdersInfo.deliverTle')}}</view>
-				<view class="basic-box">
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.pickMode')}}</view>
-						<view class="desc">{{salesOrderTransport.pickMode | pickMode}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.bookingTime')}}</view>
-						<view class="desc">{{salesOrderTransport.bookingTime | dayjs}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.licenseNo')}}</view>
-						<view class="desc">
-							{{(salesOrderTransport.pickMode !==1 && salesOrderTransport.pickMode !==4) ? salesOrderTransport.licenseNo : ''}}
-						</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.linkman')}}</view>
-						<view class="desc">{{salesOrderTransport.linkman}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.phone')}}</view>
-						<view class="desc">{{salesOrderTransport.phone}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.salesOrderTransport')}}</view>
-						<view class="desc">{{salesOrderTransport.salesOrderTransport | addressSplicing}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.deliverOrgName')}}</view>
-						<view class="desc">
-							{{salesOrderTransport.pickMode === 4 ? salesOrderTransport.deliverOrgName : ''}}
-						</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.deliverMan')}}</view>
-						<view class="desc">
-							{{(salesOrderTransport.pickMode === 3 || salesOrderTransport.pickMode === 4) ? salesOrderTransport.deliverMan : ''}}
-						</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.payItemsName')}}</view>
-						<view class="desc">{{info.payItemsName}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.payItemsMoney')}}</view>
-						<view class="desc">{{info.payItemsMoney}}</view>
-					</view>
-				</view>
-			</view>
-			<view class="basic-item">
-				<view class="basic-tle">{{$t('auditInfo.salesOrdersInfo.orderTle')}}</view>
-				<view class="basic-box">
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.couponNo')}}</view>
-						<view class="desc">{{ info.coupon ? info.coupon.couponNo : '' }}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.couponMoney')}}</view>
-						<view class="desc">{{info.couponMoney}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.integralValue')}}</view>
-						<view class="desc">{{info.integralValue}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.integralMoney')}}</view>
-						<view class="desc">{{info.integralMoney}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.disCountMoney')}}</view>
-						<view class="desc">{{info.disCountMoney}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.disCountRate')}}</view>
-						<view class="desc">{{info.disCountRate}}%</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.couponTotalMoney')}}</view>
-						<view class="desc">{{info.couponTotalMoney}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.salesOrdersInfo.totalMoney')}}</view>
-						<view class="desc">{{info.totalMoney}}</view>
-					</view>
-				</view>
-			</view>
+			<description-list :title="$t('auditInfo.salesOrdersInfo.basicTle')">
+				<description :label="$t('auditInfo.salesOrdersInfo.billNo')">{{ info.billNo }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.orderSource')">{{ info.orderSource | orderSource }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.goodsTotalMoney')">{{ info.goodsTotalMoney }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.payItemsMoney')">{{ info.payItemsMoney }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.couponTotalMoney')">{{ info.couponTotalMoney }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.totalMoney')">{{ info.totalMoney }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.orderState')">{{ info.orderState | orderState }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.deliveryState')">{{ info.deliveryState }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.payState')">{{ info.payState | payState }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.payType')">{{ info.payType | payType }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.orderTime')">{{ info.orderTime ? UnixToDate(info.orderTime) : '' }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.createTime')">{{ info.createTime | dayjs }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.finishTime')">{{ info.finishTime ? UnixToDate(info.finishTime) : '' }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.operationTime')">{{ info.operationTime ? UnixToDate(info.operationTime) : '' }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.remarks')">{{ info.remarks }}</description>
+			</description-list>
+			<description-list :title="$t('auditInfo.salesOrdersInfo.customTle')">
+				<description :label="$t('auditInfo.salesOrdersInfo.customerNo')">{{ info.customerNo }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.customerName')">{{ info.customerName }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.customerPhone')">{{ info.customerPhone }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.customerAccount')">{{ info.customerAccount }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.customerClassify')">{{ info.customerClassify | customerClassify }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.regionName')">{{ info.regionName }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.customerTypeName')">{{ info.customerTypeName }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.propertyNames')">{{ info.propertyNames }}</description>
+			</description-list>
+			<description-list :title="$t('auditInfo.salesOrdersInfo.deliverTle')">
+				<description :label="$t('auditInfo.salesOrdersInfo.pickMode')">{{ salesOrderTransport.pickMode | pickMode }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.bookingTime')">{{ salesOrderTransport.bookingTime | dayjs }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.licenseNo')">{{(salesOrderTransport.pickMode !==1 && salesOrderTransport.pickMode !==4) ? salesOrderTransport.licenseNo : ''}}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.linkman')">{{ salesOrderTransport.linkman }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.phone')">{{ salesOrderTransport.phone }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.salesOrderTransport')">{{salesOrderTransport.salesOrderTransport | addressSplicing}}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.deliverOrgName')">{{salesOrderTransport.pickMode === 4 ? salesOrderTransport.deliverOrgName : ''}}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.deliverMan')">{{(salesOrderTransport.pickMode === 3 || salesOrderTransport.pickMode === 4) ? salesOrderTransport.deliverMan : ''}}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.payItemsName')">{{ salesOrderTransport.payItemsName }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.payItemsMoney')">{{ salesOrderTransport.payItemsMoney }}</description>
+			</description-list>
+			<description-list :title="$t('auditInfo.salesOrdersInfo.orderTle')">
+				<description :label="$t('auditInfo.salesOrdersInfo.couponNo')">{{ info.coupon ? info.coupon.couponNo : '' }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.couponMoney')">{{ info.couponMoney }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.integralValue')">{{ info.integralValue }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.integralMoney')">{{ info.integralMoney }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.disCountMoney')">{{ info.disCountMoney }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.disCountRate')">{{ info.disCountRate }}%</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.couponTotalMoney')">{{ info.couponTotalMoney }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.totalMoney')">{{ info.totalMoney }}</description>
+			</description-list>
 		</view>
 		<view class="basic" v-show="current == 1">
-			<view class="basic-item" v-for="item in salesOrderDetailList" :key="item.id">
+			<description-list v-for="item in salesOrderDetailList" :key="item.id">
 				<view class="basic-tle">{{item.billName}}
 					<text class="tip-tle">{{$t('auditInfo.salesOrdersInfo.orderNums')}}：{{ item.subBillNo }}</text>
 				</view>
-				<view class="basic-box">
-					<us-table :table-column="item.printSetVo.tableColumn"
-						:table-data="item.salesOrderDetailGoodsList || []"></us-table>
-				</view>
-			</view>
-			<view class="basic-item" v-if="salesOrderPayitemsList.length">
-				<view class="basic-tle">{{$t('auditInfo.salesOrdersInfo.costMoney')}}</view>
-				<view class="basic-box" v-for="(item,index) in salesOrderPayitemsList" :key="item.id">
-					<view class="item">
-						<view class="tle">{{item.payItemsName}}</view>
-						<view class="desc">{{ item.payItemsMoney }},{{$t('auditInfo.salesOrdersInfo.totalUnit')}}{{item.payItemsTotalMoney}}</view>
-					</view>
-				</view>
-			</view>
+				<us-table :table-column="item.printSetVo.tableColumn"
+					:table-data="item.salesOrderDetailGoodsList || []"></us-table>
+			</description-list>
+			<description-list v-if="salesOrderPayitemsList.length" :title="$t('auditInfo.salesOrdersInfo.costMoney')">
+				<description v-for="(item,index) in salesOrderPayitemsList" :key="item.id" :label="item.payItemsName">{{ item.payItemsMoney }},{{$t('auditInfo.salesOrdersInfo.totalUnit')}}{{item.payItemsTotalMoney}}</description>
+			</description-list>
 		</view>
 		<view class="basic" v-show="current == 2">
-			<view class="basic-item">
-				<view class="basic-box">
-					<us-table :table-column="tableColumnBack"
-						:table-data="salesOrderBackDetailList || []"></us-table>
-				</view>
-			</view>
+			<description-list>
+				<us-table :table-column="tableColumnBack"
+					:table-data="salesOrderBackDetailList || []"></us-table>
+			</description-list>
 		</view>
 		<view class="basic" v-show="current == 3">
-			<view class="basic-item"  v-if="editId">
-				<view class="basic-tle">{{$t('auditInfo.salesOrdersInfo.sendTle')}}</view>
-				<view class="basic-box">
-					<service-cylinder-info node-type="confirmDelivery" :link-id="editId" />
-				</view>
-			</view>
-			<view class="basic-item" v-if="editId">
-				<view class="basic-tle">{{$t('auditInfo.salesOrdersInfo.recycleTle')}}</view>
-				<view class="basic-box">
-					<service-cylinder-info node-type="recycleCylinder" :link-id="editId" />
-				</view>
-			</view>
+			<description-list v-if="editId" :title="$t('auditInfo.salesOrdersInfo.sendTle')">
+				<service-cylinder-info node-type="confirmDelivery" :link-id="editId" />
+			</description-list>
+			<description-list v-if="editId" :title="$t('auditInfo.salesOrdersInfo.recycleTle')">
+				<service-cylinder-info node-type="recycleCylinder" :link-id="editId" />
+			</description-list>
 		</view>
 	</view>
 </template>

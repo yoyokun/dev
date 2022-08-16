@@ -1,87 +1,58 @@
 <template>
-	<view class="audit-info-content">
-		<view class="basic">
-			<view class="basic-item">
-				<view class="basic-tle">{{$t('auditInfo.purGoodPlanInfo.basicTle')}}</view>
-				<view class="basic-box">
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.purGoodPlanInfo.billNo')}}</view>
-						<view class="desc">{{info.billNo}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.purGoodPlanInfo.planDate')}}</view>
-						<view class="desc">{{info.planDate}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.purGoodPlanInfo.creator')}}</view>
-						<view class="desc">{{info.creator}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.purGoodPlanInfo.state')}}</view>
-						<view class="desc">{{info.state | state}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.purGoodPlanInfo.remarks')}}</view>
-						<view class="desc">{{info.remarks}}</view>
-					</view>
-					<view class="item">
-						<view class="tle">{{$t('auditInfo.purGoodPlanInfo.attachment')}}</view>
-						<view class="desc">
-							<view class="down-list" v-for="(item,index) in info.attachment" :key="item.id">
-								<text>{{ index+1 }}.{{ item.name }}</text>
-								<text @click="downFile(item.url)">{{$t('auditInfo.purGoodPlanInfo.downloadTxt')}}</text>
-							</view>
-						</view>
-					</view>
+	<view class="basic">
+		<description-list :title="$t('auditInfo.purGoodPlanInfo.basicTle')">
+			<description :label="$t('auditInfo.purGoodPlanInfo.billNo')">{{ info.billNo }}</description>
+			<description :label="$t('auditInfo.purGoodPlanInfo.planDate')">{{ info.planDate }}</description>
+			<description :label="$t('auditInfo.purGoodPlanInfo.creator')">{{ info.creator }}</description>
+			<description :label="$t('auditInfo.purGoodPlanInfo.state')">{{ info.state | state }}</description>
+			<description :label="$t('auditInfo.purGoodPlanInfo.remarks')">{{ info.remarks }}</description>
+			<description :label="$t('auditInfo.purGoodPlanInfo.attachment')">
+				<view class="down-list" v-for="(item,index) in info.attachment" :key="item.id">
+					<text>{{ index+1 }}.{{ item.name }}</text>
+					<text @click="downFile(item.url)">{{$t('auditInfo.purGoodPlanInfo.downloadTxt')}}</text>
 				</view>
-			</view>
-			<view class="basic-item">
-				<view class="basic-tle">{{$t('auditInfo.purGoodPlanInfo.buyTle')}}</view>
-				<view class="basic-box">
-					<us-table :table-column="tableColumn" :table-data="planDetailsData">
-						<!-- #ifdef H5 || APP-PLUS -->
-						<view slot="arrivalTime" slot-scope="row">
-							{{ row.data.arrivalTime ? UnixToDate(row.data.arrivalTime) : '' }}
-						</view>
-						<view slot="takeType" slot-scope="row">
-							{{ row.data.takeType | takeType }}
-						</view>
-						<!-- #endif -->
-						<!-- #ifdef MP-->
-						<view slot="arrivalTime" slot-scope="{row}">
-							{{ row.data.arrivalTime ? UnixToDate(row.data.arrivalTime) : '' }}
-						</view>
-						<view slot="takeType" slot-scope="{row}">
-							{{ row.data.takeType | takeType }}
-						</view>
-						<!-- #endif -->
-					</us-table>
+			</description>
+		</description-list>
+		<description-list :title="$t('auditInfo.purGoodPlanInfo.buyTle')">
+			<us-table :table-column="tableColumn" :table-data="planDetailsData">
+				<!-- #ifdef H5 || APP-PLUS -->
+				<view slot="arrivalTime" slot-scope="row">
+					{{ row.data.arrivalTime ? UnixToDate(row.data.arrivalTime) : '' }}
 				</view>
-			</view>
-			<view class="basic-item">
-				<view class="basic-tle">{{$t('auditInfo.purGoodPlanInfo.feeTle')}}</view>
-				<view class="basic-box">
-					<us-table :table-column="planCostsDataColumn" :table-data="planCostsData">
-						<!-- #ifdef H5 || APP-PLUS -->
-						<view slot="proportion" slot-scope="row">
-							{{ row.data.proportion&&row.data.proportion+'%' }}
-						</view>
-						<view slot="payState" slot-scope="row">
-							{{ row.data.payState | payState }}
-						</view>
-						<!-- #endif -->
-						<!-- #ifdef MP-->
-						<view slot="proportion" slot-scope="{row}">
-							{{ row.data.proportion&&row.data.proportion+'%' }}
-						</view>
-						<view slot="payState" slot-scope="{row}">
-							{{ row.data.payState | payState }}
-						</view>
-						<!-- #endif -->
-					</us-table>
+				<view slot="takeType" slot-scope="row">
+					{{ row.data.takeType | takeType }}
 				</view>
-			</view>
-		</view>
+				<!-- #endif -->
+				<!-- #ifdef MP-->
+				<view slot="arrivalTime" slot-scope="{row}">
+					{{ row.data.arrivalTime ? UnixToDate(row.data.arrivalTime) : '' }}
+				</view>
+				<view slot="takeType" slot-scope="{row}">
+					{{ row.data.takeType | takeType }}
+				</view>
+				<!-- #endif -->
+			</us-table>
+		</description-list>
+		<description-list :title="$t('auditInfo.purGoodPlanInfo.feeTle')">
+			<us-table :table-column="planCostsDataColumn" :table-data="planCostsData">
+				<!-- #ifdef H5 || APP-PLUS -->
+				<view slot="proportion" slot-scope="row">
+					{{ row.data.proportion&&row.data.proportion+'%' }}
+				</view>
+				<view slot="payState" slot-scope="row">
+					{{ row.data.payState | payState }}
+				</view>
+				<!-- #endif -->
+				<!-- #ifdef MP-->
+				<view slot="proportion" slot-scope="{row}">
+					{{ row.data.proportion&&row.data.proportion+'%' }}
+				</view>
+				<view slot="payState" slot-scope="{row}">
+					{{ row.data.payState | payState }}
+				</view>
+				<!-- #endif -->
+			</us-table>
+		</description-list>
 	</view>
 </template>
 <script>
@@ -94,8 +65,7 @@
 	} from '@/utils/util'
 	export default {
 		name: 'PurGoodPlanInfo',
-		components: {
-		},
+		components: {},
 		// 过滤器
 		filters: {
 			state(value) {

@@ -203,6 +203,13 @@
 			// overflow-y: scroll;
 			::v-deep .basic {
 				// padding: 20rpx 20rpx;
+				.basic-tle{
+					padding: 0 20rpx;
+					height: 80rpx;
+					line-height: 80rpx;
+					font-weight: bold;
+					border-bottom: 1px solid #eee;
+				}
 				.img{
 					width: 100rpx;
 					height: 100rpx;
