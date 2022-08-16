@@ -19,6 +19,10 @@
 			</uni-tr>
 
 		</uni-table>
+		<view style="padding:20rpx" v-if="pagination">
+			<uni-pagination show-icon="true" :pageSize="pagination.size" :total="pagination.total" :current="pagination.page" @change="changePage">
+			</uni-pagination>
+		</view>
 	</view>
 </template>
 
@@ -36,9 +40,19 @@
 				type: Array,
 				default: () => []
 			},
+			// 分页
+			pagination: {
+				type: [Object, Boolean],
+				default: false
+			},
 		},
 		data() {
 			return {}
+		},
+		methods:{
+			changePage(e){
+				this.$emit('currentChange',{page:e.current,size:this.pagination.size})
+			}
 		}
 	}
 </script>

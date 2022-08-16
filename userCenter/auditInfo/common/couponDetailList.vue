@@ -1,0 +1,131 @@
+<template>
+	<view>
+		<!-- <search></search> -->
+		<us-table :table-column="tableColumn" :table-data="tableData" :pagination="pagination" @currentChange="getList">
+			<!-- #ifdef H5 || APP-PLUS -->
+			<view slot="state" slot-scope="row">
+				{{ row.data.state | state }}
+			</view>
+			<view slot="vaildEndTime" slot-scope="row">
+				{{ row.data.vaildEndTime | dayjs }}
+			</view>
+			<view slot="receiveTime" slot-scope="row">
+				{{ row.data.receiveTime | dayjs }}
+			</view>
+			<view slot="useTime" slot-scope="row">
+		 	{{ row.data.useTime | dayjs }}
+			</view>
+			<!-- #endif -->
+			<!-- #ifdef MP-->
+			<view slot="state" slot-scope="{row}">
+				{{ row.data.state | state }}
+			</view>
+			<view slot="vaildEndTime" slot-scope="{row}">
+				{{ row.data.vaildEndTime | dayjs }}
+			</view>
+			<view slot="receiveTime" slot-scope="{row}">
+				{{ row.data.receiveTime | dayjs }}
+			</view>
+			<view slot="useTime" slot-scope="{row}">
+				{{ row.data.useTime | dayjs }}
+			</view>
+			<!-- #endif -->
+		</us-table>
+	</view>
+</template>
+<script>
+	let that = null
+	import {
+		couponDetailFindList
+	} from '@/api/lpgSalesManageApi'
+	import search from '@/components/search/search.vue'
+
+	export default {
+		name: 'CouponDetailList',
+		components: {
+			search
+		},
+		props: {
+			editId: {
+				type: [Number, String],
+				default: ''
+			}
+		},
+		// 过滤器
+		filters: {
+			state(value) {
+				const stateObj = that.$t('auditInfo.couponInfo.stateTxt')
+				return stateObj[value] || ''
+			}
+		},
+		data() {
+			return {
+				pagination:{
+					page: 1,
+					total: 0,
+					size: 10,
+				},
+				tableColumn: [{
+						prop: 'couponNo',
+						label: this.$t('auditInfo.couponInfo.tableColumnCoupon.couponNo')
+					},
+					{
+						prop: 'vaildEndTime',
+						label: this.$t('auditInfo.couponInfo.tableColumnCoupon.vaildEndTime'),
+						slot: 'vaildEndTime'
+					},
+					{
+						prop: 'state',
+						label: this.$t('auditInfo.couponInfo.tableColumnCoupon.state'),
+						slot: 'state'
+					},
+					{
+						prop: 'receiveTime',
+						label: this.$t('auditInfo.couponInfo.tableColumnCoupon.receiveTime'),
+						slot: 'receiveTime'
+					},
+					{
+						prop: 'useTime',
+						label: this.$t('auditInfo.couponInfo.tableColumnCoupon.useTime'),
+						slot: 'useTime'
+					},
+					{
+						prop: 'customerName',
+						label: this.$t('auditInfo.couponInfo.tableColumnCoupon.customerName')
+					},
+					{
+						prop: 'linkType',
+						label: this.$t('auditInfo.couponInfo.tableColumnCoupon.linkType'),
+						slot: 'linkType'
+					}
+				],
+				tableData: [],
+			}
+		},
+		computed: {
+
+		},
+		async created() {
+			that = this
+			const obj = {
+				page:this.pagination.page,
+				size:this.pagination.size
+			}
+			await this.getList(obj)
+		},
+		async mounted() {},
+		methods: {
+			// 获取Table列表
+			async getList(obj) {
+				const requestParameters = Object.assign({}, this.queryParam, obj || {}, {
+					id: this.editId
+				})
+				const res = await couponDetailFindList(requestParameters)
+				this.tableData = res.returnValue
+				this.pagination.total = res.totals
+			},
+		}
+	}
+</script>
+<style lang="scss" scoped>
+</style>

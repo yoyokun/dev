@@ -402,3 +402,48 @@ export function auditWorkAcceptWork(data = {}, message = '', custom = {}) {
 		}
   })
 }
+
+// 客户管理 客户详情(含默认信息)
+export function userCustomerfindByIdDefault(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/userCustomer/findById_default',
+    method: 'post',
+    data,
+	message,
+	custom: {
+		auth: custom?.auth || true, // 是否需要token
+		toast: custom?.toast || true, // 弹框
+		catch: custom?.catch || true // catch返回
+	}
+  })
+}
+
+// 价格策略管理 获取客户某个商品的价格策略配置
+export function priceStrategyFindCustomerSalesPriceList(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/priceStrategy/findCustomerSalesPriceList',
+    method: 'post',
+    data,
+	message,
+	custom: {
+		auth: custom?.auth || true, // 是否需要token
+		toast: custom?.toast || true, // 弹框
+		catch: custom?.catch || true // catch返回
+	}
+  })
+}
+
+// 价格策略管理 更新客户某个商品的价格策略配置
+export function priceStrategyUpdateCustomerPriceStrategyState(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/control/priceStrategy/updateCustomerPriceStrategyState',
+    method: 'post',
+    data,
+	message,
+	custom: {
+		auth: custom?.auth || true, // 是否需要token
+		toast: custom?.toast || true, // 弹框
+		catch: custom?.catch || true // catch返回
+	}
+  })
+}

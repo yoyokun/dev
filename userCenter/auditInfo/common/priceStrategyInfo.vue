@@ -14,52 +14,44 @@
 			<us-table :table-column="tableColumn" :table-data="tableData">
 				<!-- #ifdef H5 || APP-PLUS -->
 				<view slot="unitsName" slot-scope="row">
-					<view style="height: 60rpx;line-height: 60rpx;">{{row.data.unitsName}}</view>
-					<view style="height: 60rpx;line-height: 60rpx;" v-for="(item,index) in row.data.child" :key="index">
+					<view class="custom-slot" v-for="(item,index) in row.data.child" :key="index">
 						{{item.unitsName}}
 					</view>
 				</view>
 				<view slot="propertyNames" slot-scope="row">
-					<view style="height: 60rpx;line-height: 60rpx;">{{row.data.propertyNames}}</view>
-					<view style="height: 60rpx;line-height: 60rpx;" v-for="(item,index) in row.data.child" :key="index">
+					<view class="custom-slot" v-for="(item,index) in row.data.child" :key="index">
 						{{item.propertyNames}}
 					</view>
 				</view>
 				<view slot="listPrice" slot-scope="row">
-					<view style="height: 60rpx;line-height: 60rpx;">{{row.data.listPrice}}</view>
-					<view style="height: 60rpx;line-height: 60rpx;" v-for="(item,index) in row.data.child" :key="index">
+					<view class="custom-slot" v-for="(item,index) in row.data.child" :key="index">
 						{{item.listPrice}}
 					</view>
 				</view>
 				<view slot="costPrice" slot-scope="row">
-					<view style="height: 60rpx;line-height: 60rpx;">{{row.data.costPrice}}</view>
-					<view style="height: 60rpx;line-height: 60rpx;" v-for="(item,index) in row.data.child" :key="index">
+					<view class="custom-slot" v-for="(item,index) in row.data.child" :key="index">
 						{{item.costPrice}}
 					</view>
 				</view>
 				<!-- #endif -->
 				<!-- #ifdef MP-->
 				<view slot="unitsName" slot-scope="{row}">
-					<view style="height: 60rpx;line-height: 60rpx;">{{row.data.unitsName}}</view>
-					<view style="height: 60rpx;line-height: 60rpx;" v-for="(item,index) in row.data.child" :key="index">
+					<view class="custom-slot" v-for="(item,index) in row.data.child" :key="index">
 						{{item.unitsName}}
 					</view>
 				</view>
 				<view slot="propertyNames" slot-scope="{row}">
-					<view style="height: 60rpx;line-height: 60rpx;">{{row.data.propertyNames}}</view>
-					<view style="height: 60rpx;line-height: 60rpx;" v-for="(item,index) in row.data.child" :key="index">
+					<view class="custom-slot" v-for="(item,index) in row.data.child" :key="index">
 						{{item.propertyNames}}
 					</view>
 				</view>
 				<view slot="listPrice" slot-scope="{row}">
-					<view style="height: 60rpx;line-height: 60rpx;">{{row.data.listPrice}}</view>
-					<view style="height: 60rpx;line-height: 60rpx;" v-for="(item,index) in row.data.child" :key="index">
+					<view class="custom-slot" v-for="(item,index) in row.data.child" :key="index">
 						{{item.listPrice}}
 					</view>
 				</view>
 				<view slot="costPrice" slot-scope="{row}">
-					<view style="height: 60rpx;line-height: 60rpx;">{{row.data.costPrice}}</view>
-					<view style="height: 60rpx;line-height: 60rpx;" v-for="(item,index) in row.data.child" :key="index">
+					<view class="custom-slot" v-for="(item,index) in row.data.child" :key="index">
 						{{item.costPrice}}
 					</view>
 				</view>
@@ -217,7 +209,7 @@
 					goodsArr.forEach((val, key) => {
 						if ((item.goodsId == val.goodsId) && !val.child) {
 							goodsArr[key] = item
-							goodsArr[key].child = []
+							goodsArr[key].child = [item]
 						} else if (item.goodsId == val.goodsId) {
 							goodsArr[key].child.push(item)
 						}
@@ -229,7 +221,13 @@
 	}
 </script>
 <style lang="scss" scoped>
-	.org-box {
-		margin: 10px;
+	.custom-slot{
+		height: 60rpx;
+		line-height: 60rpx;
+		&.action{
+			line-height: auto;
+			display: flex;
+			align-items: center;
+		}
 	}
 </style>
