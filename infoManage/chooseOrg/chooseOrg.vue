@@ -13,27 +13,18 @@
 		</view>
 		<view v-if="empty">
 			<view class="customerList">
-				<view v-for="(item,index) in dataList" :key="index" :class="['box',item.active?'active': '']" @click.stop="goto('/infoManage/customerInfo/customerInfo',{ editId: item.id })">
+				<view v-for="(item,index) in dataList" :key="index" class="chooseCommonBox" @click.stop="chooseBox(index)">
 					<view class="center">
-						<text class="state">{{item.state | state}}</text>
 						<view class="flex">
-							<view class="left">
-								<text class="blod">{{item.customerNo}}</text>
-								<text class="blod">{{item.customerName}}</text>
-							</view>
-							<view class="left">
-								<text>{{item.classify | classify}}</text>
-								<text>{{item.typeName}}</text>
-							</view>
+							<text class="name">{{ item.name }}</text>
 						</view>
-						<view v-if="item.propertyName" class="tags">
-							<view v-for="(tag,indexTag) in item.propertyName.split(',')" class="ptag m-l10 m-t10" :key="indexTag">{{tag}}</view>
+						<view class="flex">
+							<view class="ptag m-r20">{{ item.orgModel | orgModel }}</view>
+							<view class="tag m-r20">{{ item.orgType | orgType }}</view>
 						</view>
 					</view>
-					<view class="right" @click.stop="chooseBox(index)">
-						<image class="icon" v-if="item.active" mode="widthFix" src="/static/image/check.png" />
-						<image class="icon" v-else mode="widthFix" src="/static/image/uncheck.png" />
-					</view>
+					<image class="icon" v-if="item.active" mode="widthFix" src="/static/image/check.png" />
+					<image class="icon" v-else mode="widthFix" src="/static/image/uncheck.png" />
 				</view>
 			</view>
 			<loading v-if="loading" class="loading" />
@@ -53,25 +44,24 @@
 
 <script>
 let that = null
-import { userCustomerFindList } from '@/api/lpgManageAppApi.js'
+import { sysOrgFindList } from '@/api/lpgManageAppApi.js'
 import paginationMixin from '@/common/paginationMixin.js'
 export default {
   data() {
     return {
 			keyword: '',
-			customerId: '', // 选中的id
 			orgId: '' // 组织id
     }
   },
 	mixins: [paginationMixin],
 	// 过滤器
 	filters: {
-		state(value) {
-			const stateObj = that.$t('chooseCustomer.stateObj')
+		orgModel(value) {
+			const stateObj = that.$t('chooseOrg.orgModelObj')
 			return stateObj[value] || ''
 		},
-		classify(value) {
-			const stateObj = that.$t('chooseCustomer.classifyObj')
+		orgType(value) {
+			const stateObj = that.$t('chooseOrg.orgTypeObj')
 			return stateObj[value] || ''
 		}
 	},
@@ -79,12 +69,11 @@ export default {
 		that = this
 	},
   onLoad(options) {
-		this.customerId = options.customerId || ''
 		this.orgId = options.orgId || ''
   },
 	onShow() {
 		uni.setNavigationBarTitle({
-			title: this.$t('chooseCustomer.titleText')
+			title: this.$t('chooseOrg.titleText')
 		})
 	},
   methods: {
@@ -93,14 +82,13 @@ export default {
       const data = {
 				keyword: this.keyword,
 				state: 1,
-				orgId: this.orgId,
         page: this.pagination.getCurrentPage(),
         size: this.pagination.getCurrentSize()
       }
-      const { returnValue: res, totals } = await userCustomerFindList(data)
+      const { returnValue: res, totals } = await sysOrgFindList(data)
       if (res) {
 				res.forEach(v=>{
-					if(v.id === this.customerId){
+					if(v.id === this.orgId){
 						v.active = true
 					} else {
 						v.active = false
@@ -122,7 +110,7 @@ export default {
 		chooseSave() {
 			// 过滤选中的数据返回
 			const data = this.dataList.filter(item=>item.active === true)
-			uni.$emit('chooseCustomer', data[0])
+			uni.$emit('chooseOrg', data[0])
 			uni.navigateBack({
 				delta: 1
 			})
@@ -141,5 +129,8 @@ page{
 <style lang="scss" scoped>
 .list-part{
 	padding-bottom: 120rpx;
+}
+.customerList{
+	padding: 120rpx 0rpx 0rpx 0rpx;
 }
 </style>

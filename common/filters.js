@@ -118,3 +118,15 @@ export function getName(val,arr) {
 		return ''
 	}
 }
+// 详情图片转换
+export function pictureConversion(val) {
+  const data = pictureJsonParse(val)
+	data.forEach(v => {
+	  v.extname = 'txt'
+	})
+	return data
+}
+// 提交时数组转换
+export function isArrayToString(val) {
+  return (Array.isArray(val) && val.length) ? JSON.stringify(val) : ''
+}

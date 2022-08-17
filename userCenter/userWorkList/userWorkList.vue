@@ -38,8 +38,8 @@
 				<view v-for="(item,index) in dataList" :key="index" class="box" @click="goto('/userCenter/userWorkInfo/userWorkInfo',{ editId: item.id })">
 					<view class="top">
 						<view class="number">{{item.workNo}}</view>
-						<view v-if="item.state === 5 || item.state === 6" class="state red">{{item.state | state}}</view>
-						<view v-else-if="item.state === 1 || item.state === 2  || item.state === 3 || item.state === 4" class="state blue">{{item.state | state}}</view>
+						<view v-if="item.state === 5 || item.state === 6  || item.state === 4" class="state red">{{item.state | state}}</view>
+						<view v-else-if="item.state === 1 || item.state === 2  || item.state === 3" class="state blue">{{item.state | state}}</view>
 						<view v-else class="state ">{{item.state | state}}</view>
 					</view>
 					<view class="content">
@@ -126,6 +126,9 @@ export default {
 <style>
 </style>
 <style lang="scss" scoped>
+.search-box{
+	position: relative;
+}
 .workList{
 	padding: 280rpx 20rpx 0rpx 20rpx;
 }

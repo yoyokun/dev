@@ -22,7 +22,7 @@
 				>
 				<template v-slot:extra>
 					<view class="btn">
-						<u-button :text="$t('editInfo.save')" type="primary" hairline shape="circle" @click="submitForm"></u-button>
+						<u-button :text="$t('common.btn.save')" type="primary" hairline shape="circle" @click="submitForm"></u-button>
 					</view>
 				</template>
 			</edit-form>
@@ -169,18 +169,11 @@ export default {
     async getUserInfo() {
 			const { returnValue: res } = await sysManagerFindBytoken()
       if (res) {
-        const headPhoto = this.$options.filters.pictureJsonParse(res.headPhoto)
-        const idPhoto = this.$options.filters.pictureJsonParse(res.idPhoto)
+        // 图片转换
+        res.headPhoto = this.$options.filters.pictureConversion(res.headPhoto)
+        res.idPhoto = this.$options.filters.pictureConversion(res.idPhoto)
 				res.nativePlace = res.nativePlace.split(',')
 				res.birthdayStr = res.birthday ? formatDate(res.birthday) : ''
-        headPhoto.forEach(v => {
-          v.extname = 'txt'
-        })
-				idPhoto.forEach(v => {
-				  v.extname = 'txt'
-				})
-        res.headPhoto = headPhoto
-        res.idPhoto = idPhoto
         this.phone = res.phone
 				this.formDataValue = res
       }
@@ -188,14 +181,14 @@ export default {
     // 提交
     submitForm() {
 			this.$refs.dialogForm.handleSubmit(async(data) => {
-				data.headPhoto = (Array.isArray(data.headPhoto) && data.headPhoto.length) ? JSON.stringify(data.headPhoto) : ''
-				data.idPhoto = (Array.isArray(data.idPhoto) && data.idPhoto.length) ? JSON.stringify(data.idPhoto) : ''
+				data.headPhoto = this.$options.filters.isArrayToString(data.headPhoto)
+				data.idPhoto = this.$options.filters.isArrayToString(data.idPhoto)
 				data.nativePlace = data.nativePlace.length ? [data.province,data.city,data.area].join(',') : ''
-				const { returnValue: res } = await sysManagerEditManager(data)
+				const { returnValue: res, message } = await sysManagerEditManager(data)
 				if (res) {
 					this.$refs.uToast.show({
 						type: 'success',
-						message: this.$t('editInfo.saveCuccess'),
+						message: message,
 					})
 					setTimeout(() => {
 						uni.navigateBack({

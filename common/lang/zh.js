@@ -16,6 +16,8 @@ module.exports = {
 		deleteContent: '确定要删除该数据吗?',
 		voidTitle: '作废提示',
 		voidContentPlace: '请输入作废描述',
+		addTitle: '添加提示',
+		addContent: '没有该二维码，请问要添加该二维码吗?',
 		stateObj: {
 			1: '启用',
 			2: '禁用'
@@ -23,6 +25,19 @@ module.exports = {
 		editForm: {
 			chooseText: '选择',
 			cancelText: '取消'
+		},
+		btn: {
+			add: '添加',
+			save: '保存',
+			edit: '编辑',
+			delete: '删除',
+			assignment: '分派',
+			toVoid: '作废',
+			result: '结果',
+			confirm: '确定',
+			accept: '接受',
+			refuse: '拒绝',
+			jump: '处理'
 		}
 	},
 	// 登录页面
@@ -74,8 +89,7 @@ module.exports = {
 			titleValue: 'LPG综合管理系统',
 			key: '密钥',
 			keyPlace: '请输入密钥'
-		},
-		save: '保存'
+		}
 	},
 	// 我的
 	personal: {
@@ -149,9 +163,7 @@ module.exports = {
 					value: '初中'
 				}
 			]
-		},
-		save: '保存',
-		saveCuccess: '保存成功'
+		}
 	},
 	// 修改密码
 	editPassword: {
@@ -169,9 +181,7 @@ module.exports = {
 			newPwd1Place: '请再次输入新密码',
 			newPwd1Message: '新密码长度在6到12个字符',
 			newPwdError: '两次输入的密码不一致'
-		},
-		save: '提交',
-		saveCuccess: '修改成功'
+		}
 	},
 	// 修改手机号
 	editPhone: {
@@ -188,9 +198,7 @@ module.exports = {
 			verifyCodeBtnMessage: '后重新获取',
 			verifyCodePlace: '请输入验证码',
 			verifyCodeMessage: '验证码长度在4到6个字符'
-		},
-		save: '提交',
-		saveCuccess: '修改成功'
+		}
 	},
 	// 岗位详情
 	jobDetails: {
@@ -325,10 +333,7 @@ module.exports = {
 					value: '初中'
 				}
 			]
-		},
-		save: '保存',
-		edit: '编辑',
-		delete: '删除'
+		}
 	},
 	// 岗位角色
 	postRole: {
@@ -338,14 +343,12 @@ module.exports = {
 	// 成员列表
 	managerList: {
 		titleText: '成员信息',
-		totalNum: '成员总数',
-		addManager: '添加'
+		totalNum: '成员总数'
 	},
 	// 工单列表
 	workList: {
 		titleText: '工单列表',
-		totalNum: '总数',
-		addWork: '添加',
+		totalNum: '工单总数',
 		customerName: '往来名称',
 		channel: '渠道',
 		formName: '工单类型',
@@ -387,30 +390,42 @@ module.exports = {
 			toManagerIdPlace: '请选择处理员',
 			remarks: '备注信息',
 			remarksPlace: '请输入备注信息',
-		},
-		save: '保存',
-		edit: '编辑',
-		delete: '删除',
-		assignment: '分派',
-		toVoid: '作废'
+		}
 	},
 	// 选择客户
 	chooseCustomer: {
 		titleText: '选择客户',
 		stateObj: {
-			1: '启用',
-			2: '禁用'
+	    1: '正常',
+			2: '冻结'
 		},
 		classifyObj: {
 			1: '居民',
 			2: '非居民'
+		}
+	},
+	// 选择组织
+	chooseOrg: {
+		titleText: '选择组织',
+		orgModelObj: {
+			1: '直营',
+			2: '股份/合作',
+			3: '独立/加盟'
 		},
-		save: '确定'
+		orgTypeObj: {
+			1: '公司',
+			2: '气站',
+			3: '门店'
+		}
+	},
+	// 选择供应商
+	chooseSupplier: {
+		titleText: '选择供应商'
 	},
 	// 我的工单
 	userWorkList: {
 		titleText: '我的工单',
-		totalNum: '总数',
+		totalNum: '工单总数',
 		tabSwitch: [
 			{
 			  id: '',
@@ -433,10 +448,142 @@ module.exports = {
 	// 我的工单详情
 	userWorkInfo: {
 		titleText: '查看工单',
-		accept: '接受',
-		refuse: '拒绝',
-		jump: '处理',
 		acceptTitle: '接收提示',
-		acceptContent: '确定要接收工单吗?'
+		acceptContent: '确定要接收工单吗?',
+		refuseTitle: '拒接提示',
+		refuseContent: '请输入拒绝原因'
+	},
+	// 钢瓶档案
+	cylinderArchivesList: {
+		titleText: '钢瓶档案',
+		totalNum: '档案总数',
+		billNo: '自有编号',
+		cylinderNo: '瓶身编号',
+		codeKey: '钢瓶二维码编号',
+		fillingStateStr: '充装状态',
+		operationTime: '操作时间',
+		stateObj: {
+			1: '正常',
+			2: '过期',
+			3: '报废',
+			4: '注销',
+			5: '删除',
+			6: '停用',
+			7: '转出',
+			8: '退回'
+		}
+	},
+	// 添加档案
+	addCylinderArchives: {
+		titleText: '添加档案',
+		titleTextEdit: '编辑档案',
+		titleTextInfo: '档案详情',
+		codeErr: '二维码图片错误，请重新上传',
+		form: {
+			orgId: '归属组织',
+			orgIdPlace: '请选择归属组织',
+			ownerType: '产权分类',
+			ownerTypePlace: '请选择产权分类',
+			ownerId: '产权人',
+			ownerIdPlace: '请选择产权人',
+			billNo: '自有编号',
+			billNoPlace: '请输入自有编号',
+			cylinderNo: '瓶身编号',
+			cylinderNoPlace: '请输入瓶身编号',
+			codeKey: '钢瓶二维码',
+			codeKeyplace: '请输入钢瓶二维码',
+			codeKeyMessage: '钢瓶二维码格式有误,只能输入数字或字母',
+			modelId: '钢瓶型号',
+			modelIdPlace: '请选择钢瓶型号',
+			fillingMedium: '充装介质',
+			fillingMediumPlace: '请输入充装介质',
+			initWeight: '钢瓶重量(kg)',
+			initWeightPlace: '请输入原始重量',
+			initWeightMessage: '原始重量有误,只能输入数字和小数点后五位',
+			maxWeight: '最大充装量(kg)',
+			maxWeightPlace: '请输入最大充装量',
+			maxWeightMessage: '最大充装量有误,只能输入数字和小数点后五位',
+			volume: '钢瓶容积(L)',
+			volumePlace: '请输入钢瓶容积(L)',
+			volumeMessage: '钢瓶容积(L)有误,只能输入数字和小数点后五位',
+			thickness: '设计壁厚(mm)',
+			thicknessPlace: '请输入设计壁厚',
+			thicknessMessage: '设计壁厚有误,只能输入数字和小数点后五位',
+			ratedPressure: '公称压力(MPa)',
+			ratedPressurePlace: '请输入公称压力',
+			ratedPressureMessage: '公称压力有误,只能输入数字和小数点后五位',
+			waterPressure: '水试验压力(MPa)',
+			waterPressurePlace: '请输入水试验压力(MPa)',
+			waterPressuremessage: '水试验压力有误,只能输入数字和小数点后五位',
+			supplierId: '制造单位',
+			supplierIdPlace: '请选择制造单位',
+			factoryDateStr: '出厂日期',
+			factoryDateStrPlace: '请选择出厂日期',
+			state: '钢瓶状态',
+			statePlace: '请选择钢瓶状态',
+			nextCheckDateStr: '下次检验日期',
+			nextCheckDateStrPlace: '请选择下次检验日期',
+			scrapDateStr: '报废日期',
+			scrapDateStrPlace: '请选择报废日期',
+			dealWithTimeStr: '报废处理时间',
+			dealWithTimeStrPlace: '请选择报废处理时间',
+			scrapNote: '报废处理情况',
+			scrapNotePlace: '请输入报废处理情况',
+			picture: '钢瓶图片',
+			ownerTypeOptions: [
+				{
+					name: '组织',
+					value: 1
+				},
+				{
+					name: '客户',
+					value: 2
+				},
+				{
+					name: '检测厂',
+					value: 4
+				}
+			],
+			stateOptions: [
+				{
+					name: '正常',
+					value: 1
+				},
+				{
+					name: '过期',
+					value: 2,
+					disabled: true
+				},
+				{
+					name: '报废',
+					value: 3,
+					disabled: true
+				},
+				{
+					name: '注销',
+					value: 4,
+					disabled: true
+				},
+				{
+					name: '删除',
+					value: 5,
+					disabled: true
+				},
+				{
+					name: '停用',
+					value: 6
+				},
+				{
+					name: '转出',
+					value: 7,
+					disabled: true
+				},
+				{
+					name: '退回',
+					value: 8,
+					disabled: true
+				}
+			]
+		}
 	}
 }

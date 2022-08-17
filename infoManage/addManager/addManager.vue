@@ -38,11 +38,11 @@
 			</template>
 			<template v-slot:extra>
 				<view class="btn" v-if="isSave">
-					<u-button :text="$t('addManager.save')" type="primary" hairline shape="circle" @click="submitForm"></u-button>
+					<u-button :text="$t('common.btn.save')" type="primary" hairline shape="circle" @click="submitForm"></u-button>
 				</view>
 				<view class="btn" v-else>
-					<u-button v-permission="{ permission:'app_managerList_edit'}" :text="$t('addManager.edit')" type="primary" hairline shape="circle" plain @click="handleEdit"></u-button>
-					<u-button v-permission="{ permission:'app_managerList_delete'}" class="m-l20" :text="$t('addManager.delete')" type="error" hairline shape="circle" plain @click="handleDelete"></u-button>
+					<u-button v-permission="{ permission:'app_managerList_edit'}" :text="$t('common.btn.edit')" type="primary" hairline shape="circle" plain @click="handleEdit"></u-button>
+					<u-button v-permission="{ permission:'app_managerList_delete'}" class="m-l20" :text="$t('common.btn.delete')" type="error" hairline shape="circle" plain @click="handleDelete"></u-button>
 				</view>
 			</template>
 		</edit-form>
@@ -285,18 +285,11 @@ export default {
     async getInfo() {
 			const { returnValue: res } = await sysManagerFindById({ id: this.editId })
       if (res) {
-        const headPhoto = this.$options.filters.pictureJsonParse(res.headPhoto)
-        const idPhoto = this.$options.filters.pictureJsonParse(res.idPhoto)
-				res.nativePlace = res.nativePlace.Split(',')
+				// 图片转换
+				res.headPhoto = this.$options.filters.pictureConversion(res.headPhoto)
+				res.idPhoto = this.$options.filters.pictureConversion(res.idPhoto)
+				res.nativePlace = res.nativePlace.split(',')
 				res.birthdayStr = res.birthday ? formatDate(res.birthday) : ''
-        headPhoto.forEach(v => {
-          v.extname = 'txt'
-        })
-				idPhoto.forEach(v => {
-				  v.extname = 'txt'
-				})
-        res.headPhoto = headPhoto
-        res.idPhoto = idPhoto
 				this.formDataValue = res
 				// 渲染岗位
 				this.switchTree(res.inIdentityList)
@@ -366,8 +359,8 @@ export default {
 					return false
 				}
 				data.id = this.editId || ''
-				data.headPhoto = (Array.isArray(data.headPhoto) && data.headPhoto.length) ? JSON.stringify(data.headPhoto) : ''
-				data.idPhoto = (Array.isArray(data.idPhoto) && data.idPhoto.length) ? JSON.stringify(data.idPhoto) : ''
+				data.headPhoto = this.$options.filters.isArrayToString(data.headPhoto)
+				data.idPhoto = this.$options.filters.isArrayToString(data.idPhoto)
 				data.nativePlace = data.nativePlace.length ? [data.province,data.city,data.area].join(',') : ''
 				// 组织id
 				data.identitiesList = []

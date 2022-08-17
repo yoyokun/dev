@@ -30,3 +30,7 @@ export function uniqueArr(arr) {
 export function objectValueEmpty(obj, key) {
   return obj ? (obj[key] || '') : ''
 }
+// 字母和数字(过滤其他字符返回)
+export function checkMix(val) {
+  return val.replace(/[^\w]/g, '')
+}

@@ -11,15 +11,15 @@
 			>
 			<template v-slot:extra>
 				<view class="btn" v-if="isSave">
-					<u-button v-if="isAssign" :text="$t('addWork.assignment')" type="primary" hairline shape="circle" @click="submitForm(1)"></u-button>
-					<u-button v-else :text="$t('addWork.save')" type="primary" hairline shape="circle" @click="submitForm(2)"></u-button>
+					<u-button v-if="isAssign" :text="$t('common.btn.assignment')" type="primary" hairline shape="circle" @click="submitForm(1)"></u-button>
+					<u-button v-else :text="$t('common.btn.save')" type="primary" hairline shape="circle" @click="submitForm(2)"></u-button>
 				</view>
 				<view class="btn" v-else>
 					<!-- 编辑 -->
 					<u-button 
 						v-if="formDataValue.state===1" 
 						v-permission="{ permission:'app_workList_edit'}" 
-						:text="$t('addWork.edit')" 
+						:text="$t('common.btn.edit')" 
 						type="primary" 
 						hairline 
 						shape="circle" 
@@ -30,7 +30,7 @@
 					<u-button 
 						v-if="formDataValue.state===1 || formDataValue.state===5" 
 						v-permission="{ permission:'app_workList_delete'}" 
-						:text="$t('addWork.delete')" 
+						:text="$t('common.btn.delete')" 
 						type="error" 
 						hairline 
 						shape="circle" 
@@ -41,7 +41,7 @@
 					<u-button
 						v-if="formDataValue.state===1 || formDataValue.state===4 || formDataValue.state===6"
 						v-permission="{ permission:'app_workList_assignment'}" 
-						:text="$t('addWork.assignment')" 
+						:text="$t('common.btn.assignment')" 
 						type="primary" 
 						hairline 
 						shape="circle" 
@@ -52,12 +52,23 @@
 					<u-button 
 						v-if="formDataValue.state===2 || formDataValue.state===3 || formDataValue.state===4 || formDataValue.state===6"
 						v-permission="{ permission:'app_workList_invalid'}" 
-						:text="$t('addWork.toVoid')" 
+						:text="$t('common.btn.toVoid')" 
 						type="error" 
 						hairline 
 						shape="circle" 
 						plain 
 						@click="handleVoid">
+					</u-button>
+					<!-- 结果 -->
+					<u-button 
+						v-if="formDataValue.state===7" 
+						v-permission="{ permission:'app_workList_result'}" 
+						:text="$t('common.btn.result')" 
+						type="primary" 
+						hairline 
+						shape="circle" 
+						plain 
+						@click="handleResult">
 					</u-button>
 				</view>
 			</template>
@@ -453,6 +464,10 @@ export default {
 				customerId: this.customerId,
 				orgId: this.userInfo.orgId
 			})
+		},
+		// 结果
+		handleResult() {
+			// 查看安检 整改 巡检 详情
 		}
   },
 	options:{

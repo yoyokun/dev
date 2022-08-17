@@ -57,6 +57,7 @@ export default {
 					fieldName: 'verifyCode',
 					placeholder: this.$t('forgetPassword.form.verifyCodePlace'),
 					btnText: this.$t('forgetPassword.form.verifyCodeBtnText'),
+					btnType: 'btn',
 					btnDisabled: false,
 					func: 'verifyCode',
 					maxlength: 6,
