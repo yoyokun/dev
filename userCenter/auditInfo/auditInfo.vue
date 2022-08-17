@@ -43,6 +43,10 @@
 			<pur-good-order-info v-if="info.formKey === 'purOrder'" :edit-id="info.linkId" />
 			<!--采购计划-->
 			<pur-good-plan-info v-if="info.formKey === 'purPlan'" :edit-id="info.linkId" />
+			<!--优惠券-->
+			<coupon-info v-if="info.formKey === 'coupon'" :edit-id="info.linkId" />
+			<!--客户价格策略-->
+			<price-customer-info v-if="info.formKey === 'customerPrice'" :edit-id="info.linkId" />
 		</view>
 		<view class="time-line" v-if="auditRecordVosReverse.length">
 			<view class="time-line-tle">{{$t('auditInfo.trendsTle')}}</view>
@@ -95,6 +99,8 @@
 	import PurGoodRequisitionInfo from './common/purGoodRequisitionInfo'
 	import PurGoodOrderInfo from './common/purGoodOrderInfo'
 	import PurGoodPlanInfo from './common/purGoodPlanInfo'
+	import CouponInfo from './common/couponInfo'
+	import PriceCustomerInfo from './common/priceCustomerInfo'
 	export default {
 		components: {
 			BusinessInfo,
@@ -116,6 +122,8 @@
 			PurGoodRequisitionInfo,
 			PurGoodOrderInfo,
 			PurGoodPlanInfo,
+			CouponInfo,
+			PriceCustomerInfo
 		},
 		data() {
 			return {

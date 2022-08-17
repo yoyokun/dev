@@ -201,3 +201,33 @@ export function purPlanFindById(data = {}, message = '', custom = {}) {
 	}
   })
 }
+
+// 优惠券管理 根据id查询信息
+export function couponFindById(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/sales/coupon/findById',
+    method: 'post',
+    data,
+	message,
+	custom: {
+		auth: custom?.auth || true, // 是否需要token
+		toast: custom?.toast || true, // 弹框
+		catch: custom?.catch || true // catch返回
+	}
+  })
+}
+
+// 优惠券详情  根据条件查询列表信息
+export function couponDetailFindList(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/sales/couponDetail/findList',
+    method: 'post',
+    data,
+	message,
+	custom: {
+		auth: custom?.auth || true, // 是否需要token
+		toast: custom?.toast || true, // 弹框
+		catch: custom?.catch || true // catch返回
+	}
+  })
+}
