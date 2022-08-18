@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<!-- <search></search> -->
+		<search></search>
 		<us-table :table-column="tableColumn" :table-data="tableData" :pagination="pagination" @currentChange="getList">
 			<!-- #ifdef H5 || APP-PLUS -->
 			<view slot="state" slot-scope="row">

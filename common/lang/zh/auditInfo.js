@@ -1114,4 +1114,17 @@ module.exports = {
 			customerPriceState:'状态',
 		},
 	},
+	// 客户钢瓶盘点
+	userCylinderCheckInfo:{
+		basicTle:'基本信息',
+		checkTle: '盘点信息',
+		billNo:'盘点单号',
+		billTime:'盘点时间',
+		creator:'盘点人',
+		remarks:'备注',
+		customerStateTxt:{
+			1: '正常',
+			2: '冻结'
+		},
+	},
 }

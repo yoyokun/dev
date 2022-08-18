@@ -467,3 +467,33 @@ export function userCustomerFindList(data = {}, message = '', custom = {}) {
 		}
   })
 }
+
+// 钢瓶盘点记录 根据id查询信息
+export function userCylinderCheckFindById(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/userCylinderCheck/findById',
+    method: 'post',
+    data,
+	message,
+	custom: {
+		auth: custom?.auth || true, // 是否需要token
+		toast: custom?.toast || true, // 弹框
+		catch: custom?.catch || true // catch返回
+	}
+  })
+}
+
+// 钢瓶盘点记录 左侧客户数据
+export function userCylinderCheckFindCustomerIds(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/userCylinderCheck/findCustomerIds',
+    method: 'post',
+    data,
+	message,
+	custom: {
+		auth: custom?.auth || true, // 是否需要token
+		toast: custom?.toast || true, // 弹框
+		catch: custom?.catch || true // catch返回
+	}
+  })
+}

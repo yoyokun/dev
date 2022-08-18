@@ -13,6 +13,9 @@
 				</view>
 			</description>
 		</description-list>
+		<description-list :title="$t('auditInfo.purGoodPlanInfo.priceTle')">
+			<choose-offer :goods-obj="goodsObj" :end-date="endDate" />
+		</description-list>
 		<description-list :title="$t('auditInfo.purGoodPlanInfo.buyTle')">
 			<us-table :table-column="tableColumn" :table-data="planDetailsData">
 				<!-- #ifdef H5 || APP-PLUS -->
@@ -57,6 +60,7 @@
 </template>
 <script>
 	let that = null
+	import ChooseOffer from './chooseOffer'
 	import {
 		purPlanFindById
 	} from '@/api/lpgSalesManageApi'
@@ -65,7 +69,9 @@
 	} from '@/utils/util'
 	export default {
 		name: 'PurGoodPlanInfo',
-		components: {},
+		components: {
+			ChooseOffer
+		},
 		// 过滤器
 		filters: {
 			state(value) {
