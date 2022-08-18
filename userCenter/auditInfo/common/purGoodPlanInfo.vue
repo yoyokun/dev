@@ -2,7 +2,7 @@
 	<view class="basic">
 		<description-list :title="$t('auditInfo.purGoodPlanInfo.basicTle')">
 			<description :label="$t('auditInfo.purGoodPlanInfo.billNo')">{{ info.billNo }}</description>
-			<description :label="$t('auditInfo.purGoodPlanInfo.planDate')">{{ info.planDate }}</description>
+			<description :label="$t('auditInfo.purGoodPlanInfo.planDate')">{{ info.planDate | dayjs('YYYY-MM-DD') }}</description>
 			<description :label="$t('auditInfo.purGoodPlanInfo.creator')">{{ info.creator }}</description>
 			<description :label="$t('auditInfo.purGoodPlanInfo.state')">{{ info.state | state }}</description>
 			<description :label="$t('auditInfo.purGoodPlanInfo.remarks')">{{ info.remarks }}</description>

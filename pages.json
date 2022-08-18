@@ -155,6 +155,12 @@
 						"navigationBarTitleText": "查看工单",
 						"enablePullDownRefresh": false
 					}
+				},{
+					"path" : "chooseGoods/chooseGoods",
+					"style" : {
+						"navigationBarTitleText": "选择商品",
+						"enablePullDownRefresh": false
+					}
 				}
 			]
 		},

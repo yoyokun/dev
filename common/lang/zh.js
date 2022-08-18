@@ -473,6 +473,18 @@ module.exports = {
 			8: '退回'
 		}
 	},
+	// 选择商品
+	chooseGoods: {
+		titleText: '选择商品',
+		stateObj: {
+	    1: '正常',
+			2: '冻结'
+		},
+		classifyObj: {
+			1: '居民',
+			2: '非居民'
+		}
+	},
 	// 添加档案
 	addCylinderArchives: {
 		titleText: '添加档案',
