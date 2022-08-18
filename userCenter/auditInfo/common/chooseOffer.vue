@@ -1,6 +1,12 @@
 <template>
 	<view>
-		<view style="padding:20rpx;border-bottom:1px solid #eee" v-if="infoOfferData.length">
+		<view>
+			<!-- <uni-datetime-picker type="date" v-model="endDateOffer" @change="changeDate"> -->
+				<description style="border-bottom:1px solid #eee" label="日期">{{endDateOffer | dayjs('YYYY-MM-DD')}}</description>
+			<!-- </uni-datetime-picker> -->
+			<description label="商品" @click.native="chooseGoods">{{goodsName}}</description>
+		</view>
+		<view style="padding:20rpx;border-bottom:1px solid #eee;border-top:1px solid #eee" v-if="infoOfferData.length">
 			<total :info-data="infoOfferData" />
 		</view>
 
@@ -91,6 +97,13 @@
 			}
 		},
 		methods: {
+			chooseGoods(e){
+				console.log(e)
+			},
+			changeDate(e) {
+				this.endDateOffer = e
+				this.getSupplierOffer()
+			},
 			// 获取商品报价
 			async getSupplierOffer() {
 				const requestParameters = Object.assign({}, {
@@ -127,13 +140,15 @@
 </script>
 
 <style lang="scss" scoped>
-	::v-deep .us-table{
+	::v-deep .us-table {
 		min-width: 100%;
+
 		.uni-tr {
-			.uni-td{
+			.uni-td {
 				font-size: 26rpx;
 			}
-			.uni-td:first-child{
+
+			.uni-td:first-child {
 				background: #f2f2f2;
 				font-weight: bold;
 			}

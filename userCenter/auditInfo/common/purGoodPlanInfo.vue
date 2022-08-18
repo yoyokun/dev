@@ -19,6 +19,11 @@
 		<description-list :title="$t('auditInfo.purGoodPlanInfo.buyTle')">
 			<us-table :table-column="tableColumn" :table-data="planDetailsData">
 				<!-- #ifdef H5 || APP-PLUS -->
+				<view slot="goodsName" slot-scope="row">
+					<view>{{ row.data.goodsName }}</view>
+					<view style="color:rgb(42, 130, 228)"
+						@click="chooseOffer(row.data.goodsDetailId, row.data.goodsName, row.data.goodsId)">报价</view>
+				</view>
 				<view slot="arrivalTime" slot-scope="row">
 					{{ row.data.arrivalTime ? UnixToDate(row.data.arrivalTime) : '' }}
 				</view>
@@ -106,7 +111,7 @@
 				tableColumn: [{
 						prop: 'goodsName',
 						label: this.$t('auditInfo.purGoodPlanInfo.tableColumn.goodsName'),
-						// slot: 'goodsName',
+						slot: 'goodsName',
 					},
 					{
 						prop: 'mainorgName',
@@ -275,6 +280,12 @@
 			})
 		},
 		methods: {
+			// 查看报价
+			chooseOffer(goodsDetailId, goodsName, goodsId) {
+				this.goodsObj.goodsDetailId = goodsDetailId
+				this.goodsObj.goodsName = goodsName
+				this.goodsObj.goodsId = goodsId
+			},
 			// 详情
 			async getInfo(id) {
 				const {
