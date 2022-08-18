@@ -126,3 +126,8 @@ export function formateSeconds(endTime) {
   result = `${h.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}:${secondTime.toString().padStart(2, '0')}`
   return result
 }
+// 日期加几年
+export function getDayAddYears(day, year, format) {
+  format = format || 'YYYY-MM-DD'
+  return moment(day, format).add(year, 'y').format(format)
+}

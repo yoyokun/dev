@@ -12,7 +12,7 @@
 			></u-search>
 			<view class="total">
 				<view class="num">{{$t('managerList.totalNum')}}：<text class="blue">{{totals}}</text></view>
-				<view class="add" v-permission="{ permission:'app_managerList_add'}" @click="goto('/infoManage/addManager/addManager')"><u-icon name="plus-circle" color="#2A82E4" size="20"></u-icon>{{$t('managerList.addManager')}}</view>
+				<view class="add" v-permission="{ permission:'app_managerList_add'}" @click="goto('/infoManage/addManager/addManager')"><u-icon name="plus-circle" color="#2A82E4" size="20"></u-icon>{{$t('common.btn.add')}}</view>
 			</view>
 		</view>
 		<view v-if="empty">

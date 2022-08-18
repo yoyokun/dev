@@ -11,24 +11,25 @@
 				@clear="getInit"
 			></u-search>
 			<view class="total">
-				<view class="num">{{$t('workList.totalNum')}}：<text class="blue">{{totals}}</text></view>
-				<view class="add" v-permission="{ permission:'app_workList_add'}" @click="goto('/infoManage/addWork/addWork')"><u-icon name="plus-circle" color="#2A82E4" size="20"></u-icon>{{$t('common.btn.add')}}</view>
+				<view class="num">{{$t('cylinderArchivesList.totalNum')}}：<text class="blue">{{totals}}</text></view>
+				<view class="add" v-permission="{ permission:'app_cylinderArchivesList_add'}" @click="goto('/infoManage/addCylinderArchives/addCylinderArchives')"><u-icon name="plus-circle" color="#2A82E4" size="20"></u-icon>{{$t('common.btn.add')}}</view>
 			</view>
 		</view>
 		<view v-if="empty">
 			<view class="workList">
-				<view v-for="(item,index) in dataList" :key="index" class="box" @click="goto('/infoManage/addWork/addWork',{ editId: item.id })">
+				<view v-for="(item,index) in dataList" :key="index" class="box" @click="goto('/infoManage/addCylinderArchives/addCylinderArchives',{ editId: item.id })">
 					<view class="top">
-						<view class="number">{{item.workNo}}</view>
-						<view v-if="item.state === 5 || item.state === 6" class="state red">{{item.state | state}}</view>
-						<view v-else-if="item.state === 1 || item.state === 2  || item.state === 3 || item.state === 4" class="state blue">{{item.state | state}}</view>
+						<view class="number">{{item.modelName}}</view>
+						<view v-if="item.state === 3" class="state red">{{item.state | state}}</view>
+						<view v-else-if="item.state === 1" class="state blue">{{item.state | state}}</view>
 						<view v-else class="state ">{{item.state | state}}</view>
 					</view>
 					<view class="content">
-						<view class="detail"><text class="name">{{$t('workList.customerName')}}</text><text class="value">{{item.customerName}}</text></view>
-						<view class="detail"><text class="name">{{$t('workList.channel')}}</text><text class="value">{{item.channel}}</text></view>
-						<view class="detail"><text class="name">{{$t('workList.formName')}}</text><text class="value">{{item.formName}}</text></view>
-						<view class="detail"><text class="name">{{$t('workList.levelName')}}</text><text class="value">{{item.levelName}}</text></view>
+						<view class="detail"><text class="name">{{$t('cylinderArchivesList.billNo')}}</text><text class="value">{{item.billNo}}</text></view>
+						<view class="detail"><text class="name">{{$t('cylinderArchivesList.cylinderNo')}}</text><text class="value">{{item.cylinderNo}}</text></view>
+						<view class="detail"><text class="name">{{$t('cylinderArchivesList.codeKey')}}</text><text class="value">{{item.codeKey}}</text></view>
+						<view class="detail"><text class="name">{{$t('cylinderArchivesList.fillingStateStr')}}</text><text class="value">{{item.fillingStateStr}}</text></view>
+						<view class="detail"><text class="name">{{$t('cylinderArchivesList.operationTime')}}</text><text class="value">{{item.operationTime | dayjs}}</text></view>
 					</view>
 				</view>
 			</view>
@@ -46,7 +47,7 @@
 
 <script>
 let that = null
-import { auditWorkFindList } from '@/api/lpgManageAppApi.js'
+import { cylinderArchivesFindList } from '@/api/lpgManageAppApi.js'
 import paginationMixin from '@/common/paginationMixin.js'
 export default {
   data() {
@@ -59,7 +60,7 @@ export default {
 	// 过滤器
 	filters: {
 		state(value) {
-			const stateObj = that.$t('workList.stateObj')
+			const stateObj = that.$t('cylinderArchivesList.stateObj')
 			return stateObj[value] || ''
 		}
 	},
@@ -71,7 +72,7 @@ export default {
   },
 	onShow() {
 		uni.setNavigationBarTitle({
-			title: this.$t('workList.titleText')
+			title: this.$t('cylinderArchivesList.titleText')
 		})
 	},
   methods: {
@@ -79,11 +80,10 @@ export default {
     async findDataList() {
       const data = {
 				keyword: this.keyword,
-				isShow: 1,
         page: this.pagination.getCurrentPage(),
         size: this.pagination.getCurrentSize()
       }
-      const { returnValue: res, totals } = await auditWorkFindList(data)
+      const { returnValue: res, totals } = await cylinderArchivesFindList(data)
       if (res) {
         this.setMoreData(res)
 				this.totals = totals

@@ -13,7 +13,7 @@
 				>
 				<template v-slot:extra>
 					<view class="btn">
-						<u-button :text="$t('editPassword.save')" type="primary" hairline shape="circle" @click="submitForm"></u-button>
+						<u-button :text="$t('common.btn.save')" type="primary" hairline shape="circle" @click="submitForm"></u-button>
 					</view>
 				</template>
 			</edit-form>

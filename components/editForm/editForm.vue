@@ -15,7 +15,6 @@
 				:required="item.required"
 				:borderBottom="item.borderBottom"
 				:labelWidth="item.labelWidth"
-				@click="chooseChange(item)"
 				>
 				<!--文本框-->
 				<u--input 
@@ -30,14 +29,20 @@
 					@change="handleFiltrate(item.fieldName)"
 				></u--input>
 				<!-- 选择按钮 -->
-				<view class="chooseBtn" v-if="item.type === 'chooseText'">
+				<view class="chooseBtn" v-if="item.type === 'chooseText' && item.btnType === 'btn'">
 					<u-button
 						:text="item.btnText || $t('common.editForm.chooseText')" 
 						:disabled="item.disabled"
 						@click="chooseChange(item)">
 					</u-button>
 				</view>
-				<u-icon @click="chooseChange(item)" v-if="item.type === 'chooseBtn'" name="arrow-right" color="#666666" size="15"></u-icon>
+				<u-icon 
+					@click="chooseChange(item)" 
+					v-if="(item.type === 'chooseText' && item.btnType !== 'btn') || item.type === 'chooseBtn'" 
+					:name="item.btnType || 'arrow-right'" 
+					color="#666666" 
+					size="18">
+				</u-icon>
 				<!--密码框-->
 				<u--input
 					type="password" 
@@ -130,7 +135,7 @@
 						v-model="formData[item.fieldName]" 
 						:disabled="item.disabled"
 						:placeholder="item.placeholder"
-						@change="handleFiltrate(item.fieldName)"	
+						@change="datetimePickerChange($event,item.fieldName)"	
 					></uni-datetime-picker>
 					<u-icon name="arrow-right" color="#666666" size="15"></u-icon>
 				</view>
@@ -316,7 +321,7 @@ export default {
 									provincesCode2.code
 								]
 							} else {
-								this.formData[key] = formDataValue[key]
+								this.formData[key] = formDataValue[key] || ''
 							}
 						}
 					})
@@ -454,10 +459,12 @@ export default {
 		},
 		// 选择
 		chooseChange(item) {
-			this.$emit(item.func, {
-				item,
-				queryParams: this.formData
-			})
+			if(item.func){
+				this.$emit(item.func, {
+					item,
+					queryParams: this.formData
+				})
+			}
 		},
 		// ActionSheet 操作菜单 选择
 		selectClick(e,name){
@@ -483,6 +490,13 @@ export default {
 				this.formData[name] = await timeFormat(e.value, 'yyyy-mm-dd hh:mm');
 			}
 			this.renderDataSource[index].showOptions = false
+			// 对部分字段校验
+			this.$refs.form.validateField(name)
+			this.handleFiltrate(name)
+		},
+		// 日期改变
+		datetimePickerChange(event,name) {
+			this.formData[name] = event
 			// 对部分字段校验
 			this.$refs.form.validateField(name)
 			this.handleFiltrate(name)

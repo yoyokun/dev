@@ -33,7 +33,7 @@
 			},
 			"style" : {
 				"navigationBarTitleText": "消息",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": true
 			}	
 		}
 		,{
@@ -139,28 +139,24 @@
 					"path" : "auditList/auditList",
 					"style" : {
 						"navigationBarTitleText": "审批事项",
+						"enablePullDownRefresh": true
+					}
+				}
+				,{
+					"path" : "userWorkList/userWorkList",
+					"style" : {
+						"navigationBarTitleText": "我的工单",
+						"enablePullDownRefresh": true
+					}
+				}
+				,{
+					"path" : "userWorkInfo/userWorkInfo",
+					"style" : {
+						"navigationBarTitleText": "查看工单",
 						"enablePullDownRefresh": false
 					}
 				}
-			    ,{
-                    "path" : "userWorkList/userWorkList",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "我的工单",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-                ,{
-                    "path" : "userWorkInfo/userWorkInfo",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "查看工单",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-            ]
+			]
 		},
 		{
 			"root": "infoManage",
@@ -186,43 +182,70 @@
 						"enablePullDownRefresh": false
 					}
 				}
-			    ,{
-                    "path" : "workList/workList",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "工单列表",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-                ,{
-                    "path" : "addWork/addWork",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "添加工单",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-                ,{
-                    "path" : "chooseCustomer/chooseCustomer",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "选择客户",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-                ,{
-                    "path" : "customerInfo/customerInfo",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "客户详情",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-            ]
+				,{
+					"path" : "workList/workList",
+					"style" : {
+						"navigationBarTitleText": "工单列表",
+						"enablePullDownRefresh": true
+					}
+				}
+				,{
+					"path" : "addWork/addWork",
+					"style" : {
+						"navigationBarTitleText": "添加工单",
+						"enablePullDownRefresh": false
+				  }
+				}
+				,{
+					"path" : "chooseCustomer/chooseCustomer",
+					"style" : {
+						"navigationBarTitleText": "选择客户",
+						"enablePullDownRefresh": true
+					}
+				}
+				,{
+					"path" : "customerInfo/customerInfo",
+					"style" : {
+						"navigationBarTitleText": "客户详情",
+						"enablePullDownRefresh": false
+					}
+				}
+				,{
+					"path" : "addCustomer/addCustomer",
+					"style" : {
+						"navigationBarTitleText": "添加客户",
+						"enablePullDownRefresh": false
+					}
+				}
+				,{
+					"path" : "cylinderArchivesList/cylinderArchivesList",
+					"style" : {
+						"navigationBarTitleText": "钢瓶档案",
+						"enablePullDownRefresh": true
+					}
+				}
+				,{
+					"path" : "addCylinderArchives/addCylinderArchives",
+					"style" : {
+						"navigationBarTitleText": "添加档案",
+						"enablePullDownRefresh": false
+					}
+				}
+				,{
+					"path" : "chooseOrg/chooseOrg",
+					"style" : {
+						"navigationBarTitleText": "选择组织",
+						"enablePullDownRefresh": true
+					}
+				}
+				,{
+					"path" : "chooseSupplier/chooseSupplier",
+					"style" : {
+						"navigationBarTitleText": "选择供应商",
+						"enablePullDownRefresh": true
+					}
+				}
+			]
 		}
 	],
 	"globalStyle": {

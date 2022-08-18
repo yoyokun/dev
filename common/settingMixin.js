@@ -2,7 +2,9 @@ import {
 	sysPropertyClassifySelectPropertyBox,
 	auditFormFindList,
 	sysFieldFindList,
-	sysOrgFindList
+	sysOrgFindList,
+	sysSpecificationFindList,
+	purSupplierFindList
 } from '@/api/lpgManageAppApi'
 import { sysManagerFindList } from '@/api/loginApi.js'
 import { riskUnitFindList } from '@/api/lpgSecurityManageApi.js'
@@ -15,6 +17,8 @@ export const settingMixin = {
 			orgList: [], // 组织列表
 			managerList: [], // 人员列表
 			riskUnitList: [], // 风险单元
+			sysSpecification: [], // 钢瓶型号
+			purSupplierList: [], // 供应商
 		}
 	},
 	methods: {
@@ -104,5 +108,35 @@ export const settingMixin = {
 			})
 			this.riskUnitList = riskUnitList
 		},
+		// 获取钢瓶型号
+		async getSysSpecificationFindList(obj = {}, type = 'id') {
+			const { returnValue: res } = await sysSpecificationFindList(Object.assign({}, { type: 'cylinder' }, obj))
+			const sysSpecification = []
+			res.forEach((v, i) => {
+				sysSpecification.push({
+					name: v.modelNumber + '-' + v.standardName,
+					value: v[type],
+					maxVolume: v.maxVolume, // 最大充装量
+					fillingMedium: v.fillingMedium, // 充装介质
+					cylinderVolume: v.cylinderVolume, // 公称容积
+					designThickness: v.designThickness // 设计壁厚
+				})
+			})
+			this.sysSpecification = sysSpecification
+		},
+		// 获取供应商列表
+		async getPurSupplier(obj = {}, type = 'id') {
+			const { returnValue: res } = await purSupplierFindList(obj)
+			if (res) {
+				const purSupplierList = []
+				res.forEach(v => {
+					purSupplierList.push({
+						name: v.supplierName,
+						value: v[type]
+					})
+				})
+				this.purSupplierList = purSupplierList
+			}
+		}
 	}
 }

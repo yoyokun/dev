@@ -13,7 +13,7 @@
 				>
 				<template v-slot:extra>
 					<view class="btn">
-						<u-button :text="$t('editPhone.save')" type="primary" hairline shape="circle" @click="submitForm"></u-button>
+						<u-button :text="$t('common.btn.save')" type="primary" hairline shape="circle" @click="submitForm"></u-button>
 					</view>
 				</template>
 			</edit-form>
@@ -65,6 +65,7 @@ export default {
 					fieldName: 'verifyCode',
 					placeholder: this.$t('editPhone.form.verifyCodePlace'),
 					btnText: this.$t('editPhone.form.verifyCodeBtnText'),
+					btnType: 'btn',
 					btnDisabled: false,
 					func: 'verifyCode',
 					borderBottom: false,

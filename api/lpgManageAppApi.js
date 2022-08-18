@@ -254,6 +254,118 @@ export function auditFormFindList(data = {}, message = '', custom = {}) {
 		}
   })
 }
+// 二维码管理 根据key查询信息
+export function assetCodeFindByKey(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/assetCode/findByKey',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
+// 二维码管理 保存或修改
+export function assetCodeSaveOrEdit(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/assetCode/saveCodeKey',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
+// 供应商列表 根据条件查询列表信息
+export function purSupplierFindList(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/sales/purSupplier/findList',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
+// 钢瓶型号管理 根据条件查询列表信息
+export function sysSpecificationFindList(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/sysSpecification/findList',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
+// 钢瓶档案 根据条件查询列表信息
+export function cylinderArchivesFindList(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/cylinderArchives/findList',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
+// 钢瓶档案 根据id查询信息
+export function cylinderArchivesFindById(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/cylinderArchives/findById',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
+// 钢瓶档案 保存或修改
+export function cylinderArchivesSaveOrEdit(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/control/cylinderArchives/saveOrEdit',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
+// 钢瓶档案 删除
+export function cylinderArchivesDeleteByIds(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/control/cylinderArchives/deleteByIds',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
 // 数据字典 根据条件查询列表信息
 export function sysFieldFindList(data = {}, message = '', custom = {}) {
   return request({
