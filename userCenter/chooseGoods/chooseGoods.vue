@@ -1,11 +1,9 @@
 <template>
 	<view class="list-part">
 		<view class="search-box">
-			<u-search :height="35" :placeholder="$t('common.searchPlaceholder')" v-model="keyword"
-				:actionText="$t('common.searchText')" @search="beforegetInit" @custom="beforegetInit" @clear="beforegetInit"></u-search>
-			<view v-if="!showFilter" class="more" @click="openFilter">更多</view>
+			<search :search-options="searchOptions" @search="search"></search>
 		</view>
-		<view v-if="dataList.length&&!showFilter">
+		<view v-if="dataList.length">
 			<view class="goodsList">
 				<view class="list" v-for="(item,index) in dataList" :key="index">
 					<view class="tle">{{item.goodsNo}} - {{item.goodsName}}</view>
@@ -64,19 +62,6 @@
 			<loading v-if="loading" class="loading" />
 			<view v-if="searchEnding" class="noData">{{$t('common.noData')}}</view>
 		</view>
-		<view class="goodsList" v-else-if="showFilter">
-			<view class="filter">
-				<view class="filter-menu">
-					<view class="item"><text>品牌</text></view>
-					<view class="item"><text>单位</text></view>
-					<view class="item"><text>分类</text></view>
-				</view>
-				<view class="filter-box">
-					<view>23</view>
-					<view>23</view>
-				</view>
-			</view>
-		</view>
 		<view v-else class="goodsList">
 			<u-empty mode="list" icon="http://cdn.uviewui.com/uview/empty/list.png"></u-empty>
 		</view>
@@ -90,23 +75,103 @@
 </template>
 
 <script>
+	import search from '@/components/search/search.vue'
 	import {
 		goodsFindList
 	} from '@/api/lpgManageAppApi'
 	import paginationMixin from '@/common/paginationMixin.js'
+	import {
+		settingMixin
+	} from '@/common/settingMixin.js'
 	let that = null
 	export default {
-		mixins: [paginationMixin],
+		mixins: [paginationMixin, settingMixin],
+		props: {
+			// 组织id
+			orgId: {
+				type: String,
+				default: ''
+			},
+		},
 		data() {
 			return {
-				keyword: '',
-				showFilter: false,
+				searchOptions: [{
+						type: 'select',
+						labelText: '商品分类',
+						fieldName: 'goodsClassifyId',
+						placeholder: '选择商品分类',
+						defaultValue: '',
+						options: []
+					},
+					{
+						labelText: '品牌',
+						type: 'select',
+						fieldName: 'brandId',
+						defaultValue: '',
+						options: []
+					},
+					{
+						labelText: '单位',
+						type: 'select',
+						fieldName: 'unitsId',
+						defaultValue: '',
+						options: []
+					},
+					{
+						type: 'text',
+						labelText: '挂牌价范围',
+						fieldName: 'startListPrice',
+						placeholder: '请输入开始挂牌价'
+					},
+					{
+						type: 'text',
+						labelText: '',
+						fieldName: 'endListPrice',
+						placeholder: '请输入结束挂牌价'
+					},
+					{
+						type: 'text',
+						labelText: '成本价范围',
+						fieldName: 'startCostPrice',
+						placeholder: '请输入开始成本价'
+					},
+					{
+						type: 'text',
+						labelText: '',
+						fieldName: 'endCostPrice',
+						placeholder: '请输入结束成本价'
+					},
+					{
+						labelText: '日期范围',
+						type: 'datetimerange',
+						fieldName: 'createDateRange', // 固定
+						startName: 'startDate', // 开始日期字段
+						endName: 'endDate', // 结束日期字段
+						placeholder: ['开始日期', '选择日期']
+					}
+				]
 			}
 		},
 		// 过滤器
 		filters: {},
 		created() {
 			that = this
+		},
+		async mounted() {
+			// 获取分类
+			await this.getGoodsClassifyList({
+				orgId: this.orgId
+			})
+			this.searchOptions[0].options = this.treeDataGoodsClassify
+			console.log(this.treeDataGoodsClassify)
+			// 获取品牌
+			await this.getBrandList({
+				orgId: this.orgId
+			})
+			this.searchOptions[1].options = this.brandList
+			// 获取单位
+			await this.getFieldUnitList()
+			this.searchOptions[2].options = this.measuringUnitData
 		},
 		onLoad(options) {
 
@@ -117,20 +182,22 @@
 			})
 		},
 		methods: {
-			beforegetInit(){
-				this.showFilter = false
-				this.getInit()
-			},
-			openFilter() {
-				this.showFilter = true
+			search(e) {
+				this.pagination.initPagination()
+				const params = {
+					...e
+				}
+				this.findDataList(params)
 			},
 			// 获取列表
-			async findDataList() {
+			async findDataList(obj = {}) {
 				const data = {
-					keyword: this.keyword,
-					state: 4,
-					page: this.pagination.getCurrentPage(),
-					size: this.pagination.getCurrentSize()
+					...obj,
+					...{
+						state: 4,
+						page: this.pagination.getCurrentPage(),
+						size: this.pagination.getCurrentSize()
+					}
 				}
 				const {
 					returnValue: res,
@@ -140,9 +207,11 @@
 					let goodsArr = {}
 					res.forEach(v => {
 						v.active = false
-						if(v.assistUnitsList.length){
-							v['assistName-' + n.assistUnitsId] = v.assistUnitsList[0].unitsName
-							v['netContent-' + n.assistUnitsId] = v.assistUnitsList[0].netContent
+						if (v.assistUnitsList.length) {
+							v['assistName-' + v.assistUnitsList[0].assistUnitsId] = v.assistUnitsList[0]
+								.unitsName
+							v['netContent-' + v.assistUnitsList[0].assistUnitsId] = v.assistUnitsList[0]
+								.netContent
 						}
 						if (goodsArr.hasOwnProperty(v.goodsId)) {
 							goodsArr[v.goodsId].child.push(v)
@@ -168,19 +237,15 @@
 			},
 			// 确定
 			chooseSave() {
-				if (this.showFilter) {
-					this.showFilter = false
-				} else {
-					// 过滤选中的数据返回
-					let data = []
-					this.dataList.forEach((item, index) => {
-						data = data.concat(item.child.filter(v => v.active === true))
-					})
-					uni.$emit('chooseGoods', data[0])
-					uni.navigateBack({
-						delta: 1
-					})
-				}
+				// 过滤选中的数据返回
+				let data = []
+				this.dataList.forEach((item, index) => {
+					data = data.concat(item.child.filter(v => v.active === true))
+				})
+				uni.$emit('chooseGoods', data[0])
+				uni.navigateBack({
+					delta: 1
+				})
 			}
 		},
 		options: {
@@ -200,19 +265,24 @@
 		.search-box {
 			display: flex;
 			align-items: center;
+			padding: 0;
 
-			.more {
-				height: 40rpx;
-				width: 80rpx;
-				text-align: center;
-				line-height: 40rpx;
-				font-size: 26rpx;
-				color: #2a82e4;
+			::v-deep .u-search__action {
+				display: none;
 			}
+
+			// .more {
+			// 	height: 40rpx;
+			// 	width: 80rpx;
+			// 	text-align: center;
+			// 	line-height: 40rpx;
+			// 	font-size: 26rpx;
+			// 	color: #2a82e4;
+			// }
 		}
 
 		.goodsList {
-			padding: 156rpx 20rpx 0rpx 20rpx;
+			padding: 136rpx 20rpx 0rpx 20rpx;
 
 			.list {
 				background: rgba(255, 255, 255, 1);
@@ -281,6 +351,7 @@
 						display: flex;
 						justify-content: flex-end;
 						padding: 16rpx 0rpx;
+
 						image {
 							width: 48rpx;
 							height: 48rpx;
@@ -288,25 +359,30 @@
 					}
 				}
 			}
-			.filter{
+
+			.filter {
 				background: white;
 				border-radius: 20rpx;
 				display: flex;
-				.filter-menu{
+
+				.filter-menu {
 					width: 200rpx;
 					border-right: 2px solid #E5E5E5;
-					.item{
+
+					.item {
 						height: 80rpx;
 						line-height: 80rpx;
 						text-align: center;
 						font-size: 32rpx;
 						border-bottom: 1px solid #E5E5E5;
-						&:last-child{
+
+						&:last-child {
 							border-bottom: none;
 						}
 					}
 				}
-				.filter-box{
+
+				.filter-box {
 					width: 1px;
 					flex: 1;
 				}

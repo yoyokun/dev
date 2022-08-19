@@ -609,3 +609,33 @@ export function userCylinderCheckFindCustomerIds(data = {}, message = '', custom
 	}
   })
 }
+
+// 品牌列表查询
+export function sysBrandFindList(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/sysBrand/findList',
+    method: 'post',
+    data,
+	message,
+	custom: {
+		auth: custom?.auth || true, // 是否需要token
+		toast: custom?.toast || true, // 弹框
+		catch: custom?.catch || true // catch返回
+	}
+  })
+}
+
+// 商品分类管理 列表
+export function goodsClassifyFindList(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/goodsClassify/findList',
+    method: 'post',
+    data,
+	message,
+	custom: {
+		auth: custom?.auth || true, // 是否需要token
+		toast: custom?.toast || true, // 弹框
+		catch: custom?.catch || true // catch返回
+	}
+  })
+}

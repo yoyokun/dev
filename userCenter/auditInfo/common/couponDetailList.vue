@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<search></search>
+		<search :search-options="searchOptions" @search="search"></search>
 		<us-table :table-column="tableColumn" :table-data="tableData" :pagination="pagination" @currentChange="getList">
 			<!-- #ifdef H5 || APP-PLUS -->
 			<view slot="state" slot-scope="row">
@@ -13,7 +13,7 @@
 				{{ row.data.receiveTime | dayjs }}
 			</view>
 			<view slot="useTime" slot-scope="row">
-		 	{{ row.data.useTime | dayjs }}
+				{{ row.data.useTime | dayjs }}
 			</view>
 			<!-- #endif -->
 			<!-- #ifdef MP-->
@@ -60,11 +60,44 @@
 		},
 		data() {
 			return {
-				pagination:{
+				pagination: {
 					page: 1,
 					total: 0,
 					size: 10,
 				},
+				searchOptions: [
+					{
+						type: 'select',
+						labelText: '状态',
+						fieldName: 'state',
+						placeholder: '请选择状态',
+						options: [{
+								label: '已发行',
+								value: 1
+							},
+							{
+								label: '已领取',
+								value: 2
+							},
+							{
+								label: '已使用',
+								value: 3
+							},
+							{
+								label: '已过期',
+								value: 4
+							}
+						]
+					},
+					{
+						labelText: '日期范围',
+						type: 'datetimerange',
+						fieldName: 'createDateRange', // 固定
+						startName: 'startDate', // 开始日期字段
+						endName: 'endDate', // 结束日期字段
+						placeholder: ['开始日期', '选择日期']
+					}
+				],
 				tableColumn: [{
 						prop: 'couponNo',
 						label: this.$t('auditInfo.couponInfo.tableColumnCoupon.couponNo')
@@ -79,25 +112,25 @@
 						label: this.$t('auditInfo.couponInfo.tableColumnCoupon.state'),
 						slot: 'state'
 					},
-					{
-						prop: 'receiveTime',
-						label: this.$t('auditInfo.couponInfo.tableColumnCoupon.receiveTime'),
-						slot: 'receiveTime'
-					},
-					{
-						prop: 'useTime',
-						label: this.$t('auditInfo.couponInfo.tableColumnCoupon.useTime'),
-						slot: 'useTime'
-					},
-					{
-						prop: 'customerName',
-						label: this.$t('auditInfo.couponInfo.tableColumnCoupon.customerName')
-					},
-					{
-						prop: 'linkType',
-						label: this.$t('auditInfo.couponInfo.tableColumnCoupon.linkType'),
-						slot: 'linkType'
-					}
+					// {
+					// 	prop: 'receiveTime',
+					// 	label: this.$t('auditInfo.couponInfo.tableColumnCoupon.receiveTime'),
+					// 	slot: 'receiveTime'
+					// },
+					// {
+					// 	prop: 'useTime',
+					// 	label: this.$t('auditInfo.couponInfo.tableColumnCoupon.useTime'),
+					// 	slot: 'useTime'
+					// },
+					// {
+					// 	prop: 'customerName',
+					// 	label: this.$t('auditInfo.couponInfo.tableColumnCoupon.customerName')
+					// },
+					// {
+					// 	prop: 'linkType',
+					// 	label: this.$t('auditInfo.couponInfo.tableColumnCoupon.linkType'),
+					// 	slot: 'linkType'
+					// }
 				],
 				tableData: [],
 			}
@@ -108,13 +141,17 @@
 		async created() {
 			that = this
 			const obj = {
-				page:this.pagination.page,
-				size:this.pagination.size
+				page: this.pagination.page,
+				size: this.pagination.size
 			}
 			await this.getList(obj)
 		},
 		async mounted() {},
 		methods: {
+			search(obj){
+				const params ={...obj,...{page:1,size:this.pagination.size}}
+				this.getList(params)
+			},
 			// 获取Table列表
 			async getList(obj) {
 				const requestParameters = Object.assign({}, this.queryParam, obj || {}, {
