@@ -111,7 +111,7 @@
 		methods: {
 			chooseGoods(e) {
 				uni.navigateTo({
-					url: '/userCenter/chooseGoods/chooseGoods'
+					url: '/infoManage/chooseGoods/chooseGoods'
 				})
 			},
 			changeDate(e) {

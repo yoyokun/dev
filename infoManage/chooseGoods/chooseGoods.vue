@@ -53,8 +53,8 @@
 							</view>
 						</view>
 						<view class="check">
-							<image class="icon" v-if="val.active" mode="widthFix" src="/static/image/check.png" />
-							<image v-else class="icon" mode="widthFix" src="/static/image/uncheck.png" />
+							<image class="icon" v-show="val.active" mode="widthFix" src="/static/image/check.png" />
+							<image v-show="!val.active" class="icon" mode="widthFix" src="/static/image/uncheck.png" />
 						</view>
 					</view>
 				</view>

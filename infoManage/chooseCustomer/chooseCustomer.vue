@@ -31,7 +31,7 @@
 						</view>
 					</view>
 					<view class="right" @click.stop="chooseBox(index)">
-						<image class="icon" v-if="val.active" mode="widthFix" src="/static/image/check.png" />
+						<image class="icon" v-if="item.active" mode="widthFix" src="/static/image/check.png" />
 						<image class="icon" v-else mode="widthFix" src="/static/image/uncheck.png" />
 					</view>
 				</view>
