@@ -43,18 +43,14 @@
 								<text class="label">成本价：</text>
 								<text class="txt">{{val.costPrice}}</text>
 							</view>
-							<!-- <view class="item">
-								<text class="label">客户报价：</text>
-								<text class="txt">{{}}</text>
-							</view> -->
 							<view class="item">
 								<text class="label">库存：</text>
 								<text class="txt">{{val.curStock}}</text>
 							</view>
 						</view>
 						<view class="check">
-							<image class="icon" v-show="val.active" mode="widthFix" src="/static/image/check.png" />
-							<image v-show="!val.active" class="icon" mode="widthFix" src="/static/image/uncheck.png" />
+							<image class="icon" v-if="val.active" mode="widthFix" src="/static/image/check.png" />
+							<image v-else class="icon" mode="widthFix" src="/static/image/uncheck.png" />
 						</view>
 					</view>
 				</view>

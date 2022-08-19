@@ -2,7 +2,7 @@
 	<view class="search">
 		<view class="search-content">
 			<view class="box">
-				<u-search :showAction="false" v-model="params.keyword" @search="emitSearch" @clear="emitSearch"></u-search>
+				<u-search :showAction="false"  v-model="params.keyword" @search="emitSearch" @clear="emitSearch"></u-search>
 			</view>
 			<u-button class="button" size="mini" type="primary" @click="emitSearch">搜索</u-button>
 			<u-button v-if="searchOptions.length" class="button" size="mini" type="info" plain @click="showMore">更多
@@ -29,7 +29,7 @@
 							</view>
 						</view>
 						<!-- 日期时间选择 -->
-						<view class="cell" v-if="['date','datetime'].indexOf(item.type)>-1">
+						<view class="cell" v-if="item.type=='date'||item.type=='datetime'">
 							<view class="tle">{{item.labelText}}</view>
 							<view class="cell-box">
 								<view class="datetime">
@@ -39,7 +39,7 @@
 							</view>
 						</view>
 						<!-- 日期时间范围选择 -->
-						<view class="cell" v-if="['daterange','datetimerange'].indexOf(item.type)>-1">
+						<view class="cell" v-if="item.type=='daterange'||item.type=='datetimerange'">
 							<view class="tle">{{item.labelText}}</view>
 							<view class="cell-box">
 								<view class="datetime">
