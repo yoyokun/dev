@@ -1,9 +1,8 @@
 <template>
 	<view>
 		<view>
-			<!-- <uni-datetime-picker type="date" v-model="endDateOffer" @change="changeDate"> -->
-				<description style="border-bottom:1px solid #eee" label="日期">{{endDateOffer | dayjs('YYYY-MM-DD')}}</description>
-			<!-- </uni-datetime-picker> -->
+			<description style="border-bottom:1px solid #eee" label="日期">{{endDateOffer | dayjs('YYYY-MM-DD')}}
+			</description>
 			<description label="商品" @click.native="chooseGoods">{{goodsName}}</description>
 		</view>
 		<view style="padding:20rpx;border-bottom:1px solid #eee;border-top:1px solid #eee" v-if="infoOfferData.length">
@@ -96,9 +95,24 @@
 				}
 			}
 		},
+		mounted() {
+			uni.$on('chooseGoods', (data) => {
+				this.goodsName = data.goodsName + (data.propertyNames ? ('-' + data.propertyNames) : '')
+				this.goodsIdOffer = data.goodsId
+				this.goodsDetailIdOffer = data.goodsDetailId
+				if (this.goodsDetailIdOffer && this.endDateOffer && this.goodsIdOffer) {
+					this.getSupplierOffer()
+				}
+			})
+		},
+		beforeDestroy() {
+			uni.$off('chooseGoods')
+		},
 		methods: {
-			chooseGoods(e){
-				console.log(e)
+			chooseGoods(e) {
+				uni.navigateTo({
+					url: '/userCenter/chooseGoods/chooseGoods'
+				})
 			},
 			changeDate(e) {
 				this.endDateOffer = e
