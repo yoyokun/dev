@@ -288,7 +288,7 @@ export default {
 				// 图片转换
 				res.headPhoto = this.$options.filters.pictureConversion(res.headPhoto)
 				res.idPhoto = this.$options.filters.pictureConversion(res.idPhoto)
-				res.nativePlace = res.nativePlace.split(',')
+				res.nativePlace = res.nativePlace.Split(',')
 				res.birthdayStr = res.birthday ? formatDate(res.birthday) : ''
 				this.formDataValue = res
 				// 渲染岗位

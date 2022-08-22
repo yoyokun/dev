@@ -4,7 +4,8 @@ import {
 	sysFieldFindList,
 	sysOrgFindList,
 	sysSpecificationFindList,
-	purSupplierFindList
+	purSupplierFindList,
+	sysPropertyFindDefaultProperty
 } from '@/api/lpgManageAppApi'
 import { sysManagerFindList } from '@/api/loginApi.js'
 import { riskUnitFindList } from '@/api/lpgSecurityManageApi.js'
@@ -15,10 +16,18 @@ export const settingMixin = {
 			workType: [], // 工单类型
 			workLevel: [], // 工单等级
 			orgList: [], // 组织列表
+			orgTypeList: [], // 组织类型列表
 			managerList: [], // 人员列表
+			managerDeliveryman: [], // 配送员列表
 			riskUnitList: [], // 风险单元
 			sysSpecification: [], // 钢瓶型号
 			purSupplierList: [], // 供应商
+			customerSourceList: [], // 客户来源
+			customerAreaList: [], // 客户区域
+			customerCollectionType: [], // 支付方式
+			customerBalanceType: [], // 结算账期
+			subOrderType: [], // 开单类型
+			customertProperty: [], // 客户标签
 		}
 	},
 	methods: {
@@ -72,6 +81,18 @@ export const settingMixin = {
 			})
 			this.workLevel = workLevel
 		},
+		// 查询门市下拉
+		async getOrgListType(obj = {}, type = 'id') {
+			const { returnValue: res } = await sysOrgFindList(obj || {})
+			const orgTypeList = []
+			res.forEach((v, i) => {
+				orgTypeList.push({
+					name: v.name,
+					value: v[type]
+				})
+			})
+			this.orgTypeList = orgTypeList
+		},
 		// 查询组织（查询自己及以下组织）下拉结构
 		async getOrgList(obj = {}, type = 'id') {
 			const { returnValue: res } = await sysOrgFindList(obj || {})
@@ -96,6 +117,18 @@ export const settingMixin = {
 			})
 			this.managerList = managerList
 		},
+    // 获取配送员
+    async getManagerDeliveryman(obj) {
+      const { returnValue: res } = await sysManagerFindList(obj || {})
+      const managerDeliveryman = []
+      res.forEach((v, i) => {
+        managerDeliveryman.push({
+          name: v.name,
+          value: v.id
+        })
+      })
+      this.managerDeliveryman = managerDeliveryman
+    },
 		// 获取风险单元
 		async getRiskUnitList(data = {}, type = 'id') {
 			const { returnValue: res } = await riskUnitFindList(data)
@@ -137,6 +170,114 @@ export const settingMixin = {
 				})
 				this.purSupplierList = purSupplierList
 			}
+		},
+		// 获取客户来源
+		async getCustomerSource(obj = {}, type = 'id') {
+			const { returnValue: res } = await sysFieldFindList(Object.assign({}, { groups: 'field_customer_source' }, obj))
+			const customerSourceList = []
+			res.forEach(v => {
+				customerSourceList.push({
+					name: v.name,
+					value: v[type]
+				})
+			})
+			this.customerSourceList = customerSourceList
+		},
+		// 获取客户类型
+		async getCustomerType(obj = {}, type = 'id') {
+			const { returnValue: res } = await sysPropertyFindDefaultProperty(Object.assign({}, { type: 'customer_type' }, obj))
+			const customerTypeList = []
+			if (!res) {
+				return
+			}
+			res.propertyDetails.forEach(v => {
+				customerTypeList.push({
+					name: v.propertyValue,
+					value: v[type]
+				})
+			})
+			this.customerTypeList = customerTypeList
+		},
+		// 获取客户区域
+		async getCustomerArea(obj = {}, type = 'id') {
+			const { returnValue: res } = await sysPropertyFindDefaultProperty(Object.assign({}, { type: 'customer_area' }, obj))
+			const customerAreaList = []
+			if (!res) {
+				return
+			}
+			res.propertyDetails.forEach(v => {
+				customerAreaList.push({
+					name: v.propertyValue,
+					value: v[type]
+				})
+			})
+			this.customerAreaList = customerAreaList
+		},
+		// 获取支付方式
+		async getCustomerCollectionType(obj = {}, type = 'id') {
+			const { returnValue: res } = await sysFieldFindList(Object.assign({}, { groups: 'field_customer_collectionType' }, obj))
+			const customerCollectionType = []
+			res.forEach(v => {
+				customerCollectionType.push({
+					name: v.name,
+					value: v[type],
+					type: v.type
+				})
+			})
+			this.customerCollectionType = customerCollectionType
+		},
+		// 获取结算账期
+		async getCustomerBalanceType(obj = {}, type = 'id') {
+			const { returnValue: res } = await sysFieldFindList(Object.assign({}, { groups: 'field_customer_balanceType' }, obj))
+			const customerBalanceType = []
+			res.forEach(v => {
+				customerBalanceType.push({
+					name: v.name,
+					value: v[type]
+				})
+			})
+			this.customerBalanceType = customerBalanceType
+		},
+		// 获取开单类型
+		async getSubOrderType(obj = {}, type = 'id') {
+			const { returnValue: res } = await sysPropertyFindDefaultProperty(Object.assign({}, { type: 'subOrder_type' }, obj))
+			const subOrderType = []
+			if (!res) {
+				return
+			}
+			res.propertyDetails.forEach(v => {
+				subOrderType.push({
+					name: v.propertyValue,
+					value: v[type],
+					active: false
+				})
+			})
+			this.subOrderType = subOrderType
+		},
+		// 获取客户标签（除了类型和区域,下拉树）
+		async geCustomerProperty(obj = {}) {
+			const { returnValue: res } = await sysPropertyClassifySelectPropertyBox(Object.assign({}, { type: 'customer', typepropertyNames: 'customerTag' }, obj))
+			this.customertProperty = this.getchildsProperty(res)
+		},
+		// 属性标签最后一级数组合并
+		arrayMergingCommon(res, childs=[] ,name = '') {
+			res.forEach((v, i) => {
+				if (v.type === 3) {
+					// 最后一级
+					const obj = {
+						name: v.name,
+						value: v.id,
+						desc: name + '/' + v.name,
+						active: false,
+						pid: v.pid
+					}
+					childs.push(obj)
+				} else {
+					const label = name ? name + '/' + v.name : v.name
+					childs = this.arrayMergingCommon(v.children, childs, label) // 获取子节点
+				}
+			})
+			return childs
 		}
 	}
 }

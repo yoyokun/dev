@@ -129,7 +129,7 @@
 					></u-datetime-picker>
 				</view> -->
 				<!-- 日期时间选择 -->
-				<view :class="['datePicker',item.inputAlign]" v-if="item.type === 'date' || item.type === 'datetime'">
+				<view :class="['datePicker',item.inputAlign]" v-if="item.type === 'date' || item.type === 'datetime' || item.type === 'range' || item.type === 'datetimerange'">
 					<uni-datetime-picker
 						:type="item.type"
 						v-model="formData[item.fieldName]" 
@@ -191,6 +191,41 @@
 						@cancel="item.showOptions = false">
 					</u-picker>
 				</view>
+				<!-- 多选 -->
+				<view :class="['formCell',item.inputAlign]" v-if="item.type === 'multiple'">
+					<view v-if="formData[item.fieldName]" class="multipleLable">
+						<view class="content">
+							<view v-for="(subItem,indexSub) in formData[item.fieldName]" :key="indexSub" class="box-case">
+								<text>{{subItem | getName(item.options)}}</text>
+								<u-icon name="close-circle-fill" color="#8C8C8C" size="20"  @click="deleteMultiple(subItem,index,item.fieldName,indexSub)"></u-icon>
+							</view>
+						</view>
+						<u-icon name="arrow-right" color="#666666" size="15" @click="!item.disabled ? item.showOptions = true : ''"></u-icon>
+					</view>
+					<u-cell 
+						v-else 
+						:value="item.placeholder" 
+						:isLink="true" 
+						:border="false" 
+						@click="!item.disabled ? item.showOptions = true : ''" 
+					></u-cell>
+					<u-popup class="multiplePopup" mode="bottom" :show="item.showOptions" :closeOnClickOverlay="false">
+						<view class="btn">
+							<text class="cancel" @click="cancelMultiple(index,item.fieldName)">{{$t('common.editForm.cancelText')}}</text>
+							<text class="confirm" @click="confirmMultiple(index,item.fieldName)">{{$t('common.editForm.confirmText')}}</text>
+						</view>
+						<scroll-view class="multipleBox" scroll-y="true">
+							<view class="box" v-for="(subItems,subIndex) in item.options" :key="subItems.id" @click="subItems.active = !subItems.active">
+								<view class="center">
+									<view class="name">{{ subItems.name }}</view>
+									<text class="desc" v-if="subItems.desc">{{ subItems.desc }}</text>
+								</view>
+								<image class="icon" v-if="subItems.active" mode="widthFix" src="/static/image/check.png" />
+								<image class="icon" v-else mode="widthFix" src="/static/image/uncheck.png" />
+							</view>
+						</scroll-view>
+					</u-popup>
+				</view>
 				<!-- 上传图片 -->
 				<view :class="['formUpload',item.inputAlign]" v-if="item.type === 'upload'">
 					<u-upload
@@ -215,6 +250,7 @@
 import { isEqual } from 'lodash'
 import { uploadFileImg } from '@/utils/request'
 import { CodeToText, TextToCode } from 'element-china-area-data'
+import { isNumber } from '@/utils/index.js'
 export default {
 	name: "EditForm",
 	props: {
@@ -277,7 +313,8 @@ export default {
 		// 监听 formDataSource 改变
 		formDataSource: {
 			handler() {
-				this.renderDataSource = this.formDataSource.map((v,index) => {
+				const formDataSource = JSON.parse(JSON.stringify(this.formDataSource))
+				this.renderDataSource = formDataSource.map((v,index) => {
 					return Object.assign({ show: true }, v, {
 						borderBottom: v.borderBottom ? v.borderBottom : v.borderBottom === undefined,
 						labelWidth: v.labelWidth ? v.labelWidth : this.labelWidth,
@@ -289,7 +326,6 @@ export default {
 						isProvinces: v.isProvinces ? v.isProvinces : false
 					}, { defaultIndex: this.renderDataSource[index] ? this.renderDataSource[index].defaultIndex : [0] })
 				})
-				console.log(this.renderDataSource)
 			},
 			deep: true,
 			immediate: true
@@ -312,14 +348,18 @@ export default {
 							}
 							if(this.renderDataSource[findIndex].isProvinces && formDataValue[key].length){
 								// 省市区 转换成code
-								const provincesCode = TextToCode[formDataValue[key][0]]
-								const provincesCode1 = TextToCode[formDataValue[key][0]][formDataValue[key][1]]
-								const provincesCode2 = TextToCode[formDataValue[key][0]][formDataValue[key][1]][formDataValue[key][2]]
-								this.formData[key] = [
-									provincesCode.code,
-									provincesCode1.code,
-									provincesCode2.code
-								]
+								if(isNumber(formDataValue[key][0]) && isNumber(formDataValue[key][1]) && isNumber(formDataValue[key][2])){
+									this.formData[key] = formDataValue[key]
+								} else {
+									const provincesCode = TextToCode[formDataValue[key][0]]
+									const provincesCode1 = TextToCode[formDataValue[key][0]][formDataValue[key][1]]
+									const provincesCode2 = TextToCode[formDataValue[key][0]][formDataValue[key][1]][formDataValue[key][2]]
+									this.formData[key] = [
+										provincesCode.code,
+										provincesCode1.code,
+										provincesCode2.code
+									]
+								}
 							} else {
 								this.formData[key] = formDataValue[key] || ''
 							}
@@ -363,7 +403,6 @@ export default {
 			this.$nextTick(() => {
 				this.$refs.form.setRules(this.rules)
 			});
-			console.log(this.formData)
 		},
 		// 处理表单数据
 		handleParams(obj) {
@@ -500,6 +539,44 @@ export default {
 			// 对部分字段校验
 			this.$refs.form.validateField(name)
 			this.handleFiltrate(name)
+		},
+		// 多选确定
+		confirmMultiple(index,name){
+			// 获取选中的value
+			const options = this.renderDataSource[index].options
+			const newArr = options.filter(n => n.active === true)
+			this.formData[name] = newArr.map(v => {return v.value})
+			// 对部分字段校验
+			this.$refs.form.validateField(name)
+			this.handleFiltrate(name)
+			this.renderDataSource[index].showOptions = false
+		},
+		// 多选取消
+		cancelMultiple(index,name) {
+			// 重置数据
+			const options = this.renderDataSource[index].options
+			options.forEach(v=>{
+				v.active = false
+			})
+			const oldArr = this.formData[name] || []
+			options.forEach(v=>{
+				oldArr.forEach(m=>{
+					if(v.value === m){
+						v.active = true
+					}
+				})
+			})
+			this.renderDataSource[index].showOptions = false
+		},
+		// 删除多选
+		deleteMultiple(value,index,name,indexSub) {
+			this.formData[name].splice(indexSub,1)
+			const options = this.renderDataSource[index].options
+			options.forEach(v=>{
+				if(v.value === value){
+					v.active = false
+				}
+			})
 		}
 	},
 	options:{
@@ -672,5 +749,73 @@ export default {
 .right.switch{
 	display: flex;
 	justify-content: end;
+}
+.multipleLable{
+	@include flexMixin();
+	.content{
+		flex: 1;
+		.box-case{
+			@include flexMixin(row,flex-start);
+			background: #E8E8E8;
+			font-size: 28rpx;
+			font-weight: 400;
+			color: rgba(56, 56, 56, 1);
+			display: inline-flex;
+			padding: 8rpx 20rpx;
+			border-radius: 28rpx;
+			margin: 10rpx 20rpx 10rpx 0rpx;
+			.u-icon{
+				margin-left: 20rpx;
+			}
+		}
+	}
+}
+.multiplePopup{
+	.btn{
+		@include flexMixin();
+		height: 80rpx;
+		.confirm{
+			font-size: 30rpx;
+			padding: 0 30rpx;
+			color: rgb(60, 156, 255);
+		}
+		.cancel{
+			font-size: 30rpx;
+			padding: 0 30rpx;
+			color: rgb(144, 145, 147);
+		}
+	}
+	.multipleBox{
+		height: 600rpx;
+		padding: 0rpx 20rpx;
+		box-sizing: border-box;
+		.box{
+			padding: 20rpx;
+			border-bottom: 1rpx solid #eee;
+			@include flexMixin();
+			&:last-child{
+				border-bottom: 0rpx;
+			}
+			.center{
+				flex: 1;
+				.name{
+					flex: 1;
+					color: rgba(56, 56, 56, 1);
+					font-size: 36rpx;
+					font-weight: 500;
+				}
+				.desc{
+					flex: 1;
+					font-size: 32rpx;
+					color: #707070;
+					margin-right: 20rpx;
+				}
+			}
+			.icon{
+				width: 48rpx;
+				height: 48rpx;
+			}
+		}
+	}
 }
 </style>

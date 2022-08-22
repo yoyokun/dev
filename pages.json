@@ -204,17 +204,17 @@
 					}
 				}
 				,{
-					"path" : "customerInfo/customerInfo",
+					"path" : "chooseOrg/chooseOrg",
 					"style" : {
-						"navigationBarTitleText": "客户详情",
-						"enablePullDownRefresh": false
+						"navigationBarTitleText": "选择组织",
+						"enablePullDownRefresh": true
 					}
 				}
 				,{
-					"path" : "addCustomer/addCustomer",
+					"path" : "chooseSupplier/chooseSupplier",
 					"style" : {
-						"navigationBarTitleText": "添加客户",
-						"enablePullDownRefresh": false
+						"navigationBarTitleText": "选择供应商",
+						"enablePullDownRefresh": true
 					}
 				}
 				,{
@@ -232,19 +232,53 @@
 					}
 				}
 				,{
-					"path" : "chooseOrg/chooseOrg",
+					"path" : "orgInfo/orgInfo",
 					"style" : {
-						"navigationBarTitleText": "选择组织",
-						"enablePullDownRefresh": true
+						"navigationBarTitleText": "组织信息",
+						"enablePullDownRefresh": false
+					}
+				}
+			    ,{
+                    "path" : "cylinderBindCode/cylinderBindCode",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "钢瓶绑码",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
+		},
+		{
+			"root": "customerManage",
+			"pages": [
+				{
+					"path" : "customerInfo/customerInfo",
+					"style" : {
+						"navigationBarTitleText": "客户详情",
+						"enablePullDownRefresh": false
 					}
 				}
 				,{
-					"path" : "chooseSupplier/chooseSupplier",
+					"path" : "addCustomer/addCustomer",
 					"style" : {
-						"navigationBarTitleText": "选择供应商",
+						"navigationBarTitleText": "添加客户",
+						"enablePullDownRefresh": false
+					}
+				}
+				,{
+					"path" : "customerList/customerList",
+					"style" : {
+						"navigationBarTitleText": "客户列表",
 						"enablePullDownRefresh": true
 					}
 				}
+			]
+		},
+		{
+			"root": "cylinderManage",
+			"pages": [
+				
 			]
 		}
 	],

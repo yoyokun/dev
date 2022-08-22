@@ -1,3 +1,7 @@
+String.prototype.Split = function(s) {
+  return String.prototype.split(s).filter(item => item !== '')
+}
+
 // 页面跳转
 export const navigateTo = (url, params = {}) => {
 	let paramsStr = '';
@@ -33,4 +37,13 @@ export function objectValueEmpty(obj, key) {
 // 字母和数字(过滤其他字符返回)
 export function checkMix(val) {
   return val.replace(/[^\w]/g, '')
+}
+// 判断是否只有数字
+export function isNumber(val) {
+  const regPos = /^[0-9]*$/
+	if(regPos.test(val)) {
+		return true
+	} else {
+		return false
+	}
 }

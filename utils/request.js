@@ -5,7 +5,6 @@ import {
 import store from '@/store'
 
 function service(options = {}) {
-	console.log('token:' + store.getters.token)
 	// 显示头部动画
 	uni.showNavigationBarLoading()
 	// 加载时候提示文字

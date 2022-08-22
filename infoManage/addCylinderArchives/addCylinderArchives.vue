@@ -619,9 +619,6 @@ export default {
 ::v-deep .u-form-item .u-line{
 	border-bottom: 1rpx solid rgba(229, 229, 229, 1) !important;
 }
-::v-deep .chooseBtn uni-button{
-	width: 120rpx !important;
-}
 ::v-deep .normalForm{
 	margin: 20rpx 20rpx;
 	.u-form{
