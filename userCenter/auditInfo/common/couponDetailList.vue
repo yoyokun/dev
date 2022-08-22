@@ -38,12 +38,10 @@
 	import {
 		couponDetailFindList
 	} from '@/api/lpgSalesManageApi'
-	import search from '@/components/search/search.vue'
 
 	export default {
 		name: 'CouponDetailList',
 		components: {
-			search
 		},
 		props: {
 			editId: {
@@ -68,34 +66,18 @@
 				searchOptions: [
 					{
 						type: 'select',
-						labelText: '状态',
+						labelText: this.$t('auditInfo.couponInfo.searchOptions.state.label'),
 						fieldName: 'state',
-						placeholder: '请选择状态',
-						options: [{
-								label: '已发行',
-								value: 1
-							},
-							{
-								label: '已领取',
-								value: 2
-							},
-							{
-								label: '已使用',
-								value: 3
-							},
-							{
-								label: '已过期',
-								value: 4
-							}
-						]
+						placeholder: this.$t('auditInfo.couponInfo.searchOptions.state.placeholder'),
+						options: this.$t('auditInfo.couponInfo.searchOptions.state.options'),
 					},
 					{
-						labelText: '日期范围',
+						labelText: this.$t('auditInfo.couponInfo.searchOptions.createDateRange.label'),
 						type: 'datetimerange',
 						fieldName: 'createDateRange', // 固定
 						startName: 'startDate', // 开始日期字段
 						endName: 'endDate', // 结束日期字段
-						placeholder: ['开始日期', '选择日期']
+						placeholder: this.$t('auditInfo.couponInfo.searchOptions.createDateRange.placeholder')
 					}
 				],
 				tableColumn: [{

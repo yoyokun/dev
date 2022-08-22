@@ -476,14 +476,53 @@ module.exports = {
 	// 选择商品
 	chooseGoods: {
 		titleText: '选择商品',
-		stateObj: {
-	    1: '正常',
-			2: '冻结'
-		},
-		classifyObj: {
-			1: '居民',
-			2: '非居民'
+		brandName:'品牌',
+		goodsClassifyName:'分类',
+		unitsName:'单位',
+		standardName:'规格',
+		propertyNames:'属性参数',
+		netContent:'重量',
+		listPrice:'挂牌价',
+		costPrice:'成本价',
+		curStock:'库存',
+		searchOptions:{
+			goodsClassifyId:{
+				label:'商品分类',
+				placeholder:'选择商品分类'
+			},
+			brandId:{
+				label:'品牌',
+				placeholder:''
+			},
+			unitsId:{
+				label:'单位',
+				placeholder:''
+			},
+			startListPrice:{
+				label:'挂牌价范围',
+				placeholder:'请输入开始挂牌价'
+			},
+			endListPrice:{
+				label:'',
+				placeholder:'请输入结束挂牌价'
+			},
+			startCostPrice:{
+				label:'成本价范围',
+				placeholder:'请输入开始成本价'
+			},
+			endCostPrice:{
+				label:'',
+				placeholder:'请输入结束成本价'
+			},
+			createDateRange:{
+				label:'日期范围',
+				placeholder:['开始日期', '选择日期']
+			}
 		}
+	},
+	search:{
+		searchTxt:'搜索',
+		searchMore:'更多'
 	},
 	// 添加档案
 	addCylinderArchives: {

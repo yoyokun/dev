@@ -4,8 +4,8 @@
 			<view class="box">
 				<u-search :showAction="false"  v-model="params.keyword" @search="emitSearch" @clear="emitSearch"></u-search>
 			</view>
-			<u-button class="button" size="mini" type="primary" @click="emitSearch">搜索</u-button>
-			<u-button v-if="searchOptions.length" class="button" size="mini" type="info" plain @click="showMore">更多
+			<u-button class="button" size="mini" type="primary" @click="emitSearch">{{$t('search.searchTxt')}}</u-button>
+			<u-button v-if="searchOptions.length" class="button" size="mini" type="info" plain @click="showMore">{{$t('search.searchMore')}}
 			</u-button>
 		</view>
 		<u-popup mode="bottom" round="14" customStyle="overflow:hidden" closeable :show="show" @close="close">
@@ -119,7 +119,6 @@
 			},
 			// 选择选项
 			changeItem(val, field) {
-				console.log(val)
 				if (typeof field === 'object') {
 					let obj = {}
 					obj[field.fieldName] = val.length?val:''

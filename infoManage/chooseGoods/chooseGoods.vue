@@ -9,42 +9,42 @@
 					<view class="tle">{{item.goodsNo}} - {{item.goodsName}}</view>
 					<view class="desc">
 						<view class="item">
-							<text class="label">品牌：</text>
+							<text class="label">{{$t('chooseGoods.brandName')}}</text>
 							<text class="txt">{{item.brandName}}</text>
 						</view>
 						<view class="item">
-							<text class="label">分类：</text>
+							<text class="label">{{$t('chooseGoods.goodsClassifyName')}}</text>
 							<text class="txt">{{item.goodsClassifyName}}</text>
 						</view>
 						<view class="item">
-							<text class="label">单位：</text>
+							<text class="label">{{$t('chooseGoods.unitsName')}}</text>
 							<text class="txt">{{item.unitsName}}</text>
 						</view>
 					</view>
 					<view class="sku" v-for="(val,key) in item.child" :key="key" @click.stop="chooseBox(index,key)">
 						<view class="desc">
 							<view class="item">
-								<text class="label">规格：</text>
+								<text class="label">{{$t('chooseGoods.standardName')}}</text>
 								<text class="txt">{{val.standardName}}</text>
 							</view>
 							<view class="item">
-								<text class="label">属性参数：</text>
+								<text class="label">{{$t('chooseGoods.propertyNames')}}</text>
 								<text class="txt">{{val.propertyNames}}</text>
 							</view>
 							<view class="item">
-								<text class="label">重量：</text>
+								<text class="label">{{$t('chooseGoods.netContent')}}</text>
 								<text class="txt">{{val['netContent-' + val.assistUnitsList[0].assistUnitsId]}}</text>
 							</view>
 							<view class="item">
-								<text class="label">挂牌价：</text>
+								<text class="label">{{$t('chooseGoods.listPrice')}}</text>
 								<text class="txt">{{val.listPrice}}</text>
 							</view>
 							<view class="item">
-								<text class="label">成本价：</text>
+								<text class="label">{{$t('chooseGoods.costPrice')}}</text>
 								<text class="txt">{{val.costPrice}}</text>
 							</view>
 							<view class="item">
-								<text class="label">库存：</text>
+								<text class="label">{{$t('chooseGoods.curStock')}}</text>
 								<text class="txt">{{val.curStock}}</text>
 							</view>
 						</view>
@@ -71,7 +71,6 @@
 </template>
 
 <script>
-	import search from '@/components/search/search.vue'
 	import {
 		goodsFindList
 	} from '@/api/lpgManageAppApi'
@@ -93,57 +92,59 @@
 			return {
 				searchOptions: [{
 						type: 'select',
-						labelText: '商品分类',
+						labelText: this.$t('chooseGoods.searchOptions.goodsClassifyId.label'),
 						fieldName: 'goodsClassifyId',
-						placeholder: '选择商品分类',
+						placeholder: this.$t('chooseGoods.searchOptions.goodsClassifyId.placeholder'),
 						defaultValue: '',
 						options: []
 					},
 					{
-						labelText: '品牌',
+						labelText: this.$t('chooseGoods.searchOptions.brandId.label'),
 						type: 'select',
 						fieldName: 'brandId',
 						defaultValue: '',
-						options: []
+						options: [],
+						placeholder:this.$t('chooseGoods.searchOptions.brandId.placeholder')
 					},
 					{
-						labelText: '单位',
+						labelText: this.$t('chooseGoods.searchOptions.unitsId.label'),
 						type: 'select',
 						fieldName: 'unitsId',
 						defaultValue: '',
-						options: []
+						options: [],
+						placeholder:this.$t('chooseGoods.searchOptions.unitsId.placeholder')
 					},
 					{
 						type: 'text',
-						labelText: '挂牌价范围',
+						labelText: this.$t('chooseGoods.searchOptions.startListPrice.label'),
 						fieldName: 'startListPrice',
-						placeholder: '请输入开始挂牌价'
+						placeholder: this.$t('chooseGoods.searchOptions.startListPrice.placeholder')
 					},
 					{
 						type: 'text',
 						labelText: '',
 						fieldName: 'endListPrice',
-						placeholder: '请输入结束挂牌价'
+						placeholder: this.$t('chooseGoods.searchOptions.endListPrice.placeholder')
 					},
 					{
 						type: 'text',
-						labelText: '成本价范围',
+						labelText: this.$t('chooseGoods.searchOptions.startCostPrice.label'),
 						fieldName: 'startCostPrice',
-						placeholder: '请输入开始成本价'
+						placeholder:this.$t('chooseGoods.searchOptions.startCostPrice.placeholder')
 					},
 					{
 						type: 'text',
-						labelText: '',
+						labelText: this.$t('chooseGoods.searchOptions.endCostPrice.label'),
 						fieldName: 'endCostPrice',
-						placeholder: '请输入结束成本价'
+						placeholder: this.$t('chooseGoods.searchOptions.endCostPrice.placeholder')
 					},
 					{
-						labelText: '日期范围',
+						labelText: this.$t('chooseGoods.searchOptions.createDateRange.label'),
 						type: 'datetimerange',
 						fieldName: 'createDateRange', // 固定
 						startName: 'startDate', // 开始日期字段
 						endName: 'endDate', // 结束日期字段
-						placeholder: ['开始日期', '选择日期']
+						placeholder: this.$t('chooseGoods.searchOptions.createDateRange.placeholder')
 					}
 				]
 			}
@@ -313,9 +314,13 @@
 						// align-items: center;
 						align-items: flex-start;
 						flex-wrap: wrap;
-
+						
 						text:first-child {
 							color: #666;
+							&::after{
+								display: inline-block;
+								content: "：";
+							}
 						}
 
 						text:last-child {

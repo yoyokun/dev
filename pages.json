@@ -301,6 +301,7 @@
 			"total": "@/components/total/total.vue",
 			"us-table": "@/components/UsTable/UsTable.vue",
 			"edit-form": "@/components/editForm/editForm.vue",
+			"search": "@/components/search/search.vue",
 			"loading": "@/components/loading/loading.vue"
 		}
 	}
