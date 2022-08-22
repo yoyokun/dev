@@ -42,6 +42,10 @@ Vue.prototype._i18n = i18n
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
+// 挂载过滤器转换方法
+Vue.prototype.filterMethod = function(val, key) {
+  return this.$options.filters[key](val)
+}
 // 全局mixin
 Vue.mixin(mixin)
 

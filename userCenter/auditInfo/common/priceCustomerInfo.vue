@@ -69,8 +69,8 @@
 			</us-table>
 		</description-list>
 		<u-popup mode="center" closeable :show="show" @close="close">
-			<policy-configuration :edit-id="editId" :is-cache="true"
-				:price-strategy-info="priceStrategyInfo" :table-data-goods-info="tableDataGoodsInfo" />
+			<policy-configuration :edit-id="editId" :is-cache="true" :price-strategy-info="priceStrategyInfo"
+				:table-data-goods-info="tableDataGoodsInfo" />
 		</u-popup>
 	</view>
 </template>
@@ -93,7 +93,7 @@
 		},
 		data() {
 			return {
-				show:false,
+				show: false,
 				info: {},
 				checkInfo: {},
 				tableColumnGoods: [{
@@ -157,7 +157,7 @@
 			})
 		},
 		methods: {
-			close(){
+			close() {
 				this.show = false
 			},
 			unique(arr, key) {
@@ -175,6 +175,10 @@
 					if (res.userSettlement.checkState === 1 || res.userSettlement.checkState === 2) {
 						// 1 待提交 2 待审核 读取缓存数据
 						const checkInfo = JSON.parse(res.userSettlement.checkInfo)
+						res.userSettlement.propertyIds = checkInfo.propertyIds
+						res.userSettlement.salePropertyIds = checkInfo.salePropertyIds
+						res.userSettlement.typeId = checkInfo.typeId
+						res.userSettlement.regionId = checkInfo.regionId
 						this.checkInfo = checkInfo
 						this.priceStrategyInfo = checkInfo.priceStrategyInfo
 					}

@@ -2,7 +2,7 @@
 	<view class="basic">
 		<description-list :title="$t('auditInfo.purGoodPlanInfo.basicTle')">
 			<description :label="$t('auditInfo.purGoodPlanInfo.billNo')">{{ info.billNo }}</description>
-			<description :label="$t('auditInfo.purGoodPlanInfo.planDate')">{{ info.planDate }}</description>
+			<description :label="$t('auditInfo.purGoodPlanInfo.planDate')">{{ info.planDate | dayjs('YYYY-MM-DD') }}</description>
 			<description :label="$t('auditInfo.purGoodPlanInfo.creator')">{{ info.creator }}</description>
 			<description :label="$t('auditInfo.purGoodPlanInfo.state')">{{ info.state | state }}</description>
 			<description :label="$t('auditInfo.purGoodPlanInfo.remarks')">{{ info.remarks }}</description>
@@ -13,9 +13,17 @@
 				</view>
 			</description>
 		</description-list>
+		<description-list :title="$t('auditInfo.purGoodPlanInfo.priceTle')">
+			<choose-offer :goods-obj="goodsObj" :end-date="endDate" />
+		</description-list>
 		<description-list :title="$t('auditInfo.purGoodPlanInfo.buyTle')">
 			<us-table :table-column="tableColumn" :table-data="planDetailsData">
 				<!-- #ifdef H5 || APP-PLUS -->
+				<view slot="goodsName" slot-scope="row">
+					<view>{{ row.data.goodsName }}</view>
+					<view style="color:rgb(42, 130, 228)"
+						@click="chooseOffer(row.data.goodsDetailId, row.data.goodsName, row.data.goodsId)">报价</view>
+				</view>
 				<view slot="arrivalTime" slot-scope="row">
 					{{ row.data.arrivalTime ? UnixToDate(row.data.arrivalTime) : '' }}
 				</view>
@@ -57,6 +65,7 @@
 </template>
 <script>
 	let that = null
+	import ChooseOffer from './chooseOffer'
 	import {
 		purPlanFindById
 	} from '@/api/lpgSalesManageApi'
@@ -65,7 +74,9 @@
 	} from '@/utils/util'
 	export default {
 		name: 'PurGoodPlanInfo',
-		components: {},
+		components: {
+			ChooseOffer
+		},
 		// 过滤器
 		filters: {
 			state(value) {
@@ -100,7 +111,7 @@
 				tableColumn: [{
 						prop: 'goodsName',
 						label: this.$t('auditInfo.purGoodPlanInfo.tableColumn.goodsName'),
-						// slot: 'goodsName',
+						slot: 'goodsName',
 					},
 					{
 						prop: 'mainorgName',
@@ -269,6 +280,12 @@
 			})
 		},
 		methods: {
+			// 查看报价
+			chooseOffer(goodsDetailId, goodsName, goodsId) {
+				this.goodsObj.goodsDetailId = goodsDetailId
+				this.goodsObj.goodsName = goodsName
+				this.goodsObj.goodsId = goodsId
+			},
 			// 详情
 			async getInfo(id) {
 				const {

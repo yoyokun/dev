@@ -1007,111 +1007,152 @@ module.exports = {
 		},
 	},
 	// 优惠券
-	couponInfo:{
+	couponInfo: {
 		tabs: [{
 			name: '基本信息'
 		}, {
 			name: '优惠券详情'
 		}],
-		basicTle:'基本信息',
-		goodsTle:'适用商品',
-		classifyName:'优惠券分类',
-		couponName:'优惠券名称',
-		orgName:'适用组织',
-		couponType:'优惠券类型',
-		couponNum:'发行数量',
-		couponMoney:'面额',
-		drawPropertyNames:'领取资格',
-		receiveNum:'限领张数',
-		validType:'有效期',
-		vaildStartTime:'日期范围',
-		vaildDay:'固定天数',
-		useGoodsType:'使用商品',
-		useType:'使用门槛',
-		reduceMoney:'满减',
-		stateTxt:{
+		basicTle: '基本信息',
+		goodsTle: '适用商品',
+		classifyName: '优惠券分类',
+		couponName: '优惠券名称',
+		orgName: '适用组织',
+		couponType: '优惠券类型',
+		couponNum: '发行数量',
+		couponMoney: '面额',
+		drawPropertyNames: '领取资格',
+		receiveNum: '限领张数',
+		validType: '有效期',
+		vaildStartTime: '日期范围',
+		vaildDay: '固定天数',
+		useGoodsType: '使用商品',
+		useType: '使用门槛',
+		reduceMoney: '满减',
+		stateTxt: {
 			1: '已发行',
 			2: '已领取',
 			3: '已使用',
 			4: '已过期'
 		},
-		couponTypeTxt:{
+		couponTypeTxt: {
 			1: '线上',
 			2: '线下'
 		},
-		validTypeTxt:{
+		validTypeTxt: {
 			1: '日期范围',
 			2: '固定天数'
 		},
-		useTypeTxt:{
+		useTypeTxt: {
 			1: '无门槛',
 			2: '满减'
 		},
-		useGoodsTypeTxt:{
+		useGoodsTypeTxt: {
 			1: '全部商品',
 			2: '部分商品'
 		},
-		tableColumn:{
-			goodsNo:'商品编码',
-			goodsName:'商品名称',
-			brandName:'品牌',
-			goodsClassifyName:'商品分类',
+		tableColumn: {
+			goodsNo: '商品编码',
+			goodsName: '商品名称',
+			brandName: '品牌',
+			goodsClassifyName: '商品分类',
 		},
-		tableColumnCoupon:{
-			couponNo:'优惠券号',
-			vaildEndTime:'有效期结束时间',
-			state:'状态',
-			receiveTime:'领取时间',
-			useTime:'使用时间',
-			customerName:'关联客户',
-			linkType:'关联类型',
+		tableColumnCoupon: {
+			couponNo: '优惠券号',
+			vaildEndTime: '有效期结束时间',
+			state: '状态',
+			receiveTime: '领取时间',
+			useTime: '使用时间',
+			customerName: '关联客户',
+			linkType: '关联类型',
 		},
+		searchOptions: {
+			state: {
+				label: '状态',
+				placeholder: '请选择状态',
+				options: [{
+						label: '已发行',
+						value: 1
+					},
+					{
+						label: '已领取',
+						value: 2
+					},
+					{
+						label: '已使用',
+						value: 3
+					},
+					{
+						label: '已过期',
+						value: 4
+					}
+				]
+			},
+			createDateRange: {
+				label: '日期范围',
+				placeholder: ['开始日期', '选择日期'],
+			},
+		},
+
 	},
 	// 客户价格策略
-	priceCustomerInfo:{
-		basicTle:'调整价格',
-		customTle:'客户报价',
-		goodsTle:'商品详情',
-		ployTle:'策略详情',
-		customerNo:'客户编号',
-		customerName:'客户名称',
-		typeName:'客户类型',
-		regionName:'客户区域',
-		propertyNames:'客户标签',
-		salePropertyNames:'优惠标签',
-		customerPriceStateTxt:{
+	priceCustomerInfo: {
+		basicTle: '调整价格',
+		customTle: '客户报价',
+		goodsTle: '商品详情',
+		ployTle: '策略详情',
+		customerNo: '客户编号',
+		customerName: '客户名称',
+		typeName: '客户类型',
+		regionName: '客户区域',
+		propertyNames: '客户标签',
+		salePropertyNames: '优惠标签',
+		customerPriceStateTxt: {
 			1: '启用',
 			2: '禁用'
 		},
-		tableColumnGoods:{
-			goodsNo:'商品编码',
-			goodsName:'商品名称',
-			brandName:'品牌',
-			goodsClassifyName:'商品分类',
-			standardName:'规格',
-			unitsName:'单位',
-			propertyNames:'属性参数',
-			listPrice:'挂牌价',
-			unitPrice:'客户报价',
-			act:'操作'
+		tableColumnGoods: {
+			goodsNo: '商品编码',
+			goodsName: '商品名称',
+			brandName: '品牌',
+			goodsClassifyName: '商品分类',
+			standardName: '规格',
+			unitsName: '单位',
+			propertyNames: '属性参数',
+			listPrice: '挂牌价',
+			unitPrice: '客户报价',
+			act: '操作'
 		},
-		tableColumnGoodsInfo:{
-			goodsNo:'商品编码',
-			goodsName:'商品名称',
-			brandName:'品牌',
-			goodsClassifyName:'商品分类',
-			standardName:'规格',
-			unitsName:'单位',
-			propertyNames:'属性参数',
-			listPrice:'挂牌价',
+		tableColumnGoodsInfo: {
+			goodsNo: '商品编码',
+			goodsName: '商品名称',
+			brandName: '品牌',
+			goodsClassifyName: '商品分类',
+			standardName: '规格',
+			unitsName: '单位',
+			propertyNames: '属性参数',
+			listPrice: '挂牌价',
 		},
-		tableColumnStrategy:{
-			strategyNo:'策略编号',
-			strategyName:'策略名称',
-			linkValue:'关联参数',
-			strategyValue:'策略值',
-			curListPrice:'策略价',
-			customerPriceState:'状态',
+		tableColumnStrategy: {
+			strategyNo: '策略编号',
+			strategyName: '策略名称',
+			linkValue: '关联参数',
+			strategyValue: '策略值',
+			curListPrice: '策略价',
+			customerPriceState: '状态',
+		},
+	},
+	// 客户钢瓶盘点
+	userCylinderCheckInfo: {
+		basicTle: '基本信息',
+		checkTle: '盘点信息',
+		billNo: '盘点单号',
+		billTime: '盘点时间',
+		creator: '盘点人',
+		remarks: '备注',
+		customerStateTxt: {
+			1: '正常',
+			2: '冻结'
 		},
 	},
 }

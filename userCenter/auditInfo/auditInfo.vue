@@ -47,6 +47,8 @@
 			<coupon-info v-if="info.formKey === 'coupon'" :edit-id="info.linkId" />
 			<!--客户价格策略-->
 			<price-customer-info v-if="info.formKey === 'customerPrice'" :edit-id="info.linkId" />
+			<!--客户钢瓶盘点-->
+			<user-cylinder-check-info v-if="info.formKey === 'customerCheck'" :edit-id="info.linkId" />
 		</view>
 		<view class="time-line" v-if="auditRecordVosReverse.length">
 			<view class="time-line-tle">{{$t('auditInfo.trendsTle')}}</view>
@@ -101,6 +103,7 @@
 	import PurGoodPlanInfo from './common/purGoodPlanInfo'
 	import CouponInfo from './common/couponInfo'
 	import PriceCustomerInfo from './common/priceCustomerInfo'
+	import UserCylinderCheckInfo from './common/userCylinderCheckInfo'
 	export default {
 		components: {
 			BusinessInfo,
@@ -123,7 +126,8 @@
 			PurGoodOrderInfo,
 			PurGoodPlanInfo,
 			CouponInfo,
-			PriceCustomerInfo
+			PriceCustomerInfo,
+			UserCylinderCheckInfo,
 		},
 		data() {
 			return {

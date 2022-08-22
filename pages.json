@@ -216,6 +216,12 @@
 						"navigationBarTitleText": "选择供应商",
 						"enablePullDownRefresh": true
 					}
+				},{
+					"path" : "chooseGoods/chooseGoods",
+					"style" : {
+						"navigationBarTitleText": "选择商品",
+						"enablePullDownRefresh": false
+					}
 				}
 				,{
 					"path" : "cylinderArchivesList/cylinderArchivesList",
@@ -238,16 +244,14 @@
 						"enablePullDownRefresh": false
 					}
 				}
-			    ,{
-                    "path" : "cylinderBindCode/cylinderBindCode",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "钢瓶绑码",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-            ]
+				,{
+					"path" : "cylinderBindCode/cylinderBindCode",
+					"style" : {
+						"navigationBarTitleText": "钢瓶绑码",
+						"enablePullDownRefresh": false
+					}
+				}
+			]
 		},
 		{
 			"root": "customerManage",
@@ -329,6 +333,7 @@
 			"total": "@/components/total/total.vue",
 			"us-table": "@/components/UsTable/UsTable.vue",
 			"edit-form": "@/components/editForm/editForm.vue",
+			"search": "@/components/search/search.vue",
 			"loading": "@/components/loading/loading.vue"
 		}
 	}
