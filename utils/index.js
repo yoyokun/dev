@@ -1,7 +1,3 @@
-String.prototype.Split = function(s) {
-  return String.prototype.split(s).filter(item => item !== '')
-}
-
 // 页面跳转
 export const navigateTo = (url, params = {}) => {
 	let paramsStr = '';

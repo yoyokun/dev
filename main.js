@@ -20,7 +20,9 @@ Vue.config.productionTip = false
 Vue.prototype.$store = store
 Vue.prototype.$bigDecimal = BigDecimal
 Vue.prototype.$navigateTo = utils.navigateTo; // 跳转页面
-
+String.prototype.Split = function(s) {
+  return this.split(s).filter(item => item !== '')
+}
 Vue.component('draggable', VueDraggable)
 
 App.mpType = 'app'
