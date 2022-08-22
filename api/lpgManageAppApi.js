@@ -242,6 +242,20 @@ export function sysPropertyClassifySelectPropertyBox(data = {}, message = '', cu
 		}
 	})
 }
+// 属性参数管理 根据type查询平台默认属性数据
+export function sysPropertyFindDefaultProperty(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/sysProperty/findDefaultProperty',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
 // 审核设置单据列表  根据条件查询列表信息
 export function auditFormFindList(data = {}, message = '', custom = {}) {
 	return request({
@@ -396,6 +410,34 @@ export function sysOrgFindList(data = {}, message = '', custom = {}) {
 		}
 	})
 }
+// 组织 根据id查询信息
+export function sysOrgFindById(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/sysOrg/findById',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 组织 保存或修改
+export function sysOrgSaveOrEdit(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/sysOrg/saveOrEdit',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
 // 工单管理 根据条件查询列表信息
 export function auditWorkFindList(data = {}, message = '', custom = {}) {
 	return request({
@@ -522,7 +564,76 @@ export function auditWorkAcceptWork(data = {}, message = '', custom = {}) {
 		}
 	})
 }
-
+// 客户管理 删除
+export function userCustomerDeleteByIds(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/control/userCustomer/deleteByIds',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 客户管理 保存或修改
+export function userCustomerSaveOrEdit(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/control/userCustomer/saveOrEdit',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 客户管理 客户编号查重
+export function userCustomerCheckCustomerNo(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/userCustomer/checkCustomerNo',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 客户管理 登录手机号查重
+export function userCustomerCheckAccount(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/userCustomer/checkAccount',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 客户管理 授权组织使用客户数据
+export function userCustomerGrantOrgUse(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/userCustomer/grantOrgUse',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
 // 客户管理 客户详情(含默认信息)
 export function userCustomerfindByIdDefault(data = {}, message = '', custom = {}) {
 	return request({
@@ -537,7 +648,6 @@ export function userCustomerfindByIdDefault(data = {}, message = '', custom = {}
 		}
 	})
 }
-
 // 价格策略管理 获取客户某个商品的价格策略配置
 export function priceStrategyFindCustomerSalesPriceList(data = {}, message = '', custom = {}) {
 	return request({
@@ -552,7 +662,6 @@ export function priceStrategyFindCustomerSalesPriceList(data = {}, message = '',
 		}
 	})
 }
-
 // 价格策略管理 更新客户某个商品的价格策略配置
 export function priceStrategyUpdateCustomerPriceStrategyState(data = {}, message = '', custom = {}) {
 	return request({
@@ -581,7 +690,6 @@ export function userCustomerFindList(data = {}, message = '', custom = {}) {
 		}
 	})
 }
-
 // 钢瓶盘点记录 根据id查询信息
 export function userCylinderCheckFindById(data = {}, message = '', custom = {}) {
 	return request({
@@ -596,7 +704,6 @@ export function userCylinderCheckFindById(data = {}, message = '', custom = {}) 
 		}
 	})
 }
-
 // 钢瓶盘点记录 左侧客户数据
 export function userCylinderCheckFindCustomerIds(data = {}, message = '', custom = {}) {
 	return request({
@@ -611,7 +718,6 @@ export function userCylinderCheckFindCustomerIds(data = {}, message = '', custom
 		}
 	})
 }
-
 // 品牌列表查询
 export function sysBrandFindList(data = {}, message = '', custom = {}) {
 	return request({
@@ -626,7 +732,6 @@ export function sysBrandFindList(data = {}, message = '', custom = {}) {
 		}
 	})
 }
-
 // 商品分类管理 列表
 export function goodsClassifyFindList(data = {}, message = '', custom = {}) {
 	return request({

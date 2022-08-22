@@ -48,10 +48,10 @@ export default {
 					placeholder: this.$t('editInfo.form.namePlace'),
 					inputAlign: 'right',
 					maxlength: 30,
-					required: true, 
+					required: true,
 					rules: [
 						{
-							required: true, 
+							required: true,
 							message: this.$t('editInfo.form.namePlace'),
 							trigger: ['change','blur']
 						}
@@ -63,13 +63,13 @@ export default {
 					fieldName: 'sex',
 					placeholder: this.$t('editInfo.form.sexPlace'),
 					inputAlign: 'right',
-					required: true, 
+					required: true,
 					showOptions: false,
 					options: this.$t('editInfo.form.sexOptions'),
 					defaultValue: '',
 					rules: [
 						{
-							required: true, 
+							required: true,
 							message: this.$t('editInfo.form.sexPlace'),
 							trigger: ['change','blur']
 						}
@@ -81,11 +81,11 @@ export default {
 					fieldName: 'account',
 					placeholder: this.$t('editInfo.form.accountPlace'),
 					inputAlign: 'right',
-					required: true, 
+					required: true,
 					maxlength: 12,
 					rules: [
 						{
-							required: true, 
+							required: true,
 							message: this.$t('editInfo.form.accountPlace'),
 							trigger: ['change','blur']
 						}
@@ -133,11 +133,11 @@ export default {
 					inputAlign: 'right',
 					limit: 1,
 					defaultValue: [],
-					required: true, 
+					required: true,
 					rules: [
 						{
 							type: 'array',
-							required: true, 
+							required: true,
 							message: this.$t('editInfo.form.headPhotoPlace'),
 							trigger: ['change','blur']
 						}
@@ -172,7 +172,7 @@ export default {
         // 图片转换
         res.headPhoto = this.$options.filters.pictureConversion(res.headPhoto)
         res.idPhoto = this.$options.filters.pictureConversion(res.idPhoto)
-				res.nativePlace = res.nativePlace.split(',')
+				res.nativePlace = res.nativePlace.Split(',')
 				res.birthdayStr = res.birthday ? formatDate(res.birthday) : ''
         this.phone = res.phone
 				this.formDataValue = res

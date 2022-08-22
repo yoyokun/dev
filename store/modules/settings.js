@@ -6,7 +6,8 @@ const state = {
 	// 是否开启打印预览
 	printSettings: uni.getStorageSync('printSettings') || 1,
 	// 地图key
-	mapKey: "d863f0d7263c912d2b36ccd5eac84314",
+	// mapKey: "d863f0d7263c912d2b36ccd5eac84314",
+	mapKey: "WAFBZ-WEHE5-ZMZIV-QAKED-UPTR2-CFFZE",
 	webMapKey: "e9c3c384d5bcdf64fb8b5ee9c0c0a947",
 	onePageRow: '15',
 }

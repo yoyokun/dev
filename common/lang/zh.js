@@ -18,13 +18,17 @@ module.exports = {
 		voidContentPlace: '请输入作废描述',
 		addTitle: '添加提示',
 		addContent: '没有该二维码，请问要添加该二维码吗?',
+		authTitle: '授权提示',
+		authContent: '该客户已经存在，需要授权使用',
+		authConfirmText: '授权',
 		stateObj: {
 			1: '启用',
 			2: '禁用'
 		},
 		editForm: {
 			chooseText: '选择',
-			cancelText: '取消'
+			cancelText: '取消',
+			confirmText: '确定'
 		},
 		btn: {
 			add: '添加',
@@ -633,6 +637,276 @@ module.exports = {
 					name: '退回',
 					value: 8,
 					disabled: true
+				}
+			]
+		}
+	},
+	// 添加客户
+	addCustomer: {
+		titleText: '添加客户',
+		titleTextEdit: '编辑客户',
+		titleTextInfo: '客户详情',
+		formTitle: '基础信息',
+		form: {
+			customerName: '客户名称',
+			customerNamePlace: '请输入客户名称',
+			phone: '联系电话',
+			phonePlace: '请输入联系电话',
+			phoneMessage: '联系电话格式有误',
+			customerPresence: '客户存在',
+			customerAuthorization: '需要授权',
+			customerNo: '客户编号',
+			customerNoPlace: '请输入客户编号',
+			customerNoMessage: '编号格式有误,只能输入数字或字母',
+			customerNoRepeat: '客户编号重复',
+			nickname: '客户昵称',
+			nicknamePlace: '请输入客户昵称',
+			classify: '客户分类',
+			classifyPlace: '请选择客户分类',
+			IDNumber: '证照号码',
+			IDNumberPlace: '请输入证件号码/营业执照编号',
+			IDNumberMessage: '证件号码/营业执照编号格式有误,只能输入数字或字母',
+			state: '客户状态',
+			statePlace: '请选择客户状态',
+			remarks: '备注信息',
+			remarksPlace: '请输入备注信息',
+			stateOptions: [
+				{
+					name: '正常',
+					value: 1
+				},
+				{
+					name: '冻结',
+					value: 2
+				}
+			],
+			classifyPlaceOptions: [
+				{
+					name: '居民',
+					value: 1
+				},
+				{
+					name: '非居民',
+					value: 2
+				}
+			]
+		},
+		form1Title: '用户信息',
+		form1: {
+			linkman: '用气名称',
+			linkmanPlace: '请输入用气名称',
+			linkTel: '联系电话',
+			linkTelPlace: '请输入联系电话',
+			linkTelMessage: '联系电话格式有误',
+			provinces: '省市区',
+			provincesPlace: '请选择省市区',
+			address: '详细地址',
+			addressPlace: '请输入详细地址',
+			floor: '楼层',
+			floorPlace: '请输入楼层',
+			doorplate: '门牌号',
+			doorplatePlace: '请输入门牌号',
+			defDelivery: '配送点',
+			defDeliveryPlace: '请选择配送点',
+			defDeliveryman: '配送员',
+			defDeliverymanPlace: '请选择配送员',
+			cardNumber: '供气卡号',
+			cardNumberPlace: '请输入供气卡号'
+		},
+		form2Title: '附加信息',
+		form2: {
+			orgId: '归属组织',
+			orgIdplace: '请选择归属组织',
+			managerId: '归属成员',
+			managerIdPlace: '请选择归属成员',
+			sourceId: '客户来源',
+			sourceIdPlace: '请选择客户来源',
+			archives: '档案资料'
+		},
+		form3Title: '结算信息',
+		form3: {
+			typeId: '客户类型',
+			typeIdPlace: '请选择客户类型',
+			regionId: '客户区域',
+			regionIdPlace: '请选择客户区域',
+			money: '期初余额',
+			moneyPlace: '请输入期初余额',
+			moneyMessage: '期初余额格式有误,只能输入数字和小数点后两位',
+			creditLines: '信用额度',
+			creditLinesPlace: '请输入信用额度',
+			creditLinesMessage: '信用额度格式有误,只能输入数字和小数点后两位',
+			propertyIds: '客户标签',
+			propertyIdsPlace: '请选择客户标签',
+			salePropertyIds: '优惠标签',
+			salePropertyIdsPlace: '请选择优惠标签',
+			collectionTypeId: '默认支付方式',
+			collectionTypeIdPlace: '请选择支付方式',
+			balanceTypeId: '结算账期',
+			balanceTypeIdPlace: '请选择结算账期',
+			orderType: '开单方式',
+			orderTypePlace: '请选择开单方式',
+			pickMode: '默认提货方式',
+			pickModePlace: '请选择提货方式',
+			licenseNum: '车牌号码',
+			licenseNumPlace: '请输入车牌号码,多个英文逗号隔开',
+			pickModeOptions: [
+				{
+					name: '自提',
+					value: 1
+				},
+				{
+					name: '车辆自提',
+					value: 2
+				},
+				{
+					name: '车辆配送',
+					value: 3
+				},
+				{
+					name: '送气员配送',
+					value: 4
+				}
+			]
+		}
+	},
+	// 客户列表
+	customerList: {
+		titleText: '客户列表',
+		totalNum: '客户总数',
+	},
+	// 组织信息
+	orgInfo: {
+		titleText: '组织信息',
+		titleTextEdit: '编辑客户',
+		formTitle: '基本信息',
+		form: {
+			supId: '上级组织',
+			supIdPlace: '请选择上级组织',
+			name: '组织名称',
+			namePlace: '请输入组织名称',
+			shortName: '组织简称',
+			shortNamePlace: '请输入组织简称',
+			orgType: '组织性质',
+			orgTypePlace: '请选择组织性质',
+			realName: '联系人姓名',
+			realNamePlace: '请输入联系人姓名',
+			phone: '联系电话',
+			phonePlace: '请输入联系电话',
+			phoneMeaasge: '手机号码格式有误',
+			provinces: '省市区',
+			provincesPlace: '请选择省市区',
+			address: '详细地址',
+			addressPlace: '请输入详细地址',
+			state: '状态',
+			statePlace: '请选择状态',
+			distScope: '配送范围(米)',
+			distScopePlace: '请输入配送范围（米）',
+			remarks: '组织描述',
+			remarksPlace: '请输入组织描述',
+			orgLogo: '组织logo',
+			orgTypeOptions: [
+				{
+					name: '公司',
+					value: 1
+				},
+				{
+					name: '气站',
+					value: 2
+				},
+				{
+					name: '门店',
+					value: 3
+				}
+			],
+			stateOptions: [
+				{
+					name: '启用',
+					value: 1
+				},
+				{
+					name: '禁用',
+					value: 2
+				}
+			]
+		},
+		formTitle: '组织资料',
+		form1: {
+			legalPerson: '公司法人',
+			legalPersonPlace: '请输入公司法人',
+			creditCode: '营业执照',
+			creditCodePlace: '请输入营业执照代码',
+			orgFax: '企业传真',
+			orgFaxPlace: '请输入企业传真',
+			orgWeb: '企业网址',
+			orgWebPlace: '请输入企业网址',
+			invoiceUp: '发票抬头',
+			invoiceUpPlace: '请输入发票抬头',
+			orgEin: '企业税号',
+			orgEinPlace: '请输入企业税号',
+			businessLicense: '营业执照'
+		},
+		formTitle: '组织能力',
+		form2: {
+			orgModel: '经营模式',
+			orgModelPlace: '请选择经营模式',
+			syncType: '业务数据',
+			syncTypePlace: '请选择业务数据',
+			priceState: '自定义价格',
+			priceStatePlace: '请选择自定义价格',
+			orgModelOptions: [
+				{
+					name: '直营',
+					value: 1
+				},
+				{
+					name: '股份/合作',
+					value: 2
+				},
+				{
+					name: '独立/加盟',
+					value: 3
+				}
+			],
+			syncTypeOptions: [
+				{
+					name: '不同步',
+					value: 1
+				},
+				{
+					name: '仅同步一次',
+					value: 2
+				},
+				{
+					name: '长期同步',
+					value: 3
+				}
+			],
+			priceStateOptions: [
+				{
+					name: '允许改价',
+					value: 1
+				},
+				{
+					name: '不允许',
+					value: 2
+				}
+			]
+		},
+		formTitle: '商城信息',
+		form3: {
+			openMall: '网上商城',
+			openMallPlace: '请选择网上商城',
+			openTimeRange: '营业时间',
+			openTimeRangePlace: '请选择营业时间',
+			storeBackground: '店铺背景图',
+			openMallOptions: [
+				{
+					name: '营业',
+					value: 1
+				},
+				{
+					name: '不营业',
+					value: 2
 				}
 			]
 		}

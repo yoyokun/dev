@@ -204,34 +204,6 @@
 					}
 				}
 				,{
-					"path" : "customerInfo/customerInfo",
-					"style" : {
-						"navigationBarTitleText": "客户详情",
-						"enablePullDownRefresh": false
-					}
-				}
-				,{
-					"path" : "addCustomer/addCustomer",
-					"style" : {
-						"navigationBarTitleText": "添加客户",
-						"enablePullDownRefresh": false
-					}
-				}
-				,{
-					"path" : "cylinderArchivesList/cylinderArchivesList",
-					"style" : {
-						"navigationBarTitleText": "钢瓶档案",
-						"enablePullDownRefresh": true
-					}
-				}
-				,{
-					"path" : "addCylinderArchives/addCylinderArchives",
-					"style" : {
-						"navigationBarTitleText": "添加档案",
-						"enablePullDownRefresh": false
-					}
-				}
-				,{
 					"path" : "chooseOrg/chooseOrg",
 					"style" : {
 						"navigationBarTitleText": "选择组织",
@@ -251,6 +223,66 @@
 						"enablePullDownRefresh": false
 					}
 				}
+				,{
+					"path" : "cylinderArchivesList/cylinderArchivesList",
+					"style" : {
+						"navigationBarTitleText": "钢瓶档案",
+						"enablePullDownRefresh": true
+					}
+				}
+				,{
+					"path" : "addCylinderArchives/addCylinderArchives",
+					"style" : {
+						"navigationBarTitleText": "添加档案",
+						"enablePullDownRefresh": false
+					}
+				}
+				,{
+					"path" : "orgInfo/orgInfo",
+					"style" : {
+						"navigationBarTitleText": "组织信息",
+						"enablePullDownRefresh": false
+					}
+				}
+				,{
+					"path" : "cylinderBindCode/cylinderBindCode",
+					"style" : {
+						"navigationBarTitleText": "钢瓶绑码",
+						"enablePullDownRefresh": false
+					}
+				}
+			]
+		},
+		{
+			"root": "customerManage",
+			"pages": [
+				{
+					"path" : "customerInfo/customerInfo",
+					"style" : {
+						"navigationBarTitleText": "客户详情",
+						"enablePullDownRefresh": false
+					}
+				}
+				,{
+					"path" : "addCustomer/addCustomer",
+					"style" : {
+						"navigationBarTitleText": "添加客户",
+						"enablePullDownRefresh": false
+					}
+				}
+				,{
+					"path" : "customerList/customerList",
+					"style" : {
+						"navigationBarTitleText": "客户列表",
+						"enablePullDownRefresh": true
+					}
+				}
+			]
+		},
+		{
+			"root": "cylinderManage",
+			"pages": [
+				
 			]
 		}
 	],

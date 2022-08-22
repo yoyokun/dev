@@ -10,10 +10,14 @@
 				@custom="getInit"
 				@clear="getInit"
 			></u-search>
+			<view class="total">
+				<view class="num">{{$t('customerList.totalNum')}}：<text class="blue">{{totals}}</text></view>
+				<view class="add" v-permission="{ permission:'app_customerList_add'}" @click="goto('/customerManage/addCustomer/addCustomer')"><u-icon name="plus-circle" color="#2A82E4" size="20"></u-icon>{{$t('common.btn.add')}}</view>
+			</view>
 		</view>
 		<view v-if="empty">
 			<view class="customerList">
-				<view v-for="(item,index) in dataList" :key="index" :class="['box',item.active?'active': '']" @click.stop="goto('/customerManage/customerInfo/customerInfo',{ editId: item.id })">
+				<view v-for="(item,index) in dataList" :key="index" class="box" @click.stop="goto('/customerManage/customerInfo/customerInfo',{ editId: item.id })">
 					<view class="center">
 						<text class="state">{{item.state | state}}</text>
 						<view class="flex">
@@ -27,23 +31,16 @@
 							</view>
 						</view>
 						<view v-if="item.propertyName" class="tags">
-							<view v-for="(tag,indexTag) in item.propertyName.split(',')" class="ptag m-l10 m-t10" :key="indexTag">{{tag}}</view>
+							<view v-for="(tag,indexTag) in item.propertyName.Split(',')" class="ptag m-l10 m-t10" :key="indexTag">{{tag}}</view>
 						</view>
-					</view>
-					<view class="right" @click.stop="chooseBox(index)">
-						<image class="icon" v-if="item.active" mode="widthFix" src="/static/image/check.png" />
-						<image class="icon" v-else mode="widthFix" src="/static/image/uncheck.png" />
 					</view>
 				</view>
 			</view>
 			<loading v-if="loading" class="loading" />
 			<view v-if="searchEnding" class="noData">{{$t('common.noData')}}</view>
 		</view>
-		<view v-else class="customerList">
+		<view v-else class="workList">
 			<u-empty mode="list" icon="http://cdn.uviewui.com/uview/empty/list.png"></u-empty>
-		</view>
-		<view class="bottom-part">
-			<view class="btnAdd" @click="chooseSave">{{$t('common.btn.confirm')}}</view>
 		</view>
     <loading v-if="loadingCenter" class="loading-center" />
 		<!-- 请求 toast 提示 -->
@@ -59,8 +56,7 @@ export default {
   data() {
     return {
 			keyword: '',
-			customerId: '', // 选中的id
-			orgId: '' // 组织id
+			totals: 0
     }
   },
 	mixins: [paginationMixin],
@@ -78,13 +74,12 @@ export default {
 	created(){
 		that = this
 	},
-  onLoad(options) {
-		this.customerId = options.customerId || ''
-		this.orgId = options.orgId || ''
+  onLoad() {
+
   },
 	onShow() {
 		uni.setNavigationBarTitle({
-			title: this.$t('chooseCustomer.titleText')
+			title: this.$t('customerList.titleText')
 		})
 	},
   methods: {
@@ -92,41 +87,16 @@ export default {
     async findDataList() {
       const data = {
 				keyword: this.keyword,
-				state: 1,
-				orgId: this.orgId,
         page: this.pagination.getCurrentPage(),
         size: this.pagination.getCurrentSize()
       }
       const { returnValue: res, totals } = await userCustomerFindList(data)
       if (res) {
-				res.forEach(v=>{
-					if(v.id === this.customerId){
-						v.active = true
-					} else {
-						v.active = false
-					}
-				})
         this.setMoreData(res)
 				this.totals = totals
       }
 			this.loadClose()
-    },
-		// 选择
-		chooseBox(index) {
-			this.dataList.forEach(v=>{
-				v.active = false
-			})
-			this.dataList[index].active = true
-		},
-		// 确定
-		chooseSave() {
-			// 过滤选中的数据返回
-			const data = this.dataList.filter(item=>item.active === true)
-			uni.$emit('chooseCustomer', data[0])
-			uni.navigateBack({
-				delta: 1
-			})
-		}
+    }
   },
 	options:{
 		styleIsolation: 'shared'
@@ -139,7 +109,7 @@ page{
 }
 </style>
 <style lang="scss" scoped>
-.list-part{
-	padding-bottom: 120rpx;
+.customerList{
+	padding: 230rpx 20rpx 0rpx 20rpx;
 }
 </style>
