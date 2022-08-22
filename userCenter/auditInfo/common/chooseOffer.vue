@@ -1,17 +1,17 @@
 <template>
 	<view>
 		<view>
-			<description style="border-bottom:1px solid #eee" label="日期">{{endDateOffer | dayjs('YYYY-MM-DD')}}
+			<description :label="$t('auditInfo.chooseOffer.endDateOffer')">{{endDateOffer | dayjs('YYYY-MM-DD')}}
 			</description>
-			<description label="商品" @click.native="chooseGoods">{{goodsName}}</description>
+			<description :label="$t('auditInfo.chooseOffer.goodsName')" @click.native="chooseGoods">{{goodsName}}</description>
 		</view>
-		<view style="padding:20rpx;border-bottom:1px solid #eee;border-top:1px solid #eee" v-if="infoOfferData.length">
+		<view class="info-data" v-if="infoOfferData.length">
 			<total :info-data="infoOfferData" />
 		</view>
 
 		<uni-table class="us-table">
 			<uni-tr v-if="tableOfferData.length === 0">
-				<uni-td>无数据</uni-td>
+				<uni-td>{{$t('common.tableEmptyText')}}</uni-td>
 			</uni-tr>
 			<uni-tr class="uni-tr">
 				<uni-td class="uni-td" v-for="(item, index) in tableOfferData[0]" :key="index">
@@ -25,17 +25,17 @@
 			</uni-tr>
 			<uni-tr class="uni-tr">
 				<uni-td class="uni-td" v-for="(item, index) in tableOfferData[2]" :key="index">
-					<view>{{ (item===''|| item===null) ? '无报价' : (item==='-' ? '停出' : item) }}</view>
+					<view>{{ (item===''|| item===null) ? $t('auditInfo.chooseOffer.priceStatus')[0] : (item==='-' ? $t('auditInfo.chooseOffer.priceStatus')[1] : item) }}</view>
 				</uni-td>
 			</uni-tr>
 			<uni-tr class="uni-tr">
 				<uni-td class="uni-td" v-for="(item, index) in tableOfferData[3]" :key="index">
-					<view>{{ (item===''|| item===null) ? '无报价' : (item==='-' ? '停出' : item) }}</view>
+					<view>{{ (item===''|| item===null) ? $t('auditInfo.chooseOffer.priceStatus')[0] : (item==='-' ? $t('auditInfo.chooseOffer.priceStatus')[1] : item) }}</view>
 				</uni-td>
 			</uni-tr>
 			<uni-tr class="uni-tr">
 				<uni-td class="uni-td" v-for="(item, index) in tableOfferData[4]" :key="index">
-					<view style="display: flex;align-items: center;">
+					<view class="uni-td-c">
 						<text>{{ index === 0 ? item : (item>=0?item:Math.abs(item)) }}</text>
 						<u-icon v-if="item>0" name="arrow-up" color="red" size="26rpx"></u-icon>
 						<u-icon v-else-if="item<0" name="arrow-down" color="green" size="26rpx"></u-icon>
@@ -131,17 +131,17 @@
 				} = await purSupplierOfferContrastList(requestParameters)
 				if (res) {
 					this.infoOfferData = [{
-							name: '平均报价',
+							name: this.$t('auditInfo.chooseOffer.infoOfferData')[0],
 							value: returnObject.avgTodayPrice || 0,
 							type: 'money'
 						},
 						{
-							name: '最高报价',
+							name: this.$t('auditInfo.chooseOffer.infoOfferData')[1],
 							value: returnObject.ttotalPriceHigh || 0,
 							type: 'money'
 						},
 						{
-							name: '最低报价',
+							name: this.$t('auditInfo.chooseOffer.infoOfferData')[2],
 							value: returnObject.ttotalPriceLow || 0,
 							type: 'money'
 						}
@@ -154,6 +154,9 @@
 </script>
 
 <style lang="scss" scoped>
+	.info-data{
+		padding:20rpx;border-bottom:1px solid #eee;border-top:1px solid #eee
+	}
 	::v-deep .us-table {
 		min-width: 100%;
 
@@ -165,6 +168,9 @@
 			.uni-td:first-child {
 				background: #f2f2f2;
 				font-weight: bold;
+			}
+			.uni-td-c{
+				display: flex;align-items: center;
 			}
 		}
 	}

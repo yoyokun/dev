@@ -346,7 +346,7 @@ export const settingMixin = {
 			this.treeDataGoodsClassify = this.treeToList(res)
 		},
 		// 分类tree转list
-		treeToList(tree,list=[]){
+		treeToList(tree, list = []){
 			tree.forEach((item,index)=>{
 				let obj = {
 					name: item.name,

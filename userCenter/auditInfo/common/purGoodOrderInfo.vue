@@ -345,17 +345,7 @@
 				window.open(url)
 				// #endif
 				// #ifdef MP
-				uni.setClipboardData({
-					data: url,
-					success: () => {
-						this.$nextTick(() => {
-							uni.showToast({
-								title: '链接已复制，请在浏览器打开',
-								duration: 2000
-							});
-						})
-					}
-				});
+				
 				// #endif
 			}
 		}

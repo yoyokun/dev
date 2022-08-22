@@ -2,58 +2,93 @@
 	<view>
 		<view class="tabs">
 			<view class="tabs-content">
-				<u-tabs :scrollable="false" :list="busMenu" :current="current" :itemStyle="{flex:'1',height:'44px'}" @change="changeTabs"></u-tabs>
+				<u-tabs activeStyle="color:rgb(42, 130, 228)" :scrollable="false" :list="busMenu" :current="current"
+					:itemStyle="{flex:'1',height:'44px'}" @change="changeTabs"></u-tabs>
 			</view>
 		</view>
-		
+
 		<view class="basic" v-show="current == 0">
 			<description-list :title="$t('auditInfo.salesOrdersInfo.basicTle')">
 				<description :label="$t('auditInfo.salesOrdersInfo.billNo')">{{ info.billNo }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.orderSource')">{{ info.orderSource | orderSource }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.goodsTotalMoney')">{{ info.goodsTotalMoney }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.payItemsMoney')">{{ info.payItemsMoney }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.couponTotalMoney')">{{ info.couponTotalMoney }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.orderSource')">{{ info.orderSource | orderSource }}
+				</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.goodsTotalMoney')">{{ info.goodsTotalMoney }}
+				</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.payItemsMoney')">{{ info.payItemsMoney }}
+				</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.couponTotalMoney')">{{ info.couponTotalMoney }}
+				</description>
 				<description :label="$t('auditInfo.salesOrdersInfo.totalMoney')">{{ info.totalMoney }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.orderState')">{{ info.orderState | orderState }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.deliveryState')">{{ info.deliveryState }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.payState')">{{ info.payState | payState }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.orderState')">{{ info.orderState | orderState }}
+				</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.deliveryState')">{{ info.deliveryState }}
+				</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.payState')">{{ info.payState | payState }}
+				</description>
 				<description :label="$t('auditInfo.salesOrdersInfo.payType')">{{ info.payType | payType }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.orderTime')">{{ info.orderTime ? UnixToDate(info.orderTime) : '' }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.createTime')">{{ info.createTime | dayjs }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.finishTime')">{{ info.finishTime ? UnixToDate(info.finishTime) : '' }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.operationTime')">{{ info.operationTime ? UnixToDate(info.operationTime) : '' }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.orderTime')">
+					{{ info.orderTime ? UnixToDate(info.orderTime) : '' }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.createTime')">{{ info.createTime | dayjs }}
+				</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.finishTime')">
+					{{ info.finishTime ? UnixToDate(info.finishTime) : '' }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.operationTime')">
+					{{ info.operationTime ? UnixToDate(info.operationTime) : '' }}</description>
 				<description :label="$t('auditInfo.salesOrdersInfo.remarks')">{{ info.remarks }}</description>
 			</description-list>
 			<description-list :title="$t('auditInfo.salesOrdersInfo.customTle')">
 				<description :label="$t('auditInfo.salesOrdersInfo.customerNo')">{{ info.customerNo }}</description>
 				<description :label="$t('auditInfo.salesOrdersInfo.customerName')">{{ info.customerName }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.customerPhone')">{{ info.customerPhone }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.customerAccount')">{{ info.customerAccount }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.customerClassify')">{{ info.customerClassify | customerClassify }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.customerPhone')">{{ info.customerPhone }}
+				</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.customerAccount')">{{ info.customerAccount }}
+				</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.customerClassify')">
+					{{ info.customerClassify | customerClassify }}</description>
 				<description :label="$t('auditInfo.salesOrdersInfo.regionName')">{{ info.regionName }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.customerTypeName')">{{ info.customerTypeName }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.propertyNames')">{{ info.propertyNames }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.customerTypeName')">{{ info.customerTypeName }}
+				</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.propertyNames')">{{ info.propertyNames }}
+				</description>
 			</description-list>
 			<description-list :title="$t('auditInfo.salesOrdersInfo.deliverTle')">
-				<description :label="$t('auditInfo.salesOrdersInfo.pickMode')">{{ salesOrderTransport.pickMode | pickMode }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.bookingTime')">{{ salesOrderTransport.bookingTime | dayjs }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.licenseNo')">{{(salesOrderTransport.pickMode !==1 && salesOrderTransport.pickMode !==4) ? salesOrderTransport.licenseNo : ''}}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.linkman')">{{ salesOrderTransport.linkman }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.phone')">{{ salesOrderTransport.phone }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.salesOrderTransport')">{{salesOrderTransport.salesOrderTransport | addressSplicing}}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.deliverOrgName')">{{salesOrderTransport.pickMode === 4 ? salesOrderTransport.deliverOrgName : ''}}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.deliverMan')">{{(salesOrderTransport.pickMode === 3 || salesOrderTransport.pickMode === 4) ? salesOrderTransport.deliverMan : ''}}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.payItemsName')">{{ salesOrderTransport.payItemsName }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.payItemsMoney')">{{ salesOrderTransport.payItemsMoney }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.pickMode')">
+					{{ salesOrderTransport.pickMode | pickMode }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.bookingTime')">
+					{{ salesOrderTransport.bookingTime | dayjs }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.licenseNo')">
+					{{(salesOrderTransport.pickMode !==1 && salesOrderTransport.pickMode !==4) ? salesOrderTransport.licenseNo : ''}}
+				</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.linkman')">{{ salesOrderTransport.linkman }}
+				</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.phone')">{{ salesOrderTransport.phone }}
+				</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.salesOrderTransport')">
+					{{salesOrderTransport.salesOrderTransport | addressSplicing}}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.deliverOrgName')">
+					{{salesOrderTransport.pickMode === 4 ? salesOrderTransport.deliverOrgName : ''}}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.deliverMan')">
+					{{(salesOrderTransport.pickMode === 3 || salesOrderTransport.pickMode === 4) ? salesOrderTransport.deliverMan : ''}}
+				</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.payItemsName')">
+					{{ salesOrderTransport.payItemsName }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.payItemsMoney')">
+					{{ salesOrderTransport.payItemsMoney }}</description>
 			</description-list>
 			<description-list :title="$t('auditInfo.salesOrdersInfo.orderTle')">
-				<description :label="$t('auditInfo.salesOrdersInfo.couponNo')">{{ info.coupon ? info.coupon.couponNo : '' }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.couponNo')">
+					{{ info.coupon ? info.coupon.couponNo : '' }}</description>
 				<description :label="$t('auditInfo.salesOrdersInfo.couponMoney')">{{ info.couponMoney }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.integralValue')">{{ info.integralValue }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.integralMoney')">{{ info.integralMoney }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.disCountMoney')">{{ info.disCountMoney }}</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.disCountRate')">{{ info.disCountRate }}%</description>
-				<description :label="$t('auditInfo.salesOrdersInfo.couponTotalMoney')">{{ info.couponTotalMoney }}</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.integralValue')">{{ info.integralValue }}
+				</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.integralMoney')">{{ info.integralMoney }}
+				</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.disCountMoney')">{{ info.disCountMoney }}
+				</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.disCountRate')">{{ info.disCountRate }}%
+				</description>
+				<description :label="$t('auditInfo.salesOrdersInfo.couponTotalMoney')">{{ info.couponTotalMoney }}
+				</description>
 				<description :label="$t('auditInfo.salesOrdersInfo.totalMoney')">{{ info.totalMoney }}</description>
 			</description-list>
 		</view>
@@ -66,13 +101,17 @@
 					:table-data="item.salesOrderDetailGoodsList || []"></us-table>
 			</description-list>
 			<description-list v-if="salesOrderPayitemsList.length" :title="$t('auditInfo.salesOrdersInfo.costMoney')">
-				<description v-for="(item,index) in salesOrderPayitemsList" :key="item.id" :label="item.payItemsName">{{ item.payItemsMoney }},{{$t('auditInfo.salesOrdersInfo.totalUnit')}}{{item.payItemsTotalMoney}}</description>
+				<description v-for="(item,index) in salesOrderPayitemsList" :key="item.id" :label="item.payItemsName">
+					{{ item.payItemsMoney }},{{$t('auditInfo.salesOrdersInfo.totalUnit')}}{{item.payItemsTotalMoney}}
+				</description>
+				<view class="p-20">
+					<total :info-data="infoData"></total>
+				</view>
 			</description-list>
 		</view>
 		<view class="basic" v-show="current == 2">
 			<description-list>
-				<us-table :table-column="tableColumnBack"
-					:table-data="salesOrderBackDetailList || []"></us-table>
+				<us-table :table-column="tableColumnBack" :table-data="salesOrderBackDetailList || []"></us-table>
 			</description-list>
 		</view>
 		<view class="basic" v-show="current == 3">
@@ -284,13 +323,16 @@
 			// 合计
 			getSummaries() {
 				let countArr = {}
-				if(!this.salesOrderBackDetailList.length) return
-				this.salesOrderBackDetailList.forEach((val,key)=>{
-					this.tableColumnBack.forEach((item,index)=>{
-						if(index==0){
-							countArr[item.prop] = this.$t('auditInfo.salesOrdersInfo.tableColumnBack.count')
-						}else if(['totalNum','backNum','lendNum','returnNum'].indexOf(item.prop) != -1){
-							countArr[item.prop] = (countArr[item.prop]?countArr[item.prop]:0) + parseInt(val[item.prop])
+				if (!this.salesOrderBackDetailList.length) return
+				this.salesOrderBackDetailList.forEach((val, key) => {
+					this.tableColumnBack.forEach((item, index) => {
+						if (index == 0) {
+							countArr[item.prop] = this.$t(
+								'auditInfo.salesOrdersInfo.tableColumnBack.count')
+						} else if (['totalNum', 'backNum', 'lendNum', 'returnNum'].indexOf(item.prop) != -
+							1) {
+							countArr[item.prop] = (countArr[item.prop] ? countArr[item.prop] : 0) +
+								parseInt(val[item.prop])
 						}
 					})
 				})
@@ -305,5 +347,8 @@
 		color: #999;
 		font-weight: normal;
 		margin-left: 20rpx;
+	}
+	.p-20{
+		padding: 20rpx;
 	}
 </style>

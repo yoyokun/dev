@@ -21,6 +21,7 @@ module.exports = {
 		authTitle: '授权提示',
 		authContent: '该客户已经存在，需要授权使用',
 		authConfirmText: '授权',
+		tableEmptyText: '暂无更多数据',
 		stateObj: {
 			1: '启用',
 			2: '禁用'
@@ -526,7 +527,9 @@ module.exports = {
 	},
 	search:{
 		searchTxt:'搜索',
-		searchMore:'更多'
+		searchMore:'更多',
+		confirmBtn:'确定',
+		resetBtn:'重置',
 	},
 	// 添加档案
 	addCylinderArchives: {

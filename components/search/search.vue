@@ -25,7 +25,7 @@
 							<view class="cell-box">
 								<view class="item" :class="params[item.fieldName]==val.value?'on':''"
 									v-for="(val,key) in item.options" :key="key"
-									@click="selectItem(val.value,item.fieldName)">{{val.label}}</view>
+									@click="selectItem(val.value,item.fieldName)">{{val.name}}</view>
 							</view>
 						</view>
 						<!-- 日期时间选择 -->
@@ -53,8 +53,8 @@
 					</block>
 				</view>
 				<view class="actions">
-					<u-button class="button" type="primary" @click="confirm">确定</u-button>
-					<u-button class="button" type="info" plain @click="reset">重置</u-button>
+					<u-button class="button" type="primary" @click="confirm">{{$t('search.confirmBtn')}}</u-button>
+					<u-button class="button" type="info" plain @click="reset">{{$t('search.resetBtn')}}</u-button>
 				</view>
 			</view>
 		</u-popup>
