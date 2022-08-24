@@ -70,6 +70,7 @@
 								</view>
 							</view>
 							<view class="status">
+								<!-- <u-icon name="checkbox-mark"></u-icon> -->
 								<text>{{$t('auditInfo.statusTxt')[item.status]}}</text>
 							</view>
 						</view>

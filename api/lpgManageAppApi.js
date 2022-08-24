@@ -746,3 +746,87 @@ export function goodsClassifyFindList(data = {}, message = '', custom = {}) {
 		}
 	})
 }
+// 客户钢瓶汇总列表
+export function findCustomerCylinderList(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/userCustomer/findCustomerCylinderList',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 钢瓶盘点记录 根据条件查询列表信息
+export function userCylinderCheckFindList(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/userCylinderCheck/findList',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 审核任务 撤回任务(具体功能列表)
+export function auditTaskRecallTaskByLinkId(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/auditTask/recallTaskByLinkId',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 钢瓶盘点记录 修改状态
+export function userCylinderCheckUpdateState(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/control/userCylinderCheck/updateState',
+    method: 'post',
+    data,
+	message,
+	custom: {
+		auth: custom?.auth || true, // 是否需要token
+		toast: custom?.toast || true, // 弹框
+		catch: custom?.catch || true // catch返回
+	}
+  })
+}
+// 钢瓶盘点记录 删除
+export function userCylinderCheckDeleteByIds(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/control/userCylinderCheck/deleteByIds',
+    method: 'post',
+    data,
+	message,
+	custom: {
+		auth: custom?.auth || true, // 是否需要token
+		toast: custom?.toast || true, // 弹框
+		catch: custom?.catch || true // catch返回
+	}
+  })
+}
+// 钢瓶盘点记录 作废
+export function userCylinderCheckToVoid(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/control/userCylinderCheck/toVoid',
+    method: 'post',
+    data,
+	message,
+	custom: {
+		auth: custom?.auth || true, // 是否需要token
+		toast: custom?.toast || true, // 弹框
+		catch: custom?.catch || true // catch返回
+	}
+  })
+}

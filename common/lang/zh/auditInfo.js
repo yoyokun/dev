@@ -1079,19 +1079,19 @@ module.exports = {
 				label: '状态',
 				placeholder: '请选择状态',
 				options: [{
-						label: '已发行',
+						name: '已发行',
 						value: 1
 					},
 					{
-						label: '已领取',
+						name: '已领取',
 						value: 2
 					},
 					{
-						label: '已使用',
+						name: '已使用',
 						value: 3
 					},
 					{
-						label: '已过期',
+						name: '已过期',
 						value: 4
 					}
 				]

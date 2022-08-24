@@ -2,7 +2,7 @@
 	<view class="search">
 		<view class="search-content">
 			<view class="box">
-				<u-search :showAction="false"  v-model="params.keyword" @search="emitSearch" @clear="emitSearch"></u-search>
+				<u-search :bgColor="bgColor" :showAction="false"  v-model="params.keyword" @search="emitSearch" @clear="emitSearch"></u-search>
 			</view>
 			<u-button class="button" size="mini" type="primary" @click="emitSearch">{{$t('search.searchTxt')}}</u-button>
 			<u-button v-if="searchOptions.length" class="button" size="mini" type="info" plain @click="showMore">{{$t('search.searchMore')}}
@@ -68,6 +68,10 @@
 			searchOptions: {
 				type: Array,
 				default: () => []
+			},
+			bgColor:{
+				type: String,
+				default:'#f2f2f2'
 			}
 		},
 		watch: {

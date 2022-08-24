@@ -427,6 +427,10 @@ module.exports = {
 	chooseSupplier: {
 		titleText: '选择供应商'
 	},
+	// 钢瓶盘点记录
+	cylinderCheckList: {
+		titleText: '钢瓶盘点记录'
+	},
 	// 我的工单
 	userWorkList: {
 		titleText: '我的工单',
@@ -776,6 +780,15 @@ module.exports = {
 	customerList: {
 		titleText: '客户列表',
 		totalNum: '客户总数',
+	},
+	// 钢瓶汇总
+	cylinderList:{
+		titleText: '客户钢瓶汇总',
+		totalTxt: '总数'
+	},
+	// 客户钢瓶详情
+	cylinderInfo:{
+		titleText: '客户钢瓶详情',
 	},
 	// 组织信息
 	orgInfo: {
