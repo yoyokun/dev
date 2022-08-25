@@ -253,24 +253,13 @@ page{
 	position: fixed;
 	z-index: 999;
 	background: rgba(255, 255, 255, 1);
-	padding: 26rpx 24rpx;
-	::v-deep .u-search__action{
-		background: rgba(42, 130, 228, 1);
-		box-shadow: 0rpx 4rpx 8rpx 0rpx rgba(42, 130, 228, 0.2);
-		font-size: 28rpx !important;
-		font-weight: 500 !important;
-		color: rgba(255, 255, 255, 1) !important;
-		padding: 14rpx 20rpx;
-		border-radius: 200rpx;
-		width: 140rpx !important;
-		box-sizing: border-box;
-	}
 	.total{
 		@include flexMixin();
 		margin-top: 20rpx;
 		background: linear-gradient(218.16deg, rgba(104, 169, 242, 1) 0%, rgba(41, 128, 227, 1) 100%);
 		border-radius: 10rpx;
 		padding: 15rpx 20rpx;
+		margin: 0rpx 24rpx 26rpx 24rpx;
 		.num{
 			flex: 1;
 			font-size: 32rpx;
@@ -386,6 +375,10 @@ page{
 				.left{
 					flex: 1;
 					@include flexMixin(column,flex-start,flex-start);
+				}
+				.icon{
+					width: 32rpx;
+					height: 32rpx;
 				}
 			}
 			.content{
