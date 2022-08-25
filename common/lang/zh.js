@@ -10,8 +10,6 @@ module.exports = {
 	// 公共模块
 	common: {
 		noData: '没有更多了',
-		searchPlaceholder: '请输入关键字',
-		searchText: '搜索',
 		deleteTitle: '删除',
 		deleteContent: '确定要删除该数据吗?',
 		voidTitle: '作废提示',
@@ -535,6 +533,7 @@ module.exports = {
 	},
 	search:{
 		searchTxt:'搜索',
+		searchPlaceholder: '请输入关键字',
 		searchMore:'更多',
 		confirmBtn:'确定',
 		resetBtn:'重置',
@@ -786,6 +785,13 @@ module.exports = {
 	customerList: {
 		titleText: '客户列表',
 		totalNum: '客户总数',
+		money: '余额',
+		search: {
+			typeId: '客户类型',
+			regionId: '客户区域',
+			propertyIds: '客户标签',
+			state: '客户状态'
+		}
 	},
 	// 钢瓶汇总
 	cylinderList:{

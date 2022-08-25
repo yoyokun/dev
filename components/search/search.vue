@@ -2,11 +2,17 @@
 	<view class="search">
 		<view class="search-content">
 			<view class="box">
-				<u-search :bgColor="bgColor" :showAction="false"  v-model="params.keyword" @search="emitSearch" @clear="emitSearch"></u-search>
+				<u-search 
+					:height="35" 
+					:bgColor="bgColor" 
+					:placeholder="$t('search.searchPlaceholder')"
+					:showAction="false"  
+					v-model="params.keyword" 
+					@search="emitSearch" 
+					@clear="emitSearch"></u-search>
 			</view>
-			<u-button class="button" size="mini" type="primary" @click="emitSearch">{{$t('search.searchTxt')}}</u-button>
-			<u-button v-if="searchOptions.length" class="button" size="mini" type="info" plain @click="showMore">{{$t('search.searchMore')}}
-			</u-button>
+			<text class="button" @click="emitSearch">{{$t('search.searchTxt')}}</text>
+			<text v-if="searchOptions.length" class="more" @click="showMore">{{$t('search.searchMore')}}</text>
 		</view>
 		<u-popup mode="bottom" round="14" customStyle="overflow:hidden" closeable :show="show" @close="close">
 			<view class="filter">
@@ -161,12 +167,23 @@
 			.box {
 				flex: 1;
 			}
-
 			.button {
-				width: 50rpx !important;
-				height: 50rpx !important;
+				background: rgba(42, 130, 228, 1);
+				box-shadow: 0rpx 4rpx 8rpx 0rpx rgba(42, 130, 228, 0.2);
+				font-size: 28rpx;
+				font-weight: 500;
+				color: rgba(255, 255, 255, 1);
+				padding: 14rpx 20rpx;
+				border-radius: 200rpx;
+				width: 140rpx;
+				box-sizing: border-box;
+				text-align: center;
 				margin-left: 20rpx;
-				padding: 0 !important;
+			}
+			.more{
+				font-size: 32rpx;
+				color: rgba(42, 130, 228, 1);
+				margin-left: 20rpx;
 			}
 		}
 

@@ -1,15 +1,7 @@
 <template>
   <view class="list-part">
 		<view class="search-box">
-			<u-search
-				:height="35"
-				:placeholder="$t('common.searchPlaceholder')"
-				v-model="keyword"
-				:actionText="$t('common.searchText')"
-				@search="getInit"
-				@custom="getInit"
-				@clear="getInit"
-			></u-search>
+			<search @search="search"></search>
 		</view>
 		<view v-if="empty">
 			<view class="customerList">
@@ -50,7 +42,7 @@ import paginationMixin from '@/common/paginationMixin.js'
 export default {
   data() {
     return {
-			keyword: '',
+			params: {},
 			supplierId: '' // 供应商id
     }
   },
@@ -67,13 +59,20 @@ export default {
 		})
 	},
   methods: {
+		// 搜索
+		search(e) {
+			this.params = { ...e }
+			this.getInit()
+		},
     // 获取列表
     async findDataList() {
       const data = {
-				keyword: this.keyword,
-				state: 1,
-        page: this.pagination.getCurrentPage(),
-        size: this.pagination.getCurrentSize()
+				...(this.params||{}),
+				...{
+					state: 1,
+					page: this.pagination.getCurrentPage(),
+					size: this.pagination.getCurrentSize()
+				}
       }
       const { returnValue: res, totals } = await purSupplierFindList(data)
       if (res) {

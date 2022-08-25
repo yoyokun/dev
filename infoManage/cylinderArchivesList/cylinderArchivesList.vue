@@ -1,15 +1,7 @@
 <template>
   <view class="list-part">
 		<view class="search-box">
-			<u-search
-				:height="35"
-				:placeholder="$t('common.searchPlaceholder')" 
-				v-model="keyword" 
-				:actionText="$t('common.searchText')" 
-				@search="getInit"
-				@custom="getInit"
-				@clear="getInit"
-			></u-search>
+			<search @search="search"></search>
 			<view class="total">
 				<view class="num">{{$t('cylinderArchivesList.totalNum')}}：<text>{{totals}}</text></view>
 				<view class="add" v-permission="{ permission:'app_cylinderArchivesList_add'}" @click="goto('/infoManage/addCylinderArchives/addCylinderArchives',{ type: 1 })"><u-icon name="plus" color="#2A82E4" size="16" bold></u-icon>{{$t('common.btn.add')}}</view>
@@ -52,7 +44,7 @@ import paginationMixin from '@/common/paginationMixin.js'
 export default {
   data() {
     return {
-			keyword: '',
+			params: {},
 			totals: 0
     }
   },
@@ -76,12 +68,19 @@ export default {
 		})
 	},
   methods: {
+		// 搜索
+		search(e) {
+			this.params = { ...e }
+			this.getInit()
+		},
     // 获取列表
     async findDataList() {
       const data = {
-				keyword: this.keyword,
-        page: this.pagination.getCurrentPage(),
-        size: this.pagination.getCurrentSize()
+				...(this.params||{}),
+				...{
+					page: this.pagination.getCurrentPage(),
+					size: this.pagination.getCurrentSize()
+				}
       }
       const { returnValue: res, totals } = await cylinderArchivesFindList(data)
       if (res) {
