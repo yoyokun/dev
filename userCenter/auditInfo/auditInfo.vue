@@ -1,9 +1,13 @@
 <template>
 	<view class="auditInfo">
-		<u-steps :current="active" class="step">
-			<u-steps-item v-for="item in auditRecordVos" :title="item.levelName" :key="item.auditTime"
-				:desc="item.auditTime | dayjs"></u-steps-item>
-		</u-steps>
+
+		<view class="step-box">
+			<u-steps :current="active" class="step">
+				<u-steps-item class="step-item" v-for="item in auditRecordVos" :title="item.levelName"
+					:key="item.auditTime" :desc="item.auditTime | dayjs"></u-steps-item>
+			</u-steps>
+		</view>
+
 		<view class="audit-info-content">
 			<!-- 业务单 -->
 			<business-info v-if="info.formKey === 'salesBusiness'" :edit-id="info.linkId" />
@@ -57,12 +61,16 @@
 					<view class="item-time">{{ item.auditTime | dayjs }}</view>
 					<view class="item-content">
 						<view class="item-info">
-							<u-image class="avatar" :src="item.headPhoto[0] ? item.headPhoto[0].url : ''" shape="circle"></u-image>
+							<u-image class="avatar" :src="item.headPhoto[0] ? item.headPhoto[0].url : ''"
+								shape="circle"></u-image>
 							<view class="user-time">
 								<view class="username">{{ item.managerName }}</view>
-								<view class="deal-time">{{ item.status === 3 ? $t('auditInfo.dealTimeTxt')[0] : $t('auditInfo.dealTimeTxt')[1] }}{{ item.auditTime | dayjs }}</view>
+								<view class="deal-time">
+									{{ item.status === 3 ? $t('auditInfo.dealTimeTxt')[0] : $t('auditInfo.dealTimeTxt')[1] }}{{ item.auditTime | dayjs }}
+								</view>
 							</view>
 							<view class="status">
+								<!-- <u-icon name="checkbox-mark"></u-icon> -->
 								<text>{{$t('auditInfo.statusTxt')[item.status]}}</text>
 							</view>
 						</view>
@@ -74,13 +82,49 @@
 				</view>
 			</view>
 		</view>
+		<view class="actions">
+			<view class="actions-box">
+				<u-button class="button" type="primary" @click="openPopup">{{$t('auditInfo.actionBtn')[0]}}</u-button>
+			</view>
+		</view>
+
+		<u-popup :show="showPopup" customStyle="overflow:hidden" closeable :round="10" mode="center"
+			@close="closePopup">
+			<view>
+				<view class="popup-box">
+					<view class="item">
+						<view class="lable">{{$t('auditInfo.auditResultTxt')}}:</view>
+						<view class="ibox">
+							<u-textarea v-model="formData.auditResult" maxlength="300" class="textareas"
+								:placeholder="$t('auditInfo.auditResultPlaceholder')" count></u-textarea>
+						</view>
+					</view>
+					<view class="item">
+						<view class="lable">{{$t('auditInfo.copyIdsTxt')}}:</view>
+						<view class="ibox">
+							<view class="ilst" @click="checkNotice(item.value)" v-for="(item,index) in copyOptions"
+								:key="index" :class="formData.copyIds.indexOf(item.value) > -1 ?'on':''">{{item.label}}
+							</view>
+						</view>
+					</view>
+					<view class="tips">{{$t('auditInfo.tips')}}</view>
+				</view>
+				<view class="popup-action">
+					<view class="btn conf" @click="handleExamine(1)">{{$t('auditInfo.actionBtn')[1]}}</view>
+					<view class="btn danger" @click="handleExamine(2)">{{$t('auditInfo.actionBtn')[2]}}</view>
+				</view>
+			</view>
+
+		</u-popup>
 	</view>
+
 </template>
 
 <script>
 	import {
 		auditTaskFindById,
-		auditLevelGetPushMans
+		auditLevelGetPushMans,
+		auditTaskAuditTask
 	} from '@/api/lpgManageAppApi.js'
 	import BusinessInfo from './common/businessInfo'
 	import AccountPeriodInfo from './common/accountPeriodInfo'
@@ -135,7 +179,13 @@
 				info: {},
 				active: 0,
 				auditRecordVos: [],
-				auditRecordVosReverse: []
+				auditRecordVosReverse: [],
+				showPopup: false,
+				copyOptions: [],
+				formData: {
+					auditResult: '',
+					copyIds: [],
+				},
 			}
 		},
 		onLoad(options) {
@@ -150,6 +200,44 @@
 			});
 		},
 		methods: {
+			// 审批
+			async handleExamine(state) {
+				let data = this.formData
+				data.id = this.editId
+				data.status = state
+				data.copyIds = Array.isArray(data.copyIds) ? data.copyIds.join(',') : data.copyIds
+				const {
+					returnValue: res,
+					message
+				} = await auditTaskAuditTask(data)
+				uni.showToast({
+					title: message,
+					icon: 'none'
+				})
+				this.closePopup()
+
+			},
+			// 选择抄送通知
+			checkNotice(id) {
+				const index = this.formData.copyIds.indexOf(id)
+				if (index > -1) {
+					this.formData.copyIds.splice(index, 1)
+				} else {
+					this.formData.copyIds.push(id)
+				}
+
+			},
+			// 审核弹窗
+			openPopup() {
+				this.showPopup = true
+			},
+			closePopup() {
+				this.formData = {
+					auditResult: '',
+					copyIds: [],
+				}
+				this.showPopup = false
+			},
 			// 详情
 			async getInfo(id) {
 				const {
@@ -191,6 +279,7 @@
 						value: v.id
 					})
 				})
+				this.copyOptions = arr
 			}
 		}
 	}
@@ -198,70 +287,104 @@
 
 <style lang="scss" scoped>
 	.auditInfo {
-		// padding: 0 30rpx;
+
+		overflow-y: scroll;
+		box-sizing: border-box;
 		padding: 30rpx;
 
-		.step {
+		.step-box {
 			margin-bottom: 30rpx;
+			background: white;
+			padding: 24rpx;
+			box-shadow: 0rpx 4rpx 8rpx 0rpx rgba(42, 130, 228, 0.15);
+			border-radius: 20rpx;
 		}
-		description-list{
+
+		.step {
+
+			.step-item {
+				::v-deep .u-text {
+					width: auto !important;
+
+					.u-text__value--content,
+					.u-text__value--main {
+						font-size: 32rpx !important;
+						color: #333 !important;
+					}
+				}
+			}
+		}
+
+		description-list {
 			margin-bottom: 40rpx;
 		}
+
 		.audit-info-content {
 			background: white;
 			border-radius: 16rpx;
 			box-shadow: 0rpx 4rpx 8rpx 0rpx rgba(42, 130, 228, 0.15);
-			// height: 600rpx;
-			// overflow-y: scroll;
+
+			::v-deep .tabs {
+				border-bottom: 1px solid #ddd;
+			}
+
 			::v-deep .basic {
-				// padding: 20rpx 20rpx;
-				.basic-tle{
+				.basic-tle {
 					padding: 0 20rpx;
 					height: 80rpx;
 					line-height: 80rpx;
 					font-weight: bold;
 					border-bottom: 1px solid #eee;
 				}
-				.img{
+
+				.img {
 					width: 100rpx;
 					height: 100rpx;
 					margin-right: 12rpx;
 					margin-top: 12rpx;
+
 				}
-				.down-list{
-					text:first-child{
+
+				.down-list {
+					text:first-child {
 						margin-right: 10rpx;
 					}
-					text:last-child{
+
+					text:last-child {
 						color: #2979ff;
 						cursor: pointer;
 					}
 				}
 			}
 		}
-		.time-line{
+
+		.time-line {
 			margin-top: 30rpx;
 			background: white;
 			padding: 20rpx 30rpx;
 			border-radius: 16rpx;
 			box-shadow: 0rpx 4rpx 8rpx 0rpx rgba(42, 130, 228, 0.15);
 			font-size: 28rpx;
-			.time-line-tle{
+
+			.time-line-tle {
 				font-weight: bold;
 				// padding: 10rpx 0;
 				padding-bottom: 20rpx;
-				
+
 			}
-			.item-list{
-				&:last-child{
+
+			.item-list {
+				&:last-child {
 					border-color: transparent;
 				}
+
 				position: relative;
 				padding-left: 30rpx;
 				padding-bottom: 30rpx;
 				margin-left: 6rpx;
 				border-left: 2px solid #e6e6e6;
-				&::before{
+
+				&::before {
 					content: '';
 					display: block;
 					width: 10px;
@@ -272,44 +395,57 @@
 					top: 0px;
 					position: absolute;
 				}
-				.item-box{
+
+				.item-box {
 					font-size: 26rpx;
-					.item-time{
+
+					.item-time {
 						color: #999;
 					}
-					.item-content{
-						.item-info{
+
+					.item-content {
+						.item-info {
 							display: flex;
 							margin-top: 10rpx;
 							align-items: center;
-							.avatar{
+
+							.avatar {
 								width: 100rpx;
 								height: 100rpx;
 								margin-right: 12rpx;
-								::v-deep .u-image,::v-deep .u-image__image,::v-deep .u-image__error,::v-deep .u-image__loading{
-									width: 100%!important;
-									height: 100%!important;
+
+								::v-deep .u-image,
+								::v-deep .u-image__image,
+								::v-deep .u-image__error,
+								::v-deep .u-image__loading {
+									width: 100% !important;
+									height: 100% !important;
 								}
 							}
-							.user-time{
+
+							.user-time {
 								width: 1px;
 								flex: 1;
-								.username{
+
+								.username {
 									font-weight: bold;
 								}
-								.deal-time{
+
+								.deal-time {
 									margin-top: 20rpx;
 									font-size: 12px;
 									color: #666;
 								}
 							}
-							.status{
+
+							.status {
 								color: #333;
 							}
 						}
 					}
-					.item-deal{
-						view{
+
+					.item-deal {
+						view {
 							margin-top: 10rpx;
 							color: #333;
 						}
@@ -317,6 +453,109 @@
 				}
 			}
 		}
-		
+
+		.actions {
+			height: calc(100rpx + constant(safe-area-inset-bottom));
+			height: calc(100rpx + env(safe-area-inset-bottom));
+
+			.actions-box {
+				position: fixed;
+				height: calc(100rpx + constant(safe-area-inset-bottom));
+				height: calc(100rpx + env(safe-area-inset-bottom));
+				width: 100%;
+				bottom: 0;
+				left: 0;
+				padding: 0 30rpx;
+				box-sizing: border-box;
+				background: white;
+				box-shadow: 0px -1px 10px 0px rgba(0, 0, 0, 0.1);
+				display: flex;
+				align-items: center;
+
+				.button {
+					height: 70rpx !important;
+					width: 540rpx;
+				}
+			}
+		}
+
+		.popup-action {
+			display: flex;
+
+			.btn {
+				flex: 1;
+				height: 84rpx;
+				line-height: 90rpx;
+				text-align: center;
+				font-size: 28rpx;
+				color: #666;
+				border-top: 1px solid #eee;
+				border-right: 1px solid #eee;
+
+				&:last-child {
+					border-right: none;
+				}
+
+				&.conf {
+					color: #2979ff;
+				}
+
+				&:active {
+					background: #eee;
+				}
+
+				&.danger {
+					color: red;
+				}
+			}
+		}
+
+		.popup-box {
+			padding: 30rpx;
+			width: 600rpx;
+
+			.tips {
+				font-size: 26rpx;
+				color: #666;
+			}
+
+			.item {
+				font-size: 28rpx;
+				margin-bottom: 20rpx;
+
+				.textareas {
+					margin-top: 20rpx;
+					font-size: 28rpx;
+				}
+
+				::v-deep .u-textarea__field {
+					font-size: 28rpx;
+				}
+
+				.ibox {
+					display: flex;
+					flex-wrap: wrap;
+				}
+
+				.ilst {
+					padding: 0 20rpx;
+					height: 54rpx;
+					line-height: 54rpx;
+					border: 1px solid #eee;
+					border-radius: 54rpx;
+					margin-right: 20rpx;
+					margin-top: 20rpx;
+					font-size: 26rpx;
+					color: #666;
+
+					&.on {
+						border-color: rgb(42, 130, 228);
+						// color: rgb(42, 130, 228);
+						background: rgb(42, 130, 228);
+						color: white;
+					}
+				}
+			}
+		}
 	}
 </style>

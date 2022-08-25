@@ -2,7 +2,7 @@
 	<view>
 		<view class="tabs">
 			<view class="tabs-content">
-				<u-tabs :scrollable="false" :list="busMenu" :current="current" :itemStyle="{flex:'1',height:'44px'}"
+				<u-tabs activeStyle="color:rgb(42, 130, 228)" :scrollable="false" :list="busMenu" :current="current" :itemStyle="{flex:'1',height:'44px'}"
 					@change="changeTabs"></u-tabs>
 			</view>
 		</view>
@@ -17,7 +17,7 @@
 				<description :label="$t('auditInfo.goodsInfo.sortNo')">{{ info.sortNo }}</description>
 				<description :label="$t('auditInfo.goodsInfo.remarks')">{{ info.remarks }}</description>
 				<description :label="$t('auditInfo.goodsInfo.goodsPath')">
-					<image class="img" v-for="item in info.goodsPath" :key="item.id" :src="item.url">
+					<image class="img" mode="aspectFill" v-for="item in info.goodsPath" :key="item.id" :src="item.url">
 				</description>
 			</description-list>
 			<description-list :title="$t('auditInfo.goodsInfo.markTle')">
@@ -79,11 +79,10 @@
 					<description :label="$t('auditInfo.goodsInfo.toDataProperty')">
 						<view v-for="item in toDataProperty" :key="item.id">
 							<view>
-								<view style="display: flex;align-items: center;"><text>属性：</text>
-									<u-tag size="mini" :text="item.name" plain plainFill></u-tag>
+								<view class="attr-tle"><text>{{$t('auditInfo.goodsInfo.attrTxt')}}：</text><u-tag size="mini" :text="item.name" plain plainFill></u-tag>
 								</view>
-								<view style="display: flex;margin-top: 10rpx;">
-									<u-tag v-for="itemBox in item.children" :key="itemBox.id" size="mini" type="success"
+								<view class="attr-txt">
+									<u-tag class="txt" v-for="itemBox in item.children" :key="itemBox.id" size="mini" type="success"
 										:text="itemBox.name" plain plainFill></u-tag>
 								</view>
 							</view>
@@ -111,7 +110,7 @@
 			</description-list>
 		</view>
 		<view class="basic" v-show="current == 2">
-			<view style="padding: 20rpx;">
+			<view class="rich-text">
 				<rich-text :nodes="info.content"></rich-text>
 			</view>
 		</view>
@@ -195,7 +194,7 @@
 					},
 					{
 						prop: 'state',
-						label: '参数状态',
+						label: this.$t('auditInfo.goodsInfo.tableColumnProperty.state'),
 						slot: 'state'
 					}
 				],
@@ -261,7 +260,21 @@
 	}
 </script>
 <style lang="scss" scoped>
-	.org-box {
-		margin: 10px;
+	.rich-text{
+		padding: 20rpx;
+		word-break: break-all;
+		image,img{
+			width: 100%!important;
+		}
+	}
+	.attr-tle{
+		display: flex;
+		align-items: center;
+	}
+	.attr-txt{
+		display: flex;margin:4rpx 0 10rpx 0;
+		.txt{
+			margin-right: 10rpx;
+		}
 	}
 </style>

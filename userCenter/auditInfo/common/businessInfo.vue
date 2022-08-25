@@ -2,7 +2,7 @@
 	<view>
 		<view class="tabs">
 			<view class="tabs-content">
-				<u-tabs :scrollable="false" :list="busMenu" :current="current" :itemStyle="{flex:'1',height:'44px'}"
+				<u-tabs activeStyle="color:rgb(42, 130, 228)" :scrollable="false" :list="busMenu" :current="current" :itemStyle="{flex:'1',height:'44px'}"
 					@change="changeTabs"></u-tabs>
 			</view>
 		</view>
@@ -147,7 +147,7 @@
 					const payItemsName = []
 					// 收费项
 					res.salesOrderPayitemsList.forEach((v) => {
-						payItemsName.push(`${v.payItemsName}:${v.payItemsMoney},共${v.payItemsTotalMoney} `)
+						payItemsName.push(`${v.payItemsName}:${v.payItemsMoney},${this.$t('auditInfo.businessInfo.totalTxt')}${v.payItemsTotalMoney} `)
 					})
 					res.payItemsName = payItemsName.join(',')
 					this.info = res

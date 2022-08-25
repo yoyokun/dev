@@ -276,6 +276,36 @@
 						"navigationBarTitleText": "客户列表",
 						"enablePullDownRefresh": true
 					}
+				},{
+					"path" : "addCylinderCheck/addCylinderCheck",
+					"style" : {
+						"navigationBarTitleText": "客户钢瓶汇总",
+						"enablePullDownRefresh": true
+					}
+				},{
+					"path" : "cylinderCheckInfo/cylinderCheckInfo",
+					"style" : {
+						"navigationBarTitleText": "盘点详情",
+						"enablePullDownRefresh": true
+					}
+				},{
+					"path" : "cylinderCheckList/cylinderCheckList",
+					"style" : {
+						"navigationBarTitleText": "钢瓶盘点记录",
+						"enablePullDownRefresh": true
+					}
+				},{
+					"path" : "cylinderInfo/cylinderInfo",
+					"style" : {
+						"navigationBarTitleText": "钢瓶详情",
+						"enablePullDownRefresh": true
+					}
+				},{
+					"path" : "cylinderList/cylinderList",
+					"style" : {
+						"navigationBarTitleText": "客户钢瓶",
+						"enablePullDownRefresh": true
+					}
 				}
 			]
 		},

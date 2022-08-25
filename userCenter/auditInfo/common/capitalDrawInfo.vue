@@ -15,7 +15,7 @@
 			<description :label="$t('auditInfo.capitalDrawInfo.billNumber')">{{ info.billNumber }}</description>
 			<description :label="$t('auditInfo.capitalDrawInfo.remarks')">{{ info.remarks }}</description>
 			<description :label="$t('auditInfo.capitalDrawInfo.credentials')">
-				<image class="img" v-for="item in info.credentials" :key="item.id" :src="item.url"></image>
+				<image class="img" mode="aspectFill" v-for="item in info.credentials" :key="item.id" :src="item.url"></image>
 			</description>
 		</description-list>
 	</view>

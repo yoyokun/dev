@@ -2,7 +2,7 @@
 	<view class="search">
 		<view class="search-content">
 			<view class="box">
-				<u-search :showAction="false"  v-model="params.keyword" @search="emitSearch" @clear="emitSearch"></u-search>
+				<u-search :bgColor="bgColor" :showAction="false"  v-model="params.keyword" @search="emitSearch" @clear="emitSearch"></u-search>
 			</view>
 			<u-button class="button" size="mini" type="primary" @click="emitSearch">{{$t('search.searchTxt')}}</u-button>
 			<u-button v-if="searchOptions.length" class="button" size="mini" type="info" plain @click="showMore">{{$t('search.searchMore')}}
@@ -25,7 +25,7 @@
 							<view class="cell-box">
 								<view class="item" :class="params[item.fieldName]==val.value?'on':''"
 									v-for="(val,key) in item.options" :key="key"
-									@click="selectItem(val.value,item.fieldName)">{{val.label}}</view>
+									@click="selectItem(val.value,item.fieldName)">{{val.name}}</view>
 							</view>
 						</view>
 						<!-- 日期时间选择 -->
@@ -53,8 +53,8 @@
 					</block>
 				</view>
 				<view class="actions">
-					<u-button class="button" type="primary" @click="confirm">确定</u-button>
-					<u-button class="button" type="info" plain @click="reset">重置</u-button>
+					<u-button class="button" type="primary" @click="confirm">{{$t('search.confirmBtn')}}</u-button>
+					<u-button class="button" type="info" plain @click="reset">{{$t('search.resetBtn')}}</u-button>
 				</view>
 			</view>
 		</u-popup>
@@ -68,6 +68,10 @@
 			searchOptions: {
 				type: Array,
 				default: () => []
+			},
+			bgColor:{
+				type: String,
+				default:'#f2f2f2'
 			}
 		},
 		watch: {

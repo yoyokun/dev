@@ -17,10 +17,7 @@
 				<!-- #endif -->
 			</us-table>
 		</description-list>
-		</u-popup>
 	</view>
-	
-
 </template>
 <script>
 	let that = null
@@ -31,8 +28,7 @@
 
 	export default {
 		name: 'PolicyConfiguration',
-		components: {
-		},
+		components: {},
 		// 过滤器
 		filters: {
 			customerPriceState(value) {
@@ -120,7 +116,7 @@
 					{
 						prop: 'customerPriceState',
 						label: this.$t('auditInfo.priceCustomerInfo.tableColumnStrategy.customerPriceState'),
-						slot:'customerPriceState'
+						slot: 'customerPriceState'
 					}
 				],
 				tableDataStrategy: []
@@ -143,10 +139,9 @@
 					res.forEach(v => {
 						if (v.priceType !== 'total') {
 							v.linkValue = v.propertyClassifyStr + ':' + v.propertyValue
-							v.strategyValue = v.priceType === 'add' ? '加减' : (v.priceType === 'fixed' ? '固定' :
-								'比列') + ':' + v.price
+							v.strategyValue = v.priceType === 'add' ? this.$t('auditInfo.priceCustomerInfo.strategy.add') : (v.priceType === 'fixed' ? this.$t('auditInfo.priceCustomerInfo.strategy.fixed') : this.$t('auditInfo.priceCustomerInfo.strategy.other')) + ':' + v.price
 						} else {
-							v.strategyValue = '核算价格:'
+							v.strategyValue = this.$t('auditInfo.priceCustomerInfo.strategy.total') + ':'
 						}
 					})
 					if (this.isCache) {
@@ -172,7 +167,7 @@
 	}
 </script>
 <style lang="scss" scoped>
-	.policy-content{
+	.policy-content {
 		width: 690rpx;
 		padding: 30rpx;
 		box-sizing: border-box;

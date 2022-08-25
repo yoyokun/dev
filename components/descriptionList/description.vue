@@ -30,8 +30,8 @@
 <style lang="scss" scoped>
 	.item {
 		border-bottom: 1rpx solid #eee;
-		min-height: 60rpx;
-		line-height: 60rpx;
+		min-height: 70rpx;
+		line-height: 70rpx;
 		padding: 0 20rpx;
 		display: flex;
 		&:last-child{

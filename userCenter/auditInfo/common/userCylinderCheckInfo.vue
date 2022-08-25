@@ -8,9 +8,9 @@
 			<description :label="$t('auditInfo.userCylinderCheckInfo.remarks')">{{ info.remarks }}</description>
 		</description-list>
 		<description-list :title="$t('auditInfo.userCylinderCheckInfo.checkTle')">
-			<uni-table class="us-table" border stripe emptyText="暂无更多数据">
+			<uni-table class="us-table" stripe :emptyText="$t('common.tableEmptyText')">
 				<uni-tr class="uni-tr">
-					<uni-th align="center" style="padding: 0;" class="uni-th" v-for="(item, index) in tableColumn" :key="item.prop">
+					<uni-th align="center" class="uni-th" v-for="(item, index) in tableColumn" :key="item.prop">
 						<block v-if="!item.childrenList.length">
 							<view class="custom-th">{{ item.label }}</view>
 						</block>
@@ -29,22 +29,27 @@
 				<uni-tr class="uni-tr" v-for="(row,rowIndex) in tableData" :key="rowIndex">
 					<block v-for="(item, index) in tableColumn" :key="item.prop">
 						<uni-td class="uni-td" v-if="!item.childrenList.length">
-							<view class="custom-td">{{ item.scopedSlots ? filterMethod(row[item.propValue], item.scopedSlots.tableRender) : row[item.propValue] }}</view>
+							<view class="custom-td">
+								{{ item.scopedSlots ? filterMethod(row[item.propValue], item.scopedSlots.tableRender) : row[item.propValue] }}
+							</view>
 						</uni-td>
 						<block v-else>
 							<td class="uni-td trd" v-if="item.prop==='standardSystemNum'">
 								<view class="custom-trd">
-									<view class="custom-td" v-for="(sysItem, sysIndex) in row.system">{{ sysItem[sysItem.name] }}</view>
+									<view class="custom-td" v-for="(sysItem, sysIndex) in row.system">
+										{{ sysItem[sysItem.name] }}</view>
 								</view>
 							</td>
 							<td class="uni-td trd" v-if="item.prop==='standardCheckNum'">
 								<view class="custom-trd">
-									<view class="custom-td" v-for="(cheItem, cheIndex) in row.check">{{ cheItem[cheItem.name] }}</view>
+									<view class="custom-td" v-for="(cheItem, cheIndex) in row.check">
+										{{ cheItem[cheItem.name] }}</view>
 								</view>
 							</td>
 							<td class="uni-td trd" v-if="item.prop==='standardDiffNum'">
 								<view class="custom-trd">
-									<view class="custom-td" v-for="(difItem, difIndex) in row.diff">{{ difItem[difItem.name] }}</view>
+									<view class="custom-td" v-for="(difItem, difIndex) in row.diff">
+										{{ difItem[difItem.name] }}</view>
 								</view>
 							</td>
 						</block>
@@ -222,47 +227,62 @@
 	}
 </script>
 <style lang="scss" scoped>
-::v-deep .us-table{
+	::v-deep .us-table {
+		.uni-th {
+			padding: 0;
+			white-space: nowrap;
+			color: #000;
+			background: linear-gradient(180deg, rgba(240, 247, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+		}
 		.uni-tr {
-			.custom-trh{
-				display:flex;
-				.custom-th{
-					position:relative;
-					border-top: 1px solid #eee;
-					min-width:80rpx;
-					&::after{
-						position:absolute;
-						width:1px;
-						height:100%;
-						background:#eee;
-						display:block;
-						content:'';
-						top:0;
-						right:0;
+			.custom-trh {
+				display: flex;
+
+				.custom-th {
+					position: relative;
+					// border-top: 1px solid #eee;
+					min-width: 80rpx;
+
+					&::after {
+						position: absolute;
+						width: 1px;
+						height: 100%;
+						background: #eee;
+						display: none;
+						content: '';
+						top: 0;
+						right: 0;
 					}
-					&:last-child{
-						&::after{
-							display:none;
+
+					&:last-child {
+						&::after {
+							display: none;
 						}
 					}
 				}
 			}
-			.custom-th{
+
+			.custom-th {
 				white-space: nowrap;
 				padding: 20rpx;
 			}
-			.uni-td,.uni-th{
+
+			.uni-td,
+			.uni-th {
 				font-size: 26rpx;
 			}
-			.uni-td{
+
+			.uni-td {
 				height: 1px;
 				padding: 0;
-				&.trd{
-					border-right:1px solid #eee;
-					border-bottom:1px solid #eee;
+
+				&.trd {
+					// border-right: 1px solid #eee;
+					// border-bottom: 1px solid #eee;
 				}
 			}
-			.custom-td{
+
+			.custom-td {
 				padding: 30rpx;
 				box-sizing: border-box;
 				text-align: center;
@@ -271,30 +291,35 @@
 				justify-content: center;
 				align-items: center;
 			}
-			.custom-trd{
-				display: flex;height:100%;
-				.custom-td{
-					position:relative;
-					width:50%;
-					color:#606266;
-					&::after{
-						display:block;
-						content:'';
-						width:1px;
-						height:100%;
-						background:#eee;
-						position:absolute;
-						right:0;
-						top:0;
+
+			.custom-trd {
+				display: flex;
+				height: 100%;
+
+				.custom-td {
+					position: relative;
+					width: 50%;
+					color: #606266;
+
+					&::after {
+						display: none;
+						content: '';
+						width: 1px;
+						height: 100%;
+						background: #eee;
+						position: absolute;
+						right: 0;
+						top: 0;
 					}
-					&:last-child{
-						&::after{
-							display:none;
+
+					&:last-child {
+						&::after {
+							display: none;
 						}
 					}
 				}
 			}
-			
+
 		}
 	}
 </style>

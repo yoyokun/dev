@@ -131,8 +131,8 @@
 		async mounted() {},
 		methods: {
 			search(obj){
-				const params ={...obj,...{page:1,size:this.pagination.size}}
-				this.getList(params)
+				this.queryParam = {...obj,...{page:1,size:this.pagination.size}}
+				this.getList()
 			},
 			// 获取Table列表
 			async getList(obj) {

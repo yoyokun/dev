@@ -3,8 +3,8 @@
 		<view class="search-box">
 			<search :search-options="searchOptions" @search="search"></search>
 		</view>
-		<view v-if="dataList.length">
-			<view class="goodsList">
+		<view v-if="empty">
+			<view class="goodsList" v-if="dataList.length">
 				<view class="list" v-for="(item,index) in dataList" :key="index">
 					<view class="tle">{{item.goodsNo}} - {{item.goodsName}}</view>
 					<view class="desc">
@@ -160,7 +160,6 @@
 				orgId: this.orgId
 			})
 			this.searchOptions[0].options = this.treeDataGoodsClassify
-			console.log(this.treeDataGoodsClassify)
 			// 获取品牌
 			await this.getBrandList({
 				orgId: this.orgId
@@ -180,16 +179,15 @@
 		},
 		methods: {
 			search(e) {
-				this.pagination.initPagination()
-				const params = {
+				this.params = {
 					...e
 				}
-				this.findDataList(params)
+				this.getInit()
 			},
 			// 获取列表
-			async findDataList(obj = {}) {
+			async findDataList() {
 				const data = {
-					...obj,
+					...(this.params||{}),
 					...{
 						state: 4,
 						page: this.pagination.getCurrentPage(),
@@ -267,15 +265,6 @@
 			::v-deep .u-search__action {
 				display: none;
 			}
-
-			// .more {
-			// 	height: 40rpx;
-			// 	width: 80rpx;
-			// 	text-align: center;
-			// 	line-height: 40rpx;
-			// 	font-size: 26rpx;
-			// 	color: #2a82e4;
-			// }
 		}
 
 		.goodsList {

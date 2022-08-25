@@ -30,13 +30,16 @@
 <style lang="scss" scoped>
 	.basic-item {
 		font-size: 28rpx;
-		
+		border-bottom: 1px solid #eee;
+		&:last-child{
+			border-bottom: none;
+		}
 		.basic-tle {
 			padding: 0 20rpx;
 			height: 80rpx;
 			line-height: 80rpx;
 			font-weight: bold;
-			border-bottom: 1rpx solid #eee;
+			border-bottom: 1px solid #eee;
 		}
 
 		.basic-box {}

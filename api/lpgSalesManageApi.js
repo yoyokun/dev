@@ -248,3 +248,18 @@ export function purSupplierOfferContrastList(data = {}, message = '', custom = {
 		}
 	})
 }
+
+// 客户钢瓶汇总列表 查询钢瓶商品详情-【某个客户钢瓶情况】
+export function findCylinderListByCustomerId(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/salesOrderCylinder/findCylinderListByCustomerId',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}

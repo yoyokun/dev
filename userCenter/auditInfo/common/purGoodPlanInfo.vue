@@ -21,7 +21,7 @@
 				<!-- #ifdef H5 || APP-PLUS -->
 				<view slot="goodsName" slot-scope="row">
 					<view>{{ row.data.goodsName }}</view>
-					<view style="color:rgb(42, 130, 228)"
+					<view class="link"
 						@click="chooseOffer(row.data.goodsDetailId, row.data.goodsName, row.data.goodsId)">报价</view>
 				</view>
 				<view slot="arrivalTime" slot-scope="row">
@@ -318,4 +318,7 @@
 	}
 </script>
 <style lang="scss" scoped>
+	.link{
+		color:rgb(42, 130, 228)
+	}
 </style>

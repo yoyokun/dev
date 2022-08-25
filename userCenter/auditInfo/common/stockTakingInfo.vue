@@ -119,7 +119,7 @@
 					res.stockCheckLogDetailsList.forEach((v) => {
 						v.differences = this.$bigDecimal.round(this.$bigDecimal.subtract(v.checkStockNum, v
 							.systemStockNum), 2)
-						v.inOutName = v.inOutName + (v.inOutType === 1 ? '入库' : '出库')
+						v.inOutName = v.inOutName + (v.inOutType === 1 ? this.$t('auditInfo.stockTakingInfo.inOutTypeTxt')[0] : this.$t('auditInfo.stockTakingInfo.inOutTypeTxt')[1])
 					})
 					this.stockCheckLogDetailsList = res.stockCheckLogDetailsList
 				}

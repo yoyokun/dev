@@ -2,7 +2,7 @@
 	<view>
 		<view class="tabs">
 			<view class="tabs-content">
-				<u-tabs :scrollable="false" :list="busMenu" :current="current" :itemStyle="{flex:'1',height:'44px'}"
+				<u-tabs activeStyle="color:rgb(42, 130, 228)" :scrollable="false" :list="busMenu" :current="current" :itemStyle="{flex:'1',height:'44px'}"
 					@change="changeTabs"></u-tabs>
 			</view>
 		</view>

@@ -11,7 +11,7 @@
 			<description :label="$t('auditInfo.singleOutputInfo.deliverMan')">{{ info.deliverMan }}</description>
 			<description :label="$t('auditInfo.singleOutputInfo.remarks')">{{ info.remarks }}</description>
 			<description :label="$t('auditInfo.singleOutputInfo.filePath')">
-				<image class="img" v-for="item in info.filePath" :key="item.id" :src="item.url"></image>
+				<image mode="aspectFill" class="img" v-for="item in info.filePath" :key="item.id" :src="item.url"></image>
 			</description>
 		</description-list>
 		<description-list :title="$t('auditInfo.singleOutputInfo.orderTle')">

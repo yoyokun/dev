@@ -14,7 +14,7 @@
 			<description :label="$t('auditInfo.fillingChangeInfo.operationTime')">{{ info.operationTime | dayjs }}</description>
 		</description-list>
 		<description-list :title="$t('auditInfo.fillingChangeInfo.tableTle')">
-			<view style="padding: 20rpx;">
+			<view class="p-20">
 				<total :info-data="infoData"></total>
 			</view>
 			<us-table :table-column="tableColumn" :table-data="tableData"></us-table>
@@ -184,4 +184,8 @@
 		}
 	}
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+	.p-20{
+		padding: 20rpx;
+	}
+</style>

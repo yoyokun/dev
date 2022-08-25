@@ -9,6 +9,11 @@ module.exports = {
 	},
 	auditOptTxt: '审批意见：',
 	copyNoteTxt: '通知抄送：',
+	actionBtn:['审批','审批通过','审批不通过'],
+	tips:'注：审批完成后，将自动通知到所选成员。',
+	auditResultTxt:'审批意见',
+	auditResultPlaceholder:'请输入审批意见',
+	copyIdsTxt:'抄送/通知',
 	// 业务单
 	businessInfo: {
 		tabs: [{
@@ -88,6 +93,7 @@ module.exports = {
 			flowNodeStr: '流转环节',
 			stateStr: '流转状态',
 		},
+		totalTxt:'共',
 	},
 	// 资金期初
 	accountPeriodInfo: {
@@ -377,6 +383,7 @@ module.exports = {
 			inOutName: '盘点处理',
 			remarks: '备注',
 		},
+		inOutTypeTxt:['入库','出库']
 	},
 	// 采购入库
 	PurGoodTankCarHouseInfo: {
@@ -472,6 +479,7 @@ module.exports = {
 		}, {
 			name: '商品描述'
 		}],
+		attrTxt: '属性',
 		basicTle: '基本信息',
 		markTle: '商品标记',
 		moneyTle: '财务信息',
@@ -1071,19 +1079,19 @@ module.exports = {
 				label: '状态',
 				placeholder: '请选择状态',
 				options: [{
-						label: '已发行',
+						name: '已发行',
 						value: 1
 					},
 					{
-						label: '已领取',
+						name: '已领取',
 						value: 2
 					},
 					{
-						label: '已使用',
+						name: '已使用',
 						value: 3
 					},
 					{
-						label: '已过期',
+						name: '已过期',
 						value: 4
 					}
 				]
@@ -1141,6 +1149,13 @@ module.exports = {
 			curListPrice: '策略价',
 			customerPriceState: '状态',
 		},
+		strategy:{
+			add:'加减',
+			fixed:'固定',
+			other:'比例',
+			total:'核算价格'
+		}
+		
 	},
 	// 客户钢瓶盘点
 	userCylinderCheckInfo: {
@@ -1154,5 +1169,12 @@ module.exports = {
 			1: '正常',
 			2: '冻结'
 		},
+	},
+	// 报价信息
+	chooseOffer: {
+		endDateOffer:'日期',
+		goodsName:'商品',
+		priceStatus:['无报价', '停出'],
+		infoOfferData:['平均报价','最高报价','最低报价'],
 	},
 }
