@@ -7,7 +7,7 @@
 		<block v-if="empty">
 			<view class="gp-box" v-if="dataList.length">
 				<view class="gp-top"><text>总数：{{totals}}</text><text class="button"
-						v-permission="{ permission:'app_cylinderCheckList_add'}">＋添加</text></view>
+						v-permission="{ permission:'app_cylinderCheckList_add'}" @click="addData">＋添加</text></view>
 				<view class="gp-main" v-for="(item, index) in dataList" :key="index" @click="toDetail(item)">
 					<view class="head">
 						<text>{{item.billNo}}</text>
@@ -159,6 +159,9 @@
 			})
 		},
 		methods: {
+			addData(){
+				this.$navigateTo('/customerManage/addCylinderCheck/addCylinderCheck')
+			},
 			async confVoid() {
 				const obj = {
 					ids: [],
