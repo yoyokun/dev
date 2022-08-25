@@ -28,27 +28,40 @@
 				</view>
 			</view>
 		</view>
-		<view class="info-main">
-			<view class="head">
-				<view class="gp-no">CS456545</view>
-				<view class="go-shop">徐记上海扒拉</view>
-				<view class="state">启用</view>
-			</view>
-			<view class="main-box">
-				<view class="item">
-					<view>徐老板</view>
-					<view>12345678912</view>
+		<block v-if="customerInfo">
+			<block v-for="(item,index) in customerInfo" :key='index'>
+				<view class="info-main">
+					<view class="head">
+						<view class="gp-no">{{item.customerNo}}</view>
+						<view class="gp-user">{{item.customerName}}</view>
+						<view class="state" v-if="item.state!=2">启用</view>
+						<view class="state red" v-else>禁用</view>
+					</view>
+					<view class="main-box">
+						<view class="item">
+							<view>{{item.linkman}}</view>
+							<view>{{item.linkTel}}</view>
+						</view>
+						<view class="item">{{item.province + item.city + item.area + item.address}}</view>
+						<view class="item">
+							<view>楼层：{{item.floor}}</view>
+							<view>门牌号：{{item.doorplate}}</view>
+						</view>
+					</view>
 				</view>
-				<view class="item">广州市白云区阁屏商务大厦</view>
-				<view class="item">
-					<view>楼层：2</view>
-					<view>门牌号：201</view>
+				<view class="table">
+					<us-table :table-column="tableColumn" :table-data="item.userCylinderCheckDetailList">
+						<view slot="checkStockNum" slot-scope="row">
+							<input class="input-stock" v-number type="number"
+								:value="row.data.checkStockNum?row.data.checkStockNum:''" placeholder="输入盘点数" />
+						</view>
+						<view slot="diffNum" slot-scope="row">
+							<text>{{countDiffNum(row.data)}}</text>
+						</view>
+					</us-table>
 				</view>
-			</view>
-		</view>
-		<view class="table">
-			<us-table :table-column="tableColumn" :table-data="tableData"></us-table>
-		</view>
+			</block>
+		</block>
 
 		<view class="actions">
 			<view class="actions-box">
@@ -62,38 +75,44 @@
 	import {
 		UnixToDate
 	} from '@/utils/util'
+	import {
+		userCylinderCheckFindById
+	} from '@/api/lpgManageAppApi'
 	export default {
 		data() {
 			return {
 				UnixToDate: UnixToDate,
 				formData: {
 					time: null,
-					customerName:null,
+					customerName: null,
 					remarks: null
 				},
+				customerInfo: null,
 				tableColumn: [{
-						prop: 'goodsNo',
+						prop: 'standardName',
 						label: '规格',
 						width: '200rpx',
 						align: 'center'
 					},
 					{
-						prop: 'goodsName',
+						prop: 'systemStockNum',
 						label: '系统数据',
 						width: '150rpx',
 						align: 'center'
 					},
 					{
-						prop: 'brandName',
+						prop: 'checkStockNum',
 						label: '盘点数',
 						width: '150rpx',
-						align: 'center'
+						align: 'center',
+						slot: 'checkStockNum'
 					},
 					{
-						prop: 'goodsClassifyName',
+						prop: 'diffNum',
 						label: '差异数',
 						width: '150rpx',
-						align: 'center'
+						align: 'center',
+						slot: 'diffNum'
 					}
 				],
 				tableData: []
@@ -104,6 +123,7 @@
 				this.customerId = data.id
 				this.formData.customerName = data.customerName
 				console.log(this.formData)
+				this.getInfo(data.id)
 			})
 			this.editId = options.editId || ''
 			if (this.editId) {
@@ -119,12 +139,45 @@
 			}
 		},
 		onShow() {
-			
+
 		},
-		onUnload(){
+		onUnload() {
 			uni.$off('chooseCustomer')
 		},
 		methods: {
+			countDiffNum(data){
+				console.log(data)
+			},
+			async getInfo(id) {
+				const {
+					returnValue: res,
+					titleObject: titleObject
+				} = await userCylinderCheckFindById({
+					customerIds: id
+				})
+				// 获取显示的sku
+				let column = null
+				let skuId = []
+				column = titleObject.tableColumn.reduce((prev, cur) => {
+					return prev.childrenList.length > cur.childrenList.length ? prev : cur
+				})
+				if (column.childrenList.length > 0) {
+					column.childrenList.forEach((item, index) => {
+						skuId.push(item.defaultId)
+					})
+				}
+				// 过滤多余sku
+				res.userCylinderCheckCustomerVoList.forEach((item, index) => {
+					let skuArr = []
+					item.userCylinderCheckDetailList.forEach((val, key) => {
+						if (skuId.indexOf(val.standardId) > -1) {
+							skuArr.push(val)
+						}
+					})
+					item.userCylinderCheckDetailList = skuArr
+				})
+				this.customerInfo = res.userCylinderCheckCustomerVoList
+			},
 			chooseCustomer() {
 				this.goto('/infoManage/chooseCustomer/chooseCustomer', {
 					customerId: this.customerId,
@@ -193,6 +246,10 @@
 				.state {
 					font-weight: normal;
 					color: rgba(42, 130, 228, 1);
+
+					.red {
+						color: red;
+					}
 				}
 			}
 
@@ -219,6 +276,11 @@
 			background: white;
 			box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.04);
 			overflow: hidden;
+
+			.input-stock {
+				font-size: 26rpx;
+				color: #999;
+			}
 		}
 
 		.actions {
