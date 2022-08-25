@@ -329,7 +329,7 @@ export default {
 					]
 				},
 				{
-					type: 'text',
+					type: 'textarea',
 					labelText: this.$t('addCustomer.form1.address'),
 					fieldName: 'address',
 					placeholder: this.$t('addCustomer.form1.addressPlace'),

@@ -101,8 +101,8 @@
 						@change="handleFiltrate(item.fieldName)"
 					/>
 				</view>
-				<!--日期时间选择 太多坑，放弃使用-->
-		<!-- 		<view :class="['formCell',item.inputAlign]" v-if="item.type === 'date' || item.type === 'datetime'">
+				<!--日期时间选择 太多坑-->
+				<view :class="['formCell',item.inputAlign]" v-if="item.type === 'time' || item.type === 'year-month'">
 					<u-cell
 						v-if="formData[item.fieldName]" 
 						:value="formData[item.fieldName]" 
@@ -127,14 +127,15 @@
 						@cancel="item.showOptions = false"
 						@confirm="datetimePicker($event,item.fieldName, index)"	
 					></u-datetime-picker>
-				</view> -->
-				<!-- 日期时间选择 -->
+				</view>
+				<!-- 日期时间选择日历模式 -->
 				<view :class="['datePicker',item.inputAlign]" v-if="item.type === 'date' || item.type === 'datetime' || item.type === 'range' || item.type === 'datetimerange'">
 					<uni-datetime-picker
 						:type="item.type"
 						v-model="formData[item.fieldName]" 
 						:disabled="item.disabled"
 						:placeholder="item.placeholder"
+						:border="false"
 						@change="datetimePickerChange($event,item.fieldName)"	
 					></uni-datetime-picker>
 					<u-icon name="arrow-right" color="#666666" size="15"></u-icon>
@@ -524,10 +525,10 @@ export default {
 		// 日期
 		async datetimePicker(e,name,index) {
 			const timeFormat = uni.$u.timeFormat;
-			if(e.mode === 'date'){
-				this.formData[name] = await timeFormat(e.value, 'yyyy-mm-dd');
-			} else if(e.mode === 'datetime'){
-				this.formData[name] = await timeFormat(e.value, 'yyyy-mm-dd hh:mm');
+			if(e.mode === 'year-month'){
+				this.formData[name] = await timeFormat(e.value, 'yyyy-mm');
+			} else if(e.mode === 'time'){
+				this.formData[name] = e.value
 			}
 			this.renderDataSource[index].showOptions = false
 			// 对部分字段校验

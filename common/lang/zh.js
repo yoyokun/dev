@@ -11,7 +11,7 @@ module.exports = {
 	common: {
 		noData: '没有更多了',
 		searchPlaceholder: '请输入关键字',
-		searchText: '确定',
+		searchText: '搜索',
 		deleteTitle: '删除',
 		deleteContent: '确定要删除该数据吗?',
 		voidTitle: '作废提示',
@@ -42,8 +42,12 @@ module.exports = {
 			confirm: '确定',
 			accept: '接受',
 			refuse: '拒绝',
-			jump: '处理'
-		}
+			enable: '启用',
+			disable: '禁用'
+		},
+		statusTitle: '提示',
+		statusContent: '真的要',
+		statusContent1: '吗?',
 	},
 	// 登录页面
 	login: {
@@ -538,6 +542,7 @@ module.exports = {
 	// 添加档案
 	addCylinderArchives: {
 		titleText: '添加档案',
+		titleText1: '钢瓶绑码',
 		titleTextEdit: '编辑档案',
 		titleTextInfo: '档案详情',
 		codeErr: '二维码图片错误，请重新上传',
@@ -552,6 +557,7 @@ module.exports = {
 			billNoPlace: '请输入自有编号',
 			cylinderNo: '瓶身编号',
 			cylinderNoPlace: '请输入瓶身编号',
+			cylinderNoBtn: '校验',
 			codeKey: '钢瓶二维码',
 			codeKeyplace: '请输入钢瓶二维码',
 			codeKeyMessage: '钢瓶二维码格式有误,只能输入数字或字母',
@@ -793,7 +799,7 @@ module.exports = {
 	// 组织信息
 	orgInfo: {
 		titleText: '组织信息',
-		titleTextEdit: '编辑客户',
+		titleTextEdit: '编辑信息',
 		formTitle: '基本信息',
 		form: {
 			supId: '上级组织',
@@ -845,7 +851,7 @@ module.exports = {
 				}
 			]
 		},
-		formTitle: '组织资料',
+		form1Title: '组织资料',
 		form1: {
 			legalPerson: '公司法人',
 			legalPersonPlace: '请输入公司法人',
@@ -861,7 +867,7 @@ module.exports = {
 			orgEinPlace: '请输入企业税号',
 			businessLicense: '营业执照'
 		},
-		formTitle: '组织能力',
+		form2Title: '组织能力',
 		form2: {
 			orgModel: '经营模式',
 			orgModelPlace: '请选择经营模式',
@@ -908,12 +914,14 @@ module.exports = {
 				}
 			]
 		},
-		formTitle: '商城信息',
+		form3Title: '商城信息',
 		form3: {
 			openMall: '网上商城',
 			openMallPlace: '请选择网上商城',
-			openTimeRange: '营业时间',
-			openTimeRangePlace: '请选择营业时间',
+			openStartTime: '开始营业时间',
+			openStartTimePlace: '请选择开始营业时间',
+			openEndTime: '结束营业时间',
+			openEndTimePlace: '请选择结束营业时间',
 			storeBackground: '店铺背景图',
 			openMallOptions: [
 				{
@@ -926,5 +934,9 @@ module.exports = {
 				}
 			]
 		}
+	},
+	// 绑码记录
+	cylinderBindCode: {
+		titleText: '绑码记录',
 	}
 }

@@ -9,6 +9,7 @@
 			@change="changeForm"
 			@chooseCustomer="chooseCustomer"
 			@chooseCodeKey="chooseCodeKey"
+			verifyCode="verifyCode"
 			>
 			<template v-slot:extra>
 				<view class="btn" v-if="isSave">
@@ -57,7 +58,19 @@ export default {
     return {
 			isSave: true,
 			editId: '',
+			type: '',
 			formDataSource: [
+				{
+					type: 'chooseText',
+					labelText: this.$t('addCylinderArchives.form.cylinderNo'),
+					fieldName: 'cylinderNo',
+					placeholder: this.$t('addCylinderArchives.form.cylinderNoPlace'),
+					maxlength: 50,
+					btnType: 'btn',
+					btnText: this.$t('addCylinderArchives.form.cylinderNoBtn'),
+					func: 'verifyCode',
+					disabled: false
+				},
 				{
 					type: 'picker',
 					labelText: this.$t('addCylinderArchives.form.orgId'),
@@ -115,14 +128,6 @@ export default {
 					labelText: this.$t('addCylinderArchives.form.billNo'),
 					fieldName: 'billNo',
 					placeholder: this.$t('addCylinderArchives.form.billNoPlace'),
-					maxlength: 50,
-					disabled: false
-				},
-				{
-					type: 'text',
-					labelText: this.$t('addCylinderArchives.form.cylinderNo'),
-					fieldName: 'cylinderNo',
-					placeholder: this.$t('addCylinderArchives.form.cylinderNoPlace'),
 					maxlength: 50,
 					disabled: false
 				},
@@ -356,6 +361,7 @@ export default {
 		}
   },
   async onLoad(options) {
+		this.type = options.type || ''
 		this.editId = options.editId || ''
 		if (this.editId) {
 			this.isSave = false
@@ -364,9 +370,16 @@ export default {
 			});
 		} else {
 			this.isSave = true
-			uni.setNavigationBarTitle({
-				title: this.$t('addCylinderArchives.titleText')
-			});
+			if (this.type === "1") {
+				uni.setNavigationBarTitle({
+					title: this.$t('addCylinderArchives.titleText')
+				});
+			} else {
+				uni.setNavigationBarTitle({
+					title: this.$t('addCylinderArchives.titleText1')
+				});
+			}
+			
 		}
 		await this.init()
 		if (this.editId) {
@@ -408,7 +421,7 @@ export default {
 		async init() {
 			// 获取组织
 			await this.getOrgList()
-			this.formDataSource[0].options = this.orgList
+			this.formDataSource[1].options = this.orgList
 			// 钢瓶型号
 			await this.getSysSpecificationFindList()
 			this.formDataSource[6].options = this.sysSpecification
@@ -607,6 +620,13 @@ export default {
 					}
 				})
 			}
+		},
+		// 校验瓶身编号
+		verifyCode(obj) {
+			const queryParams = obj.queryParams
+			if(queryParams.cylinderNo){
+				
+			}
 		}
   },
 	options:{
@@ -618,6 +638,9 @@ export default {
 <style lang="scss" scoped>
 ::v-deep .u-form-item .u-line{
 	border-bottom: 1rpx solid rgba(229, 229, 229, 1) !important;
+}
+::v-deep .chooseBtn button {
+	width: 150rpx !important;
 }
 ::v-deep .normalForm{
 	margin: 20rpx 20rpx;
