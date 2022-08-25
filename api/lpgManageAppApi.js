@@ -436,6 +436,20 @@ export function sysOrgSaveOrEdit(data = {}, message = '', custom = {}) {
 		}
   })
 }
+// 组织 修改状态
+export function sysOrgUpdateState(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/control/sysOrg/updateState',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
 // 工单管理 根据条件查询列表信息
 export function auditWorkFindList(data = {}, message = '', custom = {}) {
   return request({

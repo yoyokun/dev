@@ -11,8 +11,8 @@
 				@clear="getInit"
 			></u-search>
 			<view class="total">
-				<view class="num">{{$t('managerList.totalNum')}}：<text class="blue">{{totals}}</text></view>
-				<view class="add" v-permission="{ permission:'app_managerList_add'}" @click="goto('/infoManage/addManager/addManager')"><u-icon name="plus-circle" color="#2A82E4" size="20"></u-icon>{{$t('common.btn.add')}}</view>
+				<view class="num">{{$t('managerList.totalNum')}}：<text>{{totals}}</text></view>
+				<view class="add" v-permission="{ permission:'app_managerList_add'}" @click="goto('/infoManage/addManager/addManager')"><u-icon name="plus" color="#2A82E4" size="16" bold></u-icon>{{$t('common.btn.add')}}</view>
 			</view>
 		</view>
 		<view v-if="empty">
@@ -105,7 +105,7 @@ page{
 </style>
 <style lang="scss" scoped>
 .managerList{
-	padding: 230rpx 20rpx 0rpx 20rpx;
+	padding: 250rpx 20rpx 0rpx 20rpx;
 	.box{
 		background: rgba(255, 255, 255, 1);
 		box-shadow: 0rpx 4rpx 8rpx 0rpx rgba(0, 0, 0, 0.04);

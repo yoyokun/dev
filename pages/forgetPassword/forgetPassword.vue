@@ -78,7 +78,7 @@ export default {
 				{
 					type: 'text',
 					labelText: this.$t('forgetPassword.form.newPwd'),
-					fieldName: 'newPwd',
+					fieldName: 'password',
 					placeholder: this.$t('forgetPassword.form.newPwdPlace'),
 					maxlength: 12,
 					rules: [
@@ -116,7 +116,7 @@ export default {
 						},
 						{
 							validator: (rule, value, callback) => {
-								return value === this.formDataValue.newPwd
+								return value === this.formDataValue.password
 							},
 							message: this.$t('forgetPassword.form.newPwdError'),
 							trigger: ['change','blur']

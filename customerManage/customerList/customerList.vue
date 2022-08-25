@@ -11,8 +11,8 @@
 				@clear="getInit"
 			></u-search>
 			<view class="total">
-				<view class="num">{{$t('customerList.totalNum')}}：<text class="blue">{{totals}}</text></view>
-				<view class="add" v-permission="{ permission:'app_customerList_add'}" @click="goto('/customerManage/addCustomer/addCustomer')"><u-icon name="plus-circle" color="#2A82E4" size="20"></u-icon>{{$t('common.btn.add')}}</view>
+				<view class="num">{{$t('customerList.totalNum')}}：<text>{{totals}}</text></view>
+				<view class="add" v-permission="{ permission:'app_customerList_add'}" @click="goto('/customerManage/addCustomer/addCustomer')"><u-icon name="plus" color="#2A82E4" size="16" bold></u-icon>{{$t('common.btn.add')}}</view>
 			</view>
 		</view>
 		<view v-if="empty">
@@ -110,6 +110,6 @@ page{
 </style>
 <style lang="scss" scoped>
 .customerList{
-	padding: 230rpx 20rpx 0rpx 20rpx;
+	padding: 250rpx 20rpx 0rpx 20rpx;
 }
 </style>

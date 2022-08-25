@@ -76,25 +76,23 @@
 		</view>
 		<view class="btn" v-else>
 			<!-- 编辑 -->
-			<u-button 
-				v-permission="{ permission:'app_cylinderArchivesList_edit'}" 
+			<u-button
+				v-permission="{ permission:'app_orgInfo_edit'}" 
 				:text="$t('common.btn.edit')" 
 				type="primary" 
 				hairline 
 				shape="circle" 
-				plain 
 				@click="handleEdit">
 			</u-button>
-			<!-- 删除 -->
+			<!-- 启用 禁用 -->
 			<u-button 
-				v-if="formDataValue.state===3" 
-				v-permission="{ permission:'app_cylinderArchivesList_delete'}" 
-				:text="$t('common.btn.delete')" 
-				type="error" 
+				v-permission="{ permission:'app_orgInfo_status'}" 
+				:text="info.state===1 ? $t('common.btn.disable') : $t('common.btn.enable')" 
+				type="warning" 
 				hairline 
 				shape="circle" 
 				plain 
-				@click="handleDelete">
+				@click="handleUpdate">
 			</u-button>
 		</view>
 		<!-- 请求 toast 提示 -->
@@ -103,7 +101,7 @@
 </template>
 
 <script>
-import { sysOrgSaveOrEdit, sysOrgFindById } from '@/api/lpgManageAppApi.js'
+import { sysOrgSaveOrEdit, sysOrgFindById, sysOrgUpdateState } from '@/api/lpgManageAppApi.js'
 import { UnixToDate, getDayAddYears, DateToUnix, formatDate } from '@/utils/util.js'
 import { settingMixin } from '@/common/settingMixin.js'
 import { regionData } from 'element-china-area-data'
@@ -169,6 +167,7 @@ export default {
 					options: this.$t('orgInfo.form.orgTypeOptions'),
 					rules: [
 						{
+							type: 'number',
 							required: true,
 							message: this.$t('orgInfo.form.orgTypePlace'),
 							trigger: ['change','blur']
@@ -234,7 +233,7 @@ export default {
 					]
 				},
 				{
-					type: 'text',
+					type: 'textarea',
 					labelText: this.$t('orgInfo.form.address'),
 					fieldName: 'address',
 					placeholder: this.$t('orgInfo.form.addressPlace'),
@@ -261,6 +260,7 @@ export default {
 					options: this.$t('orgInfo.form.stateOptions'),
 					rules: [
 						{
+							type: 'number',
 							required: true,
 							message: this.$t('orgInfo.form.statePlace'),
 							trigger: ['change','blur']
@@ -353,7 +353,7 @@ export default {
 				}
 			],
 			formDataValue1: {},
-			isShow2: false,
+			isShow2: true,
 			formDataSource2: [
 				{
 					type: 'actionSheet',
@@ -367,6 +367,7 @@ export default {
 					options: this.$t('orgInfo.form2.orgModelOptions'),
 					rules: [
 						{
+							type: 'number',
 							required: true,
 							message: this.$t('orgInfo.form2.orgModelPlace'),
 							trigger: ['change','blur']
@@ -385,6 +386,7 @@ export default {
 					options: this.$t('orgInfo.form2.syncTypeOptions'),
 					rules: [
 						{
+							type: 'number',
 							required: true,
 							message: this.$t('orgInfo.form2.syncTypePlace'),
 							trigger: ['change','blur']
@@ -397,21 +399,14 @@ export default {
 					fieldName: 'priceState',
 					placeholder: this.$t('orgInfo.form2.priceStatePlace'),
 					showOptions: false,
-					required: true,
 					disabled: false,
 					defaultValue: '',
 					options: this.$t('orgInfo.form2.priceStateOptions'),
-					rules: [
-						{
-							required: true,
-							message: this.$t('orgInfo.form2.priceStatePlace'),
-							trigger: ['change','blur']
-						}
-					]
+					borderBottom: false
 				},
 			],
 			formDataValue2: {},
-			isShow3: false,
+			isShow3: true,
 			formDataSource3: [
 				{
 					type: 'actionSheet',
@@ -425,6 +420,7 @@ export default {
 					options: this.$t('orgInfo.form3.openMallOptions'),
 					rules: [
 						{
+							type: 'number',
 							required: true,
 							message: this.$t('orgInfo.form3.openMallPlace'),
 							trigger: ['change','blur']
@@ -432,11 +428,34 @@ export default {
 					]
 				},
 				{
-					type: 'datetimerange',
-					labelText: this.$t('orgInfo.form3.openTimeRange'),
-					fieldName: 'openTimeRange',
+					type: 'time',
+					labelText: this.$t('orgInfo.form3.openStartTime'),
+					fieldName: 'openStartTime',
 					disabled: false,
-					placeholder: this.$t('orgInfo.form3.openTimeRangePlace')
+					required: true,
+					placeholder: this.$t('orgInfo.form3.openStartTimePlace'),
+					rules: [
+						{
+							required: true,
+							message: this.$t('orgInfo.form3.openStartTimePlace'),
+							trigger: ['change','blur']
+						}
+					]
+				},
+				{
+					type: 'time',
+					labelText: this.$t('orgInfo.form3.openEndTime'),
+					fieldName: 'openEndTime',
+					disabled: false,
+					required: true,
+					placeholder: this.$t('orgInfo.form3.openEndTimePlace'),
+					rules: [
+						{
+							required: true,
+							message: this.$t('orgInfo.form3.openStartTimePlace'),
+							trigger: ['change','blur']
+						}
+					]
 				},
 				{
 					type: 'upload',
@@ -478,7 +497,8 @@ export default {
   methods: {
 		// 初始化
 		async init() {
-			
+			await this.getOrgList()
+			this.formDataSource[0].options = this.orgList
 		},
     // 详情
     async getInfo() {
@@ -491,8 +511,9 @@ export default {
 				res.orgLogo = this.$options.filters.pictureConversion(res.orgLogo)
 				if (res.orgModel === 1) {
 					// 直营
-					this.formDataSource2[1].options = this.$t('orgInfo.form2.syncTypeOptions').splice(0,2)
-					res.syncType = 3
+					const [...arr] = this.$t('orgInfo.form2.syncTypeOptions')
+					arr.splice(0,2)
+					this.formDataSource2[1].options = arr
 				} else if (res.orgModel === 2 || res.orgModel === 3) {
 					// 加盟
 					this.formDataSource2[1].options = this.$t('orgInfo.form2.syncTypeOptions')
@@ -508,15 +529,11 @@ export default {
 		async changeForm(obj) {
 			const queryParams = obj.queryParams
 			const name = obj.name // 改变的字段
-			if (name === 'phone' && queryParams.phone) {
-				const linkTel = this.formDataValue1.linkTel ? this.formDataValue1.linkTel : queryParams.phone
-				this.formDataValue1 = {
-					linkTel: linkTel
-				}
-			} else if (name === 'customerName' && queryParams.customerName) {
-				const linkman = this.formDataValue1.linkman ? this.formDataValue1.linkman : queryParams.customerName
-				this.formDataValue1 = {
-					linkman: linkman
+			// 经纬度查询
+			if (name === 'provinces' || name === 'address') {
+				// 省市区和地址发生变化
+				if (queryParams.province && queryParams.city && queryParams.area && queryParams.address) {
+					this.geocoder(queryParams.districtName)
 				}
 			}
 		},
@@ -524,36 +541,22 @@ export default {
 		async changeForm1(obj) {
 			const queryParams = obj.queryParams
 			const name = obj.name // 改变的字段
-			// 经纬度查询
-			if (name === 'provinces' || name === 'address') {
-				// 省市区和地址发生变化
-				if (queryParams.province && queryParams.city && queryParams.area && queryParams.address) {
-					this.geocoder(queryParams.districtName)
-				}
-			}else if (name === 'defDelivery' && queryParams.defDelivery) {
-				// 配送点变化，查配送员
-				await this.getManagerDeliveryman({ orgId: queryParams.defDelivery })
-				this.formDataSource1[7].options = this.managerDeliveryman
-				// 重置配送员
-				queryParams.defDeliveryman = ''
-				this.formDataValue1 = queryParams
-			}
 		},
 		// 表单改变
 		async changeForm2(obj) {
 			const queryParams = obj.queryParams
 			const name = obj.name // 改变的字段
-			if (name === 'orgId' && queryParams.orgId) {
-				// 归属组织变化，查归属成员
-				await this.getManagerFindList({ orgId: queryParams.orgId })
-				this.formDataSource2[1].options = this.managerList
-				if (queryParams.orgId === this.userInfo.orgId) {
-					// 默认归属成员
-					queryParams.managerId = this.userInfo.id
-				} else {
-					// 重置归属成员
-					queryParams.managerId = ''
-				}
+			if (name === 'orgModel' && queryParams.orgModel === 1) {
+				const [...arr] = this.$t('orgInfo.form2.syncTypeOptions')
+				arr.splice(0,2)
+				// 直营
+				this.formDataSource2[1].options = arr
+				queryParams.syncType = 3
+				this.formDataValue2 = queryParams
+			} else if (name === 'orgModel' && (queryParams.orgModel === 2 || queryParams.orgModel === 3)) {
+				// 加盟
+				this.formDataSource2[1].options = this.$t('orgInfo.form2.syncTypeOptions')
+				queryParams.syncType = 1
 				this.formDataValue2 = queryParams
 			}
 		},
@@ -581,51 +584,13 @@ export default {
 				this.$refs.dialogForm1.handleSubmit(async(res1) => {
 					this.$refs.dialogForm2.handleSubmit(async(res2) => {
 						this.$refs.dialogForm3.handleSubmit(async(res3) => {
-							// 地址信息
-							data.addressData = {
-								province: res1.province,
-								city: res1.city,
-								area: res1.area,
-								address: res1.address,
-								doorplate: res1.doorplate,
-								floor: res1.floor,
-								longitude: this.longitude,
-								latitude: this.latitude,
-								defDelivery: res1.defDelivery,
-								defDeliveryman: res1.defDeliveryman,
-								cardNumber: res1.cardNumber
-							}
-							// 联系人
-							data.contactData = {
-								linkman: res1.linkman,
-								linkTel: res1.linkTel
-							}
-							// 附加信息
-							data.orgData = {
-								orgId: res2.orgId,
-								managerId: res2.managerId,
-								sourceId: res2.sourceId,
-								archives: this.$options.filters.isArrayToString(res2.archives)
-							}
-							// 结算信息
-							data.settlementData = {
-								money: res3.money,
-								creditLines: res3.creditLines,
-								typeId: res3.typeId,
-								regionId: res3.regionId,
-								propertyIds: Array.isArray(res3.propertyIds) ? res3.propertyIds.join(',') : '',
-								salePropertyIds: Array.isArray(res3.salePropertyIds) ? res3.salePropertyIds.join(',') : '',
-								balanceTypeId: res3.balanceTypeId,
-								collectionTypeId: res3.collectionTypeId,
-								pickMode: res3.pickMode,
-								orderType: Array.isArray(res3.orderType) ? res3.orderType.join(',') : '',
-								licenseNum: res3.licenseNum ? res3.licenseNum.replace(/，/, ',') : ''
-							}
-							data.addressData = JSON.stringify(data.addressData)
-							data.contactData = JSON.stringify(data.contactData)
-							data.orgData = JSON.stringify(data.orgData)
-							data.settlementData = JSON.stringify(data.settlementData)
-							const { returnValue: res, message } = await sysOrgSaveOrEdit(data)
+							const obj = Object.assign({},data,res1,res2,res3)
+							obj.id = this.userInfo.orgId
+							obj.businessLicense = this.$options.filters.isArrayToString(obj.businessLicense)
+							obj.storeBackground = this.$options.filters.isArrayToString(obj.storeBackground)
+							obj.orgLogo = this.$options.filters.isArrayToString(obj.orgLogo)
+							obj.orgLevel = this.info ? this.info.orgLevel : ''
+							const { returnValue: res, message } = await sysOrgSaveOrEdit(obj)
 							if (res) {
 								this.$refs.uToast.show({
 									type: 'success',
@@ -641,7 +606,50 @@ export default {
 					})
 				})
 			})
-    }
+    },
+		// 编辑
+		handleEdit() {
+			this.isSave = true
+			uni.setNavigationBarTitle({
+				title: this.$t('orgInfo.titleTextEdit')
+			});
+			this.formDataSource.forEach(v=>{
+				v.disabled = false
+			})
+			this.formDataSource1.forEach(v=>{
+				v.disabled = false
+			})
+			this.formDataSource2.forEach(v=>{
+				v.disabled = false
+			})
+			this.formDataSource3.forEach(v=>{
+				v.disabled = false
+			})
+		},
+		// 启用禁用
+		handleUpdate() {
+			const text = this.info.state === 1 ? this.$t('common.btn.disable') : this.$t('common.btn.enable')
+			uni.showModal({
+				title: `${text}${this.$t('common.statusTitle')}`,
+				content: `${this.$t('common.statusContent')}${text}${this.info.name}${this.$t('common.statusContent1')}`,
+				success: async(param) => {
+					if (param.confirm) {
+						const { returnValue: res, message } = await sysOrgUpdateState({ ids: [this.userInfo.orgId], state: this.info.state === 2 ? 1 : 2 })
+						if(res){
+							this.$refs.uToast.show({
+								type: 'success',
+								message: message,
+							})
+							setTimeout(() => {
+							  uni.navigateBack({
+							    delta: 1
+							  })
+							}, 2000)
+						}
+					}
+				}
+			})
+		}
   },
 	options:{
 		styleIsolation: 'shared'
@@ -688,16 +696,12 @@ export default {
 		margin: 0rpx;
 	}
 }
-
-
-
-
 .btn{
 	width: 632rpx;
-	margin: 60rpx auto;
-	@include flexMixin();
+	margin: 40rpx auto;
+	@include flexMixin(column);
 	.u-button{
-		margin: 0rpx 10rpx;
+		margin: 20rpx 10rpx;
 	}
 }
 </style>
