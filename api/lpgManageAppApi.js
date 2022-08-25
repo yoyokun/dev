@@ -808,12 +808,12 @@ export function userCylinderCheckUpdateState(data = {}, message = '', custom = {
     url: baseURL + '/admin/info/control/userCylinderCheck/updateState',
     method: 'post',
     data,
-	message,
-	custom: {
-		auth: custom?.auth || true, // 是否需要token
-		toast: custom?.toast || true, // 弹框
-		catch: custom?.catch || true // catch返回
-	}
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
   })
 }
 // 钢瓶盘点记录 删除
@@ -822,12 +822,12 @@ export function userCylinderCheckDeleteByIds(data = {}, message = '', custom = {
     url: baseURL + '/admin/info/control/userCylinderCheck/deleteByIds',
     method: 'post',
     data,
-	message,
-	custom: {
-		auth: custom?.auth || true, // 是否需要token
-		toast: custom?.toast || true, // 弹框
-		catch: custom?.catch || true // catch返回
-	}
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
   })
 }
 // 钢瓶盘点记录 作废
@@ -836,11 +836,11 @@ export function userCylinderCheckToVoid(data = {}, message = '', custom = {}) {
     url: baseURL + '/admin/info/control/userCylinderCheck/toVoid',
     method: 'post',
     data,
-	message,
-	custom: {
-		auth: custom?.auth || true, // 是否需要token
-		toast: custom?.toast || true, // 弹框
-		catch: custom?.catch || true // catch返回
-	}
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
   })
 }
