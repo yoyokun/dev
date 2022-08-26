@@ -7,7 +7,7 @@
 		<block v-if="empty">
 			<view class="gp-box" v-if="dataList.length">
 				<view class="gp-top"><text>总数：{{totals}}</text><text class="button"
-						v-permission="{ permission:'app_cylinderCheckList_add'}">＋添加</text></view>
+						v-permission="{ permission:'app_cylinderCheckList_add'}" @click="addData">＋添加</text></view>
 				<view class="gp-main" v-for="(item, index) in dataList" :key="index" @click="toDetail(item)">
 					<view class="head">
 						<text>{{item.billNo}}</text>
@@ -38,7 +38,7 @@
 					</view>
 					<view class="actions">
 						<view class="btn" v-if="item.checkState==1||item.checkState==4"
-							v-permission="{ permission:'app_addCylinderCheck_save'}">编辑</view>
+							v-permission="{ permission:'app_addCylinderCheck_save'}" @click="editData(item.id)">编辑</view>
 						<view class="btn green" v-if="item.checkState==1" @click="handleUpdate(item,2)"
 							v-permission="{ permission:'app_addCylinderCheck_submit'}">提交</view>
 						<view class="btn warning" v-if="item.checkState==2" @click="handleUpdate(item,7)">撤回</view>
@@ -159,6 +159,16 @@
 			})
 		},
 		methods: {
+			addData(){
+				uni.navigateTo({
+					url:'/customerManage/addCylinderCheck/addCylinderCheck'
+				})
+			},
+			editData(id){
+				this.$navigateTo('/customerManage/addCylinderCheck/addCylinderCheck',{
+					editId:id
+				})
+			},
 			async confVoid() {
 				const obj = {
 					ids: [],

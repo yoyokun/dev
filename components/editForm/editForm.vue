@@ -239,6 +239,7 @@
 					></u-upload>
 				</view>
 			</u-form-item>
+			<!-- <block></block> -->
 		  <!--其他插槽-->
 			<slot name="other" />
 		</u--form>

@@ -2,10 +2,10 @@
 	<view class="table-box">
 		<uni-table stripe :emptyText="$t('common.tableEmptyText')">
 			<uni-tr>
-				<uni-th class="th-class" v-for="(col,key) in tableColumn" :key="key">{{col.label}}</uni-th>
+				<uni-th class="th-class" v-for="(col,key) in tableColumn" :key="key" :width="col.width" :align="col.align">{{col.label}}</uni-th>
 			</uni-tr>
 			<uni-tr v-for="(item, index) in tableData" :key="index">
-				<uni-td class="td-class" v-for="(col,key) in tableColumn" :key="key">
+				<uni-td class="td-class" v-for="(col,key) in tableColumn" :key="key" :align="col.align">
 					<block v-if="col.slot">
 						<!-- #ifdef H5 || APP-PLUS -->
 						<slot :name="`${col.slot}`" :data="item"></slot>
