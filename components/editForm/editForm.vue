@@ -76,7 +76,7 @@
 					:maxlength="item.maxlength?item.maxlength:30"
 					:placeholder="item.placeholder"
 					confirmType="done"
-					@change="handleFiltrate(item.fieldName)"
+					@blur="handleFiltrate(item.fieldName)"
 				></u--textarea>
 				<!-- 省市区 -->
 				<view :class="['datePicker',item.inputAlign]" v-if="item.type === 'cascader'">

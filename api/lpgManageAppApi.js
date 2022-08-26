@@ -690,6 +690,160 @@ export function userCustomerUpdateState(data = {}, message = '', custom = {}) {
 		}
 	})
 }
+// 客户联系人 根据条件查询列表信息
+export function userContactFindList(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/userContact/findList',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 客户联系人 保存或修改
+export function userContactSaveOrEdit(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/control/userContact/saveOrEdit',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 客户联系人 删除
+export function userContactDeleteByIds(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/control/userContact/deleteByIds',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 客户联系人 根据id查询信息
+export function userContactFindById(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/userContact/findById',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 客户联系人 设置为默认联系人
+export function userContactSetIsDefault(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/control/userContact/setIsDefault',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 客户地址 根据条件查询列表信息
+export function userAddressFindList(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/userAddress/findList',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 客户地址 根据条件查询列表信息 距离
+export function userAddressFindListForDistance(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/userAddress/findListForDistance',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 客户地址 根据id查询信息
+export function userAddressFindById(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/userAddress/findById',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 客户地址 设置为默认地址
+export function userAddressSetIsDefault(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/control/userAddress/setIsDefault',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 客户地址 保存或修改
+export function userAddressSaveOrEdit(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/control/userAddress/saveOrEdit',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 客户地址 删除
+export function userAddressDeleteByIds(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/control/userAddress/deleteByIds',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
 // 价格策略管理 获取客户某个商品的价格策略配置
 export function priceStrategyFindCustomerSalesPriceList(data = {}, message = '', custom = {}) {
 	return request({

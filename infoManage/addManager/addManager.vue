@@ -41,8 +41,8 @@
 					<u-button :text="$t('common.btn.save')" type="primary" hairline shape="circle" @click="submitForm"></u-button>
 				</view>
 				<view class="btn" v-else>
-					<u-button v-permission="{ permission:'app_managerList_edit'}" :text="$t('common.btn.edit')" type="primary" hairline shape="circle" plain @click="handleEdit"></u-button>
-					<u-button v-permission="{ permission:'app_managerList_delete'}" class="m-l20" :text="$t('common.btn.delete')" type="error" hairline shape="circle" plain @click="handleDelete"></u-button>
+					<u-button v-permission="{ permission:'app_managerList_edit'}" :text="$t('common.btn.edit')" type="primary" hairline shape="circle" @click="handleEdit"></u-button>
+					<u-button v-permission="{ permission:'app_managerList_delete'}" :text="$t('common.btn.delete')" type="error" hairline shape="circle" plain @click="handleDelete"></u-button>
 				</view>
 			</template>
 		</edit-form>
@@ -499,7 +499,10 @@ export default {
 	.btn{
 		width: 632rpx;
 		margin: 60rpx auto;
-		@include flexMixin();
+		@include flexMixin(column);
+		.u-button{
+			margin: 20rpx 10rpx;
+		}
 	}
 	.addRole{
 		@include flexMixin(row,flex-end);

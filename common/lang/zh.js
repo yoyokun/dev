@@ -42,7 +42,8 @@ module.exports = {
 			accept: '接受',
 			refuse: '拒绝',
 			enable: '启用',
-			disable: '禁用'
+			disable: '禁用',
+			cancel: '取消'
 		},
 		statusTitle: '提示',
 		statusContent: '真的要',
@@ -814,7 +815,73 @@ module.exports = {
 			  id: 4,
 			  name: '用气地址'
 			}
-		]
+		],
+		isDefault: {
+			1: '默认',
+			2: '否'
+		}
+	},
+	// 联系人
+	userContact: {
+		form: {
+			linkman: '联系人',
+			linkmanPlace: '请输入联系人',
+			linkTel: '联系电话',
+			linkTelPlace: '请输入联系电话',
+			linkTelMessage: '联系电话格式有误',
+			named: '尊称',
+			namedPlace: '请选择尊称',
+			namedOptions: [
+				{
+					name: '未知',
+					value: 1
+				},
+				{
+					name: '先生',
+					value: 2
+				},
+				{
+					name: '女士',
+					value: 3
+				}
+			],
+			position: '职务',
+			positionPlace: '请输入职务',
+			birthdayStr: '生日',
+			birthdayStrPlace: '请选择生日',
+			remarks: '备注',
+			remarksPlace: '请输入备注信息',
+			isDefault: '设为默认',
+			isDefaultPlace: '请选择'
+		}
+	},
+	// 联系地址
+	userAddress: {
+		form: {
+			linkman: '联系人',
+			linkmanPlace: '请输入联系人',
+			phone: '联系电话',
+			phonePlace: '请输入联系电话',
+			phoneMessage: '联系电话格式有误',
+			provinces: '省市区',
+			provincesPlace: '请选择省市区',
+			address: '详细地址',
+			addressPlace: '请输入详细地址',
+			floor: '楼层',
+			floorPlace: '请输入楼层',
+			doorplate: '门牌号',
+			doorplatePlace: '请输入门牌号',
+			defDelivery: '配送点',
+			defDeliveryPlace: '请选择配送点',
+			defDeliveryman: '配送员',
+			defDeliverymanPlace: '请选择配送员',
+			cardNumber: '供气卡号',
+			cardNumberPlace: '请输入供气卡号',
+			remarks: '备注',
+			remarksPlace: '请输入备注信息',
+			isDefault: '设为默认',
+			isDefaultPlace: '请选择'
+		}
 	},
 	// 钢瓶汇总
 	cylinderList:{
