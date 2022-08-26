@@ -423,7 +423,7 @@ export default {
 				}
 				const findIndex = this.renderDataSource.findIndex(item=>item.fieldName === key)
 				// 处理省市区数据
-				if (this.renderDataSource[findIndex].isProvinces) {
+				if (findIndex !== -1 && this.renderDataSource[findIndex].isProvinces) {
 					tempObj.province = value.length ? CodeToText[value[0]] : ''
 					tempObj.city = value.length ? CodeToText[value[1]] : ''
 					tempObj.area = value.length ? CodeToText[value[2]] : ''

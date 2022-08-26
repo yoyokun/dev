@@ -284,10 +284,8 @@ export const settingMixin = {
 		},
 		// 获取客户标签（除了类型和区域,下拉树）
 		async geCustomerProperty(obj = {}) {
-			const { returnValue: res } = await sysPropertyClassifySelectPropertyBox(Object.assign({}, { type: 'customer', typepropertyNames: 'customerTag' }, obj))
-			// this.customertProperty = this.getchildsProperty(res)
-			console.log(res)
-			this.customertProperty = this.treeToList(res)
+			const { returnValue: res } = await sysPropertyClassifySelectPropertyBox(Object.assign({}, { type: 'customer', typePropertyStr: 'customerTag' }, obj))
+			this.customertProperty = this.getchildsProperty(res)
 		},
 		// 属性标签最后一级数组合并
 		arrayMergingCommon(res, childs=[] ,name = '') {
@@ -304,7 +302,9 @@ export const settingMixin = {
 					childs.push(obj)
 				} else {
 					const label = name ? name + '/' + v.name : v.name
-					childs = this.arrayMergingCommon(v.children, childs, label) // 获取子节点
+					if(v.children){
+						childs = this.arrayMergingCommon(v.children, childs, label) // 获取子节点
+					}
 				}
 			})
 			return childs

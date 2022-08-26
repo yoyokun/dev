@@ -66,36 +66,12 @@
 					classForm="normalForm"
 					:form-data-source="formDataSource3"
 					:form-data-value="formDataValue3"
-					@change="changeForm3"
 					>
 				</edit-form>
 			</view>
 		</view>
-		<view class="btn" v-if="isSave">
+		<view class="btn">
 			<u-button :text="$t('common.btn.save')" type="primary" hairline shape="circle" @click="submitForm"></u-button>
-		</view>
-		<view class="btn" v-else>
-			<!-- 编辑 -->
-			<u-button 
-				v-permission="{ permission:'app_cylinderArchivesList_edit'}" 
-				:text="$t('common.btn.edit')" 
-				type="primary" 
-				hairline 
-				shape="circle" 
-				plain 
-				@click="handleEdit">
-			</u-button>
-			<!-- 删除 -->
-			<u-button 
-				v-if="formDataValue.state===3" 
-				v-permission="{ permission:'app_cylinderArchivesList_delete'}" 
-				:text="$t('common.btn.delete')" 
-				type="error" 
-				hairline 
-				shape="circle" 
-				plain 
-				@click="handleDelete">
-			</u-button>
 		</view>
 		<!-- 请求 toast 提示 -->
 		<u-toast ref='uToast'></u-toast>
@@ -149,8 +125,6 @@ export default {
 			}
 		}
     return {
-			isSave: true,
-			editId: '',
 			isShow: true,
 			formDataSource: [
 				{
@@ -562,28 +536,12 @@ export default {
 		}
   },
   async onLoad(options) {
-		this.editId = options.editId || ''
-		if (this.editId) {
-			this.isSave = false
-			uni.setNavigationBarTitle({
-				title: this.$t('addCustomer.titleTextInfo')
-			});
-		} else {
-			this.isSave = true
-			uni.setNavigationBarTitle({
-				title: this.$t('addCustomer.titleText')
-			});
-		}
+		uni.setNavigationBarTitle({
+			title: this.$t('addCustomer.titleText')
+		});
 		await this.init()
-		if (this.editId) {
-			this.formDataSource.forEach(v=>{
-				v.disabled = true
-			})
-			this.getInfo()
-		} else {
-			this.formDataValue = {
-				orgId: this.userInfo.orgId
-			}
+		this.formDataValue = {
+			orgId: this.userInfo.orgId
 		}
   },
 	onShow() {
@@ -677,11 +635,6 @@ export default {
 				}
 				this.formDataValue2 = queryParams
 			}
-		},
-		// 表单改变
-		async changeForm3(obj) {
-			const queryParams = obj.queryParams
-			const name = obj.name // 改变的字段
 		},
 		// 查询经纬度
 		geocoder(address) {
@@ -809,10 +762,6 @@ export default {
 		margin: 0rpx;
 	}
 }
-
-
-
-
 .btn{
 	width: 632rpx;
 	margin: 60rpx auto;

@@ -656,8 +656,6 @@ module.exports = {
 	// 添加客户
 	addCustomer: {
 		titleText: '添加客户',
-		titleTextEdit: '编辑客户',
-		titleTextInfo: '客户详情',
 		formTitle: '基础信息',
 		form: {
 			customerName: '客户名称',
@@ -792,6 +790,29 @@ module.exports = {
 			propertyIds: '客户标签',
 			state: '客户状态'
 		}
+	},
+	// 客户信息
+	customerInfo: {
+		titleText: '客户详情',
+		titleTextEdit: '编辑客户',
+		tabSwitch: [
+			{
+			  id: 1,
+			  name: '基础信息'
+			},
+			{
+			  id: 2,
+			  name: '价格结算'
+			},
+			{
+			  id: 3,
+			  name: '联系人'
+			},
+			{
+			  id: 4,
+			  name: '用气地址'
+			}
+		]
 	},
 	// 钢瓶汇总
 	cylinderList:{
