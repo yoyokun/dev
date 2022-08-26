@@ -1,12 +1,14 @@
 <template>
 	<view class="list-part">
 		<view class="search-box">
-			<search bg-color="white" :search-options="searchOptions" @search="search" />
-			</search>
+			<search :searchOptions="searchOptions" @search="search"></search>
+			<view class="total">
+				<view class="num">{{$t('cylinderList.totalTxt')}}：<text>{{totals}}</text></view>
+			</view>
 		</view>
 		<block v-if="empty">
 			<view class="gp-box" v-if="dataList.length">
-				<view class="gp-top">总数：{{totals}}</view>
+				<!-- <view class="gp-top">{{$t('cylinderList.totalTxt')}}：{{totals}}</view> -->
 				<view class="gp-main">
 					<view class="list" v-for="(item, index) in dataList" :key="index" @click="toDetail(item)">
 						<text>{{item.customerNo}}</text>
@@ -42,38 +44,29 @@
 		},
 		data() {
 			return {
+				totals: 0,
 				searchOptions: [{
 						type: 'select',
-						labelText: '客户状态',
+						labelText: this.$t('cylinderList.searchOptions.state.label'),
 						fieldName: 'state',
-						placeholder: '请选择客户状态',
-						options: [{
-								name: '启用',
-								value: 1
-							},
-							{
-								name: '禁用',
-								value: 2
-							}
-						]
+						options: this.$t('cylinderList.searchOptions.state.options'),
 					},
 					{
-						labelText: '客户类型',
+						labelText: this.$t('cylinderList.searchOptions.typeId.label'),
 						type: 'select',
 						fieldName: 'typeId',
 						options: []
 					},
 					{
-						labelText: '客户区域',
+						labelText: this.$t('cylinderList.searchOptions.regionId.label'),
 						type: 'select',
 						fieldName: 'regionId',
 						options: []
 					},
 					{
 						type: 'select',
-						labelText: '客户标签',
+						labelText: this.$t('cylinderList.searchOptions.propertyIds.label'),
 						fieldName: 'propertyIds',
-						placeholder: '请选择客户标签',
 						options: [],
 					}
 				]
@@ -90,7 +83,7 @@
 			this.searchOptions[2].options = this.customerAreaList
 			// 获取客户标签
 			await this.geCustomerProperty()
-			this.searchOptions[3].options = this.customertProperty
+			this.searchOptions[3].options = this.arrayMergingCommon(this.customertProperty)
 		},
 		async mounted() {
 			
@@ -148,24 +141,24 @@
 	.list-part {
 		padding-bottom: 120rpx;
 
-		.search-box {
-			display: flex;
-			align-items: center;
-			padding: 0;
-			background: #F7F7F7;
+		// .search-box {
+		// 	display: flex;
+		// 	align-items: center;
+		// 	padding: 0;
+		// 	background: #F7F7F7;
 
-			::v-deep .u-search__content {
-				background-color: white !important;
-			}
+		// 	::v-deep .u-search__content {
+		// 		background-color: white !important;
+		// 	}
 
-			::v-deep .u-search__action {
-				display: none;
-			}
-		}
+		// 	::v-deep .u-search__action {
+		// 		display: none;
+		// 	}
+		// }
 
 		.gp-box {
 			// padding: 0 30rpx;
-			padding: 110rpx 20rpx 0rpx 20rpx;
+			padding: 240rpx 20rpx 0rpx 20rpx;
 
 			.gp-top {
 				height: 110rpx;

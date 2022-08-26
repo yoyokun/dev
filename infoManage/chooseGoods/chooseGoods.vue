@@ -159,7 +159,7 @@
 			await this.getGoodsClassifyList({
 				orgId: this.orgId
 			})
-			this.searchOptions[0].options = this.treeDataGoodsClassify
+			this.searchOptions[0].options = this.treeToList(this.treeDataGoodsClassify)
 			// 获取品牌
 			await this.getBrandList({
 				orgId: this.orgId

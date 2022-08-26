@@ -2,11 +2,11 @@
 	<view class="gp-info">
 		<view class="form">
 			<view class="form-item require">
-				<view class="label">盘点时间：</view>
+				<view class="label">{{$t('addCylinderCheck.form.billTime.label')}}：</view>
 				<view class="desc">
 					<uni-datetime-picker v-model="formData.billTime" return-type="timestamp">
 						<input disabled :value="formData.billTime&&UnixToDate(formData.billTime)"
-							placeholder="请选择盘点时间" />
+							:placeholder="$t('addCylinderCheck.form.billTime.placeholder')" />
 					</uni-datetime-picker>
 				</view>
 				<view class="arrow">
@@ -14,18 +14,18 @@
 				</view>
 			</view>
 			<view class="form-item require">
-				<view class="label">客户：</view>
+				<view class="label">{{$t('addCylinderCheck.form.customerName.label')}}：</view>
 				<view class="desc" @click="chooseCustomer">
-					<input disabled :value="formData.customerName" placeholder="请选择客户" />
+					<input disabled :value="formData.customerName" :placeholder="$t('addCylinderCheck.form.customerName.placeholder')" />
 				</view>
 				<view class="arrow">
 					<u-icon name="arrow-right" />
 				</view>
 			</view>
 			<view class="form-item">
-				<view class="label">备注：</view>
+				<view class="label">{{$t('addCylinderCheck.form.remarks.label')}}：</view>
 				<view class="desc">
-					<input :value="formData.remarks" placeholder="请填写备注" />
+					<input :value="formData.remarks" :placeholder="$t('addCylinderCheck.form.remarks.placeholder')" />
 				</view>
 			</view>
 		</view>
@@ -35,8 +35,8 @@
 					<view class="head">
 						<view class="gp-no">{{item.customerNo}}</view>
 						<view class="gp-user">{{item.customerName}}</view>
-						<view class="state" v-if="item.state!=2">启用</view>
-						<view class="state red" v-else>禁用</view>
+						<view class="state" v-if="item.state!=2">{{$t('addCylinderCheck.stateTxt')[0]}}</view>
+						<view class="state red" v-else>{{$t('addCylinderCheck.stateTxt')[1]}}</view>
 					</view>
 					<view class="main-box">
 						<view class="item">
@@ -45,16 +45,15 @@
 						</view>
 						<view class="item">{{item.province + item.city + item.area + item.address}}</view>
 						<view class="item">
-							<view>楼层：{{item.floor}}</view>
-							<view>门牌号：{{item.doorplate}}</view>
+							<view>{{$t('addCylinderCheck.floorTxt')}}：{{item.floor}}</view>
+							<view>{{$t('addCylinderCheck.doorNo')}}：{{item.doorplate}}</view>
 						</view>
 					</view>
 				</view>
 				<view class="table">
 					<us-table :table-column="tableColumn" :table-data="item.userCylinderCheckDetailList">
 						<view slot="checkStockNum" slot-scope="row">
-							<input class="input-stock" type="number" placeholder="输入盘点数"
-								v-model="row.data.checkStockNum" />
+							<input class="input-stock" type="number" :placeholder="$t('addCylinderCheck.stockNumPlaceholder')" v-model="row.data.checkStockNum" />
 						</view>
 						<view slot="diffNum" slot-scope="row">
 							<text class="diff-num"
@@ -94,26 +93,26 @@
 				customerInfo: null,
 				tableColumn: [{
 						prop: 'standardName',
-						label: '规格',
+						label: this.$t('addCylinderCheck.tableColumn.standardName'),
 						width: '200rpx',
 						align: 'center'
 					},
 					{
 						prop: 'systemStockNum',
-						label: '系统数据',
+						label: this.$t('addCylinderCheck.tableColumn.systemStockNum'),
 						width: '150rpx',
 						align: 'center'
 					},
 					{
 						prop: 'checkStockNum',
-						label: '盘点数',
+						label: this.$t('addCylinderCheck.tableColumn.checkStockNum'),
 						width: '150rpx',
 						align: 'center',
 						slot: 'checkStockNum'
 					},
 					{
 						prop: 'diffNum',
-						label: '差异数',
+						label: this.$t('addCylinderCheck.tableColumn.diffNum'),
 						width: '150rpx',
 						align: 'center',
 						slot: 'diffNum'
@@ -130,7 +129,7 @@
 			this.editId = options.editId || ''
 			if (this.editId) {
 				uni.setNavigationBarTitle({
-					title: this.$t('addCustomer.titleTextInfo')
+					title: this.$t('addCylinderCheck.titleTextEdit')
 				});
 				console.log(this.editId)
 				const {
@@ -144,7 +143,7 @@
 				}
 			} else {
 				uni.setNavigationBarTitle({
-					title: this.$t('addCustomer.titleText')
+					title: this.$t('addCylinderCheck.titleText')
 				});
 			}
 		},
@@ -159,7 +158,7 @@
 			async saveData() {
 				if (!this.formData.billTime || !this.customerInfo) {
 					uni.showToast({
-						title: '必填项不能为空',
+						title: this.$t('addCylinderCheck.tipsTxt'),
 						icon: 'none'
 					})
 					return

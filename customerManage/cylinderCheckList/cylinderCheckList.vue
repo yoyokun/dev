@@ -1,52 +1,53 @@
 <template>
 	<view class="list-part">
 		<view class="search-box">
-			<search bg-color="white" :search-options="searchOptions" @search="search" />
-			</search>
+			<search :searchOptions="searchOptions" @search="search"></search>
+			<view class="total">
+				<view class="num">{{$t('cylinderCheckList.totalTxt')}}：<text>{{totals}}</text></view>
+				<view class="add" v-permission="{ permission:'app_cylinderCheckList_add'}" @click="addData"><u-icon name="plus" color="#2A82E4" size="16" bold></u-icon>{{$t('common.btn.add')}}</view>
+			</view>
 		</view>
 		<block v-if="empty">
 			<view class="gp-box" v-if="dataList.length">
-				<view class="gp-top"><text>总数：{{totals}}</text><text class="button"
-						v-permission="{ permission:'app_cylinderCheckList_add'}" @click="addData">＋添加</text></view>
 				<view class="gp-main" v-for="(item, index) in dataList" :key="index" @click="toDetail(item)">
 					<view class="head">
 						<text>{{item.billNo}}</text>
-						<text class="status" v-if="item.checkState==3">已审核</text>
-						<text class="status green" v-if="item.checkState==1">待提交</text>
-						<text class="status warning" v-if="item.checkState==2">待审核</text>
-						<text class="status gray" v-if="item.checkState==5">已作废</text>
-						<text class="status red" v-if="item.checkState==4">未通过</text>
-						<text class="status gray" v-if="item.checkState==6">无审核</text>
+						<text class="status" v-if="item.checkState==3">{{$t('cylinderCheckList.checkStateTxt')[0]}}</text>
+						<text class="status green" v-if="item.checkState==1">{{$t('cylinderCheckList.checkStateTxt')[1]}}</text>
+						<text class="status warning" v-if="item.checkState==2">{{$t('cylinderCheckList.checkStateTxt')[2]}}</text>
+						<text class="status gray" v-if="item.checkState==5">{{$t('cylinderCheckList.checkStateTxt')[3]}}</text>
+						<text class="status red" v-if="item.checkState==4">{{$t('cylinderCheckList.checkStateTxt')[4]}}</text>
+						<text class="status gray" v-if="item.checkState==6">{{$t('cylinderCheckList.checkStateTxt')[5]}}</text>
 					</view>
 					<view class="main-box">
 						<view class="item">
-							<view class="label">盘点总数：</view>
+							<view class="label">{{$t('cylinderCheckList.checkNum')}}：</view>
 							<view class="desc">{{item.checkNum}}</view>
 						</view>
 						<view class="item">
-							<view class="label">系统数：</view>
+							<view class="label">{{$t('cylinderCheckList.systemNum')}}：</view>
 							<view class="desc">{{item.systemNum}}</view>
 						</view>
 						<view class="item">
-							<view class="label">盘点人：</view>
+							<view class="label">{{$t('cylinderCheckList.creator')}}：</view>
 							<view class="desc">{{item.creator}}</view>
 						</view>
 						<view class="item">
-							<view class="label">盘点时间：</view>
+							<view class="label">{{$t('cylinderCheckList.billTime')}}：</view>
 							<view class="desc">{{item.billTime | dayjs}}</view>
 						</view>
 					</view>
 					<view class="actions">
 						<view class="btn" v-if="item.checkState==1||item.checkState==4"
-							v-permission="{ permission:'app_addCylinderCheck_save'}" @click="editData(item.id)">编辑</view>
+							v-permission="{ permission:'app_addCylinderCheck_save'}" @click="editData(item.id)">{{$t('cylinderCheckList.btns')[1]}}</view>
 						<view class="btn green" v-if="item.checkState==1" @click="handleUpdate(item,2)"
-							v-permission="{ permission:'app_addCylinderCheck_submit'}">提交</view>
-						<view class="btn warning" v-if="item.checkState==2" @click="handleUpdate(item,7)">撤回</view>
+							v-permission="{ permission:'app_addCylinderCheck_submit'}">{{$t('cylinderCheckList.btns')[2]}}</view>
+						<view class="btn warning" v-if="item.checkState==2" @click="handleUpdate(item,7)">{{$t('cylinderCheckList.btns')[3]}}</view>
 						<view class="btn gray" v-if="item.checkState==3||item.checkState==6" @click="handleVoid(item)"
 							v-permission="{ permission:'app_cylinderCheckList_invalid'}">
-							作废</view>
+							{{$t('cylinderCheckList.btns')[4]}}</view>
 						<view class="btn red" v-if="item.checkState==1||item.checkState==5||item.checkState==4"
-							@click="handleDelete(item)" v-permission="{ permission:'app_cylinderCheckList_delete'}">删除
+							@click="handleDelete(item)" v-permission="{ permission:'app_cylinderCheckList_delete'}">{{$t('cylinderCheckList.btns')[5]}}
 						</view>
 					</view>
 				</view>
@@ -62,10 +63,10 @@
 		<u-toast ref='uToast'></u-toast>
 
 		<!-- 作废 -->
-		<u-modal :show="showModal" title="作废提示" :closeOnClickOverlay="true" :asyncClose="true" :showCancelButton="true"
+		<u-modal :show="showModal" :title="$t('cylinderCheckList.descTle')" :closeOnClickOverlay="true" :asyncClose="true" :showCancelButton="true"
 			@cancel="closeModal" @close="closeModal" @confirm="confVoid">
 			<view class="modal-main">
-				<view>作废描述</view>
+				<view>{{$t('cylinderCheckList.descTips')}}</view>
 				<u-textarea v-model="modalParams.value" class="modal-text" placeholder="请输入原因"></u-textarea>
 			</view>
 		</u-modal>
@@ -87,44 +88,36 @@
 	export default {
 		mixins: [paginationMixin, settingMixin],
 		props: {
-
+			
 		},
 		data() {
 			return {
+				totals:0,
 				showModal: false,
 				modalParams:{},
 				searchOptions: [{
-						labelText: '客户类型',
+						labelText: this.$t('cylinderCheckList.searchOptions.typeId.label'),
 						type: 'select',
 						fieldName: 'typeId',
 						options: []
 					},
 					{
-						labelText: '客户区域',
+						labelText: this.$t('cylinderCheckList.searchOptions.regionId.label'),
 						type: 'select',
 						fieldName: 'regionId',
 						options: []
 					},
 					{
 						type: 'select',
-						labelText: '客户标签',
+						labelText: this.$t('cylinderCheckList.searchOptions.propertyIds.label'),
 						fieldName: 'propertyIds',
-						placeholder: '请选择客户标签',
 						options: [],
 					},
 					{
-						labelText: '客户状态',
+						labelText: this.$t('cylinderCheckList.searchOptions.state.label'),
 						type: 'select',
 						fieldName: 'state',
-						options: [{
-								name: '启用',
-								value: 1
-							},
-							{
-								name: '禁用',
-								value: 2
-							}
-						]
+						options: this.$t('cylinderCheckList.searchOptions.state.options')
 					}
 				]
 			}
@@ -145,7 +138,7 @@
 			this.searchOptions[1].options = this.customerAreaList
 			// 获取客户标签
 			await this.geCustomerProperty()
-			this.searchOptions[2].options = this.customertProperty
+			this.searchOptions[2].options = this.arrayMergingCommon(this.customertProperty)
 		},
 		async mounted() {
 
@@ -200,9 +193,11 @@
 			handleUpdate(data, type) {
 				const that = this
 				if (type === 7) {
+					console.log()
 					uni.showModal({
-						title: '撤回提示',
-						content: `真的要撤回${data.billNo}该条数据吗?`,
+						title: that.$t('cylinderCheckList.tipsTle')[0],
+						content: that.$t('cylinderCheckList').backTxt(data.billNo),
+						// content: `真的要撤回${data.billNo}该条数据吗?`,
 						success: async function(res) {
 							if (res.confirm) {
 								const obj = {
@@ -224,8 +219,9 @@
 					})
 				} else {
 					uni.showModal({
-						title: '提交提示',
-						content: `真的要提交${data.billNo}该条数据吗?`,
+						title: that.$t('cylinderCheckList.tipsTle')[1],
+						content: that.$t('cylinderCheckList').subTxt(data.billNo),
+						// content: `真的要提交${data.billNo}该条数据吗?`,
 						success: async function(res) {
 							if (res.confirm) {
 								const obj = {
@@ -252,8 +248,8 @@
 			handleDelete(data) {
 				const that = this
 				uni.showModal({
-					title: '删除提示',
-					content: `真的要删除 ${data.billNo} 该条数据吗?`,
+					title: that.$t('cylinderCheckList.tipsTle')[2],
+					content: that.$t('cylinderCheckList').delTxt(data.billNo),
 					success: async function(res) {
 						if (res.confirm) {
 							const obj = {
@@ -321,24 +317,24 @@
 	.list-part {
 		padding-bottom: 120rpx;
 
-		.search-box {
-			display: flex;
-			align-items: center;
-			padding: 0;
-			background: #F7F7F7;
+		// .search-box {
+		// 	display: flex;
+		// 	align-items: center;
+		// 	padding: 0;
+		// 	background: #F7F7F7;
 
-			::v-deep .u-search__content {
-				background-color: white !important;
-			}
+		// 	::v-deep .u-search__content {
+		// 		background-color: white !important;
+		// 	}
 
-			::v-deep .u-search__action {
-				display: none;
-			}
-		}
+		// 	::v-deep .u-search__action {
+		// 		display: none;
+		// 	}
+		// }
 
 		.gp-box {
 			// padding: 0 30rpx;
-			padding: 110rpx 20rpx 0rpx 20rpx;
+			padding: 240rpx 20rpx 0rpx 20rpx;
 
 			.gp-top {
 				height: 110rpx;
