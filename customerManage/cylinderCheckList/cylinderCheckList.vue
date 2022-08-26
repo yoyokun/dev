@@ -7,10 +7,6 @@
 				<view class="add" v-permission="{ permission:'app_cylinderCheckList_add'}" @click="addData"><u-icon name="plus" color="#2A82E4" size="16" bold></u-icon>{{$t('common.btn.add')}}</view>
 			</view>
 		</view>
-		<view class="search-box">
-			<search bg-color="white" :search-options="searchOptions" @search="search" />
-			</search>
-		</view>
 		<block v-if="empty">
 			<view class="gp-box" v-if="dataList.length">
 				<view class="gp-main" v-for="(item, index) in dataList" :key="index" @click="toDetail(item)">
