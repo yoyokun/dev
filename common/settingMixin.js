@@ -99,7 +99,9 @@ export const settingMixin = {
 		},
 		// 查询门市下拉
 		async getOrgListType(obj = {}, type = 'id') {
-			const { returnValue: res } = await sysOrgFindList(obj || {})
+			const {
+				returnValue: res
+			} = await sysOrgFindList(obj || {})
 			const orgTypeList = []
 			res.forEach((v, i) => {
 				orgTypeList.push({
@@ -137,18 +139,20 @@ export const settingMixin = {
 			})
 			this.managerList = managerList
 		},
-    // 获取配送员
-    async getManagerDeliveryman(obj) {
-      const { returnValue: res } = await sysManagerFindList(obj || {})
-      const managerDeliveryman = []
-      res.forEach((v, i) => {
-        managerDeliveryman.push({
-          name: v.name,
-          value: v.id
-        })
-      })
-      this.managerDeliveryman = managerDeliveryman
-    },
+		// 获取配送员
+		async getManagerDeliveryman(obj) {
+			const {
+				returnValue: res
+			} = await sysManagerFindList(obj || {})
+			const managerDeliveryman = []
+			res.forEach((v, i) => {
+				managerDeliveryman.push({
+					name: v.name,
+					value: v.id
+				})
+			})
+			this.managerDeliveryman = managerDeliveryman
+		},
 		// 获取风险单元
 		async getRiskUnitList(data = {}, type = 'id') {
 			const {
@@ -201,7 +205,11 @@ export const settingMixin = {
 		},
 		// 获取客户来源
 		async getCustomerSource(obj = {}, type = 'id') {
-			const { returnValue: res } = await sysFieldFindList(Object.assign({}, { groups: 'field_customer_source' }, obj))
+			const {
+				returnValue: res
+			} = await sysFieldFindList(Object.assign({}, {
+				groups: 'field_customer_source'
+			}, obj))
 			const customerSourceList = []
 			res.forEach(v => {
 				customerSourceList.push({
@@ -213,7 +221,11 @@ export const settingMixin = {
 		},
 		// 获取客户类型
 		async getCustomerType(obj = {}, type = 'id') {
-			const { returnValue: res } = await sysPropertyFindDefaultProperty(Object.assign({}, { type: 'customer_type' }, obj))
+			const {
+				returnValue: res
+			} = await sysPropertyFindDefaultProperty(Object.assign({}, {
+				type: 'customer_type'
+			}, obj))
 			const customerTypeList = []
 			if (!res) {
 				return
@@ -228,7 +240,11 @@ export const settingMixin = {
 		},
 		// 获取客户区域
 		async getCustomerArea(obj = {}, type = 'id') {
-			const { returnValue: res } = await sysPropertyFindDefaultProperty(Object.assign({}, { type: 'customer_area' }, obj))
+			const {
+				returnValue: res
+			} = await sysPropertyFindDefaultProperty(Object.assign({}, {
+				type: 'customer_area'
+			}, obj))
 			const customerAreaList = []
 			if (!res) {
 				return
@@ -243,7 +259,11 @@ export const settingMixin = {
 		},
 		// 获取支付方式
 		async getCustomerCollectionType(obj = {}, type = 'id') {
-			const { returnValue: res } = await sysFieldFindList(Object.assign({}, { groups: 'field_customer_collectionType' }, obj))
+			const {
+				returnValue: res
+			} = await sysFieldFindList(Object.assign({}, {
+				groups: 'field_customer_collectionType'
+			}, obj))
 			const customerCollectionType = []
 			res.forEach(v => {
 				customerCollectionType.push({
@@ -256,7 +276,11 @@ export const settingMixin = {
 		},
 		// 获取结算账期
 		async getCustomerBalanceType(obj = {}, type = 'id') {
-			const { returnValue: res } = await sysFieldFindList(Object.assign({}, { groups: 'field_customer_balanceType' }, obj))
+			const {
+				returnValue: res
+			} = await sysFieldFindList(Object.assign({}, {
+				groups: 'field_customer_balanceType'
+			}, obj))
 			const customerBalanceType = []
 			res.forEach(v => {
 				customerBalanceType.push({
@@ -268,7 +292,11 @@ export const settingMixin = {
 		},
 		// 获取开单类型
 		async getSubOrderType(obj = {}, type = 'id') {
-			const { returnValue: res } = await sysPropertyFindDefaultProperty(Object.assign({}, { type: 'subOrder_type' }, obj))
+			const {
+				returnValue: res
+			} = await sysPropertyFindDefaultProperty(Object.assign({}, {
+				type: 'subOrder_type'
+			}, obj))
 			const subOrderType = []
 			if (!res) {
 				return
@@ -284,13 +312,16 @@ export const settingMixin = {
 		},
 		// 获取客户标签（除了类型和区域,下拉树）
 		async geCustomerProperty(obj = {}) {
-			const { returnValue: res } = await sysPropertyClassifySelectPropertyBox(Object.assign({}, { type: 'customer', typepropertyNames: 'customerTag' }, obj))
-			// this.customertProperty = this.getchildsProperty(res)
-			console.log(res)
-			this.customertProperty = this.treeToList(res)
+			const {
+				returnValue: res
+			} = await sysPropertyClassifySelectPropertyBox(Object.assign({}, {
+				type: 'customer',
+				typePropertyStr: 'customerTag'
+			}, obj))
+			this.customertProperty = this.getchildsProperty(res)
 		},
 		// 属性标签最后一级数组合并
-		arrayMergingCommon(res, childs=[] ,name = '') {
+		arrayMergingCommon(res, childs = [], name = '') {
 			res.forEach((v, i) => {
 				if (v.type === 3) {
 					// 最后一级
@@ -304,7 +335,9 @@ export const settingMixin = {
 					childs.push(obj)
 				} else {
 					const label = name ? name + '/' + v.name : v.name
-					childs = this.arrayMergingCommon(v.children, childs, label) // 获取子节点
+					if (v.children) {
+						childs = this.arrayMergingCommon(v.children, childs, label) // 获取子节点
+					}
 				}
 			})
 			return childs
@@ -345,18 +378,18 @@ export const settingMixin = {
 			const {
 				returnValue: res
 			} = await goodsClassifyFindList(obj)
-			this.treeDataGoodsClassify = this.treeToList(res)
+			this.treeDataGoodsClassify = this.getchildsProperty(res)
 		},
 		// 分类tree转list
-		treeToList(tree, list = []){
-			tree.forEach((item,index)=>{
+		treeToList(tree, list = []) {
+			tree.forEach((item, index) => {
 				let obj = {
 					name: item.name,
 					value: item.id,
 				}
 				list.push(obj)
-				if(item.childrens.length){
-					this.treeToList(item.childrens,list)
+				if (item.children.length) {
+					this.treeToList(item.children, list)
 				}
 			})
 			return list

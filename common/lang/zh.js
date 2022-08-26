@@ -134,8 +134,7 @@ module.exports = {
 			headPhotoPlace: '请上传头像',
 			idPhoto: '证件照片',
 			idPhotoPlace: '请上传证件照片',
-			sexOptions: [
-				{
+			sexOptions: [{
 					name: '男',
 					value: '男'
 				},
@@ -148,8 +147,7 @@ module.exports = {
 					value: '保密'
 				}
 			],
-			educationOptions: [
-				{
+			educationOptions: [{
 					name: '本科',
 					value: '本科'
 				},
@@ -232,22 +230,21 @@ module.exports = {
 	// 审批事项
 	auditList: {
 		titleText: '审批事项',
-		tabSwitch: [
-			{
-			  id: 1,
-			  name: '要我审批'
+		tabSwitch: [{
+				id: 1,
+				name: '要我审批'
 			},
 			{
-			  id: 2,
-			  name: '我发起的'
+				id: 2,
+				name: '我发起的'
 			},
 			{
-			  id: 3,
-			  name: '抄送给我'
+				id: 3,
+				name: '抄送给我'
 			},
 			{
-			  id: 4,
-			  name: '审批历史'
+				id: 4,
+				name: '审批历史'
 			}
 		]
 	},
@@ -294,8 +291,7 @@ module.exports = {
 			addIdentities: '添加身份',
 			addIdentitiesPlace: '请添加身份',
 			orgLabel: '组织',
-			customerAuthOptions: [
-				{
+			customerAuthOptions: [{
 					name: '隔离',
 					value: 1
 				},
@@ -304,8 +300,7 @@ module.exports = {
 					value: 2
 				}
 			],
-			sexOptions: [
-				{
+			sexOptions: [{
 					name: '男',
 					value: '男'
 				},
@@ -318,8 +313,7 @@ module.exports = {
 					value: '保密'
 				}
 			],
-			educationOptions: [
-				{
+			educationOptions: [{
 					name: '本科',
 					value: '本科'
 				},
@@ -403,7 +397,7 @@ module.exports = {
 	chooseCustomer: {
 		titleText: '选择客户',
 		stateObj: {
-	    1: '正常',
+			1: '正常',
 			2: '冻结'
 		},
 		classifyObj: {
@@ -429,30 +423,95 @@ module.exports = {
 	chooseSupplier: {
 		titleText: '选择供应商'
 	},
+	// 编辑盘点记录
+	addCylinderCheck:{
+		titleText:'添加钢瓶盘点',
+		titleTextEdit:'编辑钢瓶盘点',
+		tableColumn:{
+			standardName:'规格',
+			systemStockNum:'系统数据',
+			checkStockNum:'盘点数',
+			diffNum:'差异数',
+		},
+		tipsTxt:'必填项不能为空',
+		stateTxt:['启用','禁用'],
+		floorTxt:'楼层',
+		doorNo:'门牌号',
+		stockNumPlaceholder:'盘点数量',
+		form:{
+			billTime:{
+				label:'盘点时间',
+				placeholder:'请选择盘点时间',
+			},
+			customerName:{
+				label:'客户',
+				placeholder:'请选择客户',
+			},
+			remarks:{
+				label:'备注',
+				placeholder:'请填写备注',
+			},
+		},
+	},
 	// 钢瓶盘点记录
 	cylinderCheckList: {
-		titleText: '钢瓶盘点记录'
+		titleText: '钢瓶盘点记录',
+		totalTxt: '总数',
+		checkStateTxt: ['已审核', '待提交', '待审核', '已作废', '未通过', '无审核'],
+		checkNum: '盘点总数',
+		systemNum: '系统数',
+		creator: '盘点人',
+		billTime: '盘点时间',
+		btns: ['添加', '编辑', '提交', '撤回', '作废', '删除'],
+		descTle: '作废提示',
+		descTips: '作废描述',
+		searchOptions: {
+			state: {
+				label: '客户状态',
+				options: [{
+						name: '启用',
+						value: 1
+					},
+					{
+						name: '禁用',
+						value: 2
+					}
+				]
+			},
+			typeId: {
+				label: '客户类型'
+			},
+			regionId: {
+				label: '客户区域'
+			},
+			propertyIds: {
+				label: '客户标签'
+			}
+		},
+		tipsTle:['撤回提示','提交提示','删除提示'],
+		backTxt:(txt)=>`真的要撤回${txt}该条数据吗?`,
+		subTxt:(txt)=>`真的要提交${txt}该条数据吗?`,
+		delTxt:(txt)=>`真的要删除${txt}该条数据吗?`,
 	},
 	// 我的工单
 	userWorkList: {
 		titleText: '我的工单',
 		totalNum: '工单总数',
-		tabSwitch: [
-			{
-			  id: '',
-			  name: '全部'
+		tabSwitch: [{
+				id: '',
+				name: '全部'
 			},
 			{
-			  id: '2,3',
-			  name: '待办'
+				id: '2,3',
+				name: '待办'
 			},
 			{
-			  id: '7',
-			  name: '已完成'
+				id: '7',
+			 name: '已完成'
 			},
 			{
-			  id: '4,5,6',
-			  name: '其他'
+				id: '4,5,6',
+				name: '其他'
 			}
 		]
 	},
@@ -487,56 +546,56 @@ module.exports = {
 	// 选择商品
 	chooseGoods: {
 		titleText: '选择商品',
-		brandName:'品牌',
-		goodsClassifyName:'分类',
-		unitsName:'单位',
-		standardName:'规格',
-		propertyNames:'属性参数',
-		netContent:'重量',
-		listPrice:'挂牌价',
-		costPrice:'成本价',
-		curStock:'库存',
-		searchOptions:{
-			goodsClassifyId:{
-				label:'商品分类',
-				placeholder:'选择商品分类'
+		brandName: '品牌',
+		goodsClassifyName: '分类',
+		unitsName: '单位',
+		standardName: '规格',
+		propertyNames: '属性参数',
+		netContent: '重量',
+		listPrice: '挂牌价',
+		costPrice: '成本价',
+		curStock: '库存',
+		searchOptions: {
+			goodsClassifyId: {
+				label: '商品分类',
+				placeholder: '选择商品分类'
 			},
-			brandId:{
-				label:'品牌',
-				placeholder:''
+			brandId: {
+				label: '品牌',
+				placeholder: ''
 			},
-			unitsId:{
-				label:'单位',
-				placeholder:''
+			unitsId: {
+				label: '单位',
+				placeholder: ''
 			},
-			startListPrice:{
-				label:'挂牌价范围',
-				placeholder:'请输入开始挂牌价'
+			startListPrice: {
+				label: '挂牌价范围',
+				placeholder: '请输入开始挂牌价'
 			},
-			endListPrice:{
-				label:'',
-				placeholder:'请输入结束挂牌价'
+			endListPrice: {
+				label: '',
+				placeholder: '请输入结束挂牌价'
 			},
-			startCostPrice:{
-				label:'成本价范围',
-				placeholder:'请输入开始成本价'
+			startCostPrice: {
+				label: '成本价范围',
+				placeholder: '请输入开始成本价'
 			},
-			endCostPrice:{
-				label:'',
-				placeholder:'请输入结束成本价'
+			endCostPrice: {
+				label: '',
+				placeholder: '请输入结束成本价'
 			},
-			createDateRange:{
-				label:'日期范围',
-				placeholder:['开始日期', '选择日期']
+			createDateRange: {
+				label: '日期范围',
+				placeholder: ['开始日期', '选择日期']
 			}
 		}
 	},
-	search:{
-		searchTxt:'搜索',
+	search: {
+		searchTxt: '搜索',
 		searchPlaceholder: '请输入关键字',
-		searchMore:'更多',
-		confirmBtn:'确定',
-		resetBtn:'重置',
+		searchMore: '更多',
+		confirmBtn: '确定',
+		resetBtn: '重置',
 	},
 	// 添加档案
 	addCylinderArchives: {
@@ -597,8 +656,7 @@ module.exports = {
 			scrapNote: '报废处理情况',
 			scrapNotePlace: '请输入报废处理情况',
 			picture: '钢瓶图片',
-			ownerTypeOptions: [
-				{
+			ownerTypeOptions: [{
 					name: '组织',
 					value: 1
 				},
@@ -611,8 +669,7 @@ module.exports = {
 					value: 4
 				}
 			],
-			stateOptions: [
-				{
+			stateOptions: [{
 					name: '正常',
 					value: 1
 				},
@@ -656,8 +713,6 @@ module.exports = {
 	// 添加客户
 	addCustomer: {
 		titleText: '添加客户',
-		titleTextEdit: '编辑客户',
-		titleTextInfo: '客户详情',
 		formTitle: '基础信息',
 		form: {
 			customerName: '客户名称',
@@ -682,8 +737,7 @@ module.exports = {
 			statePlace: '请选择客户状态',
 			remarks: '备注信息',
 			remarksPlace: '请输入备注信息',
-			stateOptions: [
-				{
+			stateOptions: [{
 					name: '正常',
 					value: 1
 				},
@@ -692,8 +746,7 @@ module.exports = {
 					value: 2
 				}
 			],
-			classifyPlaceOptions: [
-				{
+			classifyPlaceOptions: [{
 					name: '居民',
 					value: 1
 				},
@@ -761,8 +814,7 @@ module.exports = {
 			pickModePlace: '请选择提货方式',
 			licenseNum: '车牌号码',
 			licenseNumPlace: '请输入车牌号码,多个英文逗号隔开',
-			pickModeOptions: [
-				{
+			pickModeOptions: [{
 					name: '自提',
 					value: 1
 				},
@@ -793,12 +845,34 @@ module.exports = {
 			state: '客户状态'
 		}
 	},
+	// 客户信息
+	customerInfo: {
+		titleText: '客户详情',
+		titleTextEdit: '编辑客户',
+		tabSwitch: [{
+				id: 1,
+				name: '基础信息'
+			},
+			{
+				id: 2,
+			 name: '价格结算'
+			},
+			{
+				id: 3,
+				name: '联系人'
+			},
+			{
+				id: 4,
+				name: '用气地址'
+			}
+		]
+	},
 	// 钢瓶汇总
-	cylinderList:{
+	cylinderList: {
 		titleText: '客户钢瓶汇总',
 		totalTxt: '总数',
 		searchOptions: {
-			state:{
+			state: {
 				label: '客户状态',
 				options: [{
 						name: '启用',
@@ -810,29 +884,33 @@ module.exports = {
 					}
 				]
 			},
-			typeId:{
-				label:'客户类型'
+			typeId: {
+				label: '客户类型'
 			},
-			regionId:{
-				label:'客户区域'
+			regionId: {
+				label: '客户区域'
 			},
-			propertyIds:{
-				label:'客户标签'
+			propertyIds: {
+				label: '客户标签'
 			}
 		}
 	},
 	// 客户钢瓶详情
-	cylinderInfo:{
+	cylinderInfo: {
 		titleText: '客户钢瓶详情',
-		userNo:'会员编号',
-		customerNo:'客户编号',
-		customerName:'客户名称',
-		state:'账号状态',
-		regionName:'客户区域',
-		typeName:'客户类型',
-		cylinderNum:'钢瓶总数',
-		borrow:'借',
-		unit:'个',
+		userNo: '会员编号',
+		customerNo: '客户编号',
+		customerName: '客户名称',
+		state: '账号状态',
+		regionName: '客户区域',
+		typeName: '客户类型',
+		cylinderNum: '钢瓶总数',
+		borrow: '借',
+		unit: '个',
+		stateTxt: {
+			1: '启用',
+			2: '禁用'
+		}
 	},
 	// 组织信息
 	orgInfo: {
@@ -864,8 +942,7 @@ module.exports = {
 			remarks: '组织描述',
 			remarksPlace: '请输入组织描述',
 			orgLogo: '组织logo',
-			orgTypeOptions: [
-				{
+			orgTypeOptions: [{
 					name: '公司',
 					value: 1
 				},
@@ -878,8 +955,7 @@ module.exports = {
 					value: 3
 				}
 			],
-			stateOptions: [
-				{
+			stateOptions: [{
 					name: '启用',
 					value: 1
 				},
@@ -913,8 +989,7 @@ module.exports = {
 			syncTypePlace: '请选择业务数据',
 			priceState: '自定义价格',
 			priceStatePlace: '请选择自定义价格',
-			orgModelOptions: [
-				{
+			orgModelOptions: [{
 					name: '直营',
 					value: 1
 				},
@@ -927,8 +1002,7 @@ module.exports = {
 					value: 3
 				}
 			],
-			syncTypeOptions: [
-				{
+			syncTypeOptions: [{
 					name: '不同步',
 					value: 1
 				},
@@ -941,8 +1015,7 @@ module.exports = {
 					value: 3
 				}
 			],
-			priceStateOptions: [
-				{
+			priceStateOptions: [{
 					name: '允许改价',
 					value: 1
 				},
@@ -961,8 +1034,7 @@ module.exports = {
 			openEndTime: '结束营业时间',
 			openEndTimePlace: '请选择结束营业时间',
 			storeBackground: '店铺背景图',
-			openMallOptions: [
-				{
+			openMallOptions: [{
 					name: '营业',
 					value: 1
 				},

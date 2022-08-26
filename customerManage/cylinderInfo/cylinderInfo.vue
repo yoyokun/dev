@@ -2,13 +2,13 @@
 	<view class="gp-info">
 		<view class="info-main">
 			<description-list>
-				<description label="会员编号">{{ userAccount.userNo }}</description>
-				<description label="客户编号">{{ info.customerNo }}</description>
-				<description label="客户名称">{{ info.customerName }}</description>
-				<description label="账号状态">{{ info.state | state }}</description>
-				<description label="客户区域">{{ userSettlement.regionName }}</description>
-				<description label="客户类型">{{ userSettlement.typeName }}</description>
-				<description label="钢瓶总数">{{ cylinderNum }}</description>
+				<description :label="$t('cylinderInfo.userNo')">{{ userAccount.userNo }}</description>
+				<description :label="$t('cylinderInfo.customerNo')">{{ info.customerNo }}</description>
+				<description :label="$t('cylinderInfo.customerName')">{{ info.customerName }}</description>
+				<description :label="$t('cylinderInfo.state')">{{ info.state | state }}</description>
+				<description :label="$t('cylinderInfo.regionName')">{{ userSettlement.regionName }}</description>
+				<description :label="$t('cylinderInfo.typeName')">{{ userSettlement.typeName }}</description>
+				<description :label="$t('cylinderInfo.cylinderNum')">{{ cylinderNum }}</description>
 			</description-list>
 		</view>
 		<view class="gp-list" v-for="(item, index) in dataList" :key="index">
@@ -41,13 +41,11 @@
 	import {
 		UnixToDate
 	} from '@/utils/util.js'
+	let that = null
 	export default {
 		filters: {
 			state(value) {
-				const stateObj = {
-					1: '启用',
-					2: '禁用'
-				}
+				const stateObj = that.$t('cylinderInfo.stateTxt')
 				return stateObj[value] || ''
 			}
 		},
@@ -61,10 +59,11 @@
 			}
 		},
 		async created() {
+			that = this
 			await this.getList()
 		},
 		async mounted() {
-
+			
 		},
 		onLoad(options) {
 			this.editId = options.editId || ''

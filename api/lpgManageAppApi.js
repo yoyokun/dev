@@ -606,6 +606,20 @@ export function userCustomerSaveOrEdit(data = {}, message = '', custom = {}) {
 		}
 	})
 }
+// 客户结算信息 保存修改
+export function userSettlementSaveOrEdit(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/control/userSettlement/saveOrEdit',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
 // 客户管理 客户编号查重
 export function userCustomerCheckCustomerNo(data = {}, message = '', custom = {}) {
 	return request({

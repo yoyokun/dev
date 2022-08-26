@@ -19,17 +19,9 @@
 				itemStyle="height: 45px;padding: 0 4px;"
 			></u-tabs>
 			<view class="search-box">
-				<u-search
-					:height="35"
-					:placeholder="$t('common.searchPlaceholder')" 
-					v-model="keyword" 
-					:actionText="$t('common.searchText')" 
-					@search="getInit"
-					@custom="getInit"
-					@clear="getInit"
-				></u-search>
+				<search @search="search"></search>
 				<view class="total">
-					<view class="num">{{$t('userWorkList.totalNum')}}：<text class="blue">{{totals}}</text></view>
+					<view class="num">{{$t('userWorkList.totalNum')}}：<text>{{totals}}</text></view>
 				</view>
 			</view>
 		</view>
@@ -69,7 +61,7 @@ import paginationMixin from '@/common/paginationMixin.js'
 export default {
   data() {
     return {
-			keyword: '',
+			params: {},
 			totals: 0,
 			tabSwitch: this.$t('userWorkList.tabSwitch'),
 			tabSwitchId: '',
@@ -96,6 +88,11 @@ export default {
 		});
 	},
   methods: {
+		// 搜索
+		search(e) {
+			this.params = { ...e }
+			this.getInit()
+		},
 		// 切换
 		onTabSwitch(item) {
 			this.current = item.index
@@ -105,10 +102,12 @@ export default {
     // 获取列表
     async findDataList() {
       const data = {
-				keyword: this.keyword,
-				stateStr: this.tabSwitchId,
-        page: this.pagination.getCurrentPage(),
-        size: this.pagination.getCurrentSize()
+				...(this.params||{}),
+				...{
+					stateStr: this.tabSwitchId,
+					page: this.pagination.getCurrentPage(),
+					size: this.pagination.getCurrentSize()
+				}
       }
 			const { returnValue: res, totals } = await auditWorkMyWorks(data)
 			if (res) {

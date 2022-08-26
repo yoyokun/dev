@@ -44,6 +44,7 @@
 let that = null
 import { userCustomerFindList } from '@/api/lpgManageAppApi.js'
 import paginationMixin from '@/common/paginationMixin.js'
+import { settingMixin } from '@/common/settingMixin.js'
 export default {
   data() {
     return {
@@ -77,7 +78,7 @@ export default {
 			totals: 0
     }
   },
-	mixins: [paginationMixin],
+	mixins: [paginationMixin, settingMixin],
 	// 过滤器
 	filters: {
 		state(value) {
