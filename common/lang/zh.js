@@ -20,6 +20,7 @@ module.exports = {
 		authContent: '该客户已经存在，需要授权使用',
 		authConfirmText: '授权',
 		tableEmptyText: '暂无更多数据',
+		pleaseSelect: '请选择',
 		stateObj: {
 			1: '启用',
 			2: '禁用'
@@ -788,6 +789,7 @@ module.exports = {
 			typeId: '客户类型',
 			regionId: '客户区域',
 			propertyIds: '客户标签',
+			sourceId: '客户来源',
 			state: '客户状态'
 		}
 	},

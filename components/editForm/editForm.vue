@@ -198,7 +198,7 @@
 						<view class="content">
 							<view v-for="(subItem,indexSub) in formData[item.fieldName]" :key="indexSub" class="box-case">
 								<text>{{subItem | getName(item.options)}}</text>
-								<u-icon name="close-circle-fill" color="#8C8C8C" size="20"  @click="deleteMultiple(subItem,index,item.fieldName,indexSub)"></u-icon>
+								<u-icon v-if="!item.disabled" name="close-circle-fill" color="#8C8C8C" size="20"  @click="deleteMultiple(subItem,index,item.fieldName,indexSub)"></u-icon>
 							</view>
 						</view>
 						<u-icon name="arrow-right" color="#666666" size="15" @click="!item.disabled ? item.showOptions = true : ''"></u-icon>
@@ -516,11 +516,17 @@ export default {
 		},
 		// picker 选择
 		pickerConfirm(e,name,index){
-			this.formData[name] = e.value[0].value
-			// 对部分字段校验
-			this.$refs.form.validateField(name)
-			this.handleFiltrate(name)
-			this.renderDataSource[index].showOptions = false
+			// 过滤空值
+			const arr = e.value.filter(item => item)
+			if(arr.length){
+				this.formData[name] = arr[0].value
+				// 对部分字段校验
+				this.$refs.form.validateField(name)
+				this.handleFiltrate(name)
+				this.renderDataSource[index].showOptions = false
+			} else {
+				uni.$u.toast(this.$t('common.pleaseSelect'))
+			}
 		},
 		// 日期
 		async datetimePicker(e,name,index) {
