@@ -68,6 +68,12 @@ export default {
 					options: [],
 				},
 				{
+					labelText: this.$t('customerList.search.sourceId'),
+					type: 'select',
+					fieldName: 'sourceId',
+					options: [],
+				},
+				{
 					labelText: this.$t('customerList.search.state'),
 					type: 'select',
 					fieldName: 'state',
@@ -106,13 +112,16 @@ export default {
 		async init() {
 			// 获取客户类型
 			await this.getCustomerType()
-			this.searchOptions[1].options = this.customerTypeList
+			this.searchOptions[0].options = this.customerTypeList
 			// 获取客户区域
 			await this.getCustomerArea()
-			this.searchOptions[2].options = this.customerAreaList
+			this.searchOptions[1].options = this.customerAreaList
 			// 获取客户标签
 			await this.geCustomerProperty()
-			this.searchOptions[3].options = this.customertProperty
+			this.searchOptions[2].options = this.arrayMergingCommon(this.customertProperty)
+			// 获取客户来源
+			await this.getCustomerSource()
+			this.searchOptions[3].options = this.customerSourceList
 		},
 		// 搜索
 		search(e) {

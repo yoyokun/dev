@@ -294,7 +294,7 @@ export default {
 					placeholder: this.$t('addCustomer.form3.typeIdPlace'),
 					showOptions: false,
 					options: [],
-					disabled: false
+					disabled: true
 				},
 				{
 					type: 'picker',
@@ -303,7 +303,7 @@ export default {
 					placeholder: this.$t('addCustomer.form3.regionIdPlace'),
 					showOptions: false,
 					options: [],
-					disabled: false
+					disabled: true
 				},
 				{
 					type: 'text',
@@ -350,7 +350,7 @@ export default {
 					placeholder: this.$t('addCustomer.form3.propertyIdsPlace'),
 					showOptions: false,
 					options: [],
-					disabled: false
+					disabled: true
 				},
 				{
 					type: 'multiple',
@@ -359,7 +359,7 @@ export default {
 					placeholder: this.$t('addCustomer.form3.salePropertyIdsPlace'),
 					showOptions: false,
 					options: [],
-					disabled: false
+					disabled: true
 				},
 				{
 					type: 'picker',
@@ -520,8 +520,10 @@ export default {
 			this.formDataSource2.forEach(v=>{
 				v.disabled = false
 			})
-			this.formDataSource3.forEach(v=>{
-				v.disabled = false
+			this.formDataSource3.forEach((v,i)=>{
+				if(i !== 0 && i !== 1 && i !== 4 && i !== 5){
+					v.disabled = false
+				}
 			})
 		},
 		// 提交

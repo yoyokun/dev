@@ -59,8 +59,8 @@
 					</block>
 				</view>
 				<view class="actions">
-					<u-button class="button" type="primary" @click="confirm">{{$t('search.confirmBtn')}}</u-button>
-					<u-button class="button" type="info" plain @click="reset">{{$t('search.resetBtn')}}</u-button>
+					<u-button class="button" shape="circle" type="primary" plain @click="reset">{{$t('search.resetBtn')}}</u-button>
+					<u-button class="button" shape="circle" type="primary" @click="confirm">{{$t('search.confirmBtn')}}</u-button>
 				</view>
 			</view>
 		</u-popup>
@@ -115,7 +115,7 @@
 				this.params = {
 					keyword: ''
 				}
-				this.emitSearch()
+				this.confirm()
 			},
 			// 选择选项
 			selectItem(val, field) {
@@ -155,115 +155,118 @@
 	}
 </script>
 <style lang="scss" scoped>
-	.search {
-		padding: 20rpx;
-		width: 100%;
-		box-sizing: border-box;
+.search {
+	padding: 20rpx;
+	width: 100%;
+	box-sizing: border-box;
+	.search-content {
+		display: flex;
+		align-items: center;
 
-		.search-content {
-			display: flex;
-			align-items: center;
-
-			.box {
-				flex: 1;
-			}
-			.button {
-				background: rgba(42, 130, 228, 1);
-				box-shadow: 0rpx 4rpx 8rpx 0rpx rgba(42, 130, 228, 0.2);
-				font-size: 28rpx;
-				font-weight: 500;
-				color: rgba(255, 255, 255, 1);
-				padding: 14rpx 20rpx;
-				border-radius: 200rpx;
-				width: 140rpx;
-				box-sizing: border-box;
-				text-align: center;
-				margin-left: 20rpx;
-			}
-			.more{
-				font-size: 32rpx;
-				color: rgba(42, 130, 228, 1);
-				margin-left: 20rpx;
-			}
+		.box {
+			flex: 1;
 		}
+		.button {
+			background: rgba(42, 130, 228, 1);
+			box-shadow: 0rpx 4rpx 8rpx 0rpx rgba(42, 130, 228, 0.2);
+			font-size: 28rpx;
+			font-weight: 500;
+			color: rgba(255, 255, 255, 1);
+			padding: 14rpx 20rpx;
+			border-radius: 200rpx;
+			width: 140rpx;
+			box-sizing: border-box;
+			text-align: center;
+			margin-left: 20rpx;
+		}
+		.more{
+			font-size: 32rpx;
+			color: rgba(42, 130, 228, 1);
+			margin-left: 20rpx;
+		}
+	}
+	.filter {
+		height: 74vh;
+		display: flex;
+		flex-direction: column;
+		.filter-box {
+			height: 1px;
+			flex: 1;
+			overflow-y: scroll;
+			padding: 20rpx;
+			box-sizing: border-box;
+			background: rgba(247, 247, 247, 1);
 
-		.filter {
-			height: 74vh;
-			display: flex;
-			flex-direction: column;
-
-			.filter-box {
-				height: 1px;
-				flex: 1;
-				overflow-y: scroll;
+			.cell {
+				margin-bottom: 20rpx;
+				background: white;
 				padding: 20rpx;
-				box-sizing: border-box;
-				background: #fafafa;
+				&:first-child {
+					border-top-left-radius: 20rpx;
+					border-top-right-radius: 20rpx;
+				}
+				&:last-child {
+					margin-bottom: 0;
+				}
 
-				.cell {
-					border-radius: 20rpx;
-					margin-bottom: 20rpx;
-					background: white;
-					padding: 20rpx;
-					border: 1px solid #eee;
+				.tle {
+					color: rgba(56, 56, 56, 1);
+					font-size: 34rpx;
+					font-weight: 500;
+				}
 
-					&:last-child {
-						margin-bottom: 0;
-					}
+				.cell-box {
+					display: flex;
+					flex-wrap: wrap;
 
-					.tle {
-						color: rgb(42, 130, 228);
-						font-size: 30rpx;
-						font-weight: bold;
-					}
-
-					.cell-box {
-						display: flex;
-						flex-wrap: wrap;
-
-						.item {
-							padding: 0 20rpx;
-							height: 54rpx;
-							line-height: 54rpx;
-							border: 1px solid #eee;
-							border-radius: 54rpx;
-							margin-right: 20rpx;
-							margin-top: 20rpx;
-							font-size: 26rpx;
-							color: #666;
-
-							&.on {
-								border-color: rgb(42, 130, 228);
-								// color: rgb(42, 130, 228);
-								background: rgb(42, 130, 228);
-								color: white;
-							}
-
+					.item {
+						padding: 0 20rpx;
+						height: 54rpx;
+						line-height: 54rpx;
+						border: 1rpx solid rgba(128, 128, 128, 1);    
+						border-radius: 16rpx;
+						margin-right: 20rpx;
+						margin-top: 20rpx;
+						font-size: 26rpx;
+						color: rgba(128, 128, 128, 1);
+						&.on {
+							border-color: rgba(42, 130, 228, 1);
+							background: rgba(42, 130, 228, 1);
+							color: rgba(255, 255, 255, 1);
 						}
 
-						.datetime {
-							width: 100%;
-							margin-top: 20rpx;
-						}
+					}
+
+					.datetime {
+						width: 100%;
+						margin-top: 20rpx;
 					}
 				}
 			}
-
-			.actions {
-				padding: 20rpx;
-				display: flex;
-				box-shadow: 0px -1px 10px 0px rgba(0, 0, 0, 0.1);
-
-				.button {
-					margin-right: 20rpx;
-					height: 80rpx !important;
-
-					&:last-child {
-						margin-right: 0;
-
-					}
+		}
+		.actions {
+			padding: 20rpx 40rpx;
+			display: flex;
+			background: rgba(247, 247, 247, 1);
+			.button {
+				margin-right: 20rpx;
+				height: 80rpx !important;
+				&:last-child {
+					margin-right: 0;
 				}
 			}
 		}
 	}
+}
+::v-deep .u-popup__content__close--top-right{
+	top:15rpx;
+	right:15rpx;
+}
+::v-deep .uicon-close{
+	background: #8C8C8C !important;
+	color: #fff !important;
+	border-radius: 40rpx !important;
+	font-weight: normal !important;
+	padding: 5rpx;
+}
 </style>
