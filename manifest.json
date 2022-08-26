@@ -160,9 +160,9 @@
             "proxy" : {
                 "/LPGManage" : {
                     // "target" : "http://qxth5.cygmgs.com/", //目标接口域名
-                    "target" : "http://192.168.0.218:8099", //目标接口域名
+                    // "target" : "http://192.168.0.218:8099", //目标接口域名
                     // "target" : "http://192.168.0.194:8085", //目标接口域名
-                    // "target" : "http://qxt.cygmgs.com", //目标接口域名
+                    "target" : "http://qxt.cygmgs.com", //目标接口域名
                     // "target" : "http://192.168.0.194:8085", //目标接口域名
                     "changeOrigin" : true, //是否跨域
                     "secure" : false // 设置支持https协议的代理
