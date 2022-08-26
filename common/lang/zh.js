@@ -796,11 +796,43 @@ module.exports = {
 	// 钢瓶汇总
 	cylinderList:{
 		titleText: '客户钢瓶汇总',
-		totalTxt: '总数'
+		totalTxt: '总数',
+		searchOptions: {
+			state:{
+				label: '客户状态',
+				options: [{
+						name: '启用',
+						value: 1
+					},
+					{
+						name: '禁用',
+						value: 2
+					}
+				]
+			},
+			typeId:{
+				label:'客户类型'
+			},
+			regionId:{
+				label:'客户区域'
+			},
+			propertyIds:{
+				label:'客户标签'
+			}
+		}
 	},
 	// 客户钢瓶详情
 	cylinderInfo:{
 		titleText: '客户钢瓶详情',
+		userNo:'会员编号',
+		customerNo:'客户编号',
+		customerName:'客户名称',
+		state:'账号状态',
+		regionName:'客户区域',
+		typeName:'客户类型',
+		cylinderNum:'钢瓶总数',
+		borrow:'借',
+		unit:'个',
 	},
 	// 组织信息
 	orgInfo: {

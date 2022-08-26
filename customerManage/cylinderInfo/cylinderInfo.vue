@@ -18,14 +18,14 @@
 			</view>
 			<view class="ihead">
 				<text>{{item.orgName}}</text>
-				<text class="red">借</text>
+				<text class="red">{{$t('cylinderInfo.borrow')}}</text>
 			</view>
 			<view class="list-item">
 				<!-- <view class="list-item" v-for="i in 2"> -->
 				<text>{{item.goodsNo}}</text>
 				<text>{{item.goodsName}}</text>
 				<text>{{item.standardName}}</text>
-				<text>{{item.residueNum}}个</text>
+				<text>{{item.residueNum}}{{$t('cylinderInfo.unit')}}</text>
 			</view>
 		</view>
 	</view>
