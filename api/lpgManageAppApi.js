@@ -440,17 +440,17 @@ export function sysOrgSaveOrEdit(data = {}, message = '', custom = {}) {
 }
 // 组织 修改状态
 export function sysOrgUpdateState(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/info/control/sysOrg/updateState',
-    method: 'post',
-    data,
+	return request({
+		url: baseURL + '/admin/info/control/sysOrg/updateState',
+		method: 'post',
+		data,
 		message,
 		custom: {
 			auth: custom?.auth || true, // 是否需要token
 			toast: custom?.toast || true, // 弹框
 			catch: custom?.catch || true // catch返回
 		}
-  })
+	})
 }
 // 工单管理 根据条件查询列表信息
 export function auditWorkFindList(data = {}, message = '', custom = {}) {
@@ -804,43 +804,57 @@ export function auditTaskRecallTaskByLinkId(data = {}, message = '', custom = {}
 }
 // 钢瓶盘点记录 修改状态
 export function userCylinderCheckUpdateState(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/info/control/userCylinderCheck/updateState',
-    method: 'post',
-    data,
+	return request({
+		url: baseURL + '/admin/info/control/userCylinderCheck/updateState',
+		method: 'post',
+		data,
 		message,
 		custom: {
 			auth: custom?.auth || true, // 是否需要token
 			toast: custom?.toast || true, // 弹框
 			catch: custom?.catch || true // catch返回
 		}
-  })
+	})
 }
 // 钢瓶盘点记录 删除
 export function userCylinderCheckDeleteByIds(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/info/control/userCylinderCheck/deleteByIds',
-    method: 'post',
-    data,
+	return request({
+		url: baseURL + '/admin/info/control/userCylinderCheck/deleteByIds',
+		method: 'post',
+		data,
 		message,
 		custom: {
 			auth: custom?.auth || true, // 是否需要token
 			toast: custom?.toast || true, // 弹框
 			catch: custom?.catch || true // catch返回
 		}
-  })
+	})
 }
 // 钢瓶盘点记录 作废
 export function userCylinderCheckToVoid(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/info/control/userCylinderCheck/toVoid',
-    method: 'post',
-    data,
+	return request({
+		url: baseURL + '/admin/info/control/userCylinderCheck/toVoid',
+		method: 'post',
+		data,
 		message,
 		custom: {
 			auth: custom?.auth || true, // 是否需要token
 			toast: custom?.toast || true, // 弹框
 			catch: custom?.catch || true // catch返回
 		}
-  })
+	})
+}
+// 钢瓶盘点记录 保存或修改
+export function userCylinderCheckSaveOrEdit(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/control/userCylinderCheck/saveOrEdit',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
 }

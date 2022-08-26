@@ -38,7 +38,7 @@
 					</view>
 					<view class="actions">
 						<view class="btn" v-if="item.checkState==1||item.checkState==4"
-							v-permission="{ permission:'app_addCylinderCheck_save'}">编辑</view>
+							v-permission="{ permission:'app_addCylinderCheck_save'}" @click="editData(item.id)">编辑</view>
 						<view class="btn green" v-if="item.checkState==1" @click="handleUpdate(item,2)"
 							v-permission="{ permission:'app_addCylinderCheck_submit'}">提交</view>
 						<view class="btn warning" v-if="item.checkState==2" @click="handleUpdate(item,7)">撤回</view>
@@ -160,7 +160,14 @@
 		},
 		methods: {
 			addData(){
-				this.$navigateTo('/customerManage/addCylinderCheck/addCylinderCheck')
+				uni.navigateTo({
+					url:'/customerManage/addCylinderCheck/addCylinderCheck'
+				})
+			},
+			editData(id){
+				this.$navigateTo('/customerManage/addCylinderCheck/addCylinderCheck',{
+					editId:id
+				})
 			},
 			async confVoid() {
 				const obj = {

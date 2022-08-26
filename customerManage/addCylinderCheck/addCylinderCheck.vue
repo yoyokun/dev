@@ -1,18 +1,19 @@
 <template>
 	<view class="gp-info">
 		<view class="form">
-			<view class="form-item">
+			<view class="form-item require">
 				<view class="label">盘点时间：</view>
 				<view class="desc">
-					<uni-datetime-picker v-model="formData.time" return-type="timestamp">
-						<input disabled :value="formData.time&&UnixToDate(formData.time)" placeholder="请选择盘点时间" />
+					<uni-datetime-picker v-model="formData.billTime" return-type="timestamp">
+						<input disabled :value="formData.billTime&&UnixToDate(formData.billTime)"
+							placeholder="请选择盘点时间" />
 					</uni-datetime-picker>
 				</view>
 				<view class="arrow">
 					<u-icon name="arrow-right" />
 				</view>
 			</view>
-			<view class="form-item">
+			<view class="form-item require">
 				<view class="label">客户：</view>
 				<view class="desc" @click="chooseCustomer">
 					<input disabled :value="formData.customerName" placeholder="请选择客户" />
@@ -52,11 +53,12 @@
 				<view class="table">
 					<us-table :table-column="tableColumn" :table-data="item.userCylinderCheckDetailList">
 						<view slot="checkStockNum" slot-scope="row">
-							<input class="input-stock" v-number type="number"
-								:value="row.data.checkStockNum?row.data.checkStockNum:''" placeholder="输入盘点数" />
+							<input class="input-stock" type="number" placeholder="输入盘点数"
+								v-model="row.data.checkStockNum" />
 						</view>
 						<view slot="diffNum" slot-scope="row">
-							<text>{{countDiffNum(row.data)}}</text>
+							<text class="diff-num"
+								:class="countDiffNum(row.data) < 0 ? 'red':''">{{countDiffNum(row.data)}}</text>
 						</view>
 					</us-table>
 				</view>
@@ -65,7 +67,7 @@
 
 		<view class="actions">
 			<view class="actions-box">
-				<u-button class="button" shape="circle" type="primary">保存</u-button>
+				<u-button class="button" shape="circle" type="primary" @click="saveData">保存</u-button>
 			</view>
 		</view>
 	</view>
@@ -76,14 +78,16 @@
 		UnixToDate
 	} from '@/utils/util'
 	import {
-		userCylinderCheckFindById
+		userCylinderCheckFindById,
+		userCylinderCheckSaveOrEdit,
+		userCylinderCheckFindCustomerIds
 	} from '@/api/lpgManageAppApi'
 	export default {
 		data() {
 			return {
 				UnixToDate: UnixToDate,
 				formData: {
-					time: null,
+					billTime: null,
 					customerName: null,
 					remarks: null
 				},
@@ -118,21 +122,27 @@
 				tableData: []
 			}
 		},
-		onLoad(options) {
+		async onLoad(options) {
 			uni.$on('chooseCustomer', (data) => {
-				this.customerId = data.id
-				this.formData.customerName = data.customerName
-				console.log(this.formData)
-				this.getInfo(data.id)
+				this.customerIds = data.id
+				this.getInfo({customerIds: data.id})
 			})
 			this.editId = options.editId || ''
 			if (this.editId) {
-				this.isSave = false
 				uni.setNavigationBarTitle({
 					title: this.$t('addCustomer.titleTextInfo')
 				});
+				console.log(this.editId)
+				const {
+					returnValue: res
+				} = await userCylinderCheckFindCustomerIds({
+					id: this.editId
+				})
+				if (res) {
+					this.customerIds = res
+					this.getInfo({ customerIds: res, id: this.editId })
+				}
 			} else {
-				this.isSave = true
 				uni.setNavigationBarTitle({
 					title: this.$t('addCustomer.titleText')
 				});
@@ -145,21 +155,78 @@
 			uni.$off('chooseCustomer')
 		},
 		methods: {
-			countDiffNum(data){
-				console.log(data)
+			// 保存数据
+			async saveData() {
+				if (!this.formData.billTime || !this.customerInfo) {
+					uni.showToast({
+						title: '必填项不能为空',
+						icon: 'none'
+					})
+					return
+				}
+				let data = {
+					...this.formData
+				}
+				data.billTimeStr = this.UnixToDate(data.billTime)
+				delete data.customerName
+				delete data.billTime
+				data.id = this.editId || ''
+				data.checkDetailData = []
+				this.customerInfo.forEach((item, index) => {
+					let obj = {
+						id: item.id,
+						customerId: item.customerId,
+						userCylinderCheckData: []
+					}
+					item.userCylinderCheckDetailList.forEach((val, key) => {
+						obj.userCylinderCheckData.push({
+							id: val.id || '',
+							standardId: val.standardId,
+							standardName: val.standardName,
+							systemStockNum: val.systemStockNum,
+							checkStockNum: val.checkStockNum
+						})
+					})
+					data.checkDetailData.push(obj)
+				})
+				data.checkDetailData = JSON.stringify(data.checkDetailData)
+				const {
+					returnValue: res,
+					message
+				} = await userCylinderCheckSaveOrEdit(data)
+				if (res) {
+					uni.showToast({
+						title: message,
+						icon: 'none'
+					})
+					setTimeout(() => {
+						uni.navigateBack({
+							delta: 1
+						})
+					}, 2000)
+				}
 			},
-			async getInfo(id) {
+			// 计算差异
+			countDiffNum(data) {
+				return data.checkStockNum - data.systemStockNum
+			},
+			// 获取详情
+			async getInfo(params) {
 				const {
 					returnValue: res,
 					titleObject: titleObject
-				} = await userCylinderCheckFindById({
-					customerIds: id
-				})
+				} = await userCylinderCheckFindById(params)
+				let customerName = []
 				// 获取显示的sku
 				let column = null
 				let skuId = []
-				column = titleObject.tableColumn.reduce((prev, cur) => {
-					return prev.childrenList.length > cur.childrenList.length ? prev : cur
+				// column = titleObject.tableColumn.reduce((prev, cur) => {
+				// 	return prev.childrenList.length > cur.childrenList.length ? prev : cur
+				// })
+				titleObject.tableColumn.forEach((item,index)=>{
+					if(item.prop=='standardCheckNum'){
+						column = item
+					}
 				})
 				if (column.childrenList.length > 0) {
 					column.childrenList.forEach((item, index) => {
@@ -169,6 +236,7 @@
 				// 过滤多余sku
 				res.userCylinderCheckCustomerVoList.forEach((item, index) => {
 					let skuArr = []
+					customerName.push(item.customerName)
 					item.userCylinderCheckDetailList.forEach((val, key) => {
 						if (skuId.indexOf(val.standardId) > -1) {
 							skuArr.push(val)
@@ -176,11 +244,15 @@
 					})
 					item.userCylinderCheckDetailList = skuArr
 				})
+				this.formData.customerName = customerName.join(',')
+				if(this.editId){
+					this.formData.billTime = res.billTime
+				}
 				this.customerInfo = res.userCylinderCheckCustomerVoList
 			},
 			chooseCustomer() {
 				this.goto('/infoManage/chooseCustomer/chooseCustomer', {
-					customerId: this.customerId,
+					customerId: this.customerIds,
 					orgId: this.userInfo.orgId
 				})
 			},
@@ -208,6 +280,19 @@
 				height: 100rpx;
 				border-bottom: 1px solid #eee;
 				padding: 0 30rpx;
+
+				&.require {
+					position: relative;
+
+					&::before {
+						content: '*';
+						color: red;
+						// display: inline-block;
+						position: absolute;
+						display: block;
+						left: 18rpx;
+					}
+				}
 
 				.label {
 					min-width: 150rpx;
@@ -280,6 +365,10 @@
 			.input-stock {
 				font-size: 26rpx;
 				color: #999;
+			}
+
+			.diff-num.red {
+				color: red;
 			}
 		}
 
