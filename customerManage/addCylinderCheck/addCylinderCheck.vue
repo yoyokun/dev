@@ -48,21 +48,16 @@
 			</u-button>
 		</view>
 		<view class="btn" v-else>
-			<!-- v-permission="{ permission:'app_cylinderCheckList_edit'}" -->
-			<u-button v-if="infos.checkState==1||infos.checkState==4" :text="$t('common.btn.edit')"
+			<u-button v-permission="{ permission:'app_cylinderCheckList_edit'}" v-if="infos.checkState==1||infos.checkState==4" :text="$t('common.btn.edit')"
 				type="primary" hairline shape="circle" plain @click="changeEdit(false)">
 			</u-button>
-			<!-- v-permission="{ permission:'app_cylinderCheckList_submit'}" -->
-			<u-button v-if="infos.checkState==1" :text="$t('cylinderCheckList.btns')[2]" @click="handleUpdate(infos,2)" type="success" hairline shape="circle" plain>
+			<u-button v-permission="{ permission:'app_cylinderCheckList_submit'}" v-if="infos.checkState==1" :text="$t('cylinderCheckList.btns')[2]" @click="handleUpdate(infos,2)" type="success" hairline shape="circle" plain>
 			</u-button>
-			<!-- v-permission="{ permission:'app_cylinderCheckList_delete'}" -->
-			<u-button v-if="infos.checkState==1||infos.checkState==5||infos.checkState==4" :text="$t('common.btn.delete')" type="error" hairline shape="circle" plain @click="handleDelete(infos)">
+			<u-button v-permission="{ permission:'app_cylinderCheckList_delete'}" v-if="infos.checkState==1||infos.checkState==5||infos.checkState==4" :text="$t('common.btn.delete')" type="error" hairline shape="circle" plain @click="handleDelete(infos)">
 			</u-button>
-			<!-- v-permission="{ permission:'app_cylinderCheckList_revert'}" -->
-			<u-button  v-if="infos.checkState==2" :text="$t('cylinderCheckList.btns')[3]" @click="handleUpdate(infos,7)" type="warning" hairline shape="circle" plain>
+			<u-button v-permission="{ permission:'app_cylinderCheckList_revert'}" v-if="infos.checkState==2" :text="$t('cylinderCheckList.btns')[3]" @click="handleUpdate(infos,7)" type="warning" hairline shape="circle" plain>
 			</u-button>
-			<!-- v-permission="{ permission:'app_cylinderCheckList_invalid'}" -->
-			<u-button v-if="infos.checkState==3||infos.checkState==6" :text="$t('cylinderCheckList.btns')[4]" @click="handleVoid(infos)" type="info" hairline shape="circle" plain></u-button>
+			<u-button v-permission="{ permission:'app_cylinderCheckList_invalid'}" v-if="infos.checkState==3||infos.checkState==6" :text="$t('cylinderCheckList.btns')[4]" @click="handleVoid(infos)" type="info" hairline shape="circle" plain></u-button>
 		</view>
 		
 		<!-- 作废 -->
