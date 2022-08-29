@@ -103,18 +103,123 @@
 					@click="handleDelete"></u-button>
 			</view>
 		</view>
+		<view class="tabcontent" v-if="tabSwitchId === 3">
+			<view v-show="showList">
+				<view class="search-box">
+					<search @search="search"></search>
+					<text class="add" @click="handleAdd">{{$t('common.btn.add')}}</text>
+				</view>
+				<view v-if="empty">
+					<view class="customerList">
+						<view v-for="(item,index) in dataList" :key="index" class="box">
+							<text class="state" v-if="item.isDefault === 1">{{item.isDefault | isDefault}}</text>
+							<view class="center">
+								<view class="flex">
+									<view class="blod m-r20 name"><image src="/static/image/name.png" class="icon" mode="widthFix"></image>{{item.linkman}}</view>
+									<view class="blod name"><image src="/static/image/phone.png" class="icon" mode="widthFix"></image>{{item.linkTel}}</view>
+								</view>
+								<view class="flex">
+									<view class="m-r20 name blod">{{item.creator}}</view>
+									<view class="name">{{item.createTime | dayjs}}</view>
+								</view>
+							</view>
+							<view class="right">
+								<u-button
+									:text="$t('common.btn.edit')" 
+									type="primary" 
+									hairline 
+									shape="circle" 
+									plain
+									size="small"
+									@click="handleEdit(item.id)">
+								</u-button>
+							</view>
+						</view>
+					</view>
+					<loading v-if="loading" class="loading" />
+					<view v-if="searchEnding" class="noData">{{$t('common.noData')}}</view>
+				</view>
+				<view v-else class="customerList">
+					<u-empty mode="list" icon="http://cdn.uviewui.com/uview/empty/list.png"></u-empty>
+				</view>
+				<loading v-if="loadingCenter" class="loading-center" />
+			</view>
+			<view v-if="!showList">
+				<user-contact :customer-id="editId" :editId="contactId" @editClose="editClose" @refresh="getInit"/>
+			</view>
+		</view>
+		<view class="tabcontent" v-if="tabSwitchId === 4">
+			<view v-show="showList">
+				<view class="search-box">
+					<search @search="search"></search>
+					<text class="add" @click="handleAdd">{{$t('common.btn.add')}}</text>
+				</view>
+				<view v-if="empty">
+					<view class="customerList">
+						<view v-for="(item,index) in dataList" :key="index" class="box">
+							<text class="state" v-if="item.isDefault === 1">{{item.isDefault | isDefault}}</text>
+							<view class="center">
+								<view class="flex">
+									<view class="name">{{item | addressSplicing}}</view>
+								</view>
+								<view class="flex">
+									<view class="m-r20 name blod">{{item.linkman}}</view>
+									<view class="name blod">{{item.phone}}</view>
+								</view>
+							</view>
+							<view class="right">
+								<u-button
+									:text="$t('common.btn.edit')" 
+									type="primary" 
+									hairline 
+									shape="circle" 
+									plain
+									size="small"
+									@click="handleEdit(item.id)">
+								</u-button>
+							</view>
+						</view>
+					</view>
+					<loading v-if="loading" class="loading" />
+					<view v-if="searchEnding" class="noData">{{$t('common.noData')}}</view>
+				</view>
+				<view v-else class="customerList">
+					<u-empty mode="list" icon="http://cdn.uviewui.com/uview/empty/list.png"></u-empty>
+				</view>
+				<loading v-if="loadingCenter" class="loading-center" />
+			</view>
+			<view v-if="!showList">
+				<user-address :customer-id="editId" :editId="contactId" @editClose="editClose" @refresh="getInit"/>
+			</view>
+		</view>
 		<!-- 请求 toast 提示 -->
 		<u-toast ref='uToast'></u-toast>
 	</view>
 </template>
 
 <script>
-import { userCustomerfindByIdDefault, userCustomerSaveOrEdit, userSettlementSaveOrEdit, userCustomerDeleteByIds, userCustomerUpdateState } from '@/api/lpgManageAppApi.js'
+let that = null
+import { 
+	userCustomerfindByIdDefault,
+	userCustomerSaveOrEdit,
+	userSettlementSaveOrEdit,
+	userCustomerDeleteByIds,
+	userCustomerUpdateState,
+	userAddressFindList,
+	userContactFindList
+} from '@/api/lpgManageAppApi.js'
 import { UnixToDate, getDayAddYears, DateToUnix, formatDate } from '@/utils/util.js'
 import { settingMixin } from '@/common/settingMixin.js'
 import { regionData } from 'element-china-area-data'
+import paginationMixin from '@/common/paginationMixin.js'
+import UserContact from './common/userContact'
+import UserAddress from './common/userAddress'
 export default {
-	mixins: [settingMixin],
+	mixins: [paginationMixin,settingMixin],
+	components: {
+		UserContact,
+		UserAddress
+	},
 	data() {
 		return {
 			isSave: true,
@@ -411,8 +516,21 @@ export default {
 			info: {},
 			editId: '',
 			userOrgId: '' ,// 附加信息id
-			userSettlementId: '' // 结算信息
+			userSettlementId: '', // 结算信息
+			params: {},
+			showList: true,
+			contactId: ''
 		}
+	},
+	// 过滤器
+	filters: {
+		isDefault(value) {
+			const stateObj = that.$t('customerInfo.isDefault')
+			return stateObj[value] || ''
+		}
+	},
+	async created(){
+		that = this
 	},
 	async onLoad(options) {
 		this.editId = options.editId || ''
@@ -467,6 +585,9 @@ export default {
 		onTabSwitch(item) {
 			this.current = item.index
 		  this.tabSwitchId = item.id
+			if(item.id === 3 || item.id === 4) {
+				this.getInit()
+			}
 		},
 		// 表单改变
 		async changeForm2(obj) {
@@ -623,6 +744,49 @@ export default {
 					}
 				}
 			})
+		},
+		// 搜索
+		search(e) {
+			this.params = { ...e }
+			this.getInit()
+		},
+		// 联系人 联系地址
+		async findDataList() {
+		  const data = {
+				...(this.params||{}),
+				...{
+					customerId: this.editId,
+					page: this.pagination.getCurrentPage(),
+					size: this.pagination.getCurrentSize()
+				}
+		  }
+			if(this.tabSwitchId === 3){
+				const { returnValue: res, totals } = await userContactFindList(data)
+				if (res) {
+				  this.setMoreData(res)
+				}
+			} else if(this.tabSwitchId === 4){
+				const { returnValue: res, totals } = await userAddressFindList(data)
+				if (res) {
+				  this.setMoreData(res)
+				}
+			}
+			this.loadClose()
+		},
+		// 添加联系人
+		handleAdd() {
+			this.showList = false
+			this.contactId = ''
+		},
+		// 编辑联系人
+		handleEdit(id) {
+			this.showList = false
+			this.contactId = id
+		},
+		// 关闭
+		editClose() {
+			this.showList = true
+			this.contactId = ''
 		}
 	}
 }
@@ -633,7 +797,7 @@ export default {
 	border: none;
 }
 .tabcontent{
-	padding-top: 90rpx;
+	padding-top: 82rpx;
 }
 ::v-deep .u-form-item .u-line{
 	border-bottom: 1rpx solid rgba(229, 229, 229, 1) !important;
@@ -679,6 +843,54 @@ export default {
 	@include flexMixin(column);
 	.u-button{
 		margin: 20rpx 10rpx;
+	}
+}
+.search-box{
+	@include flexMixin();
+	.add{
+		white-space: nowrap;
+		font-size: 32rpx;
+		font-weight: 400;
+		color: rgba(42, 130, 228, 1);
+		padding-right: 20rpx;
+	}
+}
+.customerList{
+	padding: 140rpx 20rpx 0rpx 20rpx;
+	.box{
+		border: none;
+		background: #fff;
+		position: relative;
+		.state{
+			right: 0rpx;
+			border-top-left-radius: 0rpx !important;
+			border-bottom-right-radius: 0rpx !important;
+			border-top-right-radius: 16rpx;
+			border-bottom-left-radius: 16rpx;
+			font-size: 20rpx !important;
+			padding: 2rpx 15rpx !important;
+			position: absolute;
+			top:0rpx;
+			color: rgba(42, 130, 228, 1) !important;
+			background: rgba(181, 216, 255, 1) !important;
+		}
+		.center{
+			padding-left: 10rpx;
+			border: none;
+			border-radius: 16rpx;
+			.flex{
+				margin-top: 16rpx !important;
+				.name{
+					@include flexMixin(row,flex-start,center);
+				}
+			}
+			
+		}
+		.right{
+			width: 180rpx;
+			padding: 0rpx 30rpx;
+			box-sizing: border-box;
+		}
 	}
 }
 </style>

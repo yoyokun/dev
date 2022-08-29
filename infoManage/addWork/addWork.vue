@@ -22,8 +22,7 @@
 						:text="$t('common.btn.edit')" 
 						type="primary" 
 						hairline 
-						shape="circle" 
-						plain 
+						shape="circle"  
 						@click="handleEdit">
 					</u-button>
 					<!-- 删除 -->
@@ -496,9 +495,9 @@ export default {
 	.btn{
 		width: 632rpx;
 		margin: 60rpx auto;
-		@include flexMixin();
+		@include flexMixin(column);
 		.u-button{
-			margin: 0rpx 10rpx;
+			margin: 20rpx 10rpx;
 		}
 	}
 	.addRole{
