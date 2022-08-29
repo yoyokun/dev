@@ -20,7 +20,7 @@
 			<loading v-if="loading" class="loading" />
 			<view v-if="searchEnding" class="noData">{{$t('common.noData')}}</view>
 		</block>
-		<view v-else class="goodsList">
+		<view v-else class="gp-box">
 			<u-empty mode="list" icon="http://cdn.uviewui.com/uview/empty/list.png"></u-empty>
 		</view>
 		<loading v-if="loadingCenter" class="loading-center" />

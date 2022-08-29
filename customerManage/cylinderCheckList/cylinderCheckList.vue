@@ -9,7 +9,7 @@
 		</view>
 		<block v-if="empty">
 			<view class="gp-box" v-if="dataList.length">
-				<view class="gp-main" v-for="(item, index) in dataList" :key="index" @click="toDetail(item)">
+				<view class="gp-main" v-for="(item, index) in dataList" :key="index" @click="editData(item.id,true)">
 					<view class="head">
 						<text>{{item.billNo}}</text>
 						<text class="status" v-if="item.checkState==3">{{$t('cylinderCheckList.checkStateTxt')[0]}}</text>
@@ -37,49 +37,24 @@
 							<view class="desc">{{item.billTime | dayjs}}</view>
 						</view>
 					</view>
-					<view class="actions">
-						<view class="btn" v-if="item.checkState==1||item.checkState==4"
-							v-permission="{ permission:'app_addCylinderCheck_save'}" @click="editData(item.id)">{{$t('cylinderCheckList.btns')[1]}}</view>
-						<view class="btn green" v-if="item.checkState==1" @click="handleUpdate(item,2)"
-							v-permission="{ permission:'app_addCylinderCheck_submit'}">{{$t('cylinderCheckList.btns')[2]}}</view>
-						<view class="btn warning" v-if="item.checkState==2" @click="handleUpdate(item,7)">{{$t('cylinderCheckList.btns')[3]}}</view>
-						<view class="btn gray" v-if="item.checkState==3||item.checkState==6" @click="handleVoid(item)"
-							v-permission="{ permission:'app_cylinderCheckList_invalid'}">
-							{{$t('cylinderCheckList.btns')[4]}}</view>
-						<view class="btn red" v-if="item.checkState==1||item.checkState==5||item.checkState==4"
-							@click="handleDelete(item)" v-permission="{ permission:'app_cylinderCheckList_delete'}">{{$t('cylinderCheckList.btns')[5]}}
-						</view>
-					</view>
 				</view>
 			</view>
 			<loading v-if="loading" class="loading" />
 			<view v-if="searchEnding" class="noData">{{$t('common.noData')}}</view>
 		</block>
-		<view v-else class="goodsList">
+		<view v-else class="gp-box">
 			<u-empty mode="list" icon="http://cdn.uviewui.com/uview/empty/list.png"></u-empty>
 		</view>
 		<loading v-if="loadingCenter" class="loading-center" />
 		<!-- 请求 toast 提示 -->
 		<u-toast ref='uToast'></u-toast>
 
-		<!-- 作废 -->
-		<u-modal :show="showModal" :title="$t('cylinderCheckList.descTle')" :closeOnClickOverlay="true" :asyncClose="true" :showCancelButton="true"
-			@cancel="closeModal" @close="closeModal" @confirm="confVoid">
-			<view class="modal-main">
-				<view>{{$t('cylinderCheckList.descTips')}}</view>
-				<u-textarea v-model="modalParams.value" class="modal-text" placeholder="请输入原因"></u-textarea>
-			</view>
-		</u-modal>
 	</view>
 </template>
 
 <script>
 	import {
 		userCylinderCheckFindList,
-		auditTaskRecallTaskByLinkId,
-		userCylinderCheckUpdateState,
-		userCylinderCheckDeleteByIds,
-		userCylinderCheckToVoid
 	} from '@/api/lpgManageAppApi'
 	import paginationMixin from '@/common/paginationMixin.js'
 	import {
@@ -157,118 +132,11 @@
 					url:'/customerManage/addCylinderCheck/addCylinderCheck'
 				})
 			},
-			editData(id){
+			editData(id,show = false){
 				this.$navigateTo('/customerManage/addCylinderCheck/addCylinderCheck',{
-					editId:id
+					editId: id,
+					show: show,
 				})
-			},
-			async confVoid() {
-				const obj = {
-					ids: [],
-					invalidRemarks: this.modalParams.value||''
-				}
-				obj.ids.push(this.modalParams.voidData.id)
-				const {
-					returnValue: res,
-					message
-				} = await userCylinderCheckToVoid(obj)
-				if (res) {
-					uni.showToast({
-						title: message,
-						icon: 'none'
-					})
-					this.closeModal()
-					this.search({})
-				}
-			},
-			closeModal() {
-				this.showModal = false
-				this.modalParams = {}
-			},
-			handleVoid(data) {
-				this.showModal = true
-				this.modalParams.voidData = data
-			},
-			// 提交 撤回
-			handleUpdate(data, type) {
-				const that = this
-				if (type === 7) {
-					console.log()
-					uni.showModal({
-						title: that.$t('cylinderCheckList.tipsTle')[0],
-						content: that.$t('cylinderCheckList').backTxt(data.billNo),
-						// content: `真的要撤回${data.billNo}该条数据吗?`,
-						success: async function(res) {
-							if (res.confirm) {
-								const obj = {
-									linkId: data.id
-								}
-								const {
-									returnValue: res,
-									message
-								} = await auditTaskRecallTaskByLinkId(obj)
-								if (res) {
-									uni.showToast({
-										title: message,
-										icon: 'none'
-									})
-									that.search({})
-								}
-							}
-						}
-					})
-				} else {
-					uni.showModal({
-						title: that.$t('cylinderCheckList.tipsTle')[1],
-						content: that.$t('cylinderCheckList').subTxt(data.billNo),
-						// content: `真的要提交${data.billNo}该条数据吗?`,
-						success: async function(res) {
-							if (res.confirm) {
-								const obj = {
-									ids: [data.id],
-									state: type
-								}
-								const {
-									returnValue: res,
-									message
-								} = await userCylinderCheckUpdateState(obj)
-								if (res) {
-									uni.showToast({
-										title: message,
-										icon: 'none'
-									})
-									that.search({})
-								}
-							}
-						}
-					})
-				}
-			},
-			// 删除
-			handleDelete(data) {
-				const that = this
-				uni.showModal({
-					title: that.$t('cylinderCheckList.tipsTle')[2],
-					content: that.$t('cylinderCheckList').delTxt(data.billNo),
-					success: async function(res) {
-						if (res.confirm) {
-							const obj = {
-								ids: [data.id]
-							}
-							const {
-								returnValue: res,
-								message
-							} = await userCylinderCheckDeleteByIds(obj)
-							if (res) {
-								uni.showToast({
-									title: message,
-									icon: 'none'
-								})
-								that.search({})
-							}
-						}
-					}
-				});
 			},
 			// 搜索
 			search(e) {
@@ -276,14 +144,6 @@
 					...e
 				}
 				this.getInit()
-			},
-			// 详情
-			toDetail(item) {
-				return
-				this.$navigateTo('/customerManage/cylinderInfo/cylinderInfo', {
-					editId: item.id,
-					cylinderNum: item.cylinderNum
-				})
 			},
 			// 获取列表
 			async findDataList() {
@@ -425,69 +285,8 @@
 						}
 					}
 				}
-
-				.actions {
-					display: flex;
-					font-size: 28rpx;
-					padding: 20rpx;
-					justify-content: flex-end;
-					border-top: 1px solid #eee;
-
-					.btn {
-						margin-left: 20rpx;
-						width: 150rpx;
-						height: 56rpx;
-						text-align: center;
-						line-height: 56rpx;
-						background: #F0F7FF;
-						border: 1px solid #2A82E4;
-						color: #2A82E4;
-						border-radius: 60rpx;
-
-						&.green {
-							border-color: #43CF7C;
-							color: #43CF7C;
-							background: rgba(67, 207, 124, 0.05);
-						}
-
-						&.warning {
-							color: #FF8D1A;
-							border-color: #FF8D1A;
-							background: rgba(255, 141, 26, 0.05);
-						}
-
-						&.gray {
-							color: #808080;
-							border-color: #808080;
-							background: rgba(229, 229, 229, 0.05);
-						}
-
-						&.red {
-							color: rgba(212, 48, 48, 1);
-							border-color: rgba(212, 48, 48, 1);
-							background: rgba(255, 107, 74, 0.07);
-						}
-					}
-				}
 			}
 		}
 
-	}
-
-	.modal-main {
-		width: 100%;
-		font-size: 28rpx;
-
-		&>view {
-			margin-bottom: 20rpx;
-		}
-
-		::v-deep .modal-text {
-			font-size: 28rpx;
-
-			.u-textarea__field {
-				font-size: 28rpx;
-			}
-		}
 	}
 </style>

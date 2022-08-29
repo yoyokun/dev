@@ -466,6 +466,7 @@ module.exports = {
 		btns: ['添加', '编辑', '提交', '撤回', '作废', '删除'],
 		descTle: '作废提示',
 		descTips: '作废描述',
+		descPlaceholder: '请输入原因',
 		searchOptions: {
 			state: {
 				label: '客户状态',
@@ -494,6 +495,9 @@ module.exports = {
 		subTxt:(txt)=>`真的要提交${txt}该条数据吗?`,
 		delTxt:(txt)=>`真的要删除${txt}该条数据吗?`,
 	},
+	// cylinderCheckInfo:{
+	// 	titleText: '',
+	// },
 	// 我的工单
 	userWorkList: {
 		titleText: '我的工单',

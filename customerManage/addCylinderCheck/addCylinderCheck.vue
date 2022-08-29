@@ -1,33 +1,10 @@
 <template>
 	<view class="gp-info">
+
 		<view class="form">
-			<view class="form-item require">
-				<view class="label">{{$t('addCylinderCheck.form.billTime.label')}}：</view>
-				<view class="desc">
-					<uni-datetime-picker v-model="formData.billTime" return-type="timestamp">
-						<input disabled :value="formData.billTime&&UnixToDate(formData.billTime)"
-							:placeholder="$t('addCylinderCheck.form.billTime.placeholder')" />
-					</uni-datetime-picker>
-				</view>
-				<view class="arrow">
-					<u-icon name="arrow-right" />
-				</view>
-			</view>
-			<view class="form-item require">
-				<view class="label">{{$t('addCylinderCheck.form.customerName.label')}}：</view>
-				<view class="desc" @click="chooseCustomer">
-					<input disabled :value="formData.customerName" :placeholder="$t('addCylinderCheck.form.customerName.placeholder')" />
-				</view>
-				<view class="arrow">
-					<u-icon name="arrow-right" />
-				</view>
-			</view>
-			<view class="form-item">
-				<view class="label">{{$t('addCylinderCheck.form.remarks.label')}}：</view>
-				<view class="desc">
-					<input :value="formData.remarks" :placeholder="$t('addCylinderCheck.form.remarks.placeholder')" />
-				</view>
-			</view>
+			<edit-form ref="dialogForm" labelWidth="100" classForm="normalForm" :form-data-source="formDataSource"
+				:form-data-value="formDataValue" @change="changeForm" @chooseCustomer="chooseCustomer">
+			</edit-form>
 		</view>
 		<block v-if="customerInfo">
 			<block v-for="(item,index) in customerInfo" :key='index'>
@@ -35,7 +12,8 @@
 					<view class="head">
 						<view class="gp-no">{{item.customerNo}}</view>
 						<view class="gp-user">{{item.customerName}}</view>
-						<view class="state" v-if="item.state!=2">{{$t('addCylinderCheck.stateTxt')[0]}}</view>
+						<view class="state" v-if="item.state!=2">{{$t('addCylinderCheck.stateTxt')[0]}}
+						</view>
 						<view class="state red" v-else>{{$t('addCylinderCheck.stateTxt')[1]}}</view>
 					</view>
 					<view class="main-box">
@@ -53,7 +31,9 @@
 				<view class="table">
 					<us-table :table-column="tableColumn" :table-data="item.userCylinderCheckDetailList">
 						<view slot="checkStockNum" slot-scope="row">
-							<input class="input-stock" type="number" :placeholder="$t('addCylinderCheck.stockNumPlaceholder')" v-model="row.data.checkStockNum" />
+							<input :disabled="isSave" class="input-stock" type="number"
+								:placeholder="$t('addCylinderCheck.stockNumPlaceholder')"
+								v-model="row.data.checkStockNum" />
 						</view>
 						<view slot="diffNum" slot-scope="row">
 							<text class="diff-num"
@@ -63,12 +43,36 @@
 				</view>
 			</block>
 		</block>
-
-		<view class="actions">
-			<view class="actions-box">
-				<u-button class="button" shape="circle" type="primary" @click="saveData">保存</u-button>
-			</view>
+		<view class="btn" v-if="!isSave">
+			<u-button :text="$t('common.btn.save')" type="primary" hairline shape="circle" @click="saveData">
+			</u-button>
 		</view>
+		<view class="btn" v-else>
+			<!-- v-permission="{ permission:'app_cylinderCheckList_edit'}" -->
+			<u-button v-if="infos.checkState==1||infos.checkState==4" :text="$t('common.btn.edit')"
+				type="primary" hairline shape="circle" plain @click="changeEdit(false)">
+			</u-button>
+			<!-- v-permission="{ permission:'app_cylinderCheckList_submit'}" -->
+			<u-button v-if="infos.checkState==1" :text="$t('cylinderCheckList.btns')[2]" @click="handleUpdate(infos,2)" type="success" hairline shape="circle" plain>
+			</u-button>
+			<!-- v-permission="{ permission:'app_cylinderCheckList_delete'}" -->
+			<u-button v-if="infos.checkState==1||infos.checkState==5||infos.checkState==4" :text="$t('common.btn.delete')" type="error" hairline shape="circle" plain @click="handleDelete(infos)">
+			</u-button>
+			<!-- v-permission="{ permission:'app_cylinderCheckList_revert'}" -->
+			<u-button  v-if="infos.checkState==2" :text="$t('cylinderCheckList.btns')[3]" @click="handleUpdate(infos,7)" type="warning" hairline shape="circle" plain>
+			</u-button>
+			<!-- v-permission="{ permission:'app_cylinderCheckList_invalid'}" -->
+			<u-button v-if="infos.checkState==3||infos.checkState==6" :text="$t('cylinderCheckList.btns')[4]" @click="handleVoid(infos)" type="info" hairline shape="circle" plain></u-button>
+		</view>
+		
+		<!-- 作废 -->
+		<u-modal :show="showModal" :title="$t('cylinderCheckList.descTle')" :closeOnClickOverlay="true" :asyncClose="true" :showCancelButton="true"
+			@cancel="closeModal" @close="closeModal" @confirm="confVoid">
+			<view class="modal-main">
+				<view>{{$t('cylinderCheckList.descTips')}}</view>
+				<u-textarea v-model="modalParams.value" class="modal-text" :placeholder="$t('cylinderCheckList.descPlaceholder')"></u-textarea>
+			</view>
+		</u-modal>
 	</view>
 </template>
 
@@ -78,18 +82,57 @@
 	} from '@/utils/util'
 	import {
 		userCylinderCheckFindById,
+		auditTaskRecallTaskByLinkId,
+		userCylinderCheckUpdateState,
 		userCylinderCheckSaveOrEdit,
+		userCylinderCheckDeleteByIds,
+		userCylinderCheckToVoid,
 		userCylinderCheckFindCustomerIds
 	} from '@/api/lpgManageAppApi'
 	export default {
 		data() {
 			return {
+				showModal: false,
+				modalParams:{},
+				isSave: false,
 				UnixToDate: UnixToDate,
-				formData: {
+				formDataValue: {
 					billTime: null,
 					customerName: null,
 					remarks: null
 				},
+				infos:{},
+				formDataSource: [{
+						type: 'datetime',
+						labelText: this.$t('addCylinderCheck.form.billTime.label'),
+						fieldName: 'billTime',
+						disabled: false,
+						placeholder: this.$t('addCylinderCheck.form.billTime.placeholder')
+					},
+					{
+						type: 'chooseBtn',
+						labelText: this.$t('addCylinderCheck.form.customerName.label'),
+						fieldName: 'customerName',
+						placeholder: this.$t('addCylinderCheck.form.customerName.placeholder'),
+						// maxlength: 50,
+						required: true,
+						disabled: false,
+						func: 'chooseCustomer',
+						rules: [{
+							required: true,
+							message: this.$t('addCylinderCheck.form.customerName.placeholder'),
+							trigger: ['change', 'blur']
+						}]
+					},
+					{
+						type: 'text',
+						labelText: this.$t('addCylinderCheck.form.remarks.label'),
+						fieldName: 'remarks',
+						placeholder: this.$t('addCylinderCheck.form.remarks.placeholder'),
+						// maxlength: 50,
+						disabled: false
+					}
+				],
 				customerInfo: null,
 				tableColumn: [{
 						prop: 'standardName',
@@ -124,14 +167,16 @@
 		async onLoad(options) {
 			uni.$on('chooseCustomer', (data) => {
 				this.customerIds = data.id
-				this.getInfo({customerIds: data.id})
+				this.getInfo({
+					customerIds: data.id
+				})
 			})
 			this.editId = options.editId || ''
 			if (this.editId) {
 				uni.setNavigationBarTitle({
 					title: this.$t('addCylinderCheck.titleTextEdit')
 				});
-				console.log(this.editId)
+				this.changeEdit(true)
 				const {
 					returnValue: res
 				} = await userCylinderCheckFindCustomerIds({
@@ -139,7 +184,10 @@
 				})
 				if (res) {
 					this.customerIds = res
-					this.getInfo({ customerIds: res, id: this.editId })
+					this.getInfo({
+						customerIds: res,
+						id: this.editId
+					})
 				}
 			} else {
 				uni.setNavigationBarTitle({
@@ -154,9 +202,147 @@
 			uni.$off('chooseCustomer')
 		},
 		methods: {
+			changeForm(e) {
+				this.formDataValue = e.queryParams
+			},
+			changeEdit(isSave = this.isSave){
+				this.isSave = isSave
+				if(isSave){
+					this.formDataSource.forEach(v=>{
+						v.disabled = true
+					})
+				}else{
+					this.formDataSource.forEach(v=>{
+						v.disabled = false
+					})
+				}
+			},
+			// 作废
+			async confVoid() {
+				const obj = {
+					ids: [],
+					invalidRemarks: this.modalParams.value||''
+				}
+				obj.ids.push(this.modalParams.voidData.id)
+				const {
+					returnValue: res,
+					message
+				} = await userCylinderCheckToVoid(obj)
+				if (res) {
+					uni.showToast({
+						title: message,
+						icon: 'none'
+					})
+					this.closeModal()
+					this.getInfo({
+						customerIds: that.customerIds,
+						id: that.editId
+					})
+				}
+			},
+			closeModal() {
+				this.showModal = false
+				this.modalParams = {}
+			},
+			handleVoid(data) {
+				this.showModal = true
+				this.modalParams.voidData = data
+			},
+			// 删除
+			handleDelete(data) {
+				const that = this
+				uni.showModal({
+					title: that.$t('cylinderCheckList.tipsTle')[2],
+					content: that.$t('cylinderCheckList').delTxt(data.billNo),
+					success: async function(res) {
+						if (res.confirm) {
+							const obj = {
+								ids: [data.id]
+							}
+							const {
+								returnValue: res,
+								message
+							} = await userCylinderCheckDeleteByIds(obj)
+							if (res) {
+								uni.showToast({
+									title: message,
+									icon: 'none'
+								})
+								setTimeout(function(){
+									uni.navigateBack({
+										delta:1
+									})
+								},1500)
+								
+							}
+						}
+					}
+				});
+			},
+			// 提交 撤回
+			handleUpdate(data, type) {
+				const that = this
+				if (type === 7) {
+					console.log()
+					uni.showModal({
+						title: that.$t('cylinderCheckList.tipsTle')[0],
+						content: that.$t('cylinderCheckList').backTxt(data.billNo),
+						// content: `真的要撤回${data.billNo}该条数据吗?`,
+						success: async function(res) {
+							if (res.confirm) {
+								const obj = {
+									linkId: data.id
+								}
+								const {
+									returnValue: res,
+									message
+								} = await auditTaskRecallTaskByLinkId(obj)
+								if (res) {
+									uni.showToast({
+										title: message,
+										icon: 'none'
+									})
+									that.getInfo({
+										customerIds: that.customerIds,
+										id: that.editId
+									})
+								}
+							}
+						}
+					})
+				} else {
+					uni.showModal({
+						title: that.$t('cylinderCheckList.tipsTle')[1],
+						content: that.$t('cylinderCheckList').subTxt(data.billNo),
+						// content: `真的要提交${data.billNo}该条数据吗?`,
+						success: async function(res) {
+							if (res.confirm) {
+								const obj = {
+									ids: [data.id],
+									state: type
+								}
+								const {
+									returnValue: res,
+									message
+								} = await userCylinderCheckUpdateState(obj)
+								if (res) {
+									uni.showToast({
+										title: message,
+										icon: 'none'
+									})
+									that.getInfo({
+										customerIds: that.customerIds,
+										id: that.editId
+									})
+								}
+							}
+						}
+					})
+				}
+			},
 			// 保存数据
 			async saveData() {
-				if (!this.formData.billTime || !this.customerInfo) {
+				if (!this.formDataValue.billTime || !this.customerInfo) {
 					uni.showToast({
 						title: this.$t('addCylinderCheck.tipsTxt'),
 						icon: 'none'
@@ -164,7 +350,7 @@
 					return
 				}
 				let data = {
-					...this.formData
+					...this.formDataValue
 				}
 				data.billTimeStr = this.UnixToDate(data.billTime)
 				delete data.customerName
@@ -202,7 +388,7 @@
 						uni.navigateBack({
 							delta: 1
 						})
-					}, 2000)
+					}, 1500)
 				}
 			},
 			// 计算差异
@@ -219,11 +405,12 @@
 				// 获取显示的sku
 				let column = null
 				let skuId = []
+				// console.log(res)
 				// column = titleObject.tableColumn.reduce((prev, cur) => {
 				// 	return prev.childrenList.length > cur.childrenList.length ? prev : cur
 				// })
-				titleObject.tableColumn.forEach((item,index)=>{
-					if(item.prop=='standardCheckNum'){
+				titleObject.tableColumn.forEach((item, index) => {
+					if (item.prop == 'standardCheckNum') {
 						column = item
 					}
 				})
@@ -243,11 +430,13 @@
 					})
 					item.userCylinderCheckDetailList = skuArr
 				})
-				this.formData.customerName = customerName.join(',')
-				if(this.editId){
-					this.formData.billTime = res.billTime
+				this.formDataValue.customerName = customerName.join(',')
+				if (this.editId) {
+					this.formDataValue.billTime = res.billTime
+					this.formDataValue.remarks = res.remarks
 				}
 				this.customerInfo = res.userCylinderCheckCustomerVoList
+				this.infos = res
 			},
 			chooseCustomer() {
 				this.goto('/infoManage/chooseCustomer/chooseCustomer', {
@@ -263,8 +452,33 @@
 </script>
 
 <style lang="scss" scoped>
+	.modal-main {
+		width: 100%;
+		font-size: 28rpx;
+	
+		&>view {
+			margin-bottom: 20rpx;
+		}
+	
+		::v-deep .modal-text {
+			font-size: 28rpx;
+	
+			.u-textarea__field {
+				font-size: 28rpx;
+			}
+		}
+	}
 	.gp-info {
 		padding: 30rpx 20rpx;
+
+		.btn{
+			width: 632rpx;
+			margin: 60rpx auto;
+			@include flexMixin();
+			.u-button{
+				margin: 0rpx 10rpx;
+			}
+		}
 
 		.form {
 			border-radius: 20rpx;
