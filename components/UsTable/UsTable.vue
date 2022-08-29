@@ -8,10 +8,10 @@
 				<uni-td class="td-class" v-for="(col,key) in tableColumn" :key="key" :align="col.align">
 					<block v-if="col.slot">
 						<!-- #ifdef H5 || APP-PLUS -->
-						<slot :name="`${col.slot}`" :data="item"></slot>
+						<slot :name="`${col.slot}`" :data="item" :index="index"></slot>
 						<!-- #endif -->
 						<!-- #ifdef MP-->
-						<slot name="{{col.slot}}" :data="item"></slot>
+						<slot name="{{col.slot}}" :data="item" :index="index"></slot>
 						<!-- #endif -->
 					</block>
 					<block v-else>{{item[col.prop]}}</block>

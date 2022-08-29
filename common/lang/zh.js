@@ -496,9 +496,6 @@ module.exports = {
 		subTxt:(txt)=>`真的要提交${txt}该条数据吗?`,
 		delTxt:(txt)=>`真的要删除${txt}该条数据吗?`,
 	},
-	// cylinderCheckInfo:{
-	// 	titleText: '',
-	// },
 	// 我的工单
 	userWorkList: {
 		titleText: '我的工单',

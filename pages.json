@@ -283,12 +283,6 @@
 						"enablePullDownRefresh": true
 					}
 				},{
-					"path" : "cylinderCheckInfo/cylinderCheckInfo",
-					"style" : {
-						"navigationBarTitleText": "盘点详情",
-						"enablePullDownRefresh": true
-					}
-				},{
 					"path" : "cylinderCheckList/cylinderCheckList",
 					"style" : {
 						"navigationBarTitleText": "钢瓶盘点记录",
