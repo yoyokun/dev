@@ -18,10 +18,11 @@
 						<view class="item-bottom" @click="chooseCustomer" v-if="customArr.length">
 							<view class="item-cell" v-for="(item, index) in customArr" :key="index">
 								<text>{{item.name}}</text>
-								<u-icon @click.stop.native="delCustom(index)" color="#999" class="icon" name="close-circle-fill" v-if="!isSave"></u-icon>
+								<u-icon @click.stop.native="delCustom(index)" color="#999" class="icon"
+									name="close-circle-fill" v-if="!isSave"></u-icon>
 							</view>
 						</view>
-						
+
 					</view>
 				</template>
 			</edit-form>
@@ -237,18 +238,22 @@
 					})
 				}
 			},
-			checkNum(e,key,index){
-				let nums = Math.round(e.detail.value)
-				this.customerInfo[index].userCylinderCheckDetailList[key].checkStockNum = nums
+			checkNum(e, key, index) {
+				this.customerInfo[index].userCylinderCheckDetailList[key].checkStockNum = e.detail.value
+				let nums = Math.abs(Math.round(e.detail.value))
+				this.$nextTick(function() {
+					this.customerInfo[index].userCylinderCheckDetailList[key].checkStockNum = nums
+				});
+
 			},
 			// 删除客户
-			delCustom(index){
+			delCustom(index) {
 				const id = this.customArr[index].id
 				const ids = this.customerIds.split(',')
 				let idsArr = []
-				this.customArr.splice(index,1)
-				ids.forEach(i=>{
-					if(i != id){
+				this.customArr.splice(index, 1)
+				ids.forEach(i => {
+					if (i != id) {
 						idsArr.push(i)
 					}
 				})
@@ -476,7 +481,7 @@
 				this.infos = res
 			},
 			chooseCustomer() {
-				if(this.isSave){
+				if (this.isSave) {
 					return
 				}
 				this.goto('/infoManage/chooseCustomer/chooseCustomer', {
@@ -537,14 +542,16 @@
 				border-bottom: 1px solid #eee;
 				padding: 20rpx 20rpx;
 				flex-wrap: wrap;
-				.item-top{
+
+				.item-top {
 					width: 100%;
 					display: flex;
 					align-items: center;
 					font-size: 30rpx;
 					line-height: 30rpx;
 				}
-				.item-bottom{
+
+				.item-bottom {
 					width: 100%;
 					border-radius: 20rpx;
 					background: rgba(247, 247, 247, 1);
@@ -553,7 +560,8 @@
 					display: flex;
 					flex-wrap: wrap;
 					padding-top: 0;
-					.item-cell{
+
+					.item-cell {
 						display: flex;
 						align-items: center;
 						padding: 0 20rpx;
@@ -562,11 +570,13 @@
 						background: rgba(0, 0, 0, 0.06);
 						margin-right: 20rpx;
 						margin-top: 24rpx;
-						.icon{
+
+						.icon {
 							margin-left: 30rpx;
 						}
 					}
 				}
+
 				&.require {
 					position: relative;
 
