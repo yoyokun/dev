@@ -34,7 +34,7 @@
 		<view v-else class="customerList">
 			<u-empty mode="list" icon="http://cdn.uviewui.com/uview/empty/list.png"></u-empty>
 		</view>
-    <loading v-if="loadingCenter" class="loading-center" />
+		<loading v-if="loadingCenter" class="loading-center" />
 		<!-- 请求 toast 提示 -->
 		<u-toast ref='uToast'></u-toast>
   </view>

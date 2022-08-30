@@ -8,7 +8,6 @@
 		</view>
 		<block v-if="empty">
 			<view class="gp-box" v-if="dataList.length">
-				<!-- <view class="gp-top">{{$t('cylinderList.totalTxt')}}：{{totals}}</view> -->
 				<view class="gp-main">
 					<view class="list" v-for="(item, index) in dataList" :key="index" @click="toDetail(item)">
 						<text>{{item.customerNo}}</text>
@@ -141,34 +140,8 @@
 	.list-part {
 		padding-bottom: 120rpx;
 
-		// .search-box {
-		// 	display: flex;
-		// 	align-items: center;
-		// 	padding: 0;
-		// 	background: #F7F7F7;
-
-		// 	::v-deep .u-search__content {
-		// 		background-color: white !important;
-		// 	}
-
-		// 	::v-deep .u-search__action {
-		// 		display: none;
-		// 	}
-		// }
-
 		.gp-box {
-			// padding: 0 30rpx;
 			padding: 240rpx 20rpx 0rpx 20rpx;
-
-			.gp-top {
-				height: 110rpx;
-				line-height: 98rpx;
-				color: white;
-				font-size: 30rpx;
-				border-radius: 20rpx 20rpx 0 0;
-				padding: 0 28rpx;
-				background: linear-gradient(218.16deg, rgba(104, 169, 242, 1) 0%, rgba(41, 128, 227, 1) 100%);
-			}
 
 			.gp-main {
 				background: white;

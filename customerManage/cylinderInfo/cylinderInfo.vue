@@ -21,7 +21,6 @@
 				<text class="red">{{$t('cylinderInfo.borrow')}}</text>
 			</view>
 			<view class="list-item">
-				<!-- <view class="list-item" v-for="i in 2"> -->
 				<text>{{item.goodsNo}}</text>
 				<text>{{item.goodsName}}</text>
 				<text>{{item.standardName}}</text>
@@ -89,18 +88,6 @@
 				const {
 					returnValue: res,
 				} = await findCylinderListByCustomerId(data)
-				// let resArr = {}
-				// res.forEach(v => {
-				// 	if (resArr.hasOwnProperty(v.id)) {
-				// 		resArr[v.id].child.push(v)
-				// 	} else {
-				// 		resArr[v.id] = v
-				// 		resArr[v.id].child = [v]
-				// 	}
-				// })
-				// console.log(resArr)
-				// resArr = Object.values(resArr)
-				// console.log(resArr)
 				this.dataList = res
 			},
 			// 详情
@@ -184,7 +171,6 @@
 			}
 
 			text {
-				// flex: 1;
 				max-width: 25%;
 				word-break: break-all;
 			}
