@@ -22,7 +22,7 @@ export default {
 		}
 	},
 	mounted() {
-		console.log(this.menu)
+		console.log(this.menu.length)
 	},
 	onShow(){
 		uni.setTabBarItem({

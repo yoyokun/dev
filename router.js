@@ -15,6 +15,7 @@ router.beforeEach(async(to, from, next) => {
 	console.log(from)
 	// 获取token
 	const hasToken = store.getters.token
+	console.log(hasToken)
 	if (hasToken) {
 		// token存在
 		if (to.path === '/pages/login/login' || to.path === '/pages/secretKey/secretKey' || to.path === '/pages/forgetPassword/forgetPassword') {
@@ -25,12 +26,14 @@ router.beforeEach(async(to, from, next) => {
 			const hasRoles = store.getters.menu && store.getters.menu.length > 0
 			if (hasRoles) {
 				// 有权限
+				console.log('有权限')
 				next()
 			} else {
 				// 无权限
 				try {
 					// 请求权限
 					const menu = await store.dispatch('user/getLoginList')
+					console.log('无权限,去查权限')
 					// replace: true 不会回退到登录页面，导航将不会留下历史记录
 					next()
 				} catch (error) {

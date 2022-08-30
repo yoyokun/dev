@@ -314,6 +314,18 @@
 			"pages": [
 				
 			]
+		},
+		{
+			"root": "stockManage",
+			"pages": [
+				{
+					"path" : "stockStatistics/stockStatistics",
+					"style" : {
+						"navigationBarTitleText": "库存查询",
+						"enablePullDownRefresh": false
+					}	
+				}
+			]
 		}
 	],
 	"globalStyle": {
