@@ -27,7 +27,14 @@
 					:maxlength="item.maxlength"
 					:placeholder="item.placeholder"
 					@change="handleFiltrate(item.fieldName)"
-				></u--input>
+					@blur="handleFiltrate(item.fieldName,'blur')"
+				>
+					<block v-if="item.suffix">
+						<view slot="suffix">
+							<u-icon @click="chooseChange(item)" size="40rpx" :color="item.suffix.color" :name="item.suffix.suffixIcon"></u-icon>
+						</view>
+					</block>
+				</u--input>
 				<!-- 选择按钮 -->
 				<view class="chooseBtn" v-if="item.type === 'chooseText' && item.btnType === 'btn'">
 					<u-button
@@ -441,7 +448,6 @@ export default {
 				fun && fun(queryParams)
 			}).catch(()=>{
 				console.log('校验不通过')
-				console.log(this.formData)
 			})
 		},
 		// 清空(给外部调用)
@@ -454,9 +460,14 @@ export default {
 			fun && fun(queryParams)
 		},
 		// 输入框值改变
-		handleFiltrate(name) {
-			const queryParams = this.handleParams(this.formData)
-			this.$emit('change', { queryParams, name })
+		handleFiltrate(name,type = null) {
+			if(type == 'blur'){
+				const queryParams = this.handleParams(this.formData)
+				this.$emit('change', { type: type, queryParams, name })
+			}else{
+				const queryParams = this.handleParams(this.formData)
+				this.$emit('change', { queryParams, name })
+			}
 		},
 		// 上传图片
 		async afterRead(event) {

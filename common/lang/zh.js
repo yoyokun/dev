@@ -1,4 +1,5 @@
 import auditInfo from './zh/auditInfo'
+import stockMg from './zh/stockMg'
 module.exports = {
 	// tabbar
 	tabbar: {
@@ -252,6 +253,8 @@ module.exports = {
 	},
 	// 审核详情
 	auditInfo: auditInfo,
+	// 库存管理
+	stockMg: stockMg,
 	// 成员
 	addManager: {
 		titleText: '添加成员',
@@ -426,32 +429,32 @@ module.exports = {
 		titleText: '选择供应商'
 	},
 	// 编辑盘点记录
-	addCylinderCheck:{
-		titleText:'添加钢瓶盘点',
-		titleTextEdit:'编辑钢瓶盘点',
-		tableColumn:{
-			standardName:'规格',
-			systemStockNum:'系统数据',
-			checkStockNum:'盘点数',
-			diffNum:'差异数',
+	addCylinderCheck: {
+		titleText: '添加钢瓶盘点',
+		titleTextEdit: '编辑钢瓶盘点',
+		tableColumn: {
+			standardName: '规格',
+			systemStockNum: '系统数据',
+			checkStockNum: '盘点数',
+			diffNum: '差异数',
 		},
-		tipsTxt:'必填项不能为空',
-		stateTxt:['启用','禁用'],
-		floorTxt:'楼层',
-		doorNo:'门牌号',
-		stockNumPlaceholder:'盘点数量',
-		form:{
-			billTime:{
-				label:'盘点时间',
-				placeholder:'请选择盘点时间',
+		tipsTxt: '必填项不能为空',
+		stateTxt: ['启用', '禁用'],
+		floorTxt: '楼层',
+		doorNo: '门牌号',
+		stockNumPlaceholder: '盘点数量',
+		form: {
+			billTime: {
+				label: '盘点时间',
+				placeholder: '请选择盘点时间',
 			},
-			customerName:{
-				label:'客户',
-				placeholder:'请选择客户',
+			customerName: {
+				label: '客户',
+				placeholder: '请选择客户',
 			},
-			remarks:{
-				label:'备注',
-				placeholder:'请填写备注',
+			remarks: {
+				label: '备注',
+				placeholder: '请填写备注',
 			},
 		},
 	},
@@ -491,10 +494,10 @@ module.exports = {
 				label: '客户标签'
 			}
 		},
-		tipsTle:['撤回提示','提交提示','删除提示'],
-		backTxt:(txt)=>`真的要撤回${txt}该条数据吗?`,
-		subTxt:(txt)=>`真的要提交${txt}该条数据吗?`,
-		delTxt:(txt)=>`真的要删除${txt}该条数据吗?`,
+		tipsTle: ['撤回提示', '提交提示', '删除提示'],
+		backTxt: (txt) => `真的要撤回${txt}该条数据吗?`,
+		subTxt: (txt) => `真的要提交${txt}该条数据吗?`,
+		delTxt: (txt) => `真的要删除${txt}该条数据吗?`,
 	},
 	// 我的工单
 	userWorkList: {
@@ -510,7 +513,7 @@ module.exports = {
 			},
 			{
 				id: '7',
-			 name: '已完成'
+				name: '已完成'
 			},
 			{
 				id: '4,5,6',
@@ -859,7 +862,7 @@ module.exports = {
 			},
 			{
 				id: 2,
-			 name: '价格结算'
+				name: '价格结算'
 			},
 			{
 				id: 3,
@@ -885,8 +888,7 @@ module.exports = {
 			linkTelMessage: '联系电话格式有误',
 			named: '尊称',
 			namedPlace: '请选择尊称',
-			namedOptions: [
-				{
+			namedOptions: [{
 					name: '未知',
 					value: 1
 				},
@@ -1118,5 +1120,6 @@ module.exports = {
 	// 绑码记录
 	cylinderBindCode: {
 		titleText: '绑码记录',
-	}
+	},
+
 }

@@ -25,6 +25,14 @@ export function uniqueArr(arr) {
   return Array.from(new Set(arr))
 }
 /**
+ * 生成一个唯一的字符串
+ */
+export function createUniqueString() {
+  const timestamp = +new Date() + ''
+  const randomNum = parseInt((1 + Math.random()) * 65536) + ''
+  return (+(randomNum + timestamp)).toString(32)
+}
+/**
  * 对象判空
  */
 export function objectValueEmpty(obj, key) {

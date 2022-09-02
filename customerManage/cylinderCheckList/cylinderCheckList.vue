@@ -162,60 +162,7 @@
 	page {
 		background: #F7F7F7;
 	}
-
 	.list-part {
 		padding-bottom: 120rpx;
-
-		.gp-box {
-			padding: 240rpx 20rpx 0rpx 20rpx;
-
-			.gp-main {
-				background: white;
-				border-radius: 20rpx;
-				box-shadow: 0px 2px 4px 0px rgba(229, 229, 229, 0.5);
-				margin-bottom: 30rpx;
-				font-size: 30rpx;
-
-				.head {
-					padding: 0 20rpx;
-					height: 80rpx;
-					display: flex;
-					justify-content: space-between;
-					align-items: center;
-					border-bottom: 1px solid #eee;
-
-					.status {
-						color: #2A82E4;
-						
-					}
-				}
-
-				.main-box {
-					padding: 34rpx 24rpx;
-
-					.item {
-						display: flex;
-						font-size: 28rpx;
-						line-height: 28rpx;
-						align-items: center;
-						color: rgba(112, 112, 112, 1);
-						margin-top: 20rpx;
-
-						&:first-child {
-							margin-top: 0;
-						}
-
-						.label {
-							min-width: 140rpx;
-						}
-
-						.desc {
-							color: rgba(56, 56, 56, 1);
-						}
-					}
-				}
-			}
-		}
-
 	}
 </style>

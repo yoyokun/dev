@@ -263,3 +263,63 @@ export function findCylinderListByCustomerId(data = {}, message = '', custom = {
 		}
 	})
 }
+
+// 库存管理/出入库单记录 根据条件查询列表信息
+export function stockBillLogFindList(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/stockBillLog/findList',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+
+// 根据单号查询订单信息
+export function sysLinkBillFindLinkBillObject(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/sysLinkBill/findLinkBillObject',
+		method: "post",
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+
+// 出入库根据条件查询列表信息
+export function stockInoutReasonFindList(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/stockInoutReason/findList',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+
+// 库存管理/出入库单记录 保存或修改
+export function stockBillLogSaveOrEdit(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/stockBillLog/saveOrEdit',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}

@@ -313,9 +313,51 @@
 			"root": "stockManage",
 			"pages": [
 				{
-					"path" : "stockStatistics/stockStatistics",
+					"path" : "stockOrderList/stockOrderList",
+					"style" : {
+						"navigationBarTitleText": "出入库单",
+						"enablePullDownRefresh": false
+					}	
+				},
+				{
+					"path" : "addStockOrder/addStockOrder",
+					"style" : {
+						"navigationBarTitleText": "添加出入库单",
+						"enablePullDownRefresh": false
+					}	
+				},
+				{
+					"path" : "stockList/stockList",
 					"style" : {
 						"navigationBarTitleText": "库存查询",
+						"enablePullDownRefresh": false
+					}	
+				},
+				{
+					"path" : "stockCheckList/stockCheckList",
+					"style" : {
+						"navigationBarTitleText": "库存盘点",
+						"enablePullDownRefresh": false
+					}	
+				},
+				{
+					"path" : "addStockCheck/addStockCheck",
+					"style" : {
+						"navigationBarTitleText": "添加库存盘点",
+						"enablePullDownRefresh": false
+					}	
+				},
+				{
+					"path" : "fillOrderList/fillOrderList",
+					"style" : {
+						"navigationBarTitleText": "转换单",
+						"enablePullDownRefresh": false
+					}	
+				},
+				{
+					"path" : "addFillOrder/addFillOrder",
+					"style" : {
+						"navigationBarTitleText": "充装转换",
 						"enablePullDownRefresh": false
 					}	
 				}

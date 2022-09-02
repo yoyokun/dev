@@ -170,7 +170,8 @@
 			this.searchOptions[2].options = this.measuringUnitData
 		},
 		onLoad(options) {
-
+			this.goodsId = options.goodsId || ''
+			this.multiple = options.multiple || false
 		},
 		onShow() {
 			uni.setNavigationBarTitle({
@@ -200,8 +201,18 @@
 				} = await goodsFindList(data)
 				if (res) {
 					let goodsArr = {}
+					let ids = []
+					if(this.multiple){
+						ids = ids.concat(this.goodsId.split(','))
+					}else{
+						ids.push(this.goodsId)
+					}
 					res.forEach(v => {
-						v.active = false
+						if (ids.indexOf(v.id) > -1) {
+							v.active = true
+						} else {
+							v.active = false
+						}
 						if (v.assistUnitsList.length) {
 							v['assistName-' + v.assistUnitsList[0].assistUnitsId] = v.assistUnitsList[0]
 								.unitsName
@@ -223,12 +234,17 @@
 			},
 			// 选择
 			chooseBox(index, key) {
-				this.dataList.forEach(v => {
-					v.child.forEach(i => {
-						i.active = false
+				if(this.multiple){
+					this.dataList[index].child[key].active = this.dataList[index].child[key].active == true ? false : true
+				}else{
+					this.dataList.forEach(v => {
+						v.child.forEach(i => {
+							i.active = false
+						})
 					})
-				})
-				this.dataList[index].child[key].active = true
+					this.dataList[index].child[key].active = true
+				}
+				
 			},
 			// 确定
 			chooseSave() {
@@ -237,7 +253,11 @@
 				this.dataList.forEach((item, index) => {
 					data = data.concat(item.child.filter(v => v.active === true))
 				})
-				uni.$emit('chooseGoods', data[0])
+				if(this.multiple){
+					uni.$emit('chooseGoods', data)
+				}else{
+					uni.$emit('chooseGoods', data[0])
+				}
 				uni.navigateBack({
 					delta: 1
 				})

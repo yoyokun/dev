@@ -238,6 +238,7 @@
 					})
 				}
 			},
+			// 转化正整数
 			checkNum(e, key, index) {
 				this.customerInfo[index].userCylinderCheckDetailList[key].checkStockNum = e.detail.value
 				let nums = Math.abs(Math.round(e.detail.value))
@@ -258,9 +259,7 @@
 					}
 				})
 				this.customerIds = idsArr.join(',')
-				console.log(id)
 				this.customerInfo = this.customerInfo.filter(i => i.customerId != id)
-				console.log(this.customerInfo)
 			},
 			// 作废
 			async confVoid() {
@@ -328,7 +327,6 @@
 			handleUpdate(data, type) {
 				const that = this
 				if (type === 7) {
-					console.log()
 					uni.showModal({
 						title: that.$t('cylinderCheckList.tipsTle')[0],
 						content: that.$t('cylinderCheckList').backTxt(data.billNo),
@@ -465,12 +463,8 @@
 						id: item.customerId,
 						name: item.customerName
 					})
-					item.userCylinderCheckDetailList.forEach((val, key) => {
-						if (skuId.indexOf(val.standardId) > -1) {
-							skuArr.push(val)
-						}
-					})
-					item.userCylinderCheckDetailList = skuArr
+					item.userCylinderCheckDetailList = item.userCylinderCheckDetailList.filter((val => skuId
+						.indexOf(val.standardId) > -1))
 				})
 				this.customArr = customArr
 				if (this.editId) {
