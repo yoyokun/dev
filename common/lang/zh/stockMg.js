@@ -97,6 +97,71 @@ module.exports = {
 			},
 		},
 	},
-	// 添加出入库单
+	// 出入库单
+	addStockOrder: {
+		titleText: '添加出入库单',
+		titleTextEdit: '编辑出入库单',
+		orderChildTxt:'子单',
+		orderReasonTxt:'出入库原因',
+		orderReasonPlaceholder: '请选择出入库原因',
+		addGoodsTxt:'商品',
+		propertyNames:'属性参数',
+		standardName:'规格',
+		unitsName:'基本单位',
+		brandName:'品牌',
+		goodsClassifyName:'商品分类',
+		netContent:'重量(kg)',
+		costMoney:'金额',
+		addChildBtn: '添加子单',
+		errNumsTxt: '请输入正确的单号',
+		errQrTxt: '二维码图片错误，请重新上传',
+		form: {
+			orgId: {
+				label: '组织',
+				placeholder: '请选择组织',
+			},
+			stockFormType: {
+				label: '往来类型',
+				placeholder: '请选择往来类型',
+				options: [{
+						name: '客户',
+						value: '1'
+					},
+					{
+						name: '供应商',
+						value: '2'
+					},
+					{
+						name: '组织',
+						value: '3'
+					}
+				],
+			},
+			customerId: {
+				label: '来源名称',
+				placeholder: '请选择来源名称',
+			},
+			linkBillNo: {
+				label: '关联单号',
+				placeholder: '请输入关联单号',
+			},
+			licenseNo: {
+				label: '车牌号',
+				placeholder: '请输入车牌号',
+			},
+			deliverManId: {
+				label: '请运输员',
+				placeholder: '请选择运输员',
+			},
+			remarks: {
+				label: '备注',
+				placeholder: '请输入备注',
+			},
+			filePath: {
+				label: '附件',
+			},
+		},
+	},
 	
+
 }

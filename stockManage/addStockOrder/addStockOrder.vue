@@ -9,20 +9,20 @@
 		<view class="list-box" v-for="(item,index) in listOrder" :key="index">
 			<view class="list">
 				<view class="list-head">
-					<view class="head-tle">子单</view>
-					<view class="head-icon" @click="removeOrderGoods(index)">
+					<view class="head-tle">{{$t('stockMg.addStockOrder.orderChildTxt')}}</view>
+					<view class="head-icon" v-if="!isSave" @click="removeOrderGoods(index)">
 						<u-icon name="trash"></u-icon>
 					</view>
 				</view>
 				<view class="list-act">
 					<view class="act-reason" @click="chooseReason(index)">
-						<view>出入库原因：</view>
+						<view>{{$t('stockMg.addStockOrder.orderReasonTxt')}}：</view>
 						<view class="on" v-if="item.orderReason">{{item.orderReason.label}}</view>
-						<view v-else>请选择出入库原因</view>
+						<view v-else>{{$t('stockMg.addStockOrder.orderReasonPlaceholder')}}</view>
 					</view>
-					<view class="act-btn" @click="chooseGoods(index)">
+					<view class="act-btn" @click="chooseGoods(index)" v-if="!isSave">
 						<u-icon class="add-icon" name="plus-circle"></u-icon>
-						<view class="add-txt">商品</view>
+						<view class="add-txt">{{$t('stockMg.addStockOrder.addGoodsTxt')}}</view>
 					</view>
 				</view>
 				<view class="goods">
@@ -43,34 +43,34 @@
 								<u-icon class="arrow-right" name="arrow-right"></u-icon>
 								<view class="attr-box">
 									<view class="attr-item">
-										<view class="item-tle">属性参数：</view>
+										<view class="item-tle">{{$t('stockMg.addStockOrder.propertyNames')}}：</view>
 										<view class="item-txt">{{val.propertyNames}}</view>
 									</view>
 									<view class="attr-item">
-										<view class="item-tle">规格：</view>
+										<view class="item-tle">{{$t('stockMg.addStockOrder.standardName')}}：</view>
 										<view class="item-txt">{{val.standardName}}</view>
 									</view>
 									<view class="attr-item">
-										<view class="item-tle">基本单位：</view>
+										<view class="item-tle">{{$t('stockMg.addStockOrder.unitsName')}}：</view>
 										<view class="item-txt">{{val.unitsName}}</view>
 									</view>
 									<view class="attr-item">
-										<view class="item-tle">品牌：</view>
+										<view class="item-tle">{{$t('stockMg.addStockOrder.brandName')}}：</view>
 										<view class="item-txt">{{val.brandName}}</view>
 									</view>
 									<view class="attr-item">
-										<view class="item-tle">商品分类：</view>
+										<view class="item-tle">{{$t('stockMg.addStockOrder.goodsClassifyName')}}：</view>
 										<view class="item-txt">{{val.goodsClassifyName}}</view>
 									</view>
 								</view>
 							</view>
-							<u-icon class="remove-goods" name="minus-circle-fill" @click="removeOrderGoods(index,key)">
+							<u-icon v-if="!isSave" class="remove-goods" name="minus-circle-fill" @click="removeOrderGoods(index,key)">
 							</u-icon>
 						</view>
 
 						<view class="info-cell">
 							<view class="cell">
-								<view class="cell-label">重量(kg)：</view>
+								<view class="cell-label">{{$t('stockMg.addStockOrder.netContent')}}：</view>
 								<view class="cell-content">{{val['netContent-' + val.assistUnitsList[0].assistUnitsId]}}
 								</view>
 							</view>
@@ -79,7 +79,7 @@
 						</view>
 						<view class="info-cell">
 							<view class="cell">
-								<view class="cell-label">金额：</view>
+								<view class="cell-label">{{$t('stockMg.addStockOrder.costMoney')}}：</view>
 								<view class="cell-content">{{val.costMoney}}</view>
 							</view>
 						</view>
@@ -91,15 +91,39 @@
 		<u-picker :closeOnClickOverlay="true" :show="show" :columns="[stockInoutReason]" keyName="label"
 			@confirm="confReason" @close="close" @cancel="close"></u-picker>
 
-		<view class="btn">
-			<u-button :text="'添加子单'" plain type="primary" hairline shape="circle" @click="addListOrder">
+		<view class="btn" v-if="!isSave">
+			<u-button :text="$t('stockMg.addStockOrder.addChildBtn')" plain type="primary" hairline shape="circle" @click="addListOrder">
 			</u-button>
-		</view>
-
-		<view class="btn">
 			<u-button :text="$t('common.btn.save')" type="primary" hairline shape="circle" @click="saveData">
 			</u-button>
 		</view>
+		
+		<view class="btn" v-else>
+			<u-button :text="$t('common.btn.edit')" v-if="infos.checkState==1||infos.checkState==4" type="primary" hairline
+				shape="circle" plain @click="changeEdit(false)">
+			</u-button>
+			<u-button :text="$t('cylinderCheckList.btns')[2]" @click="handleUpdate(infos,2)" v-if="infos.checkState==1" type="success" hairline
+				shape="circle" plain>
+			</u-button>
+			<u-button :text="$t('cylinderCheckList.btns')[3]" @click="handleUpdate(infos,7)" v-if="infos.checkState==2" type="warning" hairline
+				shape="circle" plain>
+			</u-button>
+			<u-button :text="$t('common.btn.delete')"
+				type="error" hairline shape="circle" v-if="infos.checkState==1||infos.checkState==5||infos.checkState==4" plain @click="handleDelete(infos)">
+			</u-button>
+			<u-button :text="$t('common.btn.toVoid')"
+				@click="handleVoid(infos)" v-if="infos.checkState==3||infos.checkState==6" type="info" hairline shape="circle" plain></u-button>
+		</view>
+		
+		<!-- 作废 -->
+		<u-modal :show="showModal" :title="$t('cylinderCheckList.descTle')" :closeOnClickOverlay="true"
+			:asyncClose="true" :showCancelButton="true" @cancel="closeModal" @close="closeModal" @confirm="confVoid">
+			<view class="modal-main">
+				<view>{{$t('cylinderCheckList.descTips')}}</view>
+				<u-textarea v-model="modalParams.value" class="modal-text"
+					:placeholder="$t('cylinderCheckList.descPlaceholder')"></u-textarea>
+			</view>
+		</u-modal>
 	</view>
 </template>
 
@@ -112,7 +136,13 @@
 		sysLinkBillFindLinkBillObject,
 		stockBillLogSaveOrEdit,
 		stockBillLogFindById,
+		stockBillLogDeleteByIds,
+		stockBillLogUpdateState,
+		stockBillLogToVoid
 	} from '@/api/lpgSalesManageApi'
+	import {
+		auditTaskRecallTaskByLinkId
+	} from '@/api/lpgManageAppApi'
 	import {
 		createUniqueString
 	} from '@/utils'
@@ -123,62 +153,54 @@
 		},
 		data() {
 			return {
+				showModal: false,
+				modalParams: {},
+				isSave: false,
 				formDataSource: [{
 						type: 'picker',
-						labelText: '组织',
+						labelText: this.$t('stockMg.addStockOrder.form.orgId.label'),
 						fieldName: 'orgId',
-						placeholder: '请选择组织',
+						placeholder: this.$t('stockMg.addStockOrder.form.orgId.placeholder'),
 						options: [],
 						required: true,
 						rules: [{
 							required: true,
-							message: '请选择组织',
+							message: this.$t('stockMg.addStockOrder.form.orgId.placeholder'),
 							trigger: ['change', 'blur']
 						}]
 					},
 					{
 						type: 'picker',
-						labelText: '往来类型',
+						labelText: this.$t('stockMg.addStockOrder.form.stockFormType.label'),
 						fieldName: 'stockFormType',
-						placeholder: '请选择往来类型',
+						placeholder: this.$t('stockMg.addStockOrder.form.stockFormType.placeholder'),
 						required: true,
-						options: [{
-								name: '客户',
-								value: '1'
-							},
-							{
-								name: '供应商',
-								value: '2'
-							},
-							{
-								name: '组织',
-								value: '3'
-							}
-						],
+						options: this.$t('stockMg.addStockOrder.form.stockFormType.options'),
 						rules: [{
 							required: true,
-							message: '请选择往来类型',
+							message: this.$t('stockMg.addStockOrder.form.stockFormType.placeholder'),
 							trigger: ['change', 'blur']
 						}]
 					},
 					{
 						type: 'picker',
-						labelText: '来源名称',
+						labelText: this.$t('stockMg.addStockOrder.form.customerId.label'),
 						fieldName: 'customerId',
-						placeholder: '请选择来源名称',
+						placeholder: this.$t('stockMg.addStockOrder.form.customerId.placeholder'),
 						required: true,
 						options: [],
 						rules: [{
 							required: true,
-							message: '请选择来源名称',
+							message: this.$t('stockMg.addStockOrder.form.customerId.placeholder'),
 							trigger: ['change', 'blur']
 						}],
+						show:false,
 					},
 					{
 						type: 'text',
-						labelText: '关联单号',
+						labelText: this.$t('stockMg.addStockOrder.form.linkBillNo.label'),
 						fieldName: 'linkBillNo',
-						placeholder: '请输入关联单号',
+						placeholder: this.$t('stockMg.addStockOrder.form.linkBillNo.placeholder'),
 						maxlength: 50,
 						func: 'toScan',
 						suffix: {
@@ -188,33 +210,33 @@
 					},
 					{
 						type: 'text',
-						labelText: '车牌号',
+						labelText: this.$t('stockMg.addStockOrder.form.licenseNo.label'),
 						fieldName: 'licenseNo',
-						placeholder: '请输入车牌号',
+						placeholder: this.$t('stockMg.addStockOrder.form.licenseNo.placeholder'),
 						maxlength: 50,
 					},
 					{
 						type: 'picker',
-						labelText: '运输员',
+						labelText: this.$t('stockMg.addStockOrder.form.deliverManId.label'),
 						fieldName: 'deliverManId',
-						placeholder: '请选择运输员',
+						placeholder: this.$t('stockMg.addStockOrder.form.deliverManId.placeholder'),
 						required: true,
 						options: [],
 						rules: [{
 							required: true,
-							message: '请选择运输员',
+							message: this.$t('stockMg.addStockOrder.form.deliverManId.placeholder'),
 							trigger: ['change', 'blur']
 						}],
 					},
 					{
 						type: 'textarea',
-						labelText: '备注',
+						labelText: this.$t('stockMg.addStockOrder.form.remarks.label'),
 						fieldName: 'remarks',
-						placeholder: '请输入备注',
+						placeholder: this.$t('stockMg.addStockOrder.form.remarks.placeholder'),
 					},
 					{
 						type: 'upload',
-						labelText: '附件',
+						labelText: this.$t('stockMg.addStockOrder.form.filePath.label'),
 						fieldName: 'filePath',
 						borderBottom: false,
 						limit: 2,
@@ -228,7 +250,7 @@
 				stockInoutReason: [],
 				linkId: '',
 				linkTypes: '',
-
+				infos:{},
 			}
 		},
 		// 过滤器
@@ -244,6 +266,17 @@
 		},
 		async onLoad(options) {
 			this.editId = options.editId || ''
+			if (this.editId) {
+				this.changeEdit(true)
+				uni.setNavigationBarTitle({
+					title: this.$t('stockMg.addStockOrder.titleTextEdit')
+				});
+				await this.getInfo(this.editId)
+			}else{
+				uni.setNavigationBarTitle({
+					title: this.$t('stockMg.addStockOrder.titleText')
+				});
+			}
 			// 获取应用组织
 			await this.getOrgList()
 			this.formDataSource[0].options = this.orgList
@@ -260,9 +293,7 @@
 					this.listOrder[this.tempIndex].stockInoutLogDetailData.push(item)
 				})
 			})
-			if (this.editId) {
-				await this.getInfo(this.editId)
-			}
+			
 
 		},
 		onUnload() {
@@ -272,6 +303,132 @@
 
 		},
 		methods: {
+			// 作废
+			async confVoid() {
+				const obj = {
+					ids: [],
+					remarks: this.modalParams.value || ''
+				}
+				obj.ids.push(this.modalParams.voidData.id)
+				const {
+					returnValue: res,
+					message
+				} = await stockBillLogToVoid(obj).catch(err=>{
+					this.closeModal()
+				})
+				if (res) {
+					uni.showToast({
+						title: message,
+						icon: 'none'
+					})
+					this.getInfo(that.editId)
+				}
+				this.closeModal()
+			},
+			closeModal() {
+				this.showModal = false
+				this.modalParams = {}
+			},
+			handleVoid(data) {
+				this.showModal = true
+				this.modalParams.voidData = data
+			},
+			changeEdit(isSave = this.isSave) {
+				this.isSave = isSave
+				if (isSave) {
+					this.formDataSource.forEach(v => {
+						v.disabled = true
+					})
+				} else {
+					this.formDataSource.forEach(v => {
+						v.disabled = false
+					})
+				}
+				this.formDataSource = [...this.formDataSource]
+			},
+			// 提交 撤回
+			handleUpdate(data, type) {
+				const that = this
+				if (type === 7) {
+					uni.showModal({
+						title: that.$t('cylinderCheckList.tipsTle')[0],
+						content: that.$t('cylinderCheckList').backTxt(data.billNo),
+						success: async function(res) {
+							if (res.confirm) {
+								const obj = {
+									linkId: data.id
+								}
+								const {
+									returnValue: res,
+									message
+								} = await auditTaskRecallTaskByLinkId(obj)
+								if (res) {
+									uni.showToast({
+										title: message,
+										icon: 'none'
+									})
+									that.getInfo(that.editId)
+								}
+							}
+						}
+					})
+				} else {
+					uni.showModal({
+						title: that.$t('cylinderCheckList.tipsTle')[1],
+						content: that.$t('cylinderCheckList').subTxt(data.billNo),
+						success: async function(res) {
+							if (res.confirm) {
+								const obj = {
+									ids: [data.id],
+									state: type
+								}
+								const {
+									returnValue: res,
+									message
+								} = await stockBillLogUpdateState(obj)
+								if (res) {
+									uni.showToast({
+										title: message,
+										icon: 'none'
+									})
+									that.getInfo(that.editId)
+								}
+							}
+						}
+					})
+				}
+			},
+			// 删除
+			handleDelete(data) {
+				const that = this
+				uni.showModal({
+					title: that.$t('cylinderCheckList.tipsTle')[2],
+					content: that.$t('cylinderCheckList').delTxt(data.billNo),
+					success: async function(res) {
+						if (res.confirm) {
+							const obj = {
+								ids: [data.id]
+							}
+							const {
+								returnValue: res,
+								message
+							} = await stockBillLogDeleteByIds(obj)
+							if (res) {
+								uni.showToast({
+									title: message,
+									icon: 'none'
+								})
+								setTimeout(function() {
+									uni.navigateBack({
+										delta: 1
+									})
+								}, 1500)
+			
+							}
+						}
+					}
+				});
+			},
 			// 获取详情
 			async getInfo(id) {
 				const {
@@ -280,7 +437,9 @@
 					id
 				})
 				if (res) {
+					this.infos = res
 					let data = {}
+					this.formDataSource[2].show = true
 					if (res.stockFormType == 1) {
 						await this.getCustomer(res.orgId)
 						this.formDataSource[2].options = this.customerList
@@ -331,13 +490,13 @@
 				}
 			},
 			// 保存数据
-			saveData(state = 1) {
+			saveData() {
 				this.$refs.dialogForm.handleSubmit(async (data) => {
 					let params = {}
 					params.customerId = data.customerId
 					params.id = this.editId||''
 					params.stockSourceType = 'stock'
-					params.checkState = state
+					params.checkState = this.infos.checkState||1
 					params.orgId = data.orgId
 					params.stockFormType = data.stockFormType
 					params.remarks = data.remarks
@@ -393,6 +552,9 @@
 			},
 			// 选择出入库原因
 			chooseReason(index) {
+				if(this.isSave){
+					return
+				}
 				this.show = true
 				this.tempIndex = index
 			},
@@ -438,7 +600,7 @@
 
 				if ((e.name == 'stockFormType' && params.stockFormType && (params.stockFormType != this.formDataValue
 						.stockFormType)) || (params.stockFormType == 1 && e.name == 'orgId')) {
-					params.customerId = ''
+					this.formDataSource[2].show = true
 					if (params.stockFormType == 1) {
 						// 客户
 						await this.getCustomer(params.orgId)
@@ -452,6 +614,8 @@
 						await this.getOrgList()
 						this.formDataSource[2].options = this.orgList
 					}
+					params.customerId = ''
+					this.$refs.dialogForm.resetPicker('customerId',[0],[0])
 				}
 				this.formDataValue = params
 			},
@@ -462,13 +626,14 @@
 				}
 				const params = {
 					linkScope: "stock",
-					billNo: 'OS20220831610010'
+					billNo: value
 				}
 				sysLinkBillFindLinkBillObject(params).then(async (res) => {
 					const data = res.returnValue
 					if (data) {
 						this.linkId = data.billId
 						this.linkTypes = data.billType
+						this.formDataSource[2].show = true
 						if (data.formType === 1) {
 							// 客户
 							await this.getCustomer(data.orgId)
@@ -494,13 +659,16 @@
 					} else {
 						uni.showToast({
 							icon: 'none',
-							title: '请输入正确的单号'
+							title: this.$t('stockMg.addStockOrder.errNumsTxt')
 						})
 					}
 				})
 			},
 			// 扫描二维码
 			toScan(e) {
+				if(this.isSave){
+					return
+				}
 				// #ifdef APP-PLUS
 				var result = await permision.requestAndroidPermission("android.permission.CAMERA")
 				if (result === 1) {
@@ -529,7 +697,7 @@
 							if (imgRes === "error decoding QR Code") {
 								uni.showToast({
 									icon: 'none',
-									title: '二维码图片错误，请重新上传'
+									title: this.$t('stockMg.addStockOrder.errQrTxt')
 								})
 							} else {
 								this.getLinkId(imgRes)
@@ -547,6 +715,22 @@
 </script>
 
 <style lang="scss" scoped>
+	.modal-main {
+		width: 100%;
+		font-size: 28rpx;
+	
+		&>view {
+			margin-bottom: 20rpx;
+		}
+	
+		::v-deep .modal-text {
+			font-size: 28rpx;
+	
+			.u-textarea__field {
+				font-size: 28rpx;
+			}
+		}
+	}
 	.sk-info {
 		padding: 30rpx 20rpx;
 

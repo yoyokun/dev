@@ -194,6 +194,7 @@
 						:defaultIndex="item.defaultIndex || [0]" 
 						:columns="[item.options]" 
 						:keyName="item.keyName || 'name'" 
+						:ref="`picker${item.fieldName}`"
 						@confirm="pickerConfirm($event,item.fieldName,index)" 
 						@close="item.showOptions = false"
 						@cancel="item.showOptions = false">
@@ -449,6 +450,14 @@ export default {
 			}).catch(()=>{
 				console.log('校验不通过')
 			})
+		},
+		// 重置picker
+		resetPicker(field,index,lastIndex){
+			const that = this
+			setTimeout(function(){
+				that.$refs[`picker${field}`][0].setIndexs(index,lastIndex)
+			},100)
+			
 		},
 		// 清空(给外部调用)
 		resetForm(fun) {

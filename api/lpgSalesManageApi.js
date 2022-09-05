@@ -323,3 +323,46 @@ export function stockBillLogSaveOrEdit(data = {}, message = '', custom = {}) {
 		}
 	})
 }
+
+// 库存管理/出入库单记录 删除
+export function stockBillLogDeleteByIds(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/stockBillLog/deleteByIds',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 库存管理/出入库单记录 修改状态
+export function stockBillLogUpdateState(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/stockBillLog/updateState',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 库存管理/出入库单记录 作废
+export function stockBillLogToVoid(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/stockBillLog/toVoid',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}

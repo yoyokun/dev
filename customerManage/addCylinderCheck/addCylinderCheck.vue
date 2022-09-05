@@ -271,18 +271,20 @@
 				const {
 					returnValue: res,
 					message
-				} = await userCylinderCheckToVoid(obj)
+				} = await userCylinderCheckToVoid(obj).catch(err=>{
+					this.closeModal()
+				})
 				if (res) {
 					uni.showToast({
 						title: message,
 						icon: 'none'
 					})
-					this.closeModal()
 					this.getInfo({
 						customerIds: that.customerIds,
 						id: that.editId
 					})
 				}
+				this.closeModal()
 			},
 			closeModal() {
 				this.showModal = false

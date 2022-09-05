@@ -122,6 +122,7 @@
 
 		},
 		onShow() {
+			console.log('=====')
 			uni.setNavigationBarTitle({
 				title: this.$t('cylinderCheckList.titleText')
 			})

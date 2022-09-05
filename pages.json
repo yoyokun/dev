@@ -316,7 +316,7 @@
 					"path" : "stockOrderList/stockOrderList",
 					"style" : {
 						"navigationBarTitleText": "出入库单",
-						"enablePullDownRefresh": false
+						"enablePullDownRefresh": true
 					}	
 				},
 				{
@@ -330,14 +330,14 @@
 					"path" : "stockList/stockList",
 					"style" : {
 						"navigationBarTitleText": "库存查询",
-						"enablePullDownRefresh": false
+						"enablePullDownRefresh": true
 					}	
 				},
 				{
 					"path" : "stockCheckList/stockCheckList",
 					"style" : {
 						"navigationBarTitleText": "库存盘点",
-						"enablePullDownRefresh": false
+						"enablePullDownRefresh": true
 					}	
 				},
 				{
