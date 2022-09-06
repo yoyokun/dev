@@ -532,8 +532,8 @@
 			.form-item {
 				display: flex;
 				align-items: center;
-				font-size: 30rpx;
-				line-height: 30rpx;
+				font-size: 15px;
+				line-height: 15px;
 				min-height: 46rpx;
 				border-bottom: 1px solid #eee;
 				padding: 20rpx 20rpx;
@@ -543,8 +543,8 @@
 					width: 100%;
 					display: flex;
 					align-items: center;
-					font-size: 30rpx;
-					line-height: 30rpx;
+					font-size: 15px;
+					line-height: 15px;
 				}
 
 				.item-bottom {
@@ -587,7 +587,7 @@
 				}
 
 				.label {
-					min-width: 196rpx;
+					min-width: 100px;
 				}
 
 				.desc {
@@ -599,7 +599,7 @@
 				.arrow {}
 
 				input {
-					font-size: 28rpx;
+					font-size: 15px;
 				}
 			}
 		}

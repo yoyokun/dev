@@ -366,3 +366,75 @@ export function stockBillLogToVoid(data = {}, message = '', custom = {}) {
 		}
 	})
 }
+
+// 库存盘点管理 根据条件查询列表信息
+export function stockCheckLogFindList(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/stockCheckLog/findList',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+
+// 库存盘点管理 保存或修改
+export function stockCheckLogSaveOrEdit(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/stockCheckLog/saveOrEdit',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 库存盘点管理 删除
+export function stockCheckLogDeleteByIds(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/stockCheckLog/deleteByIds',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 库存盘点管理 作废
+export function stockCheckLogToVoid(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/stockCheckLog/toVoid',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 库存盘点管理 修改状态
+export function stockCheckLogUpdateState(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/stockCheckLog/updateState',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}

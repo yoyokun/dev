@@ -74,7 +74,7 @@
 								<view class="cell-content">{{val['netContent-' + val.assistUnitsList[0].assistUnitsId]}}
 								</view>
 							</view>
-							<view class="nums"><text>x</text><input maxlength="4" type="number" placeholder="库存"
+							<view class="nums"><text>x</text><input maxlength="4" type="number" :placeholder="$t('stockMg.addStockOrder.stockNumsTxt')"
 									v-model="val.stockNum" /></view>
 						</view>
 						<view class="info-cell">
@@ -469,7 +469,7 @@
 						res.stockInoutLogList.forEach((item,index)=>{
 							let obj = {}
 							obj.orderReason = {
-								label: item.inOutName + (item.inOutType === 1 ? '入库' : '出库'),
+								label: item.inOutName + (item.inOutType === 1 ? this.$t('stockMg.common.stockTypeTxt.in') : this.$t('stockMg.common.stockTypeTxt.out')),
 								value: item.inOutReasonId,
 								type: item.inOutType,
 								reasonName: item.inOutName
@@ -616,6 +616,9 @@
 					}
 					params.customerId = ''
 					this.$refs.dialogForm.resetPicker('customerId',[0],[0])
+					if(!params.deliverManId){
+						this.$refs.dialogForm.resetPicker('deliverManId',[0],[0])
+					}
 				}
 				this.formDataValue = params
 			},

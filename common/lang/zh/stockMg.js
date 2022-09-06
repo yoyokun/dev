@@ -1,4 +1,21 @@
 module.exports = {
+	common: {
+		totalTxt: '总数',
+		checkStateTxt: ['已审核', '待提交', '待审核', '已作废', '未通过', '无审核'],
+		propertyNames: '属性参数',
+		standardName: '规格',
+		unitsName: '基本单位',
+		brandName: '品牌',
+		goodsClassifyName: '商品分类',
+		stockTypeTxt: {
+			in: '入库',
+			out: '出库'
+		},
+		btn: {
+			dealStock: '开始盘点',
+			addGoodsTxt: '商品'
+		}
+	},
 	// 出入库单
 	stockOrderList: {
 		titleText: '出入库单',
@@ -101,17 +118,18 @@ module.exports = {
 	addStockOrder: {
 		titleText: '添加出入库单',
 		titleTextEdit: '编辑出入库单',
-		orderChildTxt:'子单',
-		orderReasonTxt:'出入库原因',
+		orderChildTxt: '子单',
+		orderReasonTxt: '出入库原因',
 		orderReasonPlaceholder: '请选择出入库原因',
-		addGoodsTxt:'商品',
-		propertyNames:'属性参数',
-		standardName:'规格',
-		unitsName:'基本单位',
-		brandName:'品牌',
-		goodsClassifyName:'商品分类',
-		netContent:'重量(kg)',
-		costMoney:'金额',
+		addGoodsTxt: '商品',
+		stockNumsTxt: '库存',
+		propertyNames: '属性参数',
+		standardName: '规格',
+		unitsName: '基本单位',
+		brandName: '品牌',
+		goodsClassifyName: '商品分类',
+		netContent: '重量(kg)',
+		costMoney: '金额',
 		addChildBtn: '添加子单',
 		errNumsTxt: '请输入正确的单号',
 		errQrTxt: '二维码图片错误，请重新上传',
@@ -162,6 +180,116 @@ module.exports = {
 			},
 		},
 	},
-	
+	// 库存盘点
+	stockCheckList: {
+		titleText: '库存盘点',
+		orgName: '盘点仓库',
+		state: '盘点状态',
+		operationTime: '盘点时间',
+		stateTxt: {
+			1: '盘点中',
+			2: '盘点完成'
+		},
+		searchOptions: {
+			orgIdStr: {
+				label: '盘点仓库',
+			},
+			lockState: {
+				label: '是否锁盘',
+				options: [{
+						name: '否',
+						value: '0'
+					},
+					{
+						name: '是',
+						value: '1'
+					}
+				]
+			},
+			checkStateStr: {
+				label: '审核状态',
+				options: [{
+						name: '待提交',
+						value: '1'
+					},
+					{
+						name: '待审核',
+						value: '2'
+					},
+					{
+						name: '已审核',
+						value: '3'
+					},
+					{
+						name: '未通过',
+						value: '4'
+					},
+					{
+						name: '已作废',
+						value: '5'
+					},
+					{
+						name: '无审核',
+						value: '6'
+					}
+				]
+			},
+			orgIdStr: {
+				label: '盘点仓库',
+				placeholder: '请选择盘点仓库'
+			},
+			createDateRange: {
+				label: '盘点日期',
+				placeholder: ['开始日期', '选择日期'],
+			},
+		},
+	},
+
+	// 添加库存盘点
+	addStockCheck: {
+		titleText: '添加库存盘点',
+		titleTextEdit: '编辑库存盘点',
+		titleTextInfo: '库存盘点详情',
+		baseTle: '基础信息',
+		billNo: '单据编号',
+		orgName: '盘点仓库',
+		checkState: '审核状态',
+		lockState: '盘点锁库',
+		state: '盘点状态',
+		billTime: '开单时间',
+		creator: '开单人',
+		operationTime: '更新时间',
+		operator: '操作员',
+		remarks: '备注',
+		stockGoodsTle: '盘点商品',
+		reasonTxt: '选择原因',
+		curStock: '系统库存',
+		checkNums: '盘点数量',
+		diffNums: '差异',
+		checkStateTxt: {
+			1: '待提交',
+			2: '待审核',
+			3: '已审核',
+			4: '未通过',
+			5: '已作废',
+			6: '无审核'
+		},
+		lockStateTxt:{
+			true:'是',
+			false:'否',
+		},
+		form:{
+			orgName:{
+				label:'盘点仓库',
+			},
+			lockState:{
+				label:'锁库',
+			},
+			remarks:{
+				label:'备注',
+				placeholder: '请输入备注',
+			},
+		},
+	},
 
 }

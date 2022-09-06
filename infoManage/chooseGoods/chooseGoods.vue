@@ -149,6 +149,11 @@
 				]
 			}
 		},
+		computed: {
+			onePageRow() {
+				return 5
+			}
+		},
 		// 过滤器
 		filters: {},
 		created() {

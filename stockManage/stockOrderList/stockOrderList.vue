@@ -104,7 +104,6 @@
 			}
 		},
 		async created() {
-			console.log('==')
 			// 获取应用组织
 			await this.getOrgList()
 			this.searchOptions[0].options = this.orgList
@@ -113,10 +112,8 @@
 
 		},
 		onLoad(options) {
-			console.log('++')
 		},
 		onShow() {
-			console.log('==')
 			uni.setNavigationBarTitle({
 				title: this.$t('stockMg.stockOrderList.titleText')
 			})

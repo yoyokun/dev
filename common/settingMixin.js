@@ -49,7 +49,7 @@ export const settingMixin = {
 			const stockInoutReason = []
 			res.forEach((v, i) => {
 				stockInoutReason.push({
-					label: v.reasonName + (v.type === 1 ? '入库' : '出库'),
+					label: v.reasonName + (v.type === 1 ? this.$t('stockMg.common.stockTypeTxt.in') : this.$t('stockMg.common.stockTypeTxt.out')),
 					value: v[type],
 					type: v.type,
 					reasonName: v.reasonName
