@@ -10,8 +10,6 @@ import mixin from './common/mixin' // 全局mixin
 import * as utils from "./utils"
 import { VueJsonp } from 'vue-jsonp'
 import directive from '@/common/permission/index.js'
-// 拖动排序
-import VueDraggable from '@/common/vuedraggable/src/vuedraggable'
 // 计算
 var BigDecimal = require('js-big-decimal')
 // 引入全局uView
@@ -23,7 +21,6 @@ Vue.prototype.$navigateTo = utils.navigateTo; // 跳转页面
 String.prototype.Split = function(s) {
   return this.split(s).filter(item => item !== '')
 }
-Vue.component('draggable', VueDraggable)
 
 App.mpType = 'app'
 Vue.use(directive) // 按钮权限指令

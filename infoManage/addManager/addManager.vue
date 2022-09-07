@@ -15,25 +15,37 @@
 					</view>
 				</u-form-item>
 				<view class="draggable" v-if="toData.length">
-					<draggable
-					  :disabled="!isSave"
-						v-model="toData"
-						item-key="id"
-						group="toData"
-						@start="drag=true" @end="drag=false">
-						<view v-for="(item,index) in toData" :key="item.id" class="org-box">
-							<view class="center">
-								<text class="org-label">{{$t('addManager.form.orgLabel')}}：{{ item.name }}</text>
-								<block v-for="(itemBox,indexBox) in item.children" :key="indexBox">
-									<view v-for="(subItem,indexSub) in itemBox.children" :key="indexSub" class="box-case">
-										<text>{{ itemBox.name }}/{{subItem.name}}</text>
-										<u-icon name="close-circle-fill" color="#8C8C8C" size="20"  @click="deleteRole(index,indexBox,indexSub)"></u-icon>
-									</view>
-								</block>
+					<cdt-draggrable-sort 
+						ref="cdtDraggrableSort" 
+						v-model="toData" 
+						:v-bind:id="isEdit ? 0 : 1" 
+						:disabled="!isSave"
+						@start="start" 
+						@change="change">
+						// #ifdef MP
+						<template v-slot:default="row">
+							<view>
+									{{scope}}
 							</view>
-							<image class="icon" src="/static/image/del.png" mode="widthFix" @click="deleteOrg(index)"></image>
-						</view>
-					</draggable>
+						</template>
+						// #endif
+						// #ifndef MP
+						<template slot-scope="{row,index}">
+							<view class="org-box">
+								<view class="center">
+									<text class="org-label">{{$t('addManager.form.orgLabel')}}：{{ row.name }}</text>
+									<view v-for="(itemBox,indexBox) in row.children" :key="indexBox">
+										<view v-for="(subItem,indexSub) in itemBox.children" :key="indexSub" class="box-case">
+											<text>{{ itemBox.name }}/{{subItem.name}}</text>
+											<u-icon name="close-circle-fill" color="#8C8C8C" size="20"  @click="deleteRole(index,indexBox,indexSub)"></u-icon>
+										</view>
+									</view>
+								</view>
+								<image class="icon" src="/static/image/del.png" mode="widthFix" @click="deleteOrg(index)"></image>
+							</view>
+						</template>
+						// #endif
+					</cdt-draggrable-sort>
 				</view>
 			</template>
 			<template v-slot:extra>
@@ -55,9 +67,15 @@
 import { regionData } from 'element-china-area-data'
 import { sysManagerSaveOrEdit, sysManagerFindById, sysManagerDeleteByIds } from '@/api/loginApi.js'
 import { formatDate } from '@/utils/util.js'
+// 拖动排序
+import CdtDraggrableSort from '@/uni_modules/cdt-draggrable-sort/components/cdt-draggrable-sort/cdt-draggrable-sort.vue'
 export default {
+	components: {
+		CdtDraggrableSort
+	},
   data() {
     return {
+			isEdit: false,
 			isSave: true,
 			editId: '',
 			formDataSource: [
@@ -278,6 +296,9 @@ export default {
 		// 添加监听事件
 		uni.$once('chooseData', (data) => {
 			this.toData = data
+			setTimeout(()=>{
+				this.$refs.cdtDraggrableSort.init()
+			},1000)
 		})
 	},
   methods: {
@@ -471,6 +492,13 @@ export default {
 			this.formDataSource.forEach(v=>{
 				v.disabled = false
 			})
+		},
+		// 开始拖动
+		start(){
+			this.isEdit = true
+		},
+		change(data) {
+			this.toData = data
 		}
   },
 	options:{
@@ -482,6 +510,14 @@ export default {
 <style lang="scss" scoped>
 ::v-deep .u-form-item .u-line{
 	border-bottom: 1rpx solid rgba(229, 229, 229, 1) !important;
+}
+::v-deep .draggable_box_item{
+	width: 100%;
+	display: block;
+}
+::v-deep .draggable_box_item_select{
+	width: 100%;
+	left: 0rpx !important
 }
 ::v-deep .normalForm{
 	margin: 20rpx 20rpx;
@@ -513,6 +549,7 @@ export default {
 	}
 	.draggable{
 		padding: 10rpx 16rpx;
+		position: relative;
 	}
 	.org-box{
 		width: 100%;

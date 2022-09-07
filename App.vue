@@ -20,12 +20,6 @@ export default {
 			// 存储到缓存
 			uni.setStorageSync('locale', 'en-US')
 		}
-	},
-	onshow: function() {
-		
-	},
-	onhide: function() {
-		
 	}
 }
 </script>

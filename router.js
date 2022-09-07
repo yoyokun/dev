@@ -32,8 +32,8 @@ router.beforeEach(async(to, from, next) => {
 				// 无权限
 				try {
 					// 请求权限
-					const menu = await store.dispatch('user/getLoginList')
 					console.log('无权限,去查权限')
+					const menu = await store.dispatch('user/getLoginList')
 					// replace: true 不会回退到登录页面，导航将不会留下历史记录
 					next()
 				} catch (error) {
@@ -55,7 +55,7 @@ router.beforeEach(async(to, from, next) => {
 			next(`/pages/login/login`)
 		}
 	}
-	
+
   next()
 })
 // 全局路由后置守卫

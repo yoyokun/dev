@@ -10,7 +10,7 @@ function checkPermission(el, binding) {
     permission = binding.value || binding.arg
   }
   const roles = store.getters && store.getters.roles
-  if (permission.length > 0) {
+  if (permission || permission.length > 0) {
     const hasPermission = roles.includes(permission)
     if (!hasPermission) {
       if (type) {

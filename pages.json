@@ -320,6 +320,53 @@
 					}	
 				}
 			]
+		},
+		{
+			"root": "securityManage",
+			"pages": [
+				{
+					"path" : "securityCheckList/securityCheckList",
+					"style" : {
+						"navigationBarTitleText": "安检记录",
+						"enablePullDownRefresh": false
+					}	
+				}
+				,{
+					"path" : "addSecurityCheck/addSecurityCheck",
+					"style" : {
+						"navigationBarTitleText": "添加安检",
+						"enablePullDownRefresh": false
+					}
+				}
+				,{
+					"path" : "rectificationList/rectificationList",
+					"style" : {
+						"navigationBarTitleText": "整改记录",
+						"enablePullDownRefresh": false
+					}	
+				}
+				,{
+					"path" : "patrolCheckList/patrolCheckList",
+					"style" : {
+						"navigationBarTitleText": "巡检记录",
+						"enablePullDownRefresh": false
+					}
+				}
+				,{
+					"path" : "addPatrolCheck/addPatrolCheck",
+					"style" : {
+						"navigationBarTitleText": "添加巡检",
+						"enablePullDownRefresh": false
+					}	
+				}
+				,{
+					"path" : "addRectification/addRectification",
+					"style" : {
+						"navigationBarTitleText": "编辑整改",
+						"enablePullDownRefresh": false
+					}
+				}
+			]
 		}
 	],
 	"globalStyle": {

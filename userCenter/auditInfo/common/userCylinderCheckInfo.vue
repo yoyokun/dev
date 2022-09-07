@@ -36,19 +36,19 @@
 						<block v-else>
 							<td class="uni-td trd" v-if="item.prop==='standardSystemNum'">
 								<view class="custom-trd">
-									<view class="custom-td" v-for="(sysItem, sysIndex) in row.system">
+									<view class="custom-td" v-for="(sysItem, sysIndex) in row.system" :key="sysIndex">
 										{{ sysItem[sysItem.name] }}</view>
 								</view>
 							</td>
 							<td class="uni-td trd" v-if="item.prop==='standardCheckNum'">
 								<view class="custom-trd">
-									<view class="custom-td" v-for="(cheItem, cheIndex) in row.check">
+									<view class="custom-td" v-for="(cheItem, cheIndex) in row.check" :key="cheIndex">
 										{{ cheItem[cheItem.name] }}</view>
 								</view>
 							</td>
 							<td class="uni-td trd" v-if="item.prop==='standardDiffNum'">
 								<view class="custom-trd">
-									<view class="custom-td" v-for="(difItem, difIndex) in row.diff">
+									<view class="custom-td" v-for="(difItem, difIndex) in row.diff" :key="difIndex">
 										{{ difItem[difItem.name] }}</view>
 								</view>
 							</td>

@@ -1,8 +1,8 @@
 <template>
   <view class="list-part">
-    <block v-if="dataList.length">
-      <block v-for="(item,index) in dataList" :key="item.id" >
-				<block v-for="(subItem,subItemIndex) in item.children" :key="subItem.id">
+    <view v-if="dataList.length">
+      <view v-for="(item,index) in dataList" :key="item.id" >
+				<view v-for="(subItem,subItemIndex) in item.children" :key="subItem.id">
 					<view v-for="(subItems,subItemsIndex) in subItem.children" :key="subItems.id" class="chooseCommonBox" @click="chooseBox(index,subItemIndex,subItemsIndex)">
 						<view class="center">
 							<view class="name">{{ subItems.name }}</view>
@@ -12,9 +12,9 @@
 						<image class="icon" v-if="subItems.active" mode="widthFix" src="/static/image/check.png" />
 						<image class="icon" v-else mode="widthFix" src="/static/image/uncheck.png" />
 					</view>
-				</block>
-			</block>
-    </block>
+				</view>
+			</view>
+    </view>
 		<u-empty v-else mode="list" icon="http://cdn.uviewui.com/uview/empty/list.png"></u-empty>
 		<view class="bottom-part">
 			<view class="btnAdd" @click="chooseSave">{{$t('postRole.save')}}</view>

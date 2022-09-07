@@ -1,4 +1,5 @@
 import auditInfo from './zh/auditInfo'
+import security from './zh/security'
 module.exports = {
 	// tabbar
 	tabbar: {
@@ -252,6 +253,8 @@ module.exports = {
 	},
 	// 审核详情
 	auditInfo: auditInfo,
+	// 安全管控
+	security: security,
 	// 成员
 	addManager: {
 		titleText: '添加成员',

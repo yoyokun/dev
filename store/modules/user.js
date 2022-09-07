@@ -50,32 +50,26 @@ const actions = {
 	},
 	// 获取权限信息
 	getLoginList({ commit, state }) {
-		return new Promise((resolve, reject) => {
-			// 获取用户信息
-			sysManagerFindBytoken().then(data => {
+		return new Promise(async(resolve, reject) => {
+			try {
+				const data = await sysManagerFindBytoken()
 				// 设置用户信息
 				commit('SET_USERINFO', data.returnValue)
-				sysAuthorityFindLoginList({ type: 1, medium: '2' }).then(response => {
-					// 获取到菜单为空
-					if (!response.returnValue || response.returnValue.length === 0) {
-						reject('无菜单')
-					} else {
-						// 获取按钮
-						sysAuthorityFindLoginKeys({ medium: '2' }).then(res => {
-							commit('SET_ROLES', res.returnValue)
-							commit('SET_MENU', response.returnValue)
-							// 返回菜单
-							resolve(response.returnValue)
-						}).catch(error => {
-							reject(error)
-						})
-					}
-				}).catch(error => {
-					reject(error)
-				})
-			}).catch(error => {
+				const response = await sysAuthorityFindLoginList({ type: 1, medium: '2' })
+				// 获取到菜单为空
+				if (!response.returnValue || response.returnValue.length === 0) {
+					reject('无菜单')
+				} else {
+					// 获取按钮
+					const res = await sysAuthorityFindLoginKeys({ medium: '2' })
+					commit('SET_ROLES', res.returnValue)
+					commit('SET_MENU', response.returnValue)
+					// 返回菜单
+					resolve(response.returnValue)
+				}
+			} catch (error) {
 				reject(error)
-			})
+			}
 		})
 	},
 	// 退出登录
