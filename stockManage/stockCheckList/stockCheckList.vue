@@ -4,7 +4,7 @@
 			<search :searchOptions="searchOptions" @search="search"></search>
 			<view class="total">
 				<view class="num">{{$t('stockMg.common.totalTxt')}}：<text>{{totals}}</text></view>
-				<view class="add" @click="goto('/stockManage/addStockCheck/addStockCheck')">
+				<view class="add" v-permission="{ permission:'app_stockCheckList_add'}" @click="goto('/stockManage/addStockCheck/addStockCheck')">
 					<u-icon name="plus" color="#2A82E4" size="16" bold></u-icon>{{$t('common.btn.add')}}
 				</view>
 			</view>

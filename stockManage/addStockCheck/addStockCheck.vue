@@ -11,12 +11,16 @@
 				<description-list :title="$t('stockMg.addStockCheck.baseTle')">
 					<description :label="$t('stockMg.addStockCheck.billNo')">{{ infos.billNo }}</description>
 					<description :label="$t('stockMg.addStockCheck.orgName')">{{ infos.orgName }}</description>
-					<description :label="$t('stockMg.addStockCheck.checkState')">{{ infos.checkState | checkState }}</description>
-					<description :label="$t('stockMg.addStockCheck.lockState')">{{ infos.lockState | lockState }}</description>
+					<description :label="$t('stockMg.addStockCheck.checkState')">{{ infos.checkState | checkState }}
+					</description>
+					<description :label="$t('stockMg.addStockCheck.lockState')">{{ infos.lockState | lockState }}
+					</description>
 					<description :label="$t('stockMg.addStockCheck.state')">{{ infos.state | state }}</description>
-					<description :label="$t('stockMg.addStockCheck.billTime')">{{ infos.billTime | dayjs }}</description>
+					<description :label="$t('stockMg.addStockCheck.billTime')">{{ infos.billTime | dayjs }}
+					</description>
 					<description :label="$t('stockMg.addStockCheck.creator')">{{ infos.creator }}</description>
-					<description :label="$t('stockMg.addStockCheck.operationTime')">{{ infos.operationTime | dayjs }}</description>
+					<description :label="$t('stockMg.addStockCheck.operationTime')">{{ infos.operationTime | dayjs }}
+					</description>
 					<description :label="$t('stockMg.addStockCheck.operator')">{{ infos.operator }}</description>
 					<description :label="$t('stockMg.addStockCheck.remarks')">{{ infos.remarks }}</description>
 				</description-list>
@@ -33,10 +37,12 @@
 					<view class="goods-list" v-for="(val,key) in listGoods" :key="key">
 						<view class="goods-head">
 							<view class="goods-tle">{{val.goodsNo}} - {{val.goodsName}}</view>
-							<view class="goods-reason on" @click="chooseReason(key)" v-if="val.reason&&val.reason.reasonName">
+							<view class="goods-reason on" @click="chooseReason(key)"
+								v-if="val.reason&&val.reason.reasonName">
 								{{val.reason.name}} >
 							</view>
-							<view class="goods-reason" @click="chooseReason(key)" v-else>{{$t('stockMg.addStockCheck.reasonTxt')}} ></view>
+							<view class="goods-reason" @click="chooseReason(key)" v-else>
+								{{$t('stockMg.addStockCheck.reasonTxt')}} ></view>
 						</view>
 						<view class="attr-del">
 							<view class="attr">
@@ -83,8 +89,8 @@
 							<view class="cell">
 								<view class="cell-label">{{$t('stockMg.addStockCheck.checkNums')}}：</view>
 								<view class="cell-content">
-									<input type="number" :placeholder="$t('stockMg.addStockCheck.checkNums')" v-model="val.checkNums"
-										@input="changeNums($event,key)" />
+									<input type="number" :placeholder="$t('stockMg.addStockCheck.checkNums')"
+										v-model="val.checkNums" @input="changeNums($event,key)" />
 								</view>
 							</view>
 						</view>
@@ -112,20 +118,23 @@
 		</view>
 
 		<view class="btn" v-else>
-			<u-button :text="$t('common.btn.edit')" v-if="infos.checkState==1||infos.checkState==4" type="primary"
-				hairline shape="circle" plain @click="changeEdit(false)">
+			<u-button v-permission="{ permission:'app_stockCheckList_edit'}" :text="$t('common.btn.edit')"
+				v-if="infos.checkState==1||infos.checkState==4" type="primary" hairline shape="circle" plain
+				@click="changeEdit(false)">
 			</u-button>
-			<u-button :text="$t('cylinderCheckList.btns')[2]" @click="handleUpdate(infos,2)" v-if="infos.checkState==1"
-				type="success" hairline shape="circle" plain>
+			<u-button v-permission="{ permission:'app_stockCheckList_submit'}" :text="$t('cylinderCheckList.btns')[2]"
+				@click="handleUpdate(infos,2)" v-if="infos.checkState==1" type="success" hairline shape="circle" plain>
 			</u-button>
-			<u-button :text="$t('cylinderCheckList.btns')[3]" @click="handleUpdate(infos,7)" v-if="infos.checkState==2"
-				type="warning" hairline shape="circle" plain>
+			<u-button v-permission="{ permission:'app_stockCheckList_revert'}" :text="$t('cylinderCheckList.btns')[3]"
+				@click="handleUpdate(infos,7)" v-if="infos.checkState==2" type="warning" hairline shape="circle" plain>
 			</u-button>
-			<u-button :text="$t('common.btn.delete')" type="error" hairline shape="circle"
+			<u-button v-permission="{ permission:'app_stockCheckList_delete'}" :text="$t('common.btn.delete')"
+				type="error" hairline shape="circle"
 				v-if="infos.checkState==1||infos.checkState==5||infos.checkState==4" plain @click="handleDelete(infos)">
 			</u-button>
-			<u-button :text="$t('common.btn.toVoid')" @click="handleVoid(infos)"
-				v-if="infos.checkState==3||infos.checkState==6" type="info" hairline shape="circle" plain></u-button>
+			<u-button v-permission="{ permission:'app_stockCheckList_invalid'}" :text="$t('common.btn.toVoid')"
+				@click="handleVoid(infos)" v-if="infos.checkState==3||infos.checkState==6" type="info" hairline
+				shape="circle" plain></u-button>
 		</view>
 
 		<!-- 作废 -->
@@ -214,7 +223,7 @@
 			},
 		},
 		computed: {
-			
+
 		},
 		async created() {
 			that = this
@@ -224,10 +233,10 @@
 		},
 		async onLoad(options) {
 			const that = this
-			setTimeout(function(){
-				that.$set(that.formDataValue,'orgName',that.userInfo.orgName)
-			},1)
-			
+			setTimeout(function() {
+				that.$set(that.formDataValue, 'orgName', that.userInfo.orgName)
+			}, 1)
+
 			this.editId = options.editId || ''
 			if (this.editId) {
 				this.changeEdit(true)
@@ -306,19 +315,19 @@
 			},
 			changeEdit(isSave = this.isSave) {
 				this.isSave = isSave
-				if(isSave==false && this.infos){
+				if (isSave == false && this.infos) {
 					uni.setNavigationBarTitle({
 						title: this.$t('stockMg.addStockCheck.titleTextEdit')
 					});
 				}
 				if (isSave) {
-					this.formDataSource.forEach((v,k) => {
+					this.formDataSource.forEach((v, k) => {
 						v.disabled = true
 					})
 				} else {
-					this.formDataSource.forEach((v,k) => {
+					this.formDataSource.forEach((v, k) => {
 						v.disabled = false
-						if(k==0){
+						if (k == 0) {
 							v.disabled = true
 						}
 					})
@@ -421,12 +430,14 @@
 					this.formDataValue.lockState = res.lockState == true ? 1 : 0
 					this.formDataValue.remarks = res.remarks
 					console.log(this.formDataValue)
-					if(res.stockCheckLogDetailsList.length){
-						res.stockCheckLogDetailsList.forEach(i=>{
+					if (res.stockCheckLogDetailsList.length) {
+						res.stockCheckLogDetailsList.forEach(i => {
 							i.checkNums = i.checkStockNum
 							i.curStock = i.systemStockNum
 							i.reason = {
-								name: i.inOutName + (i.inOutType === 1 ? this.$t('stockMg.common.stockTypeTxt.in') : this.$t('stockMg.common.stockTypeTxt.out')),
+								name: i.inOutName + (i.inOutType === 1 ? this.$t(
+									'stockMg.common.stockTypeTxt.in') : this.$t(
+									'stockMg.common.stockTypeTxt.out')),
 								value: i.inOutReasonId,
 								type: i.inOutType,
 								reasonName: i.inOutName
@@ -442,7 +453,7 @@
 					let params = data
 					delete params.orgName
 					params.id = this.infos.id || ''
-					params.checkState = this.infos.checkState||1
+					params.checkState = this.infos.checkState || 1
 					params.lockState = params.lockState > 0 ? true : false
 					params.checkDetailData = []
 					this.listGoods.forEach((item, index) => {
@@ -453,7 +464,7 @@
 							checkStockNum: item.checkNums,
 							id: item.id ? item.id : ''
 						}
-						if (item.reason&&item.reason.inOutReasonId) {
+						if (item.reason && item.reason.inOutReasonId) {
 							obj.inOutReasonId = item.reason.value
 						}
 						params.checkDetailData.push(obj)
@@ -535,9 +546,11 @@
 
 	.sk-info {
 		padding: 30rpx 20rpx;
-		.form{
+
+		.form {
 			margin-bottom: 30rpx;
 		}
+
 		::v-deep .normalForm {
 			.u-form {
 				background: rgba(255, 255, 255, 1);
@@ -555,9 +568,10 @@
 
 		.list-box {
 			.list {
-				&:last-child{
+				&:last-child {
 					margin-bottom: 0rpx;
 				}
+
 				margin-bottom: 30rpx;
 				background: rgba(255, 255, 255, 1);
 				box-shadow: 0rpx 4rpx 8rpx rgba(0, 0, 0, 0.04);

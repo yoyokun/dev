@@ -64,7 +64,8 @@
 									</view>
 								</view>
 							</view>
-							<u-icon v-if="!isSave" class="remove-goods" name="minus-circle-fill" @click="removeOrderGoods(index,key)">
+							<u-icon v-if="!isSave" class="remove-goods" name="minus-circle-fill"
+								@click="removeOrderGoods(index,key)">
 							</u-icon>
 						</view>
 
@@ -74,8 +75,9 @@
 								<view class="cell-content">{{val['netContent-' + val.assistUnitsList[0].assistUnitsId]}}
 								</view>
 							</view>
-							<view class="nums"><text>x</text><input maxlength="4" type="number" :placeholder="$t('stockMg.addStockOrder.stockNumsTxt')"
-									v-model="val.stockNum" /></view>
+							<view class="nums"><text>x</text><input maxlength="4" type="number"
+									:placeholder="$t('stockMg.addStockOrder.stockNumsTxt')" v-model="val.stockNum" />
+							</view>
 						</view>
 						<view class="info-cell">
 							<view class="cell">
@@ -92,29 +94,33 @@
 			@confirm="confReason" @close="close" @cancel="close"></u-picker>
 
 		<view class="btn" v-if="!isSave">
-			<u-button :text="$t('stockMg.addStockOrder.addChildBtn')" plain type="primary" hairline shape="circle" @click="addListOrder">
+			<u-button :text="$t('stockMg.addStockOrder.addChildBtn')" plain type="primary" hairline shape="circle"
+				@click="addListOrder">
 			</u-button>
 			<u-button :text="$t('common.btn.save')" type="primary" hairline shape="circle" @click="saveData">
 			</u-button>
 		</view>
-		
+
 		<view class="btn" v-else>
-			<u-button :text="$t('common.btn.edit')" v-if="infos.checkState==1||infos.checkState==4" type="primary" hairline
-				shape="circle" plain @click="changeEdit(false)">
+			<u-button v-permission="{ permission:'app_stockOrderList_edit'}" :text="$t('common.btn.edit')"
+				v-if="infos.checkState==1||infos.checkState==4" type="primary" hairline shape="circle" plain
+				@click="changeEdit(false)">
 			</u-button>
-			<u-button :text="$t('cylinderCheckList.btns')[2]" @click="handleUpdate(infos,2)" v-if="infos.checkState==1" type="success" hairline
-				shape="circle" plain>
+			<u-button v-permission="{ permission:'app_stockOrderList_submit'}" :text="$t('cylinderCheckList.btns')[2]"
+				@click="handleUpdate(infos,2)" v-if="infos.checkState==1" type="success" hairline shape="circle" plain>
 			</u-button>
-			<u-button :text="$t('cylinderCheckList.btns')[3]" @click="handleUpdate(infos,7)" v-if="infos.checkState==2" type="warning" hairline
-				shape="circle" plain>
+			<u-button v-permission="{ permission:'app_stockOrderList_revert'}" :text="$t('cylinderCheckList.btns')[3]"
+				@click="handleUpdate(infos,7)" v-if="infos.checkState==2" type="warning" hairline shape="circle" plain>
 			</u-button>
-			<u-button :text="$t('common.btn.delete')"
-				type="error" hairline shape="circle" v-if="infos.checkState==1||infos.checkState==5||infos.checkState==4" plain @click="handleDelete(infos)">
+			<u-button v-permission="{ permission:'app_stockOrderList_delete'}" :text="$t('common.btn.delete')"
+				type="error" hairline shape="circle"
+				v-if="infos.checkState==1||infos.checkState==5||infos.checkState==4" plain @click="handleDelete(infos)">
 			</u-button>
-			<u-button :text="$t('common.btn.toVoid')"
-				@click="handleVoid(infos)" v-if="infos.checkState==3||infos.checkState==6" type="info" hairline shape="circle" plain></u-button>
+			<u-button v-permission="{ permission:'app_stockOrderList_invalid'}" :text="$t('common.btn.toVoid')"
+				@click="handleVoid(infos)" v-if="infos.checkState==3||infos.checkState==6" type="info" hairline
+				shape="circle" plain></u-button>
 		</view>
-		
+
 		<!-- 作废 -->
 		<u-modal :show="showModal" :title="$t('cylinderCheckList.descTle')" :closeOnClickOverlay="true"
 			:asyncClose="true" :showCancelButton="true" @cancel="closeModal" @close="closeModal" @confirm="confVoid">
@@ -194,7 +200,7 @@
 							message: this.$t('stockMg.addStockOrder.form.customerId.placeholder'),
 							trigger: ['change', 'blur']
 						}],
-						show:false,
+						show: false,
 					},
 					{
 						type: 'text',
@@ -250,7 +256,7 @@
 				stockInoutReason: [],
 				linkId: '',
 				linkTypes: '',
-				infos:{},
+				infos: {},
 			}
 		},
 		// 过滤器
@@ -272,7 +278,7 @@
 					title: this.$t('stockMg.addStockOrder.titleTextEdit')
 				});
 				await this.getInfo(this.editId)
-			}else{
+			} else {
 				uni.setNavigationBarTitle({
 					title: this.$t('stockMg.addStockOrder.titleText')
 				});
@@ -293,7 +299,7 @@
 					this.listOrder[this.tempIndex].stockInoutLogDetailData.push(item)
 				})
 			})
-			
+
 
 		},
 		onUnload() {
@@ -313,7 +319,7 @@
 				const {
 					returnValue: res,
 					message
-				} = await stockBillLogToVoid(obj).catch(err=>{
+				} = await stockBillLogToVoid(obj).catch(err => {
 					this.closeModal()
 				})
 				if (res) {
@@ -423,7 +429,7 @@
 										delta: 1
 									})
 								}, 1500)
-			
+
 							}
 						}
 					}
@@ -461,23 +467,25 @@
 					data.deliverManId = res.deliverManId
 					data.checkState = res.checkState
 					data.stockSourceType = res.stockSourceType
-					this.linkId = res.linkId||''
-					this.linkTypes = res.linkType||''
+					this.linkId = res.linkId || ''
+					this.linkTypes = res.linkType || ''
 					this.formDataValue = data
-					if(res.stockInoutLogList && res.stockInoutLogList.length){
+					if (res.stockInoutLogList && res.stockInoutLogList.length) {
 						let listOrder = []
-						res.stockInoutLogList.forEach((item,index)=>{
+						res.stockInoutLogList.forEach((item, index) => {
 							let obj = {}
 							obj.orderReason = {
-								name: item.inOutName + (item.inOutType === 1 ? this.$t('stockMg.common.stockTypeTxt.in') : this.$t('stockMg.common.stockTypeTxt.out')),
+								name: item.inOutName + (item.inOutType === 1 ? this.$t(
+									'stockMg.common.stockTypeTxt.in') : this.$t(
+									'stockMg.common.stockTypeTxt.out')),
 								value: item.inOutReasonId,
 								type: item.inOutType,
 								reasonName: item.inOutName
 							}
 							obj.id = item.id
 							obj.stockInoutLogDetailData = []
-							if(item.stockInoutLogDetailsList && item.stockInoutLogDetailsList.length){
-								item.stockInoutLogDetailsList.forEach((val,key)=>{
+							if (item.stockInoutLogDetailsList && item.stockInoutLogDetailsList.length) {
+								item.stockInoutLogDetailsList.forEach((val, key) => {
 									val.stockNum = parseInt(val.stockNum)
 									obj.stockInoutLogDetailData.push(val)
 								})
@@ -486,7 +494,7 @@
 						})
 						this.listOrder = listOrder
 					}
-					
+
 				}
 			},
 			// 保存数据
@@ -494,9 +502,9 @@
 				this.$refs.dialogForm.handleSubmit(async (data) => {
 					let params = {}
 					params.customerId = data.customerId
-					params.id = this.editId||''
+					params.id = this.editId || ''
 					params.stockSourceType = 'stock'
-					params.checkState = this.infos.checkState||1
+					params.checkState = this.infos.checkState || 1
 					params.orgId = data.orgId
 					params.stockFormType = data.stockFormType
 					params.remarks = data.remarks
@@ -510,7 +518,7 @@
 					this.listOrder.forEach((item, index) => {
 						const obj = {
 							inOutReasonId: '',
-							id: item.id||'',
+							id: item.id || '',
 							stockInoutLogDetailData: []
 						}
 						if (item.orderReason) {
@@ -529,7 +537,7 @@
 								obj.stockInoutLogDetailData.push(goods)
 							})
 						}
-						
+
 						params.stockInoutData.push(obj)
 					})
 					params.stockInoutData = JSON.stringify(params.stockInoutData)
@@ -552,7 +560,7 @@
 			},
 			// 选择出入库原因
 			chooseReason(index) {
-				if(this.isSave){
+				if (this.isSave) {
 					return
 				}
 				this.show = true
@@ -615,9 +623,9 @@
 						this.formDataSource[2].options = this.orgList
 					}
 					params.customerId = ''
-					this.$refs.dialogForm.resetPicker('customerId',[0],[0])
-					if(!params.deliverManId){
-						this.$refs.dialogForm.resetPicker('deliverManId',[0],[0])
+					this.$refs.dialogForm.resetPicker('customerId', [0], [0])
+					if (!params.deliverManId) {
+						this.$refs.dialogForm.resetPicker('deliverManId', [0], [0])
 					}
 				}
 				this.formDataValue = params
@@ -669,7 +677,7 @@
 			},
 			// 扫描二维码
 			toScan(e) {
-				if(this.isSave){
+				if (this.isSave) {
 					return
 				}
 				// #ifdef APP-PLUS
@@ -721,19 +729,20 @@
 	.modal-main {
 		width: 100%;
 		font-size: 28rpx;
-	
+
 		&>view {
 			margin-bottom: 20rpx;
 		}
-	
+
 		::v-deep .modal-text {
 			font-size: 28rpx;
-	
+
 			.u-textarea__field {
 				font-size: 28rpx;
 			}
 		}
 	}
+
 	.sk-info {
 		padding: 30rpx 20rpx;
 

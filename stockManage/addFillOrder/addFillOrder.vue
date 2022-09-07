@@ -113,19 +113,19 @@
 		</view>
 
 		<view class="btn" v-else>
-			<u-button :text="$t('common.btn.edit')" v-if="infos.checkState==1||infos.checkState==4" type="primary"
+			<u-button v-permission="{ permission:'app_fillOrderList_edit'}" :text="$t('common.btn.edit')" v-if="infos.checkState==1||infos.checkState==4" type="primary"
 				hairline shape="circle" plain @click="changeEdit(false)">
 			</u-button>
-			<u-button :text="$t('cylinderCheckList.btns')[2]" @click="handleUpdate(infos,2)" v-if="infos.checkState==1"
+			<u-button v-permission="{ permission:'app_fillOrderList_submit'}" :text="$t('cylinderCheckList.btns')[2]" @click="handleUpdate(infos,2)" v-if="infos.checkState==1"
 				type="success" hairline shape="circle" plain>
 			</u-button>
-			<u-button :text="$t('cylinderCheckList.btns')[3]" @click="handleUpdate(infos,7)" v-if="infos.checkState==2"
+			<u-button v-permission="{ permission:'app_fillOrderList_revert'}" :text="$t('cylinderCheckList.btns')[3]" @click="handleUpdate(infos,7)" v-if="infos.checkState==2"
 				type="warning" hairline shape="circle" plain>
 			</u-button>
-			<u-button :text="$t('common.btn.delete')" type="error" hairline shape="circle"
+			<u-button v-permission="{ permission:'app_fillOrderList_delete'}" :text="$t('common.btn.delete')" type="error" hairline shape="circle"
 				v-if="infos.checkState==1||infos.checkState==5||infos.checkState==4" plain @click="handleDelete(infos)">
 			</u-button>
-			<u-button :text="$t('common.btn.toVoid')" @click="handleVoid(infos)"
+			<u-button v-permission="{ permission:'app_fillOrderList_invalid'}" :text="$t('common.btn.toVoid')" @click="handleVoid(infos)"
 				v-if="(infos.checkState==3||infos.checkState==6)&& infos.moneySourceType ==='money'" type="info" hairline shape="circle" plain></u-button>
 		</view>
 
