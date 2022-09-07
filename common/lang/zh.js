@@ -1,9 +1,6 @@
 import auditInfo from './zh/auditInfo'
-<<<<<<< HEAD
 import security from './zh/security'
-=======
 import stockMg from './zh/stockMg'
->>>>>>> 0457f25420091bff04ad2f72907a7cfde7a289f0
 module.exports = {
 	// tabbar
 	tabbar: {
@@ -257,13 +254,10 @@ module.exports = {
 	},
 	// 审核详情
 	auditInfo: auditInfo,
-<<<<<<< HEAD
 	// 安全管控
 	security: security,
-=======
 	// 库存管理
 	stockMg: stockMg,
->>>>>>> 0457f25420091bff04ad2f72907a7cfde7a289f0
 	// 成员
 	addManager: {
 		titleText: '添加成员',
