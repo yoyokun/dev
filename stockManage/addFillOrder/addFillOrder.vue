@@ -364,8 +364,8 @@
 				const that = this
 				if (type === 7) {
 					uni.showModal({
-						title: that.$t('cylinderCheckList.tipsTle')[0],
-						content: that.$t('cylinderCheckList').backTxt(data.billNo),
+						title: that.$t('common.tipsTle')[0],
+						content: that.$t('common').backTxt(data.billNo),
 						success: async function(res) {
 							if (res.confirm) {
 								const obj = {

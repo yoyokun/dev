@@ -12,8 +12,6 @@ module.exports = {
 	// 公共模块
 	common: {
 		noData: '没有更多了',
-		deleteTitle: '删除',
-		deleteContent: '确定要删除该数据吗?',
 		voidTitle: '作废提示',
 		voidContentPlace: '请输入作废描述',
 		addTitle: '添加提示',
@@ -47,9 +45,12 @@ module.exports = {
 			disable: '禁用',
 			cancel: '取消'
 		},
-		statusTitle: '提示',
-		statusContent: '真的要',
-		statusContent1: '吗?',
+		tipsTle: ['撤回提示', '提交提示', '删除提示', '禁用提示', '启用提示'],
+		backTxt: (txt) => `真的要撤回${txt}该条数据吗?`,
+		subTxt: (txt) => `真的要提交${txt}该条数据吗?`,
+		delTxt: (txt) => `真的要删除${txt}该条数据吗?`,
+		disableTxt: (txt) => `真的要禁用${txt}该条数据吗?`,
+		enableTxt: (txt) => `真的要启用${txt}该条数据吗?`,
 	},
 	// 登录页面
 	login: {
@@ -496,11 +497,7 @@ module.exports = {
 			propertyIds: {
 				label: '客户标签'
 			}
-		},
-		tipsTle: ['撤回提示', '提交提示', '删除提示'],
-		backTxt: (txt) => `真的要撤回${txt}该条数据吗?`,
-		subTxt: (txt) => `真的要提交${txt}该条数据吗?`,
-		delTxt: (txt) => `真的要删除${txt}该条数据吗?`,
+		}
 	},
 	// 我的工单
 	userWorkList: {

@@ -700,10 +700,11 @@ export default {
 		},
 		// 启用禁用
 		handleUpdate() {
-			const text = this.info.state === 1 ? this.$t('common.btn.disable') : this.$t('common.btn.enable')
+			const text = this.info.state === 1 ? this.$t('common.tipsTle')[3] : this.$t('common.tipsTle')[4]
+			const content = this.info.state === 1 ? this.$t('common').disableTxt(this.info.customerName) : this.$t('common').enableTxt(this.info.customerName)
 			uni.showModal({
-				title: `${text}${this.$t('common.statusTitle')}`,
-				content: `${this.$t('common.statusContent')}${text}${this.info.customerName}${this.$t('common.statusContent1')}`,
+				title: text,
+				content: content,
 				success: async(param) => {
 					if (param.confirm) {
 						const { returnValue: res, message } = await userCustomerUpdateState({ ids: [this.editId], state: this.info.state === 2 ? 1 : 2 })
@@ -725,8 +726,8 @@ export default {
 		// 删除
 		handleDelete() {
 			uni.showModal({
-				title: this.$t('common.deleteTitle'),
-				content: this.$t('common.deleteContent'),
+				title: this.$t('common.tipsTle')[2],
+				content: this.$t('common').delTxt(this.formDataValue.customerName),
 				success: async(param) => {
 					if (param.confirm) {
 						const { returnValue: res, message } = await userCustomerDeleteByIds({ ids: [this.editId] })

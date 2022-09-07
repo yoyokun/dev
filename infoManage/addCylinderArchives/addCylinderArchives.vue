@@ -501,8 +501,8 @@ export default {
 		// 删除
 		handleDelete() {
 			uni.showModal({
-				title: this.$t('common.deleteTitle'),
-				content: this.$t('common.deleteContent'),
+				title: this.$t('common.tipsTle')[2],
+				content: this.$t('common').delTxt(this.formDataValue.modelName),
 				success: async(param) => {
 					if (param.confirm) {
 						const { returnValue: res, message } = await cylinderArchivesDeleteByIds({ ids: [this.editId] })

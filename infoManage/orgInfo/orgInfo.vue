@@ -628,10 +628,11 @@ export default {
 		},
 		// 启用禁用
 		handleUpdate() {
-			const text = this.info.state === 1 ? this.$t('common.btn.disable') : this.$t('common.btn.enable')
+			const text = this.info.state === 1 ? this.$t('common.tipsTle')[3] : this.$t('common.tipsTle')[4]
+			const content = this.info.state === 1 ? this.$t('common').disableTxt(this.info.name) : this.$t('common').enableTxt(this.info.name)
 			uni.showModal({
-				title: `${text}${this.$t('common.statusTitle')}`,
-				content: `${this.$t('common.statusContent')}${text}${this.info.name}${this.$t('common.statusContent1')}`,
+				title: text,
+				content: content,
 				success: async(param) => {
 					if (param.confirm) {
 						const { returnValue: res, message } = await sysOrgUpdateState({ ids: [this.userInfo.orgId], state: this.info.state === 2 ? 1 : 2 })
