@@ -380,7 +380,8 @@ export default {
 					this.$emit('change', { queryParams, name: '' })
 				}
 			},
-			deep: true
+			deep: true,
+			immediate: true
 		}
 	},
 	created() {

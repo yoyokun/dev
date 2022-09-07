@@ -1,13 +1,13 @@
 <template>
 	<view class="sk-info">
-		<view class="form" v-if="!isSave">
+		<view class="form" v-show="!isSave">
 			<edit-form ref="dialogForm" labelWidth="80" classForm="normalForm" :form-data-source="formDataSource"
 				:form-data-value="formDataValue" @change="changeForm" @toScan="toScan">
 			</edit-form>
 		</view>
 
 		<view class="list-box">
-			<view class="list" v-if="isSave&&editId">
+			<view class="list" v-show="isSave&&editId">
 				<description-list :title="$t('stockMg.addStockCheck.baseTle')">
 					<description :label="$t('stockMg.addStockCheck.billNo')">{{ infos.billNo }}</description>
 					<description :label="$t('stockMg.addStockCheck.orgName')">{{ infos.orgName }}</description>
@@ -34,7 +34,7 @@
 						<view class="goods-head">
 							<view class="goods-tle">{{val.goodsNo}} - {{val.goodsName}}</view>
 							<view class="goods-reason on" @click="chooseReason(key)" v-if="val.reason&&val.reason.reasonName">
-								{{val.reason.label}} >
+								{{val.reason.name}} >
 							</view>
 							<view class="goods-reason" @click="chooseReason(key)" v-else>{{$t('stockMg.addStockCheck.reasonTxt')}} ></view>
 						</view>
@@ -101,7 +101,7 @@
 			</view>
 		</view>
 		<!-- 出入库原因 -->
-		<u-picker :closeOnClickOverlay="true" :show="show" :columns="[stockInoutReason]" keyName="label"
+		<u-picker :closeOnClickOverlay="true" :show="show" :columns="[stockInoutReason]" keyName="name"
 			@confirm="confReason" @close="close" @cancel="close"></u-picker>
 
 		<view class="btn" v-if="!isSave">
@@ -156,9 +156,6 @@
 	import {
 		auditTaskRecallTaskByLinkId
 	} from '@/api/lpgManageAppApi'
-	import {
-		createUniqueString
-	} from '@/utils'
 	export default {
 		mixins: [settingMixin],
 		props: {
@@ -217,9 +214,7 @@
 			},
 		},
 		computed: {
-			orgName() {
-				return this.$store.state.user.userInfo.orgName
-			}
+			
 		},
 		async created() {
 			that = this
@@ -232,6 +227,7 @@
 			setTimeout(function(){
 				that.$set(that.formDataValue,'orgName',that.userInfo.orgName)
 			},1)
+			
 			this.editId = options.editId || ''
 			if (this.editId) {
 				this.changeEdit(true)
@@ -430,7 +426,7 @@
 							i.checkNums = i.checkStockNum
 							i.curStock = i.systemStockNum
 							i.reason = {
-								label: i.inOutName + (i.inOutType === 1 ? this.$t('stockMg.common.stockTypeTxt.in') : this.$t('stockMg.common.stockTypeTxt.out')),
+								name: i.inOutName + (i.inOutType === 1 ? this.$t('stockMg.common.stockTypeTxt.in') : this.$t('stockMg.common.stockTypeTxt.out')),
 								value: i.inOutReasonId,
 								type: i.inOutType,
 								reasonName: i.inOutName
@@ -457,7 +453,7 @@
 							checkStockNum: item.checkNums,
 							id: item.id ? item.id : ''
 						}
-						if (item.reason) {
+						if (item.reason&&item.reason.inOutReasonId) {
 							obj.inOutReasonId = item.reason.value
 						}
 						params.checkDetailData.push(obj)
@@ -508,6 +504,7 @@
 			// 表单
 			async changeForm(e) {
 				let params = e.queryParams
+				console.log(params)
 				this.formDataValue = params
 			},
 
@@ -542,8 +539,6 @@
 			margin-bottom: 30rpx;
 		}
 		::v-deep .normalForm {
-			// margin: 20rpx 20rpx;
-
 			.u-form {
 				background: rgba(255, 255, 255, 1);
 				box-shadow: 0rpx 4rpx 8rpx rgba(0, 0, 0, 0.04);
@@ -737,7 +732,6 @@
 									background: rgba(247, 247, 247, 1);
 								}
 							}
-
 						}
 
 						.info-cell {
@@ -749,8 +743,6 @@
 							justify-content: space-between;
 
 							.cell {
-								// width: 1px;
-								// flex: 1;
 								display: flex;
 								align-items: center;
 
@@ -762,7 +754,6 @@
 									input {
 										width: 120rpx;
 										font-size: 30rpx;
-										// text-align: right;
 									}
 								}
 							}

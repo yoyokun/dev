@@ -17,7 +17,7 @@
 				<view class="list-act">
 					<view class="act-reason" @click="chooseReason(index)">
 						<view>{{$t('stockMg.addStockOrder.orderReasonTxt')}}：</view>
-						<view class="on" v-if="item.orderReason">{{item.orderReason.label}}</view>
+						<view class="on" v-if="item.orderReason">{{item.orderReason.name}}</view>
 						<view v-else>{{$t('stockMg.addStockOrder.orderReasonPlaceholder')}}</view>
 					</view>
 					<view class="act-btn" @click="chooseGoods(index)" v-if="!isSave">
@@ -88,7 +88,7 @@
 			</view>
 		</view>
 		<!-- 出入库原因 -->
-		<u-picker :closeOnClickOverlay="true" :show="show" :columns="[stockInoutReason]" keyName="label"
+		<u-picker :closeOnClickOverlay="true" :show="show" :columns="[stockInoutReason]" keyName="name"
 			@confirm="confReason" @close="close" @cancel="close"></u-picker>
 
 		<view class="btn" v-if="!isSave">
@@ -469,7 +469,7 @@
 						res.stockInoutLogList.forEach((item,index)=>{
 							let obj = {}
 							obj.orderReason = {
-								label: item.inOutName + (item.inOutType === 1 ? this.$t('stockMg.common.stockTypeTxt.in') : this.$t('stockMg.common.stockTypeTxt.out')),
+								name: item.inOutName + (item.inOutType === 1 ? this.$t('stockMg.common.stockTypeTxt.in') : this.$t('stockMg.common.stockTypeTxt.out')),
 								value: item.inOutReasonId,
 								type: item.inOutType,
 								reasonName: item.inOutName

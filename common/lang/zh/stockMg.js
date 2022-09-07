@@ -234,10 +234,6 @@ module.exports = {
 					}
 				]
 			},
-			orgIdStr: {
-				label: '盘点仓库',
-				placeholder: '请选择盘点仓库'
-			},
 			createDateRange: {
 				label: '盘点日期',
 				placeholder: ['开始日期', '选择日期'],
@@ -274,22 +270,151 @@ module.exports = {
 			5: '已作废',
 			6: '无审核'
 		},
-		lockStateTxt:{
-			true:'是',
-			false:'否',
+		lockStateTxt: {
+			true: '是',
+			false: '否',
 		},
-		form:{
-			orgName:{
-				label:'盘点仓库',
+		form: {
+			orgName: {
+				label: '盘点仓库',
 			},
-			lockState:{
-				label:'锁库',
+			lockState: {
+				label: '锁库',
 			},
-			remarks:{
-				label:'备注',
+			remarks: {
+				label: '备注',
 				placeholder: '请输入备注',
 			},
 		},
 	},
-
+	// 添加充装转换
+	addFillOrder:{
+		titleText: '添加充装转换',
+		titleTextEdit: '编辑充装转换',
+		titleTextInfo: '充装详情',
+		baseTle: '基础信息',
+		billNo: '单据编号',
+		orgName: '充装组织',
+		checkState: '单据状态',
+		fillTime:'充装时间',
+		inOutName:'出入库原因',
+		operationTime:'更新时间',
+		operator:'操作员',
+		remarks:'备注',
+		goodsTle:'商品',
+		profit:'盘盈量',
+		systemNum:'系统充装',
+		planWeight:'设置充装',
+		realNum:'实际充装',
+		realWeight:'实际充装',
+		unit:'瓶',
+		tips:'请添加商品',
+		form:{
+			orgName:{
+				label:'充装组织',
+			},
+			fillingRange:{
+				label:'充装组织',
+			},
+			inOutReasonId:{
+				label: '出入库原因',
+				placeholder: '请选择出入库原因',
+			},
+			remarks:{
+				label: '备注',
+				placeholder: '请输入备注',
+			}
+		},
+		checkStateTxt: {
+			1: '待提交',
+			2: '待审核',
+			3: '已审核',
+			4: '未通过',
+			5: '已作废',
+			6: '无审核'
+		},
+	},
+	// 转换单
+	fillOrderList: {
+		titleText: '充装转换单',
+		fillTime: '充装时间',
+		systemTotalNum: '系统数量',
+		planTotalWeight: '设置重量',
+		realTotalNum: '实际数量',
+		realTotalWeight: '实际重量',
+		profit: '盘盈量',
+		unit: '瓶',
+		searchOptions: {
+			orgIdStr: {
+				label: '充装组织',
+			},
+			checkStateStr: {
+				label: '审核状态',
+				options: [{
+						name: '待提交',
+						value: '1'
+					},
+					{
+						name: '待审核',
+						value: '2'
+					},
+					{
+						name: '已审核',
+						value: '3'
+					},
+					{
+						name: '未通过',
+						value: '4'
+					},
+					{
+						name: '已作废',
+						value: '5'
+					},
+					{
+						name: '无审核',
+						value: '6'
+					}
+				]
+			},
+			createDateRange: {
+				label: '更新日期',
+				placeholder: ['开始日期', '选择日期'],
+			},
+		},
+	},
+	// 转换单
+	stockList: {
+		titleText: '库存查询',
+		systemStockNum: '系统库存',
+		inWayStockNum: '在途库存',
+		realStockNum: '实际库存',
+		unit: '单位',
+		searchOptions: {
+			orgIdStr: {
+				label: '充装组织',
+			},
+			goodsClassifyId: {
+				label: '商品分类',
+			},
+			propertyIds: {
+				label: '属性参数',
+			},
+			state: {
+				label: '商品状态',
+				options: [{
+						name: '全部',
+						value: ''
+					},
+					{
+						name: '待上架',
+						value: 3
+					},
+					{
+						name: '已上架',
+						value: 4
+					}
+				]
+			},
+		},
+	},
 }

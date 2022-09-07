@@ -51,3 +51,28 @@ export function isNumber(val) {
 		return false
 	}
 }
+// 只能输入金额，两位小数(过滤其他字符返回)(正数负数)
+export function checkPrice(val) {
+  if (val !== '' && val !== undefined && val !== null) {
+    val = val.replace(/[^-\d.]/g, '') // 清除“数字”和“.”以外的字符
+    val = val.replace(/^\./g, '') // 验证第一个字符是数字而不是.
+    val = val.replace(/\.{2,}/g, '.') // 只保留第一个. 清除多余的.
+    val = val.replace(/\-{2,}/g, '-') // 只保留第一个- 清除多余的.
+    val = val.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.')
+    val = val.replace('-', '$#$').replace(/\-/g, '').replace('$#$', '-')
+    val = val.replace('-.', '$#$').replace('$#$', '-')
+    if (val.indexOf('-') > 0) {
+      val = val.replace('-', '')
+    }
+    const re = /([0-9]+.[0-9]{2})[0-9]*/
+    val = val.replace(re, '$1')
+    if (val.indexOf('.') !== -1) {
+      return val
+    } else if (val.indexOf('-') !== -1) {
+      return val
+    } else {
+      return val ? parseFloat(val) : ''
+    }
+  }
+  return ''
+}
