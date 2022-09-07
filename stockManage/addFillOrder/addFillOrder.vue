@@ -89,14 +89,14 @@
 							<view class="cell">
 								<view class="cell-label">{{$t('stockMg.addFillOrder.realNum')}}：</view>
 								<view class="cell-content">
-									<input type="number" :placeholder="$t('stockMg.addFillOrder.realNum')" @input="changeNums($event,key,'realNum')" v-model="val.realNum" />
+									<input :disabled="isSave" type="number" :placeholder="$t('stockMg.addFillOrder.realNum')" @input="changeNums($event,key,'realNum')" v-model="val.realNum" />
 									<text>{{$t('stockMg.addFillOrder.unit')}}</text>
 								</view>
 							</view>
 							<view class="cell">
 								<view class="cell-label">{{$t('stockMg.addFillOrder.realWeight')}}：</view>
 								<view class="cell-content">
-									<input :placeholder="$t('stockMg.addFillOrder.realWeight')" type="number" v-model="val.realWeight"
+									<input :disabled="isSave" :placeholder="$t('stockMg.addFillOrder.realWeight')" type="number" v-model="val.realWeight"
 										@input="changeNums($event,key,'realWeight')" />
 									<text>kg</text>
 								</view>
@@ -488,8 +488,8 @@
 					let realTotalNum = 0
 					let realTotalWeight = 0
 					this.listGoods.forEach((item, index) => {
-						realTotalNum += parseInt(item.realNum)
-						realTotalWeight += item.realWeight
+						realTotalNum += parseInt(item.realNum || 0)
+						realTotalWeight += item.realWeight || 0
 						let obj = {
 							goodsDetailId: item.goodsDetailId,
 							goodsName: item.goodsName,
