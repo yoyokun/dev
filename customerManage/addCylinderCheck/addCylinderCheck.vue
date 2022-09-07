@@ -238,6 +238,7 @@
 					})
 				}
 			},
+			// 转化正整数
 			checkNum(e, key, index) {
 				this.customerInfo[index].userCylinderCheckDetailList[key].checkStockNum = e.detail.value
 				let nums = Math.abs(Math.round(e.detail.value))
@@ -258,9 +259,7 @@
 					}
 				})
 				this.customerIds = idsArr.join(',')
-				console.log(id)
 				this.customerInfo = this.customerInfo.filter(i => i.customerId != id)
-				console.log(this.customerInfo)
 			},
 			// 作废
 			async confVoid() {
@@ -272,18 +271,20 @@
 				const {
 					returnValue: res,
 					message
-				} = await userCylinderCheckToVoid(obj)
+				} = await userCylinderCheckToVoid(obj).catch(err=>{
+					this.closeModal()
+				})
 				if (res) {
 					uni.showToast({
 						title: message,
 						icon: 'none'
 					})
-					this.closeModal()
 					this.getInfo({
 						customerIds: that.customerIds,
 						id: that.editId
 					})
 				}
+				this.closeModal()
 			},
 			closeModal() {
 				this.showModal = false
@@ -328,7 +329,6 @@
 			handleUpdate(data, type) {
 				const that = this
 				if (type === 7) {
-					console.log()
 					uni.showModal({
 						title: that.$t('cylinderCheckList.tipsTle')[0],
 						content: that.$t('cylinderCheckList').backTxt(data.billNo),
@@ -465,12 +465,8 @@
 						id: item.customerId,
 						name: item.customerName
 					})
-					item.userCylinderCheckDetailList.forEach((val, key) => {
-						if (skuId.indexOf(val.standardId) > -1) {
-							skuArr.push(val)
-						}
-					})
-					item.userCylinderCheckDetailList = skuArr
+					item.userCylinderCheckDetailList = item.userCylinderCheckDetailList.filter((val => skuId
+						.indexOf(val.standardId) > -1))
 				})
 				this.customArr = customArr
 				if (this.editId) {
@@ -536,8 +532,8 @@
 			.form-item {
 				display: flex;
 				align-items: center;
-				font-size: 30rpx;
-				line-height: 30rpx;
+				font-size: 15px;
+				line-height: 15px;
 				min-height: 46rpx;
 				border-bottom: 1px solid #eee;
 				padding: 20rpx 20rpx;
@@ -547,8 +543,8 @@
 					width: 100%;
 					display: flex;
 					align-items: center;
-					font-size: 30rpx;
-					line-height: 30rpx;
+					font-size: 15px;
+					line-height: 15px;
 				}
 
 				.item-bottom {
@@ -591,7 +587,7 @@
 				}
 
 				.label {
-					min-width: 196rpx;
+					min-width: 100px;
 				}
 
 				.desc {
@@ -603,7 +599,7 @@
 				.arrow {}
 
 				input {
-					font-size: 28rpx;
+					font-size: 15px;
 				}
 			}
 		}

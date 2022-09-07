@@ -7,8 +7,12 @@ import {
 	purSupplierFindList,
 	sysPropertyFindDefaultProperty,
 	sysBrandFindList,
-	goodsClassifyFindList
+	goodsClassifyFindList,
+	userCustomerFindList,
 } from '@/api/lpgManageAppApi'
+import {
+	stockInoutReasonFindList,
+} from '@/api/lpgSalesManageApi'
 import {
 	sysManagerFindList
 } from '@/api/loginApi.js'
@@ -38,6 +42,22 @@ export const settingMixin = {
 		}
 	},
 	methods: {
+		// 获取出入库原因
+		async getStockInoutReason(obj = {}, type = 'id') {
+			const {
+				returnValue: res
+			} = await stockInoutReasonFindList(obj)
+			const stockInoutReason = []
+			res.forEach((v, i) => {
+				stockInoutReason.push({
+					name: v.reasonName + (v.type === 1 ? this.$t('stockMg.common.stockTypeTxt.in') : this.$t('stockMg.common.stockTypeTxt.out')),
+					value: v[type],
+					type: v.type,
+					reasonName: v.reasonName
+				})
+			})
+			this.stockInoutReason = stockInoutReason
+		},
 		// 获取属性分类值（树结构）
 		async getPropertyClassifySelectPropertyBox(obj = {}) {
 			const {
@@ -380,6 +400,24 @@ export const settingMixin = {
 				returnValue: res
 			} = await goodsClassifyFindList(obj)
 			this.treeDataGoodsClassify = this.getchildsProperty(res)
+		},
+		// 获取该组织能看到的所有客户
+		async getCustomer(orgId = '', type = 'id') {
+			const {
+				returnValue: res
+			} = await userCustomerFindList({
+				orgId
+			})
+			if (res) {
+				const customerList = []
+				res.forEach(v => {
+					customerList.push({
+						name: v.customerName,
+						value: v[type]
+					})
+				})
+				this.customerList = customerList
+			}
 		},
 		// 分类tree转list
 		treeToList(tree, list = []) {

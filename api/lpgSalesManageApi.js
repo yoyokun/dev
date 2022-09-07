@@ -263,3 +263,278 @@ export function findCylinderListByCustomerId(data = {}, message = '', custom = {
 		}
 	})
 }
+
+// 库存管理/出入库单记录 根据条件查询列表信息
+export function stockBillLogFindList(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/stockBillLog/findList',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+
+// 根据单号查询订单信息
+export function sysLinkBillFindLinkBillObject(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/sysLinkBill/findLinkBillObject',
+		method: "post",
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+
+// 出入库根据条件查询列表信息
+export function stockInoutReasonFindList(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/stockInoutReason/findList',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+
+// 库存管理/出入库单记录 保存或修改
+export function stockBillLogSaveOrEdit(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/stockBillLog/saveOrEdit',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+
+// 库存管理/出入库单记录 删除
+export function stockBillLogDeleteByIds(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/stockBillLog/deleteByIds',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 库存管理/出入库单记录 修改状态
+export function stockBillLogUpdateState(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/stockBillLog/updateState',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 库存管理/出入库单记录 作废
+export function stockBillLogToVoid(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/stockBillLog/toVoid',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+
+// 库存盘点管理 根据条件查询列表信息
+export function stockCheckLogFindList(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/stockCheckLog/findList',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+
+// 库存盘点管理 保存或修改
+export function stockCheckLogSaveOrEdit(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/stockCheckLog/saveOrEdit',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 库存盘点管理 删除
+export function stockCheckLogDeleteByIds(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/stockCheckLog/deleteByIds',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 库存盘点管理 作废
+export function stockCheckLogToVoid(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/stockCheckLog/toVoid',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 库存盘点管理 修改状态
+export function stockCheckLogUpdateState(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/stockCheckLog/updateState',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 充装统计-按商品属性-(用户充装转换页面)
+export function fillingLogFindGoodsDataList(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/fillingLog/findGoodsDataList',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+
+// 充装转换管理 保存或修改
+export function fillingChangeLogSaveOrEdit(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/fillingChangeLog/saveOrEdit',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+
+// 充装转换管理 根据条件查询列表信息
+export function fillingChangeLogFindList(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/fillingChangeLog/findList',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 库存管理/商品库存管理 库存实时查询(库存查询)
+export function stockGoodsInoutLogFindList(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/stockGoodsInoutLog/findList',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 充装转换管理 修改状态
+export function fillingChangeLogUpdateState(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/fillingChangeLog/updateState',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 充装转换管理 作废
+export function fillingChangeLogToVoid(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/fillingChangeLog/toVoid',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 充装转换管理 删除
+export function fillingChangeLogDeleteByIds(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/fillingChangeLog/deleteByIds',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
