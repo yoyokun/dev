@@ -73,14 +73,12 @@
 			</template>
 		</edit-form>
 		<!-- 作废 -->
-		<u-modal :show="show" :title="$t('common.voidTitle')" :showCancelButton="true"  @confirm="confirm" @cancel="show = false" @close="show = false">
-			<view class="viod-content">
-				<u--textarea
-					v-model="invalidNote" 
-					maxlength="100"
-					:placeholder="$t('common.voidContentPlace')"
-					confirmType="done"
-				></u--textarea>
+		<u-modal :show="show" :title="$t('common.descTle')" :closeOnClickOverlay="true"
+			:asyncClose="true" :showCancelButton="true" @confirm="confirm" @cancel="show = false" @close="show = false">
+			<view class="modal-main">
+				<view>{{$t('common.descTips')}}</view>
+				<u-textarea v-model="invalidNote" maxlength="100" class="modal-text" confirmType="done"
+					:placeholder="$t('common.descPlaceholder')"></u-textarea>
 			</view>
 		</u-modal>
 		<!-- 请求 toast 提示 -->
@@ -416,7 +414,7 @@ export default {
 		// 作废确认
 		async confirm() {
 			if (!this.invalidNote) {
-				uni.$u.toast(this.$t('common.voidContentPlace'))
+				uni.$u.toast(this.$t('common.descPlaceholder'))
 				return false
 			}
 			const { returnValue: res, message } = await auditWorkInvalidWork({ id: this.editId, invalidNote: this.invalidNote })

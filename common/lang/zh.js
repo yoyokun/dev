@@ -12,8 +12,11 @@ module.exports = {
 	// 公共模块
 	common: {
 		noData: '没有更多了',
-		voidTitle: '作废提示',
-		voidContentPlace: '请输入作废描述',
+		descTle: '作废提示',
+		descTips: '作废描述',
+		descPlaceholder: '请输入作废描述',
+		// voidTitle: '作废提示',
+		// voidContentPlace: '请输入作废描述',
 		addTitle: '添加提示',
 		addContent: '没有该二维码，请问要添加该二维码吗?',
 		authTitle: '授权提示',
@@ -43,7 +46,9 @@ module.exports = {
 			refuse: '拒绝',
 			enable: '启用',
 			disable: '禁用',
-			cancel: '取消'
+			cancel: '取消',
+			submit: '提交',
+			withdraw: '撤回'
 		},
 		tipsTle: ['撤回提示', '提交提示', '删除提示', '禁用提示', '启用提示'],
 		backTxt: (txt) => `真的要撤回${txt}该条数据吗?`,
@@ -471,10 +476,6 @@ module.exports = {
 		systemNum: '系统数',
 		creator: '盘点人',
 		billTime: '盘点时间',
-		btns: ['添加', '编辑', '提交', '撤回', '作废', '删除'],
-		descTle: '作废提示',
-		descTips: '作废描述',
-		descPlaceholder: '请输入原因',
 		searchOptions: {
 			state: {
 				label: '客户状态',

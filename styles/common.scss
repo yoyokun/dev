@@ -300,11 +300,6 @@ page{
 		}
 	}
 }
-// 作废弹框
-.viod-content{
-	width: 100%;
-	@include flexMixin(row,flex-start,flex-start);
-}
 // 工单列表
 .workList{
 	.box{
@@ -470,7 +465,23 @@ page{
 		height: 48rpx;
 	}
 }
+// 作废样式
+.modal-main {
+		width: 100%;
+		font-size: 28rpx;
 
+		&>view {
+			margin-bottom: 20rpx;
+		}
+
+		::v-deep .modal-text {
+			font-size: 28rpx;
+
+			.u-textarea__field {
+				font-size: 28rpx;
+			}
+		}
+	}
 // 列表样式
 .gp-box {
 	padding: 240rpx 20rpx 0rpx 20rpx;

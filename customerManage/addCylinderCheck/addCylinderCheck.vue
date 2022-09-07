@@ -74,7 +74,7 @@
 				shape="circle" plain @click="changeEdit(false)">
 			</u-button>
 			<u-button v-permission="{ permission:'app_cylinderCheckList_submit'}" v-if="infos.checkState==1"
-				:text="$t('cylinderCheckList.btns')[2]" @click="handleUpdate(infos,2)" type="success" hairline
+				:text="$t('common.btn.submit')" @click="handleUpdate(infos,2)" type="success" hairline
 				shape="circle" plain>
 			</u-button>
 			<u-button v-permission="{ permission:'app_cylinderCheckList_delete'}"
@@ -82,21 +82,21 @@
 				type="error" hairline shape="circle" plain @click="handleDelete(infos)">
 			</u-button>
 			<u-button v-permission="{ permission:'app_cylinderCheckList_revert'}" v-if="infos.checkState==2"
-				:text="$t('cylinderCheckList.btns')[3]" @click="handleUpdate(infos,7)" type="warning" hairline
+				:text="$t('common.btn.withdraw')" @click="handleUpdate(infos,7)" type="warning" hairline
 				shape="circle" plain>
 			</u-button>
 			<u-button v-permission="{ permission:'app_cylinderCheckList_invalid'}"
-				v-if="infos.checkState==3||infos.checkState==6" :text="$t('cylinderCheckList.btns')[4]"
+				v-if="infos.checkState==3||infos.checkState==6" :text="$t('common.btn.toVoid')"
 				@click="handleVoid(infos)" type="info" hairline shape="circle" plain></u-button>
 		</view>
 
 		<!-- 作废 -->
-		<u-modal :show="showModal" :title="$t('cylinderCheckList.descTle')" :closeOnClickOverlay="true"
+		<u-modal :show="showModal" :title="$t('common.descTle')" :closeOnClickOverlay="true"
 			:asyncClose="true" :showCancelButton="true" @cancel="closeModal" @close="closeModal" @confirm="confVoid">
 			<view class="modal-main">
-				<view>{{$t('cylinderCheckList.descTips')}}</view>
-				<u-textarea v-model="modalParams.value" class="modal-text"
-					:placeholder="$t('cylinderCheckList.descPlaceholder')"></u-textarea>
+				<view>{{$t('common.descTips')}}</view>
+				<u-textarea v-model="modalParams.value" maxlength="100" class="modal-text" confirmType="done"
+					:placeholder="$t('common.descPlaceholder')"></u-textarea>
 			</view>
 		</u-modal>
 	</view>

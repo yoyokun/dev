@@ -122,10 +122,10 @@
 				v-if="infos.checkState==1||infos.checkState==4" type="primary" hairline shape="circle" plain
 				@click="changeEdit(false)">
 			</u-button>
-			<u-button v-permission="{ permission:'app_stockCheckList_submit'}" :text="$t('cylinderCheckList.btns')[2]"
+			<u-button v-permission="{ permission:'app_stockCheckList_submit'}" :text="$t('common.btn.submit')"
 				@click="handleUpdate(infos,2)" v-if="infos.checkState==1" type="success" hairline shape="circle" plain>
 			</u-button>
-			<u-button v-permission="{ permission:'app_stockCheckList_revert'}" :text="$t('cylinderCheckList.btns')[3]"
+			<u-button v-permission="{ permission:'app_stockCheckList_revert'}" :text="$t('common.btn.withdraw')"
 				@click="handleUpdate(infos,7)" v-if="infos.checkState==2" type="warning" hairline shape="circle" plain>
 			</u-button>
 			<u-button v-permission="{ permission:'app_stockCheckList_delete'}" :text="$t('common.btn.delete')"
@@ -138,12 +138,12 @@
 		</view>
 
 		<!-- 作废 -->
-		<u-modal :show="showModal" :title="$t('cylinderCheckList.descTle')" :closeOnClickOverlay="true"
+		<u-modal :show="showModal" :title="$t('common.descTle')" :closeOnClickOverlay="true"
 			:asyncClose="true" :showCancelButton="true" @cancel="closeModal" @close="closeModal" @confirm="confVoid">
 			<view class="modal-main">
-				<view>{{$t('cylinderCheckList.descTips')}}</view>
-				<u-textarea v-model="modalParams.value" class="modal-text"
-					:placeholder="$t('cylinderCheckList.descPlaceholder')"></u-textarea>
+				<view>{{$t('common.descTips')}}</view>
+				<u-textarea v-model="modalParams.value" maxlength="100" class="modal-text" confirmType="done"
+					:placeholder="$t('common.descPlaceholder')"></u-textarea>
 			</view>
 		</u-modal>
 	</view>
