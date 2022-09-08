@@ -68,8 +68,6 @@
 		data() {
 			return {
 				totals:0,
-				showModal: false,
-				modalParams:{},
 				searchOptions: [{
 						labelText: this.$t('cylinderCheckList.searchOptions.typeId.label'),
 						type: 'select',

@@ -550,6 +550,25 @@ module.exports = {
 			8: '退回'
 		}
 	},
+	// 选择单据
+	chooseBill: {
+		titleText: '选择单据',
+		billTypeName:'单据类型',
+		orgName:'主体',
+		customerName:'客户/组织/供应商',
+		billStateName:'单据状态',
+		operator:'制单人',
+		operationTime:'制单时间',
+		searchOptions: {
+			billCodeTypeStr: {
+				label: '单据类型',
+			},
+			createDateRange: {
+				label: '开单日期',
+				placeholder: ['开始日期', '选择日期']
+			}
+		}
+	},
 	// 选择商品
 	chooseGoods: {
 		titleText: '选择商品',

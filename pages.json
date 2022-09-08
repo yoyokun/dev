@@ -220,7 +220,13 @@
 					"path" : "chooseGoods/chooseGoods",
 					"style" : {
 						"navigationBarTitleText": "选择商品",
-						"enablePullDownRefresh": false
+						"enablePullDownRefresh": true
+					}
+				},{
+					"path" : "chooseBill/chooseBill",
+					"style" : {
+						"navigationBarTitleText": "选择单据",
+						"enablePullDownRefresh": true
 					}
 				}
 				,{

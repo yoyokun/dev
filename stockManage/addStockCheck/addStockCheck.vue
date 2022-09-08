@@ -2,7 +2,7 @@
 	<view class="sk-info">
 		<view class="form" v-show="!isSave">
 			<edit-form ref="dialogForm" labelWidth="80" classForm="normalForm" :form-data-source="formDataSource"
-				:form-data-value="formDataValue" @change="changeForm" @toScan="toScan">
+				:form-data-value="formDataValue" @change="changeForm">
 			</edit-form>
 		</view>
 
@@ -42,37 +42,38 @@
 								{{val.reason.name}} >
 							</view>
 							<view class="goods-reason" @click="chooseReason(key)" v-else>
-								{{$t('stockMg.addStockCheck.reasonTxt')}} ></view>
+								{{$t('stockMg.addStockCheck.reasonTxt')}} >
+							</view>
 						</view>
 						<view class="attr-del">
 							<view class="attr">
 								<view class="attr-txt">
-									{{ val.brandName ? val.brandName + "," : "" }}
 									{{ val.goodsClassifyName ? val.goodsClassifyName + "," : "" }}
 									{{ val.propertyNames ? val.propertyNames + "," : "" }}
-									{{ val.standardName }}
+									{{ val.standardName ? val.standardName + "," : "" }}
+									{{ val.brandName }}
 								</view>
 								<u-icon class="arrow-right" name="arrow-right"></u-icon>
 								<view class="attr-box">
 									<view class="attr-item">
+										<view class="item-tle">{{$t('stockMg.common.goodsClassifyName')}}：</view>
+										<view class="item-txt">{{val.goodsClassifyName}}</view>
+									</view>
+									<view class="attr-item" v-if="val.propertyNames">
 										<view class="item-tle">{{$t('stockMg.common.propertyNames')}}：</view>
 										<view class="item-txt">{{val.propertyNames}}</view>
 									</view>
-									<view class="attr-item">
+									<view class="attr-item" v-if="val.standardName">
 										<view class="item-tle">{{$t('stockMg.common.standardName')}}：</view>
 										<view class="item-txt">{{val.standardName}}</view>
 									</view>
-									<view class="attr-item">
-										<view class="item-tle">{{$t('stockMg.common.unitsName')}}：</view>
-										<view class="item-txt">{{val.unitsName}}</view>
-									</view>
-									<view class="attr-item">
+									<view class="attr-item" v-if="val.brandName">
 										<view class="item-tle">{{$t('stockMg.common.brandName')}}：</view>
 										<view class="item-txt">{{val.brandName}}</view>
 									</view>
-									<view class="attr-item">
-										<view class="item-tle">{{$t('stockMg.common.goodsClassifyName')}}：</view>
-										<view class="item-txt">{{val.goodsClassifyName}}</view>
+									<view class="attr-item" v-if="val.unitsName">
+										<view class="item-tle">{{$t('stockMg.common.unitsName')}}：</view>
+										<view class="item-txt">{{val.unitsName}}</view>
 									</view>
 								</view>
 							</view>
@@ -89,8 +90,9 @@
 							<view class="cell">
 								<view class="cell-label">{{$t('stockMg.addStockCheck.checkNums')}}：</view>
 								<view class="cell-content">
-									<input type="number" :placeholder="$t('stockMg.addStockCheck.checkNums')"
-										v-model="val.checkNums" @input="changeNums($event,key)" />
+									<input type="number" :disabled="isSave"
+										:placeholder="$t('stockMg.addStockCheck.checkNums')" v-model="val.checkNums"
+										@input="changeNums($event,key)" />
 								</view>
 							</view>
 						</view>
@@ -132,20 +134,22 @@
 				type="error" hairline shape="circle"
 				v-if="infos.checkState==1||infos.checkState==5||infos.checkState==4" plain @click="handleDelete(infos)">
 			</u-button>
-			<u-button v-permission="{ permission:'app_stockCheckList_invalid'}" :text="$t('common.btn.toVoid')"
-				@click="handleVoid(infos)" v-if="infos.checkState==3||infos.checkState==6" type="info" hairline
-				shape="circle" plain></u-button>
+			<u-button v-permission="{ permission:'app_stockCheckList_invalid'}"
+				v-if="infos.checkState==3||infos.checkState==6" :text="$t('common.btn.toVoid')"
+				@click="handleVoid(infos)" type="error" hairline shape="circle" plain></u-button>
 		</view>
 
 		<!-- 作废 -->
-		<u-modal :show="showModal" :title="$t('common.descTle')" :closeOnClickOverlay="true"
-			:asyncClose="true" :showCancelButton="true" @cancel="closeModal" @close="closeModal" @confirm="confVoid">
+		<u-modal :show="showModal" :title="$t('common.descTle')" :closeOnClickOverlay="true" :asyncClose="false"
+			:showCancelButton="true" @cancel="closeModal" @close="closeModal" @confirm="confVoid">
 			<view class="modal-main">
 				<view>{{$t('common.descTips')}}</view>
 				<u-textarea v-model="modalParams.value" maxlength="100" class="modal-text" confirmType="done"
 					:placeholder="$t('common.descPlaceholder')"></u-textarea>
 			</view>
 		</u-modal>
+		<!-- 请求 toast 提示 -->
+		<u-toast ref='uToast'></u-toast>
 	</view>
 </template>
 
@@ -165,6 +169,9 @@
 	import {
 		auditTaskRecallTaskByLinkId
 	} from '@/api/lpgManageAppApi'
+	import {
+		checkPrice
+	} from '@/utils'
 	export default {
 		mixins: [settingMixin],
 		props: {
@@ -274,34 +281,44 @@
 		},
 		methods: {
 			changeNums(e, key) {
-				const nums = e.detail.value
+				const nums = checkPrice(e.detail.value)
 				let item = this.listGoods[key]
-				item.checkNums = nums
+				item.checkNums = e.detail.value
 				this.$set(this.listGoods, key, item)
+				this.$nextTick(function() {
+					item.checkNums = nums
+					this.$set(this.listGoods, key, item)
+				})
 			},
 			// 计算差异
 			countDiffNum(data) {
-				return data.checkNums - data.curStock
+				return this.$bigDecimal.round(this.$bigDecimal.subtract(data.checkNums, data.curStock), 2)
 			},
 			// 作废
 			async confVoid() {
-				const obj = {
-					ids: [],
-					remarks: this.modalParams.value || ''
+				const remarks = this.modalParams.value && this.modalParams.value.replace(/\s*/g, "")
+				if (!remarks) {
+					this.$refs.uToast.show({
+						type: 'error',
+						message: this.$t('common.descPlaceholder'),
+					})
+					return
 				}
-				obj.ids.push(this.modalParams.voidData.id)
 				const {
 					returnValue: res,
 					message
-				} = await stockCheckLogToVoid(obj).catch(err => {
+				} = await stockCheckLogToVoid({
+					ids: [this.modalParams.voidData.id],
+					remarks: remarks || ''
+				}).catch(err => {
 					this.closeModal()
 				})
 				if (res) {
-					uni.showToast({
-						title: message,
-						icon: 'none'
+					this.$refs.uToast.show({
+						type: 'success',
+						message: message,
 					})
-					this.getInfo(that.editId)
+					this.getInfo(this.editId)
 				}
 				this.closeModal()
 			},
@@ -336,50 +353,47 @@
 			},
 			// 提交 撤回
 			handleUpdate(data, type) {
-				const that = this
 				if (type === 7) {
 					uni.showModal({
-						title: that.$t('common.tipsTle')[0],
-						content: that.$t('common').backTxt(data.billNo),
-						success: async function(res) {
+						title: this.$t('common.tipsTle')[0],
+						content: this.$t('common').backTxt(data.billNo),
+						success: async (res) => {
 							if (res.confirm) {
-								const obj = {
-									linkId: data.id
-								}
 								const {
 									returnValue: res,
 									message
-								} = await auditTaskRecallTaskByLinkId(obj)
+								} = await auditTaskRecallTaskByLinkId({
+									linkId: data.id
+								})
 								if (res) {
-									uni.showToast({
-										title: message,
-										icon: 'none'
+									this.$refs.uToast.show({
+										type: 'success',
+										message: message,
 									})
-									that.getInfo(that.editId)
+									this.getInfo(this.editId)
 								}
 							}
 						}
 					})
 				} else {
 					uni.showModal({
-						title: that.$t('cylinderCheckList.tipsTle')[1],
-						content: that.$t('cylinderCheckList').subTxt(data.billNo),
-						success: async function(res) {
+						title: this.$t('common.tipsTle')[1],
+						content: this.$t('common').subTxt(data.billNo),
+						success: async (res) => {
 							if (res.confirm) {
-								const obj = {
-									ids: [data.id],
-									state: type
-								}
 								const {
 									returnValue: res,
 									message
-								} = await stockCheckLogUpdateState(obj)
+								} = await stockCheckLogUpdateState({
+									ids: [data.id],
+									state: type
+								})
 								if (res) {
-									uni.showToast({
-										title: message,
-										icon: 'none'
+									this.$refs.uToast.show({
+										type: 'success',
+										message: message,
 									})
-									that.getInfo(that.editId)
+									this.getInfo(this.editId)
 								}
 							}
 						}
@@ -388,23 +402,21 @@
 			},
 			// 删除
 			handleDelete(data) {
-				const that = this
 				uni.showModal({
-					title: that.$t('cylinderCheckList.tipsTle')[2],
-					content: that.$t('cylinderCheckList').delTxt(data.billNo),
-					success: async function(res) {
+					title: this.$t('common.tipsTle')[2],
+					content: this.$t('common').delTxt(data.billNo),
+					success: async (res) => {
 						if (res.confirm) {
-							const obj = {
-								ids: [data.id]
-							}
 							const {
 								returnValue: res,
 								message
-							} = await stockCheckLogDeleteByIds(obj)
+							} = await stockCheckLogDeleteByIds({
+								ids: [data.id]
+							})
 							if (res) {
-								uni.showToast({
-									title: message,
-									icon: 'none'
+								this.$refs.uToast.show({
+									type: 'success',
+									message: message,
 								})
 								setTimeout(function() {
 									uni.navigateBack({
@@ -419,7 +431,6 @@
 			},
 			// 获取详情
 			async getInfo(id) {
-				const that = this
 				const {
 					returnValue: res
 				} = await stockCheckLogFindById({
@@ -429,7 +440,6 @@
 					this.infos = res
 					this.formDataValue.lockState = res.lockState == true ? 1 : 0
 					this.formDataValue.remarks = res.remarks
-					console.log(this.formDataValue)
 					if (res.stockCheckLogDetailsList.length) {
 						res.stockCheckLogDetailsList.forEach(i => {
 							i.checkNums = i.checkStockNum
@@ -475,9 +485,9 @@
 						message
 					} = await stockCheckLogSaveOrEdit(params)
 					if (res) {
-						uni.showToast({
-							title: message,
-							icon: 'none'
+						this.$refs.uToast.show({
+							type: 'success',
+							message: message,
 						})
 						setTimeout(function() {
 							uni.navigateBack({
@@ -559,6 +569,10 @@
 				width: 710rpx;
 				padding: 10rpx 10rpx;
 				box-sizing: border-box;
+
+				.u-form-item .u-line {
+					border-bottom: 1rpx solid rgba(229, 229, 229, 1) !important;
+				}
 			}
 
 			::v-deep .u-upload__button {
@@ -768,6 +782,8 @@
 									input {
 										width: 120rpx;
 										font-size: 30rpx;
+										text-align: center;
+										border-bottom: 1px solid #ccc;
 									}
 								}
 							}

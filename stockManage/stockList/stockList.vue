@@ -11,7 +11,7 @@
 				<view class="gp-main" v-for="(item, index) in dataList" :key="index">
 					<view class="head">
 						<text>{{item.goodsNo}} - {{item.goodsName}}</text>
-						<view class="unit">
+						<view class="unit" v-if="item.unitsName">
 							<text class="label">{{$t('stockMg.stockList.unit')}}：</text>
 							<text class="desc">{{item.unitsName}}</text>
 						</view>
@@ -20,13 +20,17 @@
 						<view class="attr-del">
 							<view class="attr">
 								<view class="attr-txt">
-									{{ item.brandName ? item.brandName + "，" : "" }}
-									{{ item.goodsClassifyName ? item.goodsClassifyName + "，" : "" }}
-									{{ item.propertyNames ? item.propertyNames + "，" : "" }}
-									{{ item.standardName }}
+									{{ item.goodsClassifyName ? item.goodsClassifyName + "," : "" }}
+									{{ item.propertyNames ? item.propertyNames + "," : "" }}
+									{{ item.standardName ? item.standardName + "," : "" }}
+									{{ item.brandName }}
 								</view>
 								<u-icon class="arrow-right" name="arrow-right"></u-icon>
 								<view class="attr-box">
+									<view class="attr-item">
+										<view class="item-tle">{{$t('stockMg.common.goodsClassifyName')}}：</view>
+										<view class="item-txt">{{item.goodsClassifyName}}</view>
+									</view>
 									<view class="attr-item" v-if="item.propertyNames">
 										<view class="item-tle">{{$t('stockMg.common.propertyNames')}}：</view>
 										<view class="item-txt">{{item.propertyNames}}</view>
@@ -35,17 +39,13 @@
 										<view class="item-tle">{{$t('stockMg.common.standardName')}}：</view>
 										<view class="item-txt">{{item.standardName}}</view>
 									</view>
-									<view class="attr-item" v-if="item.unitsName">
-										<view class="item-tle">{{$t('stockMg.common.unitsName')}}：</view>
-										<view class="item-txt">{{item.unitsName}}</view>
-									</view>
 									<view class="attr-item" v-if="item.brandName">
 										<view class="item-tle">{{$t('stockMg.common.brandName')}}：</view>
 										<view class="item-txt">{{item.brandName}}</view>
 									</view>
-									<view class="attr-item">
-										<view class="item-tle">{{$t('stockMg.common.goodsClassifyName')}}：</view>
-										<view class="item-txt">{{item.goodsClassifyName}}</view>
+									<view class="attr-item" v-if="item.unitsName">
+										<view class="item-tle">{{$t('stockMg.common.unitsName')}}：</view>
+										<view class="item-txt">{{item.unitsName}}</view>
 									</view>
 								</view>
 							</view>
@@ -96,7 +96,6 @@
 		data() {
 			return {
 				totals: 0,
-				showModal: false,
 				searchOptions: [{
 						type: 'select',
 						labelText: this.$t('stockMg.stockList.searchOptions.orgIdStr.label'),
@@ -193,9 +192,17 @@
 		padding-bottom: 120rpx;
 
 		.head {
+			min-height: 1px;
+			padding: 20rpx 24rpx;
+			box-sizing: border-box;
+			height: auto;
+			>text{
+				width: 1px;
+				flex: 1;
+			}
 			.unit {
 				font-size: 28rpx;
-
+				margin-left: 20rpx;
 				.label {
 					color: #707070;
 				}
