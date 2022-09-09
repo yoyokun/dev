@@ -156,7 +156,7 @@
 						ids.push(this.billId)
 					}
 					res.forEach(v => {
-						if (ids.indexOf(v.id) > -1) {
+						if (ids.indexOf(v.billId) > -1) {
 							v.active = true
 						} else {
 							v.active = false

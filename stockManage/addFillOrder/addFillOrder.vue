@@ -581,6 +581,7 @@
 					returnValue: res,
 					returnObject
 				} = await fillingLogFindGoodsDataList(obj || {})
+				console.log(res)
 				if (res.length) {
 					this.infoData.totalCount = returnObject.totalCount || 0
 					this.infoData.totalWeight = returnObject.totalWeight || 0
@@ -596,9 +597,7 @@
 						v.systemNum = v.fillingNum
 						v.realNum = v.fillingNum
 						v.realWeight = v.weight
-						v.profit = this.$bigDecimal.round(this.$bigDecimal.subtract(v.planWeight, v
-								.realWeight),
-							2)
+						v.profit = this.$bigDecimal.round(this.$bigDecimal.subtract(v.planWeight, v.realWeight), 2)
 					})
 					this.listGoods = res
 				}
