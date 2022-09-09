@@ -70,11 +70,13 @@
 						</view>
 
 						<view class="info-cell">
-							<view class="cell">
-								<view class="cell-label">{{$t('stockMg.addStockOrder.netContent')}}：</view>
-								<view class="cell-content">{{val['netContent-' + val.assistUnitsList[0].assistUnitsId]}}
+							<view class="cell-unit">
+								<view class="cell" v-for="(o,k) in val.assistUnitsList">
+									<view class="cell-label">{{o.unitsName}}：</view>
+									<view class="cell-content">{{o.netContent}}</view>
 								</view>
 							</view>
+							
 							<view class="nums"><text>x</text><input maxlength="4" type="number"
 									:placeholder="$t('stockMg.addStockOrder.stockNumsTxt')" v-model="val.stockNum"
 									@input="checkNum($event,index,key)" />
@@ -529,14 +531,6 @@
 							if (item.stockInoutLogDetailsList && item.stockInoutLogDetailsList.length) {
 								item.stockInoutLogDetailsList.forEach((val, key) => {
 									val.stockNum = parseInt(val.stockNum)
-									if (val.assistUnitsList.length) {
-										val['assistName-' + val.assistUnitsList[0].assistUnitsId] = val
-											.assistUnitsList[0]
-											.unitsName
-										val['netContent-' + val.assistUnitsList[0].assistUnitsId] = val
-											.assistUnitsList[0]
-											.netContent
-									}
 									obj.stockInoutLogDetailData.push(val)
 								})
 							}
@@ -931,7 +925,19 @@
 							font-size: 32rpx;
 							line-height: 32rpx;
 							margin-top: 30rpx;
-
+							.cell-unit{
+								flex: 1;
+								width: 1px;
+								display: flex;
+								flex-direction: column;
+								.cell{
+									width: 100%;
+									margin-top: 30rpx;
+									&:first-child{
+										margin-top: 0rpx;
+									}
+								}
+							}
 							.cell {
 								width: 1px;
 								flex: 1;
