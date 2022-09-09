@@ -187,6 +187,7 @@
 						labelText: this.$t('stockMg.addStockCheck.form.orgName.label'),
 						fieldName: 'orgName',
 						disabled: true,
+						required: true,
 					},
 					{
 						type: 'switch',

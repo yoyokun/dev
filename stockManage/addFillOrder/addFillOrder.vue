@@ -192,6 +192,7 @@
 						labelText: this.$t('stockMg.addFillOrder.form.orgName.label'),
 						fieldName: 'orgName',
 						disabled: true,
+						required: true,
 					},
 					{
 						type: 'datetimerange',

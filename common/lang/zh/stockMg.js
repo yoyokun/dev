@@ -306,7 +306,7 @@ module.exports = {
 				label:'充装组织',
 			},
 			fillingRange:{
-				label:'充装组织',
+				label:'充装时间',
 			},
 			inOutReasonId:{
 				label: '出入库原因',
