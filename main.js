@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import App from './App'
-import router from './router'
-import { RouterMount } from 'uni-simple-router'
+import {router,RouterMount} from './router.js'
 import VueI18n from 'vue-i18n'
 // 引入vuex
 import store from './store'
@@ -21,6 +20,8 @@ Vue.prototype.$navigateTo = utils.navigateTo; // 跳转页面
 String.prototype.Split = function(s) {
   return this.split(s).filter(item => item !== '')
 }
+
+Vue.use(router)
 
 App.mpType = 'app'
 Vue.use(directive) // 按钮权限指令
@@ -55,7 +56,7 @@ const app = new Vue({
 })
 //v1.3.5起 H5端 你应该去除原有的app.$mount();使用路由自带的渲染方式
 // #ifdef H5
-	RouterMount(app,'#app');
+	RouterMount(app,router,'#app')
 // #endif
 
 // #ifndef H5

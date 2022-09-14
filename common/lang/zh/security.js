@@ -1,4 +1,7 @@
 module.exports = {
+	signCanvas: {
+		isEmptyMsg: '请签名'
+	},
 	securityCheckList: {
 		titleText: '安检记录',
 		totalNum: '安检总数',
@@ -181,5 +184,52 @@ module.exports = {
 			3: '无法巡检',
 			4: '已超时'
 		}
+	},
+	// 添加巡检
+	addPatrolCheck: {
+		titleText: '添加巡检',
+		titleTextInfo: '巡检详情',
+		titleTextEdit: '编辑巡检',
+		form: {
+			orgId: {
+				label: '巡检组织',
+				placeholder: '请选择组织'
+			},
+			managerId: {
+				label: '巡检员',
+				placeholder: '请选择巡检员'
+			},
+			unitId: {
+				label: '风险单元',
+				placeholder: '请选择风险单元'
+			},
+			assetFacilityVos: {
+				label: '巡检设备',
+			},
+			levelId: {
+				label: '巡检结果',
+				placeholder: '请选择巡检结果'
+			},
+			remarks: {
+				label: '备注',
+				placeholder: '请输入备注'
+			},
+			picture: {
+				label: '拍照'
+			},
+			customerSign: {
+				label: '客户签名'
+			},
+			managerSign: {
+				label: '巡检员签名'
+			}
+		},
+		billNo: '编号',
+		unitOrgName: '单元组织',
+		unitName: '风险单元',
+		unitTypeName: '单元类型',
+		unitAddress: '位置',
+		orgName: '巡检组织',
+		managerName: '巡检员'
 	}
 }
