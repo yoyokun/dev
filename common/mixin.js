@@ -25,6 +25,13 @@ export default {
 					this.$navigateTo('/pages/login/login')
 				}
 			}
+		},
+		// 转换textarea内容
+		sinceNote(val) {
+			if(val){
+				return val.replaceAll('\n','<br>')
+			}
+			return ''
 		}
 	}
 }

@@ -38,7 +38,8 @@ export const settingMixin = {
 			customerBalanceType: [], // 结算账期
 			subOrderType: [], // 开单类型
 			customertProperty: [], // 客户标签
-			safeLevelList: [] // 风险等级
+			safeLevelList: [], // 安检风险等级
+			riskLevelList: [] // 巡检风险等级
 		}
 	},
 	methods: {
@@ -456,6 +457,18 @@ export const settingMixin = {
 				})
 			})
 			this.safeLevelList = safeLevelList
+		},
+		// 获取风险等级
+		async getRiskLevelList(data = {}, type = 'id') {
+			const { returnValue: res } = await sysFieldFindList(Object.assign({}, data, { groups: 'risk_leve' }))
+			const riskLevelList = []
+			res.forEach(v => {
+				riskLevelList.push({
+					name: v.name,
+					value: v[type]
+				})
+			})
+			this.riskLevelList = riskLevelList
 		},
 	}
 }

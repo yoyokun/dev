@@ -39,7 +39,7 @@
 			<u-button 
 				v-if="info.state===3" 
 				:text="$t('common.btn.jump')" 
-				type="error" 
+				type="primary" 
 				hairline 
 				shape="circle" 
 				plain 
@@ -155,13 +155,26 @@ export default {
 		},
 		// 处理
 		handleJump() {
-			if (this.info.formKey === 'security' || this.info.formKey === 'rectify' || this.info.formKey === 'polling') {
-				// 跳转到安检 整改 巡检
+			if (this.info.formKey === 'security') {
+				// 跳转到安检
+			} else if (this.info.formKey === 'rectify') {
+				// 跳转到整改
+			} else if (this.info.formKey === 'polling') {
+				// 巡检
+				this.goto('/securityManage/addPatrolCheck/addPatrolCheck',{ editId: this.info.linkId })
 			}
 		},
 		// 结果
 		handleResult() {
 			// 查看安检 整改 巡检 详情
+			if (this.info.formKey === 'security') {
+				// 跳转到安检
+			} else if (this.info.formKey === 'rectify') {
+				// 跳转到整改
+			} else if (this.info.formKey === 'polling') {
+				// 巡检
+				this.goto('/securityManage/addPatrolCheck/addPatrolCheck',{ editId: this.info.linkId })
+			}
 		}
 	}
 }

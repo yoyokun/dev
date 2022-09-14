@@ -408,6 +408,13 @@
 						"enablePullDownRefresh": false
 					}
 				}
+				,{
+					"path" : "signCanvas/signCanvas",
+					"style" : {
+						"navigationBarTitleText": "签名",
+						"enablePullDownRefresh": false
+					}
+				}
 			]
 		}
 	],

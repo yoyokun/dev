@@ -129,6 +129,6 @@ export default {
 	position: relative;
 }
 .workList{
-	padding: 280rpx 20rpx 0rpx 20rpx;
+	padding: 310rpx 20rpx 0rpx 20rpx;
 }
 </style>

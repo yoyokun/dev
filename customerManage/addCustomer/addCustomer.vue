@@ -727,41 +727,6 @@ export default {
 ::v-deep .u-form-item .u-line{
 	border-bottom: 1rpx solid rgba(229, 229, 229, 1) !important;
 }
-.customerBox{
-	background: rgba(255, 255, 255, 1);
-	box-shadow: 0rpx 4rpx 8rpx rgba(0, 0, 0, 0.04);
-	border-radius: 16rpx;
-	width: 710rpx;
-	padding: 10rpx 10rpx;
-	box-sizing: border-box;
-	margin: 20rpx 20rpx 10rpx 20rpx;
-	.title{
-		@include flexMixin();
-		padding: 0rpx 10rpx;
-		.name{
-			font-size: 36rpx;
-			font-weight: 500;
-			line-height: 80rpx;
-			&:before{
-				display: inline-block;
-				content:" ";
-				width: 8rpx;
-				height: 35rpx;
-				background: rgba(42, 130, 228, 1);
-				border-radius: 20rpx;
-				top: 4rpx;
-				margin-right: 10rpx;
-				position: relative;
-			}
-		}
-	}
-	.content{
-		border-top: 0.5rpx solid #f1eeee;     
-	}
-	::v-deep .u-upload__button{
-		margin: 0rpx;
-	}
-}
 .btn{
 	width: 632rpx;
 	margin: 60rpx auto;

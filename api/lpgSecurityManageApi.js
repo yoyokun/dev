@@ -16,6 +16,20 @@ export function riskUnitFindList(data = {}, message = '', custom = {}) {
 		}
   })
 }
+// 风险单元 根据id查询信息
+export function riskUnitFindById(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/sis/riskUnit/findById',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
 // 安检记录 根据条件查询列表信息
 export function safeSecurityFindList(data = {}, message = '', custom = {}) {
   return request({
