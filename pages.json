@@ -312,7 +312,27 @@
 		{
 			"root": "cylinderManage",
 			"pages": [
-				
+				{
+					"path" : "circulationInfoList/circulationInfoList",
+					"style" : {
+						"navigationBarTitleText": "钢瓶流转",
+						"enablePullDownRefresh": true
+					}	
+				},
+				{
+					"path" : "circulationList/circulationList",
+					"style" : {
+						"navigationBarTitleText": "流转记录",
+						"enablePullDownRefresh": true
+					}	
+				},
+				{
+					"path" : "addCirculationFill/addCirculationFill",
+					"style" : {
+						"navigationBarTitleText": "充装",
+						"enablePullDownRefresh": true
+					}	
+				}
 			]
 		},
 		{

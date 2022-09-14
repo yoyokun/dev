@@ -1069,3 +1069,31 @@ export function sysLinkBillFindList(data = {}, message = '', custom = {}) {
 		}
 	})
 }
+// 钢瓶流转记录 钢瓶流转信息
+export function cylinderFlowFindArchivesInfoByFlow(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/cylinderFlow/findArchivesInfoByFlow',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 钢瓶档案 根据codeKey查询钢瓶档案
+export function cylinderArchivesFindByCodeKey(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/cygm/cylinderArchives/findByCodeKey',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
