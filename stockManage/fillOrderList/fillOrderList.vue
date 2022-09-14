@@ -89,7 +89,6 @@
 		data() {
 			return {
 				totals: 0,
-				showModal: false,
 				searchOptions: [{
 						type: 'select',
 						labelText: this.$t('stockMg.fillOrderList.searchOptions.orgIdStr.label'),

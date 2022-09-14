@@ -1,6 +1,7 @@
 import auditInfo from './zh/auditInfo'
 import security from './zh/security'
 import stockMg from './zh/stockMg'
+import cylinderMg from './zh/cylinderMg'
 module.exports = {
 	// tabbar
 	tabbar: {
@@ -265,6 +266,8 @@ module.exports = {
 	security: security,
 	// 库存管理
 	stockMg: stockMg,
+	// 钢瓶溯源
+	cylinderMg:cylinderMg,
 	// 成员
 	addManager: {
 		titleText: '添加成员',
@@ -549,6 +552,25 @@ module.exports = {
 			6: '停用',
 			7: '转出',
 			8: '退回'
+		}
+	},
+	// 选择单据
+	chooseBill: {
+		titleText: '选择单据',
+		billTypeName:'单据类型',
+		orgName:'主体',
+		customerName:'客户/组织/供应商',
+		billStateName:'单据状态',
+		operator:'制单人',
+		operationTime:'制单时间',
+		searchOptions: {
+			billCodeTypeStr: {
+				label: '单据类型',
+			},
+			createDateRange: {
+				label: '开单日期',
+				placeholder: ['开始日期', '选择日期']
+			}
 		}
 	},
 	// 选择商品

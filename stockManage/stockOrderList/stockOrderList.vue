@@ -3,7 +3,7 @@
 		<view class="search-box">
 			<search :searchOptions="searchOptions" @search="search"></search>
 			<view class="total">
-				<view class="num">{{$t('stockMg.stockOrderList.totalTxt')}}：<text>{{totals}}</text></view>
+				<view class="num">{{$t('stockMg.common.totalTxt')}}：<text>{{totals}}</text></view>
 				<view class="add" v-permission="{ permission:'app_stockOrderList_add'}" @click="goto('/stockManage/addStockOrder/addStockOrder')">
 					<u-icon name="plus" color="#2A82E4" size="16" bold></u-icon>{{$t('common.btn.add')}}
 				</view>
@@ -15,12 +15,12 @@
 					@click="goto('/stockManage/addStockOrder/addStockOrder',{editId: item.id})">
 					<view class="head">
 						<text>{{item.billNo}}</text>
-						<text class="status" v-if="item.checkState==3">{{$t('stockMg.stockOrderList.checkStateTxt')[0]}}</text>
-						<text class="status green" v-if="item.checkState==1">{{$t('stockMg.stockOrderList.checkStateTxt')[1]}}</text>
-						<text class="status warning" v-if="item.checkState==2">{{$t('stockMg.stockOrderList.checkStateTxt')[2]}}</text>
-						<text class="status gray" v-if="item.checkState==5">{{$t('stockMg.stockOrderList.checkStateTxt')[3]}}</text>
-						<text class="status red" v-if="item.checkState==4">{{$t('stockMg.stockOrderList.checkStateTxt')[4]}}</text>
-						<text class="status gray" v-if="item.checkState==6">{{$t('stockMg.stockOrderList.checkStateTxt')[5]}}</text>
+						<text class="status" v-if="item.checkState==3">{{$t('stockMg.common.checkStateTxt')[0]}}</text>
+						<text class="status green" v-if="item.checkState==1">{{$t('stockMg.common.checkStateTxt')[1]}}</text>
+						<text class="status warning" v-if="item.checkState==2">{{$t('stockMg.common.checkStateTxt')[2]}}</text>
+						<text class="status gray" v-if="item.checkState==5">{{$t('stockMg.common.checkStateTxt')[3]}}</text>
+						<text class="status red" v-if="item.checkState==4">{{$t('stockMg.common.checkStateTxt')[4]}}</text>
+						<text class="status gray" v-if="item.checkState==6">{{$t('stockMg.common.checkStateTxt')[5]}}</text>
 					</view>
 					<view class="main-box">
 						<view class="item">
@@ -67,8 +67,6 @@
 		data() {
 			return {
 				totals: 0,
-				showModal: false,
-				modalParams: {},
 				searchOptions: [{
 						type: 'select',
 						labelText: this.$t('stockMg.stockOrderList.searchOptions.orgIdStr.label'),

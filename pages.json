@@ -220,7 +220,13 @@
 					"path" : "chooseGoods/chooseGoods",
 					"style" : {
 						"navigationBarTitleText": "选择商品",
-						"enablePullDownRefresh": false
+						"enablePullDownRefresh": true
+					}
+				},{
+					"path" : "chooseBill/chooseBill",
+					"style" : {
+						"navigationBarTitleText": "选择单据",
+						"enablePullDownRefresh": true
 					}
 				}
 				,{
@@ -306,7 +312,27 @@
 		{
 			"root": "cylinderManage",
 			"pages": [
-				
+				{
+					"path" : "circulationInfoList/circulationInfoList",
+					"style" : {
+						"navigationBarTitleText": "钢瓶流转",
+						"enablePullDownRefresh": true
+					}	
+				},
+				{
+					"path" : "circulationList/circulationList",
+					"style" : {
+						"navigationBarTitleText": "流转记录",
+						"enablePullDownRefresh": true
+					}	
+				},
+				{
+					"path" : "addCirculationFill/addCirculationFill",
+					"style" : {
+						"navigationBarTitleText": "充装",
+						"enablePullDownRefresh": true
+					}	
+				}
 			]
 		},
 		{

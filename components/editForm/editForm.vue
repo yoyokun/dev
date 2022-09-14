@@ -28,10 +28,11 @@
 					:placeholder="item.placeholder"
 					@change="handleFiltrate(item.fieldName)"
 					@blur="handleFiltrate(item.fieldName,'blur')"
+					@click.native="chooseChange(item)"
 				>
 					<block v-if="item.suffix">
 						<view slot="suffix">
-							<u-icon @click="chooseChange(item)" size="40rpx" :color="item.suffix.color" :name="item.suffix.suffixIcon"></u-icon>
+							<u-icon @click="chooseChange(item.suffix)" size="40rpx" :color="item.suffix.color" :name="item.suffix.icon"></u-icon>
 						</view>
 					</block>
 				</u--input>
@@ -458,7 +459,6 @@ export default {
 			setTimeout(function(){
 				that.$refs[`picker${field}`][0].setIndexs(index,lastIndex)
 			},100)
-			
 		},
 		// 清空(给外部调用)
 		resetForm(fun) {

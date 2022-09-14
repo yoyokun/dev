@@ -73,7 +73,6 @@
 		data() {
 			return {
 				totals: 0,
-				showModal: false,
 				searchOptions: [{
 						type: 'select',
 						labelText: this.$t('stockMg.stockCheckList.searchOptions.orgIdStr.label'),
@@ -122,7 +121,7 @@
 			this.searchOptions[0].options = this.orgList
 		},
 		async mounted() {
-
+			
 		},
 		onLoad(options) {},
 		onShow() {

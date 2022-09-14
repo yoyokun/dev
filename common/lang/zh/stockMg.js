@@ -19,8 +19,6 @@ module.exports = {
 	// 出入库单
 	stockOrderList: {
 		titleText: '出入库单',
-		totalTxt: '总数',
-		checkStateTxt: ['已审核', '待提交', '待审核', '已作废', '未通过', '无审核'],
 		customerName: '来往对象',
 		linkBillNo: '关联单据',
 		operationTime: '开单时间',
@@ -49,7 +47,7 @@ module.exports = {
 				]
 			},
 			linkType: {
-				label: '业务组织',
+				label: '关联类型',
 				options: [{
 						name: '销售单',
 						value: 'order'
@@ -121,13 +119,7 @@ module.exports = {
 		orderChildTxt: '子单',
 		orderReasonTxt: '出入库原因',
 		orderReasonPlaceholder: '请选择出入库原因',
-		addGoodsTxt: '商品',
 		stockNumsTxt: '库存',
-		propertyNames: '属性参数',
-		standardName: '规格',
-		unitsName: '基本单位',
-		brandName: '品牌',
-		goodsClassifyName: '商品分类',
 		netContent: '重量(kg)',
 		costMoney: '金额',
 		addChildBtn: '添加子单',
@@ -161,14 +153,14 @@ module.exports = {
 			},
 			linkBillNo: {
 				label: '关联单号',
-				placeholder: '请输入关联单号',
+				placeholder: '请选择关联单号',
 			},
 			licenseNo: {
 				label: '车牌号',
 				placeholder: '请输入车牌号',
 			},
 			deliverManId: {
-				label: '请运输员',
+				label: '运输员',
 				placeholder: '请选择运输员',
 			},
 			remarks: {
@@ -314,7 +306,7 @@ module.exports = {
 				label:'充装组织',
 			},
 			fillingRange:{
-				label:'充装组织',
+				label:'充装时间',
 			},
 			inOutReasonId:{
 				label: '出入库原因',

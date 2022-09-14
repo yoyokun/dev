@@ -608,8 +608,8 @@ export function userCustomerSaveOrEdit(data = {}, message = '', custom = {}) {
 }
 // 客户结算信息 保存修改
 export function userSettlementSaveOrEdit(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/info/control/userSettlement/saveOrEdit',
+	return request({
+		url: baseURL + '/admin/info/control/userSettlement/saveOrEdit',
 		method: 'post',
 		data,
 		message,
@@ -678,8 +678,8 @@ export function userCustomerfindByIdDefault(data = {}, message = '', custom = {}
 }
 // 客户管理 修改客户状态
 export function userCustomerUpdateState(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/info/control/userCustomer/updateState',
+	return request({
+		url: baseURL + '/admin/info/control/userCustomer/updateState',
 		method: 'post',
 		data,
 		message,
@@ -692,8 +692,8 @@ export function userCustomerUpdateState(data = {}, message = '', custom = {}) {
 }
 // 客户联系人 根据条件查询列表信息
 export function userContactFindList(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/info/userContact/findList',
+	return request({
+		url: baseURL + '/admin/info/userContact/findList',
 		method: 'post',
 		data,
 		message,
@@ -706,8 +706,8 @@ export function userContactFindList(data = {}, message = '', custom = {}) {
 }
 // 客户联系人 保存或修改
 export function userContactSaveOrEdit(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/info/control/userContact/saveOrEdit',
+	return request({
+		url: baseURL + '/admin/info/control/userContact/saveOrEdit',
 		method: 'post',
 		data,
 		message,
@@ -720,8 +720,8 @@ export function userContactSaveOrEdit(data = {}, message = '', custom = {}) {
 }
 // 客户联系人 删除
 export function userContactDeleteByIds(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/info/control/userContact/deleteByIds',
+	return request({
+		url: baseURL + '/admin/info/control/userContact/deleteByIds',
 		method: 'post',
 		data,
 		message,
@@ -734,8 +734,8 @@ export function userContactDeleteByIds(data = {}, message = '', custom = {}) {
 }
 // 客户联系人 根据id查询信息
 export function userContactFindById(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/info/userContact/findById',
+	return request({
+		url: baseURL + '/admin/info/userContact/findById',
 		method: 'post',
 		data,
 		message,
@@ -748,8 +748,8 @@ export function userContactFindById(data = {}, message = '', custom = {}) {
 }
 // 客户联系人 设置为默认联系人
 export function userContactSetIsDefault(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/info/control/userContact/setIsDefault',
+	return request({
+		url: baseURL + '/admin/info/control/userContact/setIsDefault',
 		method: 'post',
 		data,
 		message,
@@ -762,8 +762,8 @@ export function userContactSetIsDefault(data = {}, message = '', custom = {}) {
 }
 // 客户地址 根据条件查询列表信息
 export function userAddressFindList(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/info/userAddress/findList',
+	return request({
+		url: baseURL + '/admin/info/userAddress/findList',
 		method: 'post',
 		data,
 		message,
@@ -776,8 +776,8 @@ export function userAddressFindList(data = {}, message = '', custom = {}) {
 }
 // 客户地址 根据条件查询列表信息 距离
 export function userAddressFindListForDistance(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/info/userAddress/findListForDistance',
+	return request({
+		url: baseURL + '/admin/info/userAddress/findListForDistance',
 		method: 'post',
 		data,
 		message,
@@ -790,8 +790,8 @@ export function userAddressFindListForDistance(data = {}, message = '', custom =
 }
 // 客户地址 根据id查询信息
 export function userAddressFindById(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/info/userAddress/findById',
+	return request({
+		url: baseURL + '/admin/info/userAddress/findById',
 		method: 'post',
 		data,
 		message,
@@ -804,8 +804,8 @@ export function userAddressFindById(data = {}, message = '', custom = {}) {
 }
 // 客户地址 设置为默认地址
 export function userAddressSetIsDefault(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/info/control/userAddress/setIsDefault',
+	return request({
+		url: baseURL + '/admin/info/control/userAddress/setIsDefault',
 		method: 'post',
 		data,
 		message,
@@ -818,8 +818,8 @@ export function userAddressSetIsDefault(data = {}, message = '', custom = {}) {
 }
 // 客户地址 保存或修改
 export function userAddressSaveOrEdit(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/info/control/userAddress/saveOrEdit',
+	return request({
+		url: baseURL + '/admin/info/control/userAddress/saveOrEdit',
 		method: 'post',
 		data,
 		message,
@@ -832,8 +832,8 @@ export function userAddressSaveOrEdit(data = {}, message = '', custom = {}) {
 }
 // 客户地址 删除
 export function userAddressDeleteByIds(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/info/control/userAddress/deleteByIds',
+	return request({
+		url: baseURL + '/admin/info/control/userAddress/deleteByIds',
 		method: 'post',
 		data,
 		message,
@@ -1030,6 +1030,63 @@ export function userCylinderCheckToVoid(data = {}, message = '', custom = {}) {
 export function userCylinderCheckSaveOrEdit(data = {}, message = '', custom = {}) {
 	return request({
 		url: baseURL + '/admin/info/control/userCylinderCheck/saveOrEdit',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+
+// 关联单据管理 查询关联单据信息
+export function sysLinkBillFindLinkBillList(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/sysLinkBill/findLinkBillList',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 关联单据管理 根据条件查询列表信息
+export function sysLinkBillFindList(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/sysLinkBill/findList',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 钢瓶流转记录 钢瓶流转信息
+export function cylinderFlowFindArchivesInfoByFlow(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/cylinderFlow/findArchivesInfoByFlow',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 钢瓶档案 根据codeKey查询钢瓶档案
+export function cylinderArchivesFindByCodeKey(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/cygm/cylinderArchives/findByCodeKey',
 		method: 'post',
 		data,
 		message,

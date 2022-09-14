@@ -9,6 +9,7 @@ import {
 	sysBrandFindList,
 	goodsClassifyFindList,
 	userCustomerFindList,
+	sysLinkBillFindList,
 } from '@/api/lpgManageAppApi'
 import {
 	stockInoutReasonFindList,
@@ -40,9 +41,24 @@ export const settingMixin = {
 			customertProperty: [], // 客户标签
 			safeLevelList: [], // 安检风险等级
 			riskLevelList: [] // 巡检风险等级
+			billType: [], // 单据类型
 		}
 	},
 	methods: {
+		// 获取出入库原因
+		async getBillType(obj = {}) {
+			const {
+				returnValue: res
+			} = await sysLinkBillFindList(obj)
+			const billType = []
+			res.forEach((v, i) => {
+				billType.push({
+					name: v.billName,
+					value: v.billCode,
+				})
+			})
+			this.billType = billType
+		},
 		// 获取出入库原因
 		async getStockInoutReason(obj = {}, type = 'id') {
 			const {

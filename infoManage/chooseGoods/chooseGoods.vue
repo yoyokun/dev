@@ -31,10 +31,16 @@
 								<text class="label">{{$t('chooseGoods.propertyNames')}}</text>
 								<text class="txt">{{val.propertyNames}}</text>
 							</view>
-							<view class="item">
+							<block v-if="val.assistUnitsList&&val.assistUnitsList.length">
+								<view class="item" v-for="(i,k) in val.assistUnitsList" :key="k">
+									<text class="label">{{i.unitsName}}</text>
+									<text class="txt">{{i.netContent}}</text>
+								</view>
+							</block>
+							<!-- <view class="item">
 								<text class="label">{{$t('chooseGoods.netContent')}}</text>
 								<text class="txt">{{val['netContent-' + val.assistUnitsList[0].assistUnitsId]}}</text>
-							</view>
+							</view> -->
 							<view class="item">
 								<text class="label">{{$t('chooseGoods.listPrice')}}</text>
 								<text class="txt">{{val.listPrice}}</text>
@@ -217,12 +223,6 @@
 							v.active = true
 						} else {
 							v.active = false
-						}
-						if (v.assistUnitsList.length) {
-							v['assistName-' + v.assistUnitsList[0].assistUnitsId] = v.assistUnitsList[0]
-								.unitsName
-							v['netContent-' + v.assistUnitsList[0].assistUnitsId] = v.assistUnitsList[0]
-								.netContent
 						}
 						if (goodsArr.hasOwnProperty(v.goodsId)) {
 							goodsArr[v.goodsId].child.push(v)

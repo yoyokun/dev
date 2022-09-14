@@ -87,7 +87,7 @@
 			</u-button>
 			<u-button v-permission="{ permission:'app_cylinderCheckList_invalid'}"
 				v-if="infos.checkState==3||infos.checkState==6" :text="$t('common.btn.toVoid')"
-				@click="handleVoid(infos)" type="info" hairline shape="circle" plain></u-button>
+				@click="handleVoid(infos)" type="error" hairline shape="circle" plain></u-button>
 		</view>
 
 		<!-- 作废 -->
@@ -99,6 +99,8 @@
 					:placeholder="$t('common.descPlaceholder')"></u-textarea>
 			</view>
 		</u-modal>
+		<!-- 请求 toast 提示 -->
+		<u-toast ref='uToast'></u-toast>
 	</view>
 </template>
 
@@ -133,7 +135,8 @@
 						labelText: this.$t('addCylinderCheck.form.billTime.label'),
 						fieldName: 'billTime',
 						disabled: false,
-						placeholder: this.$t('addCylinderCheck.form.billTime.placeholder')
+						placeholder: this.$t('addCylinderCheck.form.billTime.placeholder'),
+						required: true,
 					},
 					{
 						type: 'text',
@@ -263,25 +266,31 @@
 			},
 			// 作废
 			async confVoid() {
-				const obj = {
-					ids: [],
-					invalidRemarks: this.modalParams.value || ''
+				const remarks = this.modalParams.value && this.modalParams.value.replace(/\s*/g, "")
+				if (!remarks) {
+					this.$refs.uToast.show({
+						type: 'error',
+						message: this.$t('common.descPlaceholder'),
+					})
+					return
 				}
-				obj.ids.push(this.modalParams.voidData.id)
 				const {
 					returnValue: res,
 					message
-				} = await userCylinderCheckToVoid(obj).catch(err=>{
+				} = await userCylinderCheckToVoid({
+					ids: [this.modalParams.voidData.id],
+					remarks: remarks || ''
+				}).catch(err=>{
 					this.closeModal()
 				})
 				if (res) {
-					uni.showToast({
-						title: message,
-						icon: 'none'
+					this.$refs.uToast.show({
+						type: 'success',
+						message: message,
 					})
 					this.getInfo({
-						customerIds: that.customerIds,
-						id: that.editId
+						customerIds: this.customerIds,
+						id: this.editId
 					})
 				}
 				this.closeModal()
@@ -296,23 +305,21 @@
 			},
 			// 删除
 			handleDelete(data) {
-				const that = this
 				uni.showModal({
-					title: that.$t('cylinderCheckList.tipsTle')[2],
-					content: that.$t('cylinderCheckList').delTxt(data.billNo),
-					success: async function(res) {
+					title: this.$t('common.tipsTle')[2],
+					content: this.$t('common').delTxt(data.billNo),
+					success: async (res) => {
 						if (res.confirm) {
-							const obj = {
-								ids: [data.id]
-							}
 							const {
 								returnValue: res,
 								message
-							} = await userCylinderCheckDeleteByIds(obj)
+							} = await userCylinderCheckDeleteByIds({
+								ids: [data.id]
+							})
 							if (res) {
-								uni.showToast({
-									title: message,
-									icon: 'none'
+								this.$refs.uToast.show({
+									type: 'success',
+									message: message,
 								})
 								setTimeout(function() {
 									uni.navigateBack({
@@ -327,28 +334,26 @@
 			},
 			// 提交 撤回
 			handleUpdate(data, type) {
-				const that = this
 				if (type === 7) {
 					uni.showModal({
-						title: that.$t('common.tipsTle')[0],
-						content: that.$t('common').backTxt(data.billNo),
-						success: async function(res) {
+						title: this.$t('common.tipsTle')[0],
+						content: this.$t('common').backTxt(data.billNo),
+						success: async (res) => {
 							if (res.confirm) {
-								const obj = {
-									linkId: data.id
-								}
 								const {
 									returnValue: res,
 									message
-								} = await auditTaskRecallTaskByLinkId(obj)
+								} = await auditTaskRecallTaskByLinkId({
+									linkId: data.id
+								})
 								if (res) {
-									uni.showToast({
-										title: message,
-										icon: 'none'
+									this.$refs.uToast.show({
+										type: 'success',
+										message: message,
 									})
-									that.getInfo({
-										customerIds: that.customerIds,
-										id: that.editId
+									this.getInfo({
+										customerIds: this.customerIds,
+										id: this.editId
 									})
 								}
 							}
@@ -356,26 +361,25 @@
 					})
 				} else {
 					uni.showModal({
-						title: that.$t('cylinderCheckList.tipsTle')[1],
-						content: that.$t('cylinderCheckList').subTxt(data.billNo),
-						success: async function(res) {
+						title: this.$t('common.tipsTle')[1],
+						content: this.$t('common').subTxt(data.billNo),
+						success: async (res) => {
 							if (res.confirm) {
-								const obj = {
-									ids: [data.id],
-									state: type
-								}
 								const {
 									returnValue: res,
 									message
-								} = await userCylinderCheckUpdateState(obj)
+								} = await userCylinderCheckUpdateState({
+									ids: [data.id],
+									state: type
+								})
 								if (res) {
-									uni.showToast({
-										title: message,
-										icon: 'none'
+									this.$refs.uToast.show({
+										type: 'success',
+										message: message,
 									})
-									that.getInfo({
-										customerIds: that.customerIds,
-										id: that.editId
+									this.getInfo({
+										customerIds: this.customerIds,
+										id: this.editId
 									})
 								}
 							}
@@ -385,10 +389,10 @@
 			},
 			// 保存数据
 			async saveData() {
-				if (!this.formDataValue.billTime || !this.customerInfo) {
-					uni.showToast({
-						title: this.$t('addCylinderCheck.tipsTxt'),
-						icon: 'none'
+				if (!this.formDataValue.billTime || !(this.customerInfo&&this.customerInfo.length)) {
+					this.$refs.uToast.show({
+						type: 'error',
+						message: this.$t('addCylinderCheck.tipsTxt'),
 					})
 					return
 				}
@@ -423,9 +427,9 @@
 					message
 				} = await userCylinderCheckSaveOrEdit(data)
 				if (res) {
-					uni.showToast({
-						title: message,
-						icon: 'none'
+					this.$refs.uToast.show({
+						type: 'success',
+						message: message,
 					})
 					setTimeout(() => {
 						uni.navigateBack({
@@ -436,7 +440,7 @@
 			},
 			// 计算差异
 			countDiffNum(data) {
-				return data.checkStockNum - data.systemStockNum
+				return this.$bigDecimal.round(this.$bigDecimal.subtract(data.checkStockNum, data.systemStockNum), 2)
 			},
 			// 获取详情
 			async getInfo(params) {
@@ -658,6 +662,7 @@
 			.input-stock {
 				font-size: 26rpx;
 				color: #999;
+				border-bottom: 1px solid #ccc;
 			}
 
 			.diff-num.red {
