@@ -2,15 +2,24 @@
 	<view class="sk-info">
 		<view class="form">
 			<edit-form ref="dialogForm" labelWidth="80" classForm="normalForm" :form-data-source="formDataSource"
-				:form-data-value="formDataValue" @change="changeForm" @toScan="toScan">
+				:form-data-value="formDataValue" @change="changeForm">
+				<template v-slot:other>
+					<u-form-item required :label="$t('cylinderMg.addCirculation.form.codeKey.label')">
+						<view class="code-box">
+							<u-input type="text" class="code-input" v-model="codeKey" shape="circle" :placeholder="$t('cylinderMg.addCirculation.form.codeKey.placeholder')">
+								<view slot="suffix">
+									<u-icon @click="toScan" size="40rpx" color="#3c9cff"
+										name="scan"></u-icon>
+								</view>
+							</u-input>
+							<u-button class="code-btn" type="primary" shape="circle" size="small" @click="searchCode">{{$t('cylinderMg.addCirculation.btn.conf')}}</u-button>
+						</view>
+					</u-form-item>
+				</template>
 			</edit-form>
 		</view>
 		<view class="table">
 			<us-table :table-column="tableColumn" :table-data="tableData"></us-table>
-		</view>
-		<view class="btn">
-			<u-button :text="$t('common.btn.save')" type="primary" hairline shape="circle" @click="searchCode">
-			</u-button>
 		</view>
 		<!-- 请求 toast 提示 -->
 		<u-toast ref='uToast'></u-toast>
@@ -34,7 +43,6 @@
 		},
 		data() {
 			return {
-				isSave: false,
 				formDataSource: [{
 						type: 'picker',
 						labelText: this.$t('cylinderMg.addCirculation.form.holderId.label'),
@@ -47,26 +55,9 @@
 							message: this.$t('cylinderMg.addCirculation.form.holderId.placeholder'),
 							trigger: ['change', 'blur']
 						}]
-					},
-					{
-						type: 'text',
-						labelText: this.$t('cylinderMg.addCirculation.form.codeKey.label'),
-						fieldName: 'codeKey',
-						placeholder: this.$t('cylinderMg.addCirculation.form.codeKey.placeholder'),
-						required: true,
-						rules: [{
-							required: true,
-							message: this.$t('cylinderMg.addCirculation.form.codeKey.placeholder'),
-							trigger: ['change', 'blur']
-						}],
-						suffix: {
-							icon: 'scan',
-							color: '#3c9cff',
-							func: 'toScan'
-						},
-						borderBottom: false,
 					}
 				],
+				codeKey:'',
 				nodeType: 'filling',
 				cylinderId: null,
 				holderType: 1,
@@ -74,25 +65,25 @@
 				holderName: null,
 				formDataValue: {},
 				tableColumn: [{
+					prop: 'cylinderNo',
+					label: this.$t('cylinderMg.addCirculation.tableColumn.cylinderNo'),
+					width: '160rpx',
+					align: 'center'
+				}, {
 					prop: 'codeKey',
 					label: this.$t('cylinderMg.addCirculation.tableColumn.codeKey'),
 					width: '210rpx',
-					align:'center'
+					align: 'center'
 				}, {
 					prop: 'modelName',
 					label: this.$t('cylinderMg.addCirculation.tableColumn.modelName'),
 					width: '160rpx',
-					align:'center'
-				}, {
-					prop: 'fillingStateStr',
-					label: this.$t('cylinderMg.addCirculation.tableColumn.fillingStateStr'),
-					width: '160rpx',
-					align:'center'
+					align: 'center'
 				}, {
 					prop: 'holderName',
 					label: this.$t('cylinderMg.addCirculation.tableColumn.holderName'),
 					width: '170rpx',
-					align:'center'
+					align: 'center'
 				}],
 				tableData: []
 			}
@@ -127,13 +118,20 @@
 		methods: {
 			// 查询二维码
 			searchCode(code = null) {
-				this.formDataValue.codeKey = code||this.formDataValue.codeKey
+				this.codeKey = code || this.codeKey
+				if(!this.codeKey){
+					this.$refs.uToast.show({
+						type: 'error',
+						message: this.$t('cylinderMg.addCirculation.tips.errCode')
+					})
+					return
+				}
 				this.$refs.dialogForm.handleSubmit(async (data) => {
 					uni.showLoading()
 					const {
 						returnValue: res
 					} = await cylinderArchivesFindByCodeKey({
-						codeKey: this.formDataValue.codeKey
+						codeKey: this.codeKey
 					})
 					if (res) {
 						this.cylinderId = res.id // 钢瓶ID
@@ -237,6 +235,7 @@
 <style lang="scss" scoped>
 	.sk-info {
 		padding: 30rpx 20rpx;
+
 		::v-deep .normalForm {
 			.u-form {
 				background: rgba(255, 255, 255, 1);
@@ -259,14 +258,17 @@
 		.table {
 			margin-top: 30rpx;
 		}
-
-		.btn {
-			width: 632rpx;
-			margin: 60rpx auto;
-			@include flexMixin();
-
-			.u-button {
-				margin: 0rpx 10rpx;
+		.code-box{
+			width: 100%;
+			display: flex;
+			align-items: center;
+			.code-input{
+				flex: 1;
+				width: 1rpx;
+				margin-right: 30rpx;
+			}
+			.code-btn{
+				width: 100rpx!important;
 			}
 		}
 	}

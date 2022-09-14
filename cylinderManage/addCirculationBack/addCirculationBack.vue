@@ -1,7 +1,8 @@
 <template>
 	<view class="sk-info">
 		<view class="form">
-			<edit-form ref="dialogForm" labelWidth="80" classForm="normalForm" :form-data-source="formDataSource" :form-data-value="formDataValue" @change="changeForm">
+			<edit-form ref="dialogForm" labelWidth="80" classForm="normalForm" :form-data-source="formDataSource"
+				:form-data-value="formDataValue" @change="changeForm">
 				<template v-slot:other>
 					<u-form-item required :label="$t('cylinderMg.addCirculation.form.codeKey.label')">
 						<view class="code-box">
@@ -43,20 +44,20 @@
 			return {
 				formDataSource: [{
 						type: 'picker',
-						labelText: this.$t('cylinderMg.addCirculation.form.holderIdRe.label'),
+						labelText: this.$t('cylinderMg.addCirculation.form.holderIdBack.label'),
 						fieldName: 'holderId',
-						placeholder: this.$t('cylinderMg.addCirculation.form.holderIdRe.placeholder'),
+						placeholder: this.$t('cylinderMg.addCirculation.form.holderIdBack.placeholder'),
 						options: [],
 						required: true,
 						rules: [{
 							required: true,
-							message: this.$t('cylinderMg.addCirculation.form.holderIdRe.placeholder'),
+							message: this.$t('cylinderMg.addCirculation.form.holderIdBack.placeholder'),
 							trigger: ['change', 'blur']
 						}]
 					}
 				],
 				codeKey:'',
-				nodeType: 'transferReceive',
+				nodeType: 'recycleCylinder',
 				cylinderId: null,
 				holderType: 1,
 				holderNo: null,
@@ -99,7 +100,7 @@
 		},
 		async onLoad(options) {
 			uni.setNavigationBarTitle({
-				title: this.$t('cylinderMg.addCirculationReceive.titleText')
+				title: this.$t('cylinderMg.addCirculationBack.titleText')
 			});
 			// 获取应用组织
 			await this.getOrgList()

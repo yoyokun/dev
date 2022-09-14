@@ -329,7 +329,7 @@
 				{
 					"path" : "addCirculationFill/addCirculationFill",
 					"style" : {
-						"navigationBarTitleText": "充装",
+						"navigationBarTitleText": "充装流转",
 						"enablePullDownRefresh": true
 					}	
 				},
@@ -337,6 +337,27 @@
 					"path" : "addCirculationDelivery/addCirculationDelivery",
 					"style" : {
 						"navigationBarTitleText": "车辆配送流转",
+						"enablePullDownRefresh": true
+					}	
+				},
+				{
+					"path" : "addCirculationReceive/addCirculationReceive",
+					"style" : {
+						"navigationBarTitleText": "组织接收流转",
+						"enablePullDownRefresh": true
+					}	
+				},
+				{
+					"path" : "addCirculationBack/addCirculationBack",
+					"style" : {
+						"navigationBarTitleText": "客户回瓶流转",
+						"enablePullDownRefresh": true
+					}	
+				},
+				{
+					"path" : "addCirculationService/addCirculationService",
+					"style" : {
+						"navigationBarTitleText": "确认送达流转",
 						"enablePullDownRefresh": true
 					}	
 				}
