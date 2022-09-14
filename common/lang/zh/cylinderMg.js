@@ -280,5 +280,40 @@ module.exports = {
 				placeholder: ['开始日期', '选择日期'],
 			},
 		},
-	}
+	},
+	// 添加流转记录
+	addCirculation: {
+		form: {
+			holderId: {
+				label: '充装组织',
+				placeholder: '请选择充装组织'
+			},
+			carNo: {
+				label: '车牌号码',
+				placeholder: '请输入车牌号码'
+			},
+			codeKey: {
+				label: '钢瓶码',
+				placeholder: '请输入钢瓶二维码'
+			},
+		},
+		tableColumn: {
+			codeKey: '钢瓶二维码',
+			modelName: '钢瓶型号',
+			fillingStateStr: '充装状态',
+			holderName: '持有者',
+		},
+		tips: {
+			errImg: '二维码图片错误，请重新上传',
+			errCode: '该二维码无效'
+		},
+	},
+	// 添加充装流转记录
+	addCirculationFill: {
+		titleText: '充装流转',
+	},
+	// 添加车辆配送流转记录
+	addCirculationDelivery: {
+		titleText: '车辆配送流转',
+	},
 }

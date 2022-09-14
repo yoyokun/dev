@@ -332,6 +332,13 @@
 						"navigationBarTitleText": "充装",
 						"enablePullDownRefresh": true
 					}	
+				},
+				{
+					"path" : "addCirculationDelivery/addCirculationDelivery",
+					"style" : {
+						"navigationBarTitleText": "车辆配送流转",
+						"enablePullDownRefresh": true
+					}	
 				}
 			]
 		},

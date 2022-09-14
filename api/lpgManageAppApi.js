@@ -1097,3 +1097,31 @@ export function cylinderArchivesFindByCodeKey(data = {}, message = '', custom = 
 		}
 	})
 }
+// 钢瓶流转记录 钢瓶扫码
+export function cylinderFlowScanCodeByType(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/control/cylinderFlow/scanCodeByType',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 车辆信息 根据车牌号查询信息
+export function carVehicleFindByLicenseNo(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/carVehicle/findByLicenseNo',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
