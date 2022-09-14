@@ -40,7 +40,7 @@ export const settingMixin = {
 			subOrderType: [], // 开单类型
 			customertProperty: [], // 客户标签
 			safeLevelList: [], // 安检风险等级
-			riskLevelList: [] // 巡检风险等级
+			riskLevelList: [], // 巡检风险等级
 			billType: [], // 单据类型
 		}
 	},
