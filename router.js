@@ -1,12 +1,12 @@
-import Vue from 'vue'
 import store from './store'
-import Router from 'uni-simple-router'
+import {RouterMount,createRouter} from 'uni-simple-router'
 
-Vue.use(Router)
-//初始化
-const router = new Router({
-	routes:ROUTES //路由表
+const router = createRouter({
+	platform: process.env.VUE_APP_PLATFORM,  
+	routes: [...ROUTES,{ path: '/', redirect: '/pages/login/login' }]
 });
+
+
 const whiteList = ['/pages/login/login', '/pages/secretKey/secretKey', '/pages/forgetPassword/forgetPassword'] // 路由白名单
 //全局路由前置守卫
 router.beforeEach(async(to, from, next) => {
@@ -61,4 +61,7 @@ router.beforeEach(async(to, from, next) => {
 // 全局路由后置守卫
 router.afterEach((to, from) => {
 })
-export default router;
+export {
+	router,
+	RouterMount
+}

@@ -1,12 +1,11 @@
 {
-	"name": "lpgmanagecustomer",
+	"name": "LPGManageApp",
 	"version": "1.0.0",
 	"description": "",
 	"author": "胡旦旦",
 	"id": "uview-ui",
 	"scripts": {
-		"test": "eslint . --fix",
-		"postinstall": "patch-package"
+		"test": "eslint . --fix"
 	},
 	"dependencies": {
 		"element-china-area-data": "^5.0.2",
@@ -15,7 +14,7 @@
 		"moment": "^2.24.0",
 		"num-tofixed": "^1.0.3",
 		"uni-read-pages": "^1.0.5",
-		"uni-simple-router": "^1.5.5",
+		"uni-simple-router": "^2.0.7",
 		"vue-i18n": "^9.2.0",
 		"vue-jsonp": "^2.0.0"
 	},

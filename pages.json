@@ -444,6 +444,12 @@
 			]
 		}
 	],
+	"preloadRule": {
+		"pages/index/index": {
+			"network": "all",
+			"packages": ["personalCenter","userCenter","infoManage","customerManage","cylinderManage","stockManage","securityManage"]
+		}
+	},
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "气讯通",
