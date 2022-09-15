@@ -2,7 +2,8 @@
 	<view class="sk-info">
 		<view class="form">
 			<edit-form ref="dialogForm" labelWidth="80" classForm="normalForm" :form-data-source="formDataSource"
-				:form-data-value="formDataValue" @change="changeForm" @chooseBill="chooseBill">
+				:form-data-value="formDataValue" @change="changeForm" @chooseBill="chooseBill"
+				@chooseCustomer="chooseCustomer">
 			</edit-form>
 		</view>
 
@@ -71,12 +72,15 @@
 
 						<view class="info-cell">
 							<view class="cell-unit">
-								<view class="cell" v-for="(o,k) in val.assistUnitsList">
-									<view class="cell-label">{{o.unitsName}}：</view>
-									<view class="cell-content">{{o.netContent}}</view>
-								</view>
+								<block v-if="val.assistUnitsList&&val.assistUnitsList.length" v-for="(o,k) in val.assistUnitsList" :key="k">
+									<view class="cell" v-if="o.unitsName&&o.netContent">
+										<view class="cell-label">{{o.unitsName}}：</view>
+										<view class="cell-content">{{o.netContent}}</view>
+									</view>
+								</block>
+								
 							</view>
-							
+
 							<view class="nums"><text>x</text><input maxlength="4" type="number"
 									:placeholder="$t('stockMg.addStockOrder.stockNumsTxt')" v-model="val.stockNum"
 									@input="checkNum($event,index,key)" />
@@ -181,7 +185,7 @@
 						}]
 					},
 					{
-						type: 'picker',
+						type: 'actionSheet',
 						labelText: this.$t('stockMg.addStockOrder.form.stockFormType.label'),
 						fieldName: 'stockFormType',
 						placeholder: this.$t('stockMg.addStockOrder.form.stockFormType.placeholder'),
@@ -194,12 +198,12 @@
 						}]
 					},
 					{
-						type: 'picker',
+						type: 'chooseBtn',
 						labelText: this.$t('stockMg.addStockOrder.form.customerId.label'),
-						fieldName: 'customerId',
+						fieldName: 'customerName',
 						placeholder: this.$t('stockMg.addStockOrder.form.customerId.placeholder'),
 						required: true,
-						options: [],
+						func: 'chooseCustomer',
 						rules: [{
 							required: true,
 							message: this.$t('stockMg.addStockOrder.form.customerId.placeholder'),
@@ -257,6 +261,7 @@
 				linkId: '',
 				linkTypes: '',
 				infos: {},
+				customerId: '',
 			}
 		},
 		// 过滤器
@@ -272,6 +277,13 @@
 		},
 		async onLoad(options) {
 			this.editId = options.editId || ''
+			// 获取应用组织
+			await this.getOrgList()
+			this.formDataSource[0].options = this.orgList
+			this.$set(this.formDataValue, 'orgId', this.userInfo.orgId)
+			await this.getManagerDeliveryman()
+			this.formDataSource[5].options = this.managerDeliveryman
+			await this.getStockInoutReason()
 			if (this.editId) {
 				this.changeEdit(true)
 				uni.setNavigationBarTitle({
@@ -283,13 +295,6 @@
 					title: this.$t('stockMg.addStockOrder.titleText')
 				});
 			}
-			// 获取应用组织
-			await this.getOrgList()
-			this.formDataSource[0].options = this.orgList
-			this.$set(this.formDataValue, 'orgId', this.userInfo.orgId)
-			await this.getManagerDeliveryman()
-			this.formDataSource[5].options = this.managerDeliveryman
-			await this.getStockInoutReason()
 			uni.$on('chooseGoods', (res) => {
 				res.forEach((item, index) => {
 					item.stockNum = 1
@@ -305,22 +310,10 @@
 					this.linkId = res.billId
 					this.linkTypes = res.billType
 					this.formDataSource[2].show = true
-					if (res.formType === 1) {
-						// 客户
-						await this.getCustomer(res.orgId)
-						this.formDataSource[2].options = this.customerList
-					} else if (res.formType === 2) {
-						// 供应商
-						await this.getPurSupplier()
-						this.formDataSource[2].options = this.purSupplierList
-					} else if (res.formType === 3) {
-						// 组织
-						await this.getOrgList()
-						this.formDataSource[2].options = this.orgList
-					}
+					this.customerId = res.customerId
 					let obj = {
 						linkBillNo: res.billNo,
-						customerId: res.customerId,
+						customerName: res.customerName,
 						stockFormType: (res.formType).toString()
 					}
 					this.formDataValue = {
@@ -329,10 +322,28 @@
 					}
 				}
 			})
+			uni.$on('chooseCustomer', (data) => {
+				this.customerId = data.id
+				this.$set(this.formDataValue, 'customerName', data.customerName)
+			})
+			// 添加监听事件
+			uni.$on('chooseOrg', (data) => {
+				this.customerId = data.id
+				this.$set(this.formDataValue, 'customerName', data.name)
+			})
+			// 添加监听事件
+			uni.$on('chooseSupplier', (data) => {
+				console.log(data)
+				this.customerId = data.id
+				this.$set(this.formDataValue, 'customerName', data.supplierName)
+			})
 		},
 		onUnload() {
 			uni.$off('chooseGoods')
 			uni.$off('chooseBill')
+			uni.$off('chooseCustomer')
+			uni.$off('chooseOrg')
+			uni.$off('chooseSupplier')
 		},
 		onShow() {
 
@@ -490,22 +501,12 @@
 					this.infos = res
 					let data = {}
 					this.formDataSource[2].show = true
-					if (res.stockFormType == 1) {
-						await this.getCustomer(res.orgId)
-						this.formDataSource[2].options = this.customerList
-					} else if (res.stockFormType == 2) {
-						await this.getPurSupplier()
-						this.formDataSource[2].options = this.purSupplierList
-					} else if (res.stockFormType == 3) {
-						await this.getsysOrgDataList()
-						this.formDataSource[2].options = this.sysOrgData
-					}
 					data.filePath = res.filePath.length ? JSON.parse(res.filePath) : [],
 						data.stockFormType = res.stockFormType.toString()
 					this.formDataSource[7].defaultValue = data.filePath
 					data.orgId = res.orgId
-					data.customerId = res.customerId
 					data.linkBillNo = res.linkBillNo
+					data.customerName = res.customerName
 					data.remarks = res.remarks
 					data.licenseNo = res.licenseNo
 					data.deliverManId = res.deliverManId
@@ -513,6 +514,7 @@
 					data.stockSourceType = res.stockSourceType
 					this.linkId = res.linkId || ''
 					this.linkTypes = res.linkType || ''
+					this.customerId = res.customerId
 					this.formDataValue = data
 					if (res.stockInoutLogList && res.stockInoutLogList.length) {
 						let listOrder = []
@@ -545,7 +547,7 @@
 			saveData() {
 				this.$refs.dialogForm.handleSubmit(async (data) => {
 					let params = {}
-					params.customerId = data.customerId
+					params.customerId = this.customerId
 					params.id = this.editId || ''
 					params.stockSourceType = 'stock'
 					params.checkState = this.infos.checkState || 1
@@ -631,6 +633,29 @@
 					stockInoutLogDetailData: []
 				})
 			},
+			// 选择客户
+			chooseCustomer() {
+				if (this.isSave) {
+					return
+				}
+				if (this.formDataValue.stockFormType == 1) {
+					// 客户
+					this.goto('/infoManage/chooseCustomer/chooseCustomer', {
+						customerId: this.customerId,
+						orgId: this.userInfo.orgId
+					})
+				} else if (this.formDataValue.stockFormType == 2) {
+					// 供应商
+					this.goto('/infoManage/chooseSupplier/chooseSupplier', {
+						supplierId: this.customerId
+					})
+				} else if (this.formDataValue.stockFormType == 3) {
+					// 组织
+					this.goto('/infoManage/chooseOrg/chooseOrg', {
+						orgId: this.customerId
+					})
+				}
+			},
 			// 选择商品
 			chooseGoods(index) {
 				this.tempIndex = index
@@ -641,8 +666,8 @@
 			// 表单
 			async changeForm(e) {
 				let params = e.queryParams
-				if ((e.name == 'customerId' && (params.customerId != this.formDataValue.customerId)) || (e.name ==
-						'stockFormType' && (params.stockFormType != this.formDataValue.stockFormType))) {
+				if ((e.name == 'customerName' && (params.customerName != this.formDataValue.customerName)) || (e
+						.name == 'stockFormType' && (params.stockFormType != this.formDataValue.stockFormType))) {
 					this.linkId = ''
 					this.linkTypes = ''
 					params.linkBillNo = ''
@@ -651,21 +676,8 @@
 				if ((e.name == 'stockFormType' && params.stockFormType && (params.stockFormType != this.formDataValue
 						.stockFormType)) || (params.stockFormType == 1 && e.name == 'orgId')) {
 					this.formDataSource[2].show = true
-					if (params.stockFormType == 1) {
-						// 客户
-						await this.getCustomer(params.orgId)
-						this.formDataSource[2].options = this.customerList
-					} else if (params.stockFormType == 2) {
-						// 供应商
-						await this.getPurSupplier()
-						this.formDataSource[2].options = this.purSupplierList
-					} else if (params.stockFormType == 3) {
-						// 组织
-						await this.getOrgList()
-						this.formDataSource[2].options = this.orgList
-					}
-					params.customerId = ''
-					this.$refs.dialogForm.resetPicker('customerId', [0], [0])
+					params.customerName = ''
+					this.customerId = ''
 					if (!params.deliverManId) {
 						this.$refs.dialogForm.resetPicker('deliverManId', [0], [0])
 					}
@@ -674,6 +686,9 @@
 			},
 			// 选择单据
 			chooseBill() {
+				if (this.isSave) {
+					return
+				}
 				this.$navigateTo('/infoManage/chooseBill/chooseBill', {
 					billId: this.linkId
 				})
@@ -925,19 +940,23 @@
 							font-size: 32rpx;
 							line-height: 32rpx;
 							margin-top: 30rpx;
-							.cell-unit{
+
+							.cell-unit {
 								flex: 1;
 								width: 1px;
 								display: flex;
 								flex-direction: column;
-								.cell{
+
+								.cell {
 									width: 100%;
 									margin-top: 30rpx;
-									&:first-child{
+
+									&:first-child {
 										margin-top: 0rpx;
 									}
 								}
 							}
+
 							.cell {
 								width: 1px;
 								flex: 1;
