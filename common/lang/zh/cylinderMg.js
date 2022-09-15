@@ -304,6 +304,14 @@ module.exports = {
 				label: '客户',
 				placeholder: '请选择客户'
 			},
+			supplierName:{
+				label: '供应商',
+				placeholder: '请选择供应商'
+			},
+			userName:{
+				label: '提货人',
+				placeholder: '请选择提货人'
+			},
 			codeKey: {
 				label: '钢瓶码',
 				placeholder: '请输入钢瓶二维码'
@@ -352,5 +360,13 @@ module.exports = {
 		customerName: '客户名称',
 		phone: '联系电话',
 		orgName: '归属组织',
+	},
+	// 钢瓶检验流转
+	addCirculationTest:{
+		titleText: '钢瓶检验流转',
+	},
+	// 送气工提货流转
+	addCirculationTake:{
+		titleText: '送气工提货流转',
 	},
 }

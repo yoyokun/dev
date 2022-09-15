@@ -1125,3 +1125,31 @@ export function carVehicleFindByLicenseNo(data = {}, message = '', custom = {}) 
 		}
 	})
 }
+// 人员选择器
+export function sysOrgWithEmp(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/sysOrg/withEmp',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 管理员  根据id查询信息
+export function sysManagerFindById(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/sysManager/findById',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}

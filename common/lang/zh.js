@@ -441,6 +441,10 @@ module.exports = {
 	chooseSupplier: {
 		titleText: '选择供应商'
 	},
+	// 选择组织成员 
+	chooseUser:{
+		titleText: '选择组织成员'
+	},
 	// 编辑盘点记录
 	addCylinderCheck: {
 		titleText: '添加钢瓶盘点',
