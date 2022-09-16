@@ -6,12 +6,14 @@
 				<template v-slot:other>
 					<u-form-item required :label="$t('cylinderMg.addCirculation.form.codeKey.label')">
 						<view class="code-box">
-							<u-input type="text" class="code-input" v-model="codeKey" shape="circle" :placeholder="$t('cylinderMg.addCirculation.form.codeKey.placeholder')">
+							<u-input type="text" class="code-input" v-model="codeKey" shape="circle"
+								:placeholder="$t('cylinderMg.addCirculation.form.codeKey.placeholder')">
 								<view slot="suffix">
 									<u-icon @click="toScan" size="40rpx" color="#3c9cff" name="scan"></u-icon>
 								</view>
 							</u-input>
-							<u-button class="code-btn" type="primary" shape="circle" size="small" @click="searchCode">{{$t('cylinderMg.addCirculation.btn.conf')}}</u-button>
+							<u-button class="code-btn" type="primary" shape="circle" size="small" @click="searchCode">
+								{{$t('cylinderMg.addCirculation.btn.conf')}}</u-button>
 						</view>
 					</u-form-item>
 				</template>
@@ -43,20 +45,19 @@
 		data() {
 			return {
 				formDataSource: [{
-						type: 'picker',
-						labelText: this.$t('cylinderMg.addCirculation.form.holderIdBack.label'),
-						fieldName: 'holderId',
-						placeholder: this.$t('cylinderMg.addCirculation.form.holderIdBack.placeholder'),
-						options: [],
+					type: 'picker',
+					labelText: this.$t('cylinderMg.addCirculation.form.holderIdBack.label'),
+					fieldName: 'holderId',
+					placeholder: this.$t('cylinderMg.addCirculation.form.holderIdBack.placeholder'),
+					options: [],
+					required: true,
+					rules: [{
 						required: true,
-						rules: [{
-							required: true,
-							message: this.$t('cylinderMg.addCirculation.form.holderIdBack.placeholder'),
-							trigger: ['change', 'blur']
-						}]
-					}
-				],
-				codeKey:'',
+						message: this.$t('cylinderMg.addCirculation.form.holderIdBack.placeholder'),
+						trigger: ['change', 'blur']
+					}]
+				}],
+				codeKey: '',
 				nodeType: 'recycleCylinder',
 				cylinderId: null,
 				holderType: 1,
@@ -117,8 +118,8 @@
 		methods: {
 			// 查询二维码
 			searchCode(code = null) {
-				this.codeKey = code||this.codeKey
-				if(!this.codeKey){
+				this.codeKey = code || this.codeKey
+				if (!this.codeKey) {
 					this.$refs.uToast.show({
 						type: 'error',
 						message: this.$t('cylinderMg.addCirculation.tips.errCode')
@@ -126,17 +127,15 @@
 					return
 				}
 				this.$refs.dialogForm.handleSubmit(async (data) => {
-					uni.showLoading()
 					const {
 						returnValue: res
 					} = await cylinderArchivesFindByCodeKey({
 						codeKey: this.codeKey
-					})
+					},this.$t('cylinderMg.addCirculation.loadTxt.finding'))
 					if (res) {
 						this.cylinderId = res.id // 钢瓶ID
 						await this.saveData()
 					} else {
-						uni.hideLoading()
 						this.$refs.uToast.show({
 							type: 'error',
 							message: this.$t('cylinderMg.addCirculation.tips.errCode')
@@ -194,8 +193,7 @@
 				const {
 					returnValue: res,
 					message
-				} = await cylinderFlowScanCodeByType(params)
-				uni.hideLoading()
+				} = await cylinderFlowScanCodeByType(params,this.$t('cylinderMg.addCirculation.loadTxt.saving'))
 				if (res) {
 					this.tableData.push(res)
 					this.$refs.uToast.show({
@@ -218,11 +216,9 @@
 			// 表单
 			async changeForm(e) {
 				let params = e.queryParams
-				if (params.holderId && params.holderId != this.formDataValue
-					.holderId) {
+				if (e.name == 'holderId' && params.holderId) {
 					this.getHolderInfo(params.holderId)
 				}
-				this.formDataValue = params
 			},
 		},
 		options: {
@@ -234,6 +230,7 @@
 <style lang="scss" scoped>
 	.sk-info {
 		padding: 30rpx 20rpx;
+
 		::v-deep .normalForm {
 			.u-form {
 				background: rgba(255, 255, 255, 1);
@@ -256,17 +253,20 @@
 		.table {
 			margin-top: 30rpx;
 		}
-		.code-box{
+
+		.code-box {
 			width: 100%;
 			display: flex;
 			align-items: center;
-			.code-input{
+
+			.code-input {
 				flex: 1;
 				width: 1rpx;
 				margin-right: 30rpx;
 			}
-			.code-btn{
-				width: 100rpx!important;
+
+			.code-btn {
+				width: 100rpx !important;
 			}
 		}
 	}

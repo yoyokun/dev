@@ -55,6 +55,7 @@
 						trigger: ['change', 'blur']
 					}]
 				}],
+				userId:'',
 				codeKey: '',
 				nodeType: 'workPick',
 				cylinderId: null,
@@ -108,6 +109,7 @@
 						userName: data.name
 					}
 					this.holderId = data.linkId
+					this.userId = data.id
 					await this.getHolderInfo(this.holderId)
 				},10)
 			})
@@ -119,17 +121,15 @@
 		},
 		methods: {
 			async getHolderInfo(id) {
-				uni.showLoading()
 				const {
 					returnValue: res
 				} = await sysManagerFindById({
 					id: id
-				})
+				},this.$t('cylinderMg.addCirculation.loadTxt.finding'))
 				if (res) {
 					this.holderName = res.name // 持有人名称
 					this.holderNo = res.empNo // 持有人编号
 				}
-				uni.hideLoading()
 			},
 			// 查询二维码
 			searchCode(code = null) {
@@ -142,17 +142,15 @@
 					return
 				}
 				this.$refs.dialogForm.handleSubmit(async (data) => {
-					uni.showLoading()
 					const {
 						returnValue: res
 					} = await cylinderArchivesFindByCodeKey({
 						codeKey: this.codeKey
-					})
+					},this.$t('cylinderMg.addCirculation.loadTxt.finding'))
 					if (res) {
 						this.cylinderId = res.id // 钢瓶ID
 						await this.saveData()
 					} else {
-						uni.hideLoading()
 						this.$refs.uToast.show({
 							type: 'error',
 							message: this.$t('cylinderMg.addCirculation.tips.errCode')
@@ -210,8 +208,7 @@
 				const {
 					returnValue: res,
 					message
-				} = await cylinderFlowScanCodeByType(params)
-				uni.hideLoading()
+				} = await cylinderFlowScanCodeByType(params,this.$t('cylinderMg.addCirculation.loadTxt.saving'))
 				if (res) {
 					this.tableData.push(res)
 					this.$refs.uToast.show({
@@ -222,13 +219,12 @@
 			},
 			// 表单
 			async changeForm(e) {
-				let params = e.queryParams
-				this.formDataValue = params
+				
 			},
 			// 选择客户
 			chooseUser() {
 				this.goto('/infoManage/chooseUser/chooseUser', {
-					userIds: this.holderId,
+					userIds: this.userId,
 				})
 			},
 		},

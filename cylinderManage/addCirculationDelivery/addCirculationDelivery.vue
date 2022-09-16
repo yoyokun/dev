@@ -147,17 +147,15 @@
 					return
 				}
 				this.$refs.dialogForm.handleSubmit(async (data) => {
-					uni.showLoading()
 					const {
 						returnValue: res
 					} = await cylinderArchivesFindByCodeKey({
 						codeKey: this.codeKey
-					})
+					},this.$t('cylinderMg.addCirculation.loadTxt.finding'))
 					if (res) {
 						this.cylinderId = res.id // 钢瓶ID
 						await this.saveData()
 					} else {
-						uni.hideLoading()
 						this.$refs.uToast.show({
 							type: 'error',
 							message: this.$t('cylinderMg.addCirculation.tips.errCode')
@@ -215,8 +213,7 @@
 				const {
 					returnValue: res,
 					message
-				} = await cylinderFlowScanCodeByType(params)
-				uni.hideLoading()
+				} = await cylinderFlowScanCodeByType(params,this.$t('cylinderMg.addCirculation.loadTxt.saving'))
 				if (res) {
 					this.tableData.push(res)
 					this.$refs.uToast.show({
@@ -262,33 +259,25 @@
 		.car-info{
 			border-radius: 20rpx;
 			background: white;
-			padding: 30rpx;
+			padding: 30rpx 15rpx;
 			margin-top: 30rpx;
 			box-shadow: 0px 2px 4px rgba(0,0,0,0.04);
 			display: flex;
 			flex-wrap: wrap;
 			.item{
-				margin-right: 30rpx;
-				width: calc((100% - 30rpx) / 2);
+				min-width: calc((100% - 30rpx) / 2);
+				padding: 0 15rpx;
+				box-sizing: border-box;
 				display: flex;
 				font-size: 28rpx;
 				line-height: 34rpx;
 				color: rgba(112, 112, 112, 1);
-				margin-top: 20rpx;
-				&:nth-child(-n+2){
-					margin-top: 0;
-				}
-				&:nth-child(2n){
-					margin-right: 0;
-				}
+				line-height: 50rpx;
 				.label{
 					min-width: 140rpx;
 				}
 				.desc{
 					color: rgba(56, 56, 56, 1);
-					word-break: break-all;
-					width: 1px;
-					flex: 1;
 				}
 			}
 		}

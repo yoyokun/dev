@@ -283,6 +283,7 @@ module.exports = {
 	},
 	// 添加流转记录
 	addCirculation: {
+		
 		form: {
 			holderId: {
 				label: '充装组织',
@@ -326,6 +327,10 @@ module.exports = {
 		tips: {
 			errImg: '二维码图片错误，请重新上传',
 			errCode: '该二维码无效'
+		},
+		loadTxt:{
+			finding:'查询中',
+			saving:'保存中'
 		},
 		btn:{
 			conf:'确定'
