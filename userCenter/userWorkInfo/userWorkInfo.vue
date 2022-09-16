@@ -17,6 +17,7 @@
 		<view class="btn">
 			<!-- 接受 -->
 			<u-button 
+				v-permission="{ permission:'app_userWorkList_accept'}"
 				v-if="info.state===2" 
 				:text="$t('common.btn.accept')" 
 				type="primary" 
@@ -27,6 +28,7 @@
 			</u-button>
 			<!-- 拒绝 -->
 			<u-button 
+				v-permission="{ permission:'app_userWorkList_refuse'}"
 				v-if="info.state===2" 
 				:text="$t('common.btn.refuse')" 
 				type="error" 
@@ -37,6 +39,7 @@
 			</u-button>
 			<!-- 处理 -->
 			<u-button 
+				v-permission="{ permission:'app_userWorkList_jump'}"
 				v-if="info.state===3" 
 				:text="$t('common.btn.jump')" 
 				type="primary" 
@@ -47,6 +50,7 @@
 			</u-button>
 			<!-- 结果 -->
 			<u-button 
+				v-permission="{ permission:'app_userWorkList_result'}"
 				v-if="info.state===7" 
 				:text="$t('common.btn.result')" 
 				type="error" 

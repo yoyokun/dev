@@ -156,6 +156,27 @@
 						"enablePullDownRefresh": false
 					}
 				}
+				,{
+					"path" : "userPatrolCheck/userPatrolCheck",
+					"style" : {
+						"navigationBarTitleText": "我的巡检",
+						"enablePullDownRefresh": false
+					}
+				}
+				,{
+					"path" : "userSecurityList/userSecurityList",
+					"style" : {
+						"navigationBarTitleText": "我的安检",
+						"enablePullDownRefresh": false
+					}
+				}
+				,{
+					"path" : "userRectificationList/userRectificationList",
+					"style" : {
+						"navigationBarTitleText": "我的整改",
+						"enablePullDownRefresh": false
+					}
+				}
 			]
 		},
 		{
@@ -259,20 +280,18 @@
 				,{
 					"path" : "cylinderBindCode/cylinderBindCode",
 					"style" : {
-						"navigationBarTitleText": "钢瓶绑码",
+						"navigationBarTitleText": "绑码记录",
 						"enablePullDownRefresh": false
 					}
 				}
-			    ,{
-                    "path" : "chooseAddress/chooseAddress",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "选择地址",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-            ]
+				,{
+					"path" : "chooseAddress/chooseAddress",
+					"style" : {
+						"navigationBarTitleText": "选择地址",
+						"enablePullDownRefresh": false
+					}
+				}
+			]
 		},
 		{
 			"root": "customerManage",
