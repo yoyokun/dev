@@ -282,3 +282,31 @@ export function riskPollingMyList(data = {}, message = '', custom = {}) {
 		}
   })
 }
+// 安检模板 根据条件查询列表信息
+export function safeTemplateFindList(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/sis/safeTemplate/findList',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}
+// 安检模板 根据id查询信息
+export function safeTemplateFindById(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/sis/safeTemplate/findById',
+    method: 'post',
+    data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+  })
+}

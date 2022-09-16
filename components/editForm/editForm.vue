@@ -17,18 +17,28 @@
 				:labelWidth="item.labelWidth"
 				>
 				<!--文本框-->
+				<view class="chooseBtnText" v-if="item.type === 'chooseBtn'" @click.native="chooseChange(item)">
+					<u--textarea
+						v-model="formData[item.fieldName]" 
+						:disabled="true"
+						border="none"
+						:placeholder="item.placeholder"
+						confirmType="done"
+						@input="handleFiltrate(item.fieldName)"
+						autoHeight
+					></u--textarea>
+				</view>
 				<u--input 
 					type="text" 
-					v-if="item.type === 'text' || item.type === 'chooseText' || item.type === 'chooseBtn'"
+					v-if="item.type === 'text' || item.type === 'chooseText'"
 					v-model="formData[item.fieldName]" 
-					:readonly="item.disabled || item.type === 'chooseBtn'"
+					:readonly="item.disabled"
 					:inputAlign="item.inputAlign"
 					:border="item.inputBorder"
 					:maxlength="item.maxlength"
 					:placeholder="item.placeholder"
 					@change="handleFiltrate(item.fieldName)"
 					@blur="handleFiltrate(item.fieldName,'blur')"
-					@click.native="chooseChange(item)"
 				>
 					<block v-if="item.suffix">
 						<view slot="suffix">
@@ -376,7 +386,6 @@ export default {
 							}
 						}
 					})
-					console.log(this.formData)
 					const queryParams = this.handleParams(this.formData)
 					this.$emit('change', { queryParams, name: '' })
 				}
@@ -778,6 +787,15 @@ export default {
 .right.switch{
 	display: flex;
 	justify-content: end;
+}
+.chooseBtnText{
+	font-size: 28rpx;
+	line-height: 44rpx;
+	color: #606266;
+	flex: 1;
+	::v-deep .uni-textarea-wrapper{
+		min-height: 20px;
+	}
 }
 .multipleLable{
 	@include flexMixin();

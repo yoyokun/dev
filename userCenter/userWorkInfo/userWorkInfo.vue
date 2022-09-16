@@ -84,14 +84,14 @@ export default {
 	},
 	async onLoad(options) {
 		this.editId = options.editId || ''
-		if (this.editId) {
-			this.getInfo()
-		}
 	},
 	onShow() {
 		uni.setNavigationBarTitle({
 			title: this.$t('userWorkInfo.titleText')
 		});
+		if (this.editId) {
+			this.getInfo()
+		}
 	},
 	methods: {
 		// 详情
@@ -114,9 +114,13 @@ export default {
 								type: 'success',
 								message: message,
 							})
-							if (this.info.formKey === 'security' || this.info.formKey === 'rectify' || this.info.formKey === 'polling') {
-								// 跳转到安检 整改 巡检
-								
+							if (this.info.formKey === 'security') {
+								// 跳转到安检
+							} else if (this.info.formKey === 'rectify') {
+								// 跳转到整改
+							} else if (this.info.formKey === 'polling') {
+								// 巡检
+								this.goto('/securityManage/addPatrolCheck/addPatrolCheck',{ editId: res.id })
 							} else {
 								setTimeout(() => {
 									uni.navigateBack({

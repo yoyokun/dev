@@ -423,6 +423,9 @@ module.exports = {
 			2: '非居民'
 		}
 	},
+	chooseAddress: {
+		titleText: '选择地址',
+	},
 	// 选择组织
 	chooseOrg: {
 		titleText: '选择组织',

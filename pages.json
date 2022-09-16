@@ -263,7 +263,16 @@
 						"enablePullDownRefresh": false
 					}
 				}
-			]
+			    ,{
+                    "path" : "chooseAddress/chooseAddress",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "选择地址",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 		},
 		{
 			"root": "customerManage",

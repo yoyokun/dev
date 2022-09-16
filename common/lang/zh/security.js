@@ -92,7 +92,8 @@ module.exports = {
 			1: '未安检',
 			2: '已安检',
 			3: '无法安检',
-			4: '已超时'
+			4: '已超时',
+			5: '客户拒检'
 		}
 	},
 	rectificationList: {
@@ -230,6 +231,78 @@ module.exports = {
 		unitTypeName: '单元类型',
 		unitAddress: '位置',
 		orgName: '巡检组织',
-		managerName: '巡检员'
+		managerName: '巡检员',
+		state: '状态'
+	},
+	// 添加安检
+	addSecurityCheck: {
+		titleText: '添加安检',
+		titleTextInfo: '安检详情',
+		titleTextEdit: '编辑安检',
+		form: {
+			customerName: {
+				label: '客户名称',
+				placeholder: '请选择客户'
+			},
+			address: {
+				label: '安检对象',
+				placeholder: '请选择安检对象'
+			},
+			orgId: {
+				label: '安检组织',
+				placeholder: '请选择安检组织'
+			},
+			managerId: {
+				label: '安检员',
+				placeholder: '请选择安检员'
+			},
+			templateId: {
+				label: '安检模板',
+				placeholder: '请选择安检模板'
+			},
+			state: {
+				label: '安检情况',
+				placeholder: '请选择安检情况',
+				options: [
+					{
+						name: '正常安检',
+						value: 2
+					},
+					{
+						name: '无法安检',
+						value: 3
+					},
+					{
+						name: '客户拒检',
+						value: 5
+					}
+				]
+			},
+			refuseNote: {
+				label: '无法安检',
+				placeholder: '请输入无法安检原因'
+			},
+			refuseNote1: {
+				label: '客户拒检',
+				placeholder: '请输入客户拒检原因'
+			},
+			remarks: {
+				label: '备注',
+				placeholder: '请输入备注'
+			},
+			cylinderNum: {
+				label: '钢瓶',
+				placeholder: '请输入钢瓶数量'
+			},
+			picture: {
+				label: '拍照'
+			},
+			customerSign: {
+				label: '客户签名'
+			},
+			managerSign: {
+				label: '安检员签名'
+			}
+		}
 	}
 }
