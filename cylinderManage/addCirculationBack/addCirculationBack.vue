@@ -8,8 +8,7 @@
 						<view class="code-box">
 							<u-input type="text" class="code-input" v-model="codeKey" shape="circle" :placeholder="$t('cylinderMg.addCirculation.form.codeKey.placeholder')">
 								<view slot="suffix">
-									<u-icon @click="toScan" size="40rpx" color="#3c9cff"
-										name="scan"></u-icon>
+									<u-icon @click="toScan" size="40rpx" color="#3c9cff" name="scan"></u-icon>
 								</view>
 							</u-input>
 							<u-button class="code-btn" type="primary" shape="circle" size="small" @click="searchCode">{{$t('cylinderMg.addCirculation.btn.conf')}}</u-button>
@@ -45,20 +44,20 @@
 			return {
 				formDataSource: [{
 						type: 'picker',
-						labelText: this.$t('cylinderMg.addCirculation.form.holderId.label'),
+						labelText: this.$t('cylinderMg.addCirculation.form.holderIdBack.label'),
 						fieldName: 'holderId',
-						placeholder: this.$t('cylinderMg.addCirculation.form.holderId.placeholder'),
+						placeholder: this.$t('cylinderMg.addCirculation.form.holderIdBack.placeholder'),
 						options: [],
 						required: true,
 						rules: [{
 							required: true,
-							message: this.$t('cylinderMg.addCirculation.form.holderId.placeholder'),
+							message: this.$t('cylinderMg.addCirculation.form.holderIdBack.placeholder'),
 							trigger: ['change', 'blur']
 						}]
 					}
 				],
 				codeKey:'',
-				nodeType: 'filling',
+				nodeType: 'recycleCylinder',
 				cylinderId: null,
 				holderType: 1,
 				holderNo: null,
@@ -101,7 +100,7 @@
 		},
 		async onLoad(options) {
 			uni.setNavigationBarTitle({
-				title: this.$t('cylinderMg.addCirculationFill.titleText')
+				title: this.$t('cylinderMg.addCirculationBack.titleText')
 			});
 			// 获取应用组织
 			await this.getOrgList()
@@ -118,7 +117,7 @@
 		methods: {
 			// 查询二维码
 			searchCode(code = null) {
-				this.codeKey = code || this.codeKey
+				this.codeKey = code||this.codeKey
 				if(!this.codeKey){
 					this.$refs.uToast.show({
 						type: 'error',
@@ -235,7 +234,6 @@
 <style lang="scss" scoped>
 	.sk-info {
 		padding: 30rpx 20rpx;
-
 		::v-deep .normalForm {
 			.u-form {
 				background: rgba(255, 255, 255, 1);

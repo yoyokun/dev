@@ -18,6 +18,34 @@
 				</template>
 			</edit-form>
 		</view>
+		
+		<view class="car-info" v-if="licenseInfo">
+			<view class="item">
+				<view class="label">{{$t('cylinderMg.addCirculationDelivery.license')}}：</view>
+				<view class="desc">{{ licenseInfo.license }}</view>
+			</view>
+			<view class="item">
+				<view class="label">{{$t('cylinderMg.addCirculationDelivery.certificateNo')}}：</view>
+				<view class="desc">{{ licenseInfo.certificateNo }}</view>
+			</view>
+			<view class="item">
+				<view class="label">{{$t('cylinderMg.addCirculationDelivery.orgName')}}：</view>
+				<view class="desc">{{ licenseInfo.orgName }}</view>
+			</view>
+			<view class="item">
+				<view class="label">{{$t('cylinderMg.addCirculationDelivery.principal')}}：</view>
+				<view class="desc">{{ licenseInfo.principal }}</view>
+			</view>
+			<view class="item">
+				<view class="label">{{$t('cylinderMg.addCirculationDelivery.linkphone')}}：</view>
+				<view class="desc">{{ licenseInfo.linkphone }}</view>
+			</view>
+			<view class="item">
+				<view class="label">{{$t('cylinderMg.addCirculationDelivery.vehicleModelName')}}：</view>
+				<view class="desc">{{ licenseInfo.vehicleModelName }}</view>
+			</view>
+		</view>
+		
 		<view class="table">
 			<us-table :table-column="tableColumn" :table-data="tableData"></us-table>
 		</view>
@@ -27,43 +55,39 @@
 </template>
 
 <script>
-	import {
-		settingMixin
-	} from '@/common/settingMixin.js'
 	import qrcode from "@/utils/reqrcode.js"
 	import {
 		cylinderArchivesFindByCodeKey,
 		cylinderFlowScanCodeByType,
-		sysOrgFindById
+		carVehicleFindByLicenseNo
 	} from '@/api/lpgManageAppApi'
 	export default {
-		mixins: [settingMixin],
 		props: {
 
 		},
 		data() {
 			return {
 				formDataSource: [{
-						type: 'picker',
-						labelText: this.$t('cylinderMg.addCirculation.form.holderId.label'),
-						fieldName: 'holderId',
-						placeholder: this.$t('cylinderMg.addCirculation.form.holderId.placeholder'),
-						options: [],
+						type: 'text',
+						labelText: this.$t('cylinderMg.addCirculation.form.carNo.label'),
+						fieldName: 'holderNo',
+						placeholder: this.$t('cylinderMg.addCirculation.form.carNo.placeholder'),
 						required: true,
 						rules: [{
 							required: true,
-							message: this.$t('cylinderMg.addCirculation.form.holderId.placeholder'),
+							message: this.$t('cylinderMg.addCirculation.form.carNo.placeholder'),
 							trigger: ['change', 'blur']
 						}]
 					}
 				],
 				codeKey:'',
-				nodeType: 'filling',
+				nodeType: 'carDistribution',
 				cylinderId: null,
-				holderType: 1,
-				holderNo: null,
+				holderType: 3,
 				holderName: null,
+				holderId: null,
 				formDataValue: {},
+				licenseInfo: null,
 				tableColumn: [{
 					prop: 'cylinderNo',
 					label: this.$t('cylinderMg.addCirculation.tableColumn.cylinderNo'),
@@ -101,13 +125,9 @@
 		},
 		async onLoad(options) {
 			uni.setNavigationBarTitle({
-				title: this.$t('cylinderMg.addCirculationFill.titleText')
+				title: this.$t('cylinderMg.addCirculationDelivery.titleText')
 			});
-			// 获取应用组织
-			await this.getOrgList()
-			this.formDataSource[0].options = this.orgList
-			this.$set(this.formDataValue, 'holderId', this.userInfo.orgId)
-			await this.getHolderInfo(this.formDataValue.holderId)
+			await this.getHolderInfo(this.formDataValue.holderNo)
 		},
 		onUnload() {
 
@@ -187,9 +207,9 @@
 				let params = {
 					nodeType: this.nodeType, // 流转环节
 					holderType: this.holderType, // 持有人类型，1组织，2客户，3车辆，4供应商/检测厂 5，成员
-					holderId: this.formDataValue.holderId, // 持有人ID
+					holderId: this.holderId, // 持有人ID
 					holderName: this.holderName, // 持有人名称
-					holderNo: this.holderNo, // 持有人编号
+					holderNo: this.formDataValue.holderNo, // 持有人编号
 					cylinderId: this.cylinderId // 钢瓶ID
 				}
 				const {
@@ -205,23 +225,27 @@
 					})
 				}
 			},
-			async getHolderInfo(id) {
+			async getHolderInfo(license) {
 				const {
 					returnValue: res
-				} = await sysOrgFindById({
-					id: id
+				} = await carVehicleFindByLicenseNo({
+					license: license || ''
 				})
 				if (res) {
-					this.holderName = res.name // 持有人名称
-					this.holderNo = res.orgNo // 持有人编号
+					this.licenseInfo = res
+					this.holderName = res.license // 持有人名称
+					this.holderId = res.id // 持有人id
+				} else {
+					this.holderName = this.formDataValue.holderNo // 持有人名称
+					this.holderId = '' // 持有人编号
+					this.licenseInfo = null
 				}
 			},
 			// 表单
 			async changeForm(e) {
 				let params = e.queryParams
-				if (params.holderId && params.holderId != this.formDataValue
-					.holderId) {
-					this.getHolderInfo(params.holderId)
+				if (e.type == 'blur' && e.name == 'holderNo' && params.holderNo) {
+					this.getHolderInfo(params.holderNo)
 				}
 				this.formDataValue = params
 			},
@@ -235,7 +259,39 @@
 <style lang="scss" scoped>
 	.sk-info {
 		padding: 30rpx 20rpx;
-
+		.car-info{
+			border-radius: 20rpx;
+			background: white;
+			padding: 30rpx;
+			margin-top: 30rpx;
+			box-shadow: 0px 2px 4px rgba(0,0,0,0.04);
+			display: flex;
+			flex-wrap: wrap;
+			.item{
+				margin-right: 30rpx;
+				width: calc((100% - 30rpx) / 2);
+				display: flex;
+				font-size: 28rpx;
+				line-height: 34rpx;
+				color: rgba(112, 112, 112, 1);
+				margin-top: 20rpx;
+				&:nth-child(-n+2){
+					margin-top: 0;
+				}
+				&:nth-child(2n){
+					margin-right: 0;
+				}
+				.label{
+					min-width: 140rpx;
+				}
+				.desc{
+					color: rgba(56, 56, 56, 1);
+					word-break: break-all;
+					width: 1px;
+					flex: 1;
+				}
+			}
+		}
 		::v-deep .normalForm {
 			.u-form {
 				background: rgba(255, 255, 255, 1);

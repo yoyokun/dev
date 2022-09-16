@@ -280,5 +280,93 @@ module.exports = {
 				placeholder: ['开始日期', '选择日期'],
 			},
 		},
-	}
+	},
+	// 添加流转记录
+	addCirculation: {
+		form: {
+			holderId: {
+				label: '充装组织',
+				placeholder: '请选择充装组织'
+			},
+			holderIdRe:{
+				label: '接收组织',
+				placeholder: '请选择接收组织'
+			},
+			holderIdBack:{
+				label: '回瓶组织',
+				placeholder: '请选择回瓶组织'
+			},
+			carNo: {
+				label: '车牌号码',
+				placeholder: '请输入车牌号码'
+			},
+			customerName: {
+				label: '客户',
+				placeholder: '请选择客户'
+			},
+			supplierName:{
+				label: '供应商',
+				placeholder: '请选择供应商'
+			},
+			userName:{
+				label: '提货人',
+				placeholder: '请选择提货人'
+			},
+			codeKey: {
+				label: '钢瓶码',
+				placeholder: '请输入钢瓶二维码'
+			},
+		},
+		tableColumn: {
+			cylinderNo: '瓶身编号',
+			codeKey: '钢瓶二维码',
+			modelName: '钢瓶型号',
+			holderName: '产权人',
+		},
+		tips: {
+			errImg: '二维码图片错误，请重新上传',
+			errCode: '该二维码无效'
+		},
+		btn:{
+			conf:'确定'
+		},
+	},
+	// 添加充装流转记录
+	addCirculationFill: {
+		titleText: '充装流转',
+	},
+	// 添加车辆配送流转记录
+	addCirculationDelivery: {
+		titleText: '车辆配送流转',
+		license: '车牌号码',
+		certificateNo: '行驶证编号',
+		orgName: '车辆归属',
+		principal: '车辆负责人',
+		linkphone: '联系电话',
+		vehicleModelName: '车辆类型',
+	},
+	// 添加组织接收流转
+	addCirculationReceive: {
+		titleText: '组织接收流转',
+	},
+	// 客户回瓶流转
+	addCirculationBack: {
+		titleText: '客户回瓶流转',
+	},
+	// 确认送达流转
+	addCirculationService: {
+		titleText: '确认送达流转',
+		customerNo: '客户编号',
+		customerName: '客户名称',
+		phone: '联系电话',
+		orgName: '归属组织',
+	},
+	// 钢瓶检验流转
+	addCirculationTest:{
+		titleText: '钢瓶检验流转',
+	},
+	// 送气工提货流转
+	addCirculationTake:{
+		titleText: '送气工提货流转',
+	},
 }

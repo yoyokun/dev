@@ -2,22 +2,25 @@
 	<view class="sk-info">
 		<view class="form">
 			<edit-form ref="dialogForm" labelWidth="80" classForm="normalForm" :form-data-source="formDataSource"
-				:form-data-value="formDataValue" @change="changeForm">
+				:form-data-value="formDataValue" @change="changeForm" @chooseUser="chooseUser">
 				<template v-slot:other>
 					<u-form-item required :label="$t('cylinderMg.addCirculation.form.codeKey.label')">
 						<view class="code-box">
-							<u-input type="text" class="code-input" v-model="codeKey" shape="circle" :placeholder="$t('cylinderMg.addCirculation.form.codeKey.placeholder')">
+							<u-input type="text" class="code-input" v-model="codeKey" shape="circle"
+								:placeholder="$t('cylinderMg.addCirculation.form.codeKey.placeholder')">
 								<view slot="suffix">
-									<u-icon @click="toScan" size="40rpx" color="#3c9cff"
-										name="scan"></u-icon>
+									<u-icon @click="toScan" size="40rpx" color="#3c9cff" name="scan"></u-icon>
 								</view>
 							</u-input>
-							<u-button class="code-btn" type="primary" shape="circle" size="small" @click="searchCode">{{$t('cylinderMg.addCirculation.btn.conf')}}</u-button>
+							<u-button class="code-btn" type="primary" shape="circle" size="small" @click="searchCode">
+								{{$t('cylinderMg.addCirculation.btn.conf')}}
+							</u-button>
 						</view>
 					</u-form-item>
 				</template>
 			</edit-form>
 		</view>
+
 		<view class="table">
 			<us-table :table-column="tableColumn" :table-data="tableData"></us-table>
 		</view>
@@ -27,40 +30,36 @@
 </template>
 
 <script>
-	import {
-		settingMixin
-	} from '@/common/settingMixin.js'
 	import qrcode from "@/utils/reqrcode.js"
 	import {
 		cylinderArchivesFindByCodeKey,
 		cylinderFlowScanCodeByType,
-		sysOrgFindById
+		sysManagerFindById
 	} from '@/api/lpgManageAppApi'
 	export default {
-		mixins: [settingMixin],
 		props: {
 
 		},
 		data() {
 			return {
 				formDataSource: [{
-						type: 'picker',
-						labelText: this.$t('cylinderMg.addCirculation.form.holderId.label'),
-						fieldName: 'holderId',
-						placeholder: this.$t('cylinderMg.addCirculation.form.holderId.placeholder'),
-						options: [],
+					type: 'chooseBtn',
+					labelText: this.$t('cylinderMg.addCirculation.form.userName.label'),
+					fieldName: 'userName',
+					placeholder: this.$t('cylinderMg.addCirculation.form.userName.placeholder'),
+					required: true,
+					func: 'chooseUser',
+					rules: [{
 						required: true,
-						rules: [{
-							required: true,
-							message: this.$t('cylinderMg.addCirculation.form.holderId.placeholder'),
-							trigger: ['change', 'blur']
-						}]
-					}
-				],
-				codeKey:'',
-				nodeType: 'filling',
+						message: this.$t('cylinderMg.addCirculation.form.userName.placeholder'),
+						trigger: ['change', 'blur']
+					}]
+				}],
+				codeKey: '',
+				nodeType: 'workPick',
 				cylinderId: null,
-				holderType: 1,
+				holderType: 5,
+				holderId: null,
 				holderNo: null,
 				holderName: null,
 				formDataValue: {},
@@ -101,25 +100,41 @@
 		},
 		async onLoad(options) {
 			uni.setNavigationBarTitle({
-				title: this.$t('cylinderMg.addCirculationFill.titleText')
+				title: this.$t('cylinderMg.addCirculationTake.titleText')
 			});
-			// 获取应用组织
-			await this.getOrgList()
-			this.formDataSource[0].options = this.orgList
-			this.$set(this.formDataValue, 'holderId', this.userInfo.orgId)
-			await this.getHolderInfo(this.formDataValue.holderId)
+			uni.$on('chooseUser', (data) => {
+				setTimeout(async () => {
+					this.formDataValue = {
+						userName: data.name
+					}
+					this.holderId = data.linkId
+					await this.getHolderInfo(this.holderId)
+				},10)
+			})
 		},
 		onUnload() {
-
+			uni.$off('chooseUser')
 		},
 		onShow() {
-
 		},
 		methods: {
+			async getHolderInfo(id) {
+				uni.showLoading()
+				const {
+					returnValue: res
+				} = await sysManagerFindById({
+					id: id
+				})
+				if (res) {
+					this.holderName = res.name // 持有人名称
+					this.holderNo = res.empNo // 持有人编号
+				}
+				uni.hideLoading()
+			},
 			// 查询二维码
 			searchCode(code = null) {
 				this.codeKey = code || this.codeKey
-				if(!this.codeKey){
+				if (!this.codeKey) {
 					this.$refs.uToast.show({
 						type: 'error',
 						message: this.$t('cylinderMg.addCirculation.tips.errCode')
@@ -187,7 +202,7 @@
 				let params = {
 					nodeType: this.nodeType, // 流转环节
 					holderType: this.holderType, // 持有人类型，1组织，2客户，3车辆，4供应商/检测厂 5，成员
-					holderId: this.formDataValue.holderId, // 持有人ID
+					holderId: this.holderId, // 持有人ID
 					holderName: this.holderName, // 持有人名称
 					holderNo: this.holderNo, // 持有人编号
 					cylinderId: this.cylinderId // 钢瓶ID
@@ -205,25 +220,16 @@
 					})
 				}
 			},
-			async getHolderInfo(id) {
-				const {
-					returnValue: res
-				} = await sysOrgFindById({
-					id: id
-				})
-				if (res) {
-					this.holderName = res.name // 持有人名称
-					this.holderNo = res.orgNo // 持有人编号
-				}
-			},
 			// 表单
 			async changeForm(e) {
 				let params = e.queryParams
-				if (params.holderId && params.holderId != this.formDataValue
-					.holderId) {
-					this.getHolderInfo(params.holderId)
-				}
 				this.formDataValue = params
+			},
+			// 选择客户
+			chooseUser() {
+				this.goto('/infoManage/chooseUser/chooseUser', {
+					userIds: this.holderId,
+				})
 			},
 		},
 		options: {
@@ -258,17 +264,21 @@
 		.table {
 			margin-top: 30rpx;
 		}
-		.code-box{
+
+
+		.code-box {
 			width: 100%;
 			display: flex;
 			align-items: center;
-			.code-input{
+
+			.code-input {
 				flex: 1;
 				width: 1rpx;
 				margin-right: 30rpx;
 			}
-			.code-btn{
-				width: 100rpx!important;
+
+			.code-btn {
+				width: 100rpx !important;
 			}
 		}
 	}

@@ -228,6 +228,12 @@
 						"navigationBarTitleText": "选择单据",
 						"enablePullDownRefresh": true
 					}
+				},{
+					"path" : "chooseUser/chooseUser",
+					"style" : {
+						"navigationBarTitleText": "选择组织成员",
+						"enablePullDownRefresh": true
+					}
 				}
 				,{
 					"path" : "cylinderArchivesList/cylinderArchivesList",
@@ -338,8 +344,50 @@
 				{
 					"path" : "addCirculationFill/addCirculationFill",
 					"style" : {
-						"navigationBarTitleText": "充装",
-						"enablePullDownRefresh": true
+						"navigationBarTitleText": "充装流转",
+						"enablePullDownRefresh": false
+					}	
+				},
+				{
+					"path" : "addCirculationDelivery/addCirculationDelivery",
+					"style" : {
+						"navigationBarTitleText": "车辆配送流转",
+						"enablePullDownRefresh": false
+					}	
+				},
+				{
+					"path" : "addCirculationReceive/addCirculationReceive",
+					"style" : {
+						"navigationBarTitleText": "组织接收流转",
+						"enablePullDownRefresh": false
+					}	
+				},
+				{
+					"path" : "addCirculationBack/addCirculationBack",
+					"style" : {
+						"navigationBarTitleText": "客户回瓶流转",
+						"enablePullDownRefresh": false
+					}	
+				},
+				{
+					"path" : "addCirculationService/addCirculationService",
+					"style" : {
+						"navigationBarTitleText": "确认送达流转",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path" : "addCirculationTest/addCirculationTest",
+					"style" : {
+						"navigationBarTitleText": "钢瓶检验流转",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path" : "addCirculationTake/addCirculationTake",
+					"style" : {
+						"navigationBarTitleText": "送气工提货流转",
+						"enablePullDownRefresh": false
 					}	
 				}
 			]

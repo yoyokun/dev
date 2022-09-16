@@ -31,16 +31,12 @@
 								<text class="label">{{$t('chooseGoods.propertyNames')}}</text>
 								<text class="txt">{{val.propertyNames}}</text>
 							</view>
-							<block v-if="val.assistUnitsList&&val.assistUnitsList.length">
-								<view class="item" v-for="(i,k) in val.assistUnitsList" :key="k">
+							<block v-if="val.assistUnitsList&&val.assistUnitsList.length" v-for="(i,k) in val.assistUnitsList" :key="k">
+								<view class="item" v-if="i.unitsName&&i.netContent">
 									<text class="label">{{i.unitsName}}</text>
 									<text class="txt">{{i.netContent}}</text>
 								</view>
 							</block>
-							<!-- <view class="item">
-								<text class="label">{{$t('chooseGoods.netContent')}}</text>
-								<text class="txt">{{val['netContent-' + val.assistUnitsList[0].assistUnitsId]}}</text>
-							</view> -->
 							<view class="item">
 								<text class="label">{{$t('chooseGoods.listPrice')}}</text>
 								<text class="txt">{{val.listPrice}}</text>
@@ -322,8 +318,9 @@
 					flex-wrap: wrap;
 
 					.item {
-						min-width: calc(100% / 3);
+						width: calc(100% / 3);
 						display: flex;
+						// padding: 0 10rpx;
 						// width: fit-content;
 						// align-items: center;
 						align-items: flex-start;
@@ -341,6 +338,7 @@
 							// width: 1px;
 							// flex: 1;
 							color: #000;
+							// word-break: break-all;
 						}
 					}
 				}
@@ -355,10 +353,19 @@
 						padding: 30rpx 0;
 						border-bottom: 1px solid #E5E5E5;
 						margin-top: 0;
-						line-height: 58rpx;
-
+						// line-height: 58rpx;
+						
 						.item {
+							margin-bottom: 20rpx;
 							flex-wrap: wrap;
+							padding: 0 2rpx;
+							box-sizing: border-box;
+							&:nth-last-child(-n+3){
+								margin-bottom: 0;
+							}
+							.txt{
+								word-break: break-all;
+							}
 						}
 					}
 
