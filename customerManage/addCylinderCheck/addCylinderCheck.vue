@@ -1,33 +1,30 @@
 <template>
 	<view class="gp-info">
-
 		<view class="form">
 			<edit-form ref="dialogForm" labelWidth="100" classForm="normalForm" :form-data-source="formDataSource"
-				:form-data-value="formDataValue" @change="changeForm" @chooseCustomer="chooseCustomer">
+				:form-data-value="formDataValue">
 				<template v-slot:other>
-
-					<view class="form-item require">
-						<view class="item-top">
-							<view class="label">{{$t('addCylinderCheck.form.customerName.label')}}</view>
-							<view class="desc" @click="chooseCustomer">
-								<input disabled type="text"
-									:placeholder="customArr.length?'':$t('addCylinderCheck.form.customerName.placeholder')" />
+					<u-form-item required :label="$t('addCylinderCheck.form.customerName.label')">
+						<view class="item-top" @click="chooseCustomer">
+							<view class="desc">
+								<text v-if="customArr.length === 0">{{$t('addCylinderCheck.form.customerName.placeholder')}}</text>
 							</view>
 							<u-icon name="arrow-right" class="arrow"></u-icon>
 						</view>
-						<view class="item-bottom" @click="chooseCustomer" v-if="customArr.length">
+					</u-form-item>
+					<view class="form-item" v-if="customArr.length">
+						<view class="item-bottom" @click="chooseCustomer">
 							<view class="item-cell" v-for="(item, index) in customArr" :key="index">
 								<text>{{item.name}}</text>
 								<u-icon @click.stop.native="delCustom(index)" color="#999" class="icon"
-									name="close-circle-fill" v-if="!isSave"></u-icon>
+									name="close-circle-fill" v-if="!isSave" size="20"></u-icon>
 							</view>
 						</view>
-
 					</view>
 				</template>
 			</edit-form>
 		</view>
-		<block v-if="customerInfo">
+		<block v-if="customerInfo.length">
 			<block v-for="(item,index) in customerInfo" :key='index'>
 				<view class="info-main">
 					<view class="head">
@@ -89,7 +86,6 @@
 				v-if="infos.checkState==3||infos.checkState==6" :text="$t('common.btn.toVoid')"
 				@click="handleVoid(infos)" type="error" hairline shape="circle" plain></u-button>
 		</view>
-
 		<!-- 作废 -->
 		<u-modal :show="showModal" :title="$t('common.descTle')" :closeOnClickOverlay="true"
 			:asyncClose="true" :showCancelButton="true" @cancel="closeModal" @close="closeModal" @confirm="confVoid">
@@ -117,6 +113,9 @@
 		userCylinderCheckToVoid,
 		userCylinderCheckFindCustomerIds
 	} from '@/api/lpgManageAppApi'
+	import {
+		positiveInteger
+	} from '@/utils'
 	export default {
 		data() {
 			return {
@@ -137,6 +136,11 @@
 						disabled: false,
 						placeholder: this.$t('addCylinderCheck.form.billTime.placeholder'),
 						required: true,
+						rules: [{
+							required: true,
+							message: this.$t('addCylinderCheck.form.billTime.placeholder'),
+							trigger: ['change', 'blur']
+						}]
 					},
 					{
 						type: 'text',
@@ -146,10 +150,10 @@
 						disabled: false
 					}
 				],
-				customerInfo: null,
+				customerInfo: [],
 				tableColumn: [{
-						prop: 'standardName',
-						label: this.$t('addCylinderCheck.tableColumn.standardName'),
+						prop: 'showName',
+						label: this.$t('addCylinderCheck.tableColumn.showName'),
 						width: '200rpx',
 						align: 'center'
 					},
@@ -226,9 +230,6 @@
 			uni.$off('chooseCustomer')
 		},
 		methods: {
-			changeForm(e) {
-				this.formDataValue = e.queryParams
-			},
 			changeEdit(isSave = this.isSave) {
 				this.isSave = isSave
 				if (isSave) {
@@ -243,12 +244,7 @@
 			},
 			// 转化正整数
 			checkNum(e, key, index) {
-				this.customerInfo[index].userCylinderCheckDetailList[key].checkStockNum = e.detail.value
-				let nums = Math.abs(Math.round(e.detail.value))
-				this.$nextTick(function() {
-					this.customerInfo[index].userCylinderCheckDetailList[key].checkStockNum = nums
-				});
-
+				this.customerInfo[index].userCylinderCheckDetailList[key].checkStockNum = positiveInteger(e.detail.value)
 			},
 			// 删除客户
 			delCustom(index) {
@@ -389,55 +385,56 @@
 			},
 			// 保存数据
 			async saveData() {
-				if (!this.formDataValue.billTime || !(this.customerInfo&&this.customerInfo.length)) {
-					this.$refs.uToast.show({
-						type: 'error',
-						message: this.$t('addCylinderCheck.tipsTxt'),
-					})
-					return
-				}
-				let data = {
-					...this.formDataValue
-				}
-				data.billTimeStr = this.UnixToDate(data.billTime)
-				delete data.customArr
-				delete data.billTime
-				data.id = this.editId || ''
-				data.checkDetailData = []
-				this.customerInfo.forEach((item, index) => {
-					let obj = {
-						id: item.id,
-						customerId: item.customerId,
-						userCylinderCheckData: []
-					}
-					item.userCylinderCheckDetailList.forEach((val, key) => {
-						obj.userCylinderCheckData.push({
-							id: val.id || '',
-							standardId: val.standardId,
-							standardName: val.standardName,
-							systemStockNum: val.systemStockNum,
-							checkStockNum: val.checkStockNum
+				this.$refs.dialogForm.handleSubmit(async (data) => {
+					if (!(this.customerInfo&&this.customerInfo.length)) {
+							this.$refs.uToast.show({
+								type: 'error',
+								message: this.$t('addCylinderCheck.form.customerName.placeholder'),
+							})
+							return
+						}
+						data.billTimeStr = this.UnixToDate(data.billTime)
+						delete data.billTime
+						data.id = this.editId || ''
+						data.checkDetailData = []
+						this.customerInfo.forEach((item, index) => {
+							let obj = {
+								id: item.id,
+								customerId: item.customerId,
+								userCylinderCheckData: []
+							}
+							item.userCylinderCheckDetailList.forEach((val, key) => {
+								if(val.checkStockNum !== '') {
+									obj.userCylinderCheckData.push({
+										id: val.id || '',
+										stockSetId: val.stockSetId,
+										showName: val.showName,
+										systemStockNum: val.systemStockNum,
+										checkStockNum: val.checkStockNum
+									})
+								}
+							})
+							data.checkDetailData.push(obj)
 						})
-					})
-					data.checkDetailData.push(obj)
+						data.checkDetailData = JSON.stringify(data.checkDetailData)
+						const {
+							returnValue: res,
+							message
+						} = await userCylinderCheckSaveOrEdit(data)
+						if (res) {
+							this.$refs.uToast.show({
+								type: 'success',
+								message: message,
+							})
+							setTimeout(() => {
+								uni.navigateBack({
+									delta: 1
+								})
+							}, 1500)
+						}
+					
 				})
-				data.checkDetailData = JSON.stringify(data.checkDetailData)
-				const {
-					returnValue: res,
-					message
-				} = await userCylinderCheckSaveOrEdit(data)
-				if (res) {
-					this.$refs.uToast.show({
-						type: 'success',
-						message: message,
-					})
-					setTimeout(() => {
-						uni.navigateBack({
-							delta: 1
-						})
-					}, 1500)
-				}
-			},
+				},
 			// 计算差异
 			countDiffNum(data) {
 				return this.$bigDecimal.round(this.$bigDecimal.subtract(data.checkStockNum, data.systemStockNum), 2)
@@ -449,28 +446,11 @@
 					titleObject: titleObject
 				} = await userCylinderCheckFindById(params)
 				let customArr = []
-				// 获取显示的sku
-				let column = null
-				let skuId = []
-				titleObject.tableColumn.forEach((item, index) => {
-					if (item.prop == 'standardCheckNum') {
-						column = item
-					}
-				})
-				if (column.childrenList.length > 0) {
-					column.childrenList.forEach((item, index) => {
-						skuId.push(item.defaultId)
-					})
-				}
-				// 过滤多余sku
 				res.userCylinderCheckCustomerVoList.forEach((item, index) => {
-					let skuArr = []
 					customArr.push({
 						id: item.customerId,
 						name: item.customerName
 					})
-					item.userCylinderCheckDetailList = item.userCylinderCheckDetailList.filter((val => skuId
-						.indexOf(val.standardId) > -1))
 				})
 				this.customArr = customArr
 				if (this.editId) {
@@ -521,10 +501,9 @@
 		.btn {
 			width: 632rpx;
 			margin: 60rpx auto;
-			@include flexMixin();
-
-			.u-button {
-				margin: 0rpx 10rpx;
+			@include flexMixin(column);
+			.u-button{
+				margin: 20rpx 10rpx;
 			}
 		}
 
@@ -532,35 +511,30 @@
 			border-radius: 20rpx;
 			background: white;
 			box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.04);
-
-			.form-item {
+			.item-top {
+				width: 100%;
 				display: flex;
 				align-items: center;
-				font-size: 15px;
-				line-height: 15px;
-				min-height: 46rpx;
-				border-bottom: 1px solid #eee;
-				padding: 20rpx 20rpx;
-				flex-wrap: wrap;
-
-				.item-top {
-					width: 100%;
-					display: flex;
-					align-items: center;
-					font-size: 15px;
-					line-height: 15px;
+				font-size: 30rpx;
+				line-height: 50rpx;
+				.desc {
+					width: 1px;
+					flex: 1;
+					font-size: 28rpx;
+					color: #606266;
 				}
-
+			}
+			.form-item {
+				padding: 0rpx 20rpx 20rpx 20rpx;
 				.item-bottom {
 					width: 100%;
-					border-radius: 20rpx;
+					border-radius: 10rpx;
 					background: rgba(247, 247, 247, 1);
 					padding: 24rpx 20rpx;
-					margin-top: 20rpx;
 					display: flex;
 					flex-wrap: wrap;
 					padding-top: 0;
-
+					box-sizing: border-box;
 					.item-cell {
 						display: flex;
 						align-items: center;
@@ -570,40 +544,11 @@
 						background: rgba(0, 0, 0, 0.06);
 						margin-right: 20rpx;
 						margin-top: 24rpx;
-
+						font-size: 30rpx;
 						.icon {
 							margin-left: 30rpx;
 						}
 					}
-				}
-
-				&.require {
-					position: relative;
-
-					&::before {
-						content: '*';
-						color: red;
-						position: absolute;
-						display: none;
-						// display: block;
-						left: 8rpx;
-					}
-				}
-
-				.label {
-					min-width: 100px;
-				}
-
-				.desc {
-					width: 1px;
-					flex: 1;
-					font-size: 28rpx;
-				}
-
-				.arrow {}
-
-				input {
-					font-size: 15px;
 				}
 			}
 		}

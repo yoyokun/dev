@@ -453,12 +453,11 @@ module.exports = {
 		titleText: '添加钢瓶盘点',
 		titleTextEdit: '编辑钢瓶盘点',
 		tableColumn: {
-			standardName: '规格',
+			showName: '商品',
 			systemStockNum: '系统数据',
 			checkStockNum: '盘点数',
 			diffNum: '差异数',
 		},
-		tipsTxt: '必填项不能为空',
 		stateTxt: ['启用', '禁用'],
 		floorTxt: '楼层',
 		doorNo: '门牌号',
