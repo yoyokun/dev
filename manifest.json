@@ -9,7 +9,7 @@
         "optimization" : {
             "subPackages" : false
         },
-				"runmode" : "liberate", // 开启分包优化后，必须配置资源释放模式
+        "runmode" : "liberate", // 开启分包优化后，必须配置资源释放模式
         "safearea" : {
             "bottom" : {
                 "offset" : "none"
@@ -164,6 +164,7 @@
                     // "target" : "http://192.168.0.218:8099", //目标接口域名
                     // "target" : "http://192.168.0.194:8085", //目标接口域名
                     "target" : "http://192.168.0.203", //目标接口域名
+
                     // "target" : "http://qxt.cygmgs.com", //目标接口域名
                     // "target" : "http://192.168.0.194:8085", //目标接口域名
                     "changeOrigin" : true, //是否跨域

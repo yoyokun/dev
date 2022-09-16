@@ -130,17 +130,15 @@
 					return
 				}
 				this.$refs.dialogForm.handleSubmit(async (data) => {
-					uni.showLoading()
 					const {
 						returnValue: res
 					} = await cylinderArchivesFindByCodeKey({
 						codeKey: this.codeKey
-					})
+					},this.$t('cylinderMg.addCirculation.loadTxt.finding'))
 					if (res) {
 						this.cylinderId = res.id // 钢瓶ID
 						await this.saveData()
 					} else {
-						uni.hideLoading()
 						this.$refs.uToast.show({
 							type: 'error',
 							message: this.$t('cylinderMg.addCirculation.tips.errCode')
@@ -198,8 +196,7 @@
 				const {
 					returnValue: res,
 					message
-				} = await cylinderFlowScanCodeByType(params)
-				uni.hideLoading()
+				} = await cylinderFlowScanCodeByType(params,this.$t('cylinderMg.addCirculation.loadTxt.saving'))
 				if (res) {
 					this.tableData.push(res)
 					this.$refs.uToast.show({
@@ -210,8 +207,7 @@
 			},
 			// 表单
 			async changeForm(e) {
-				let params = e.queryParams
-				this.formDataValue = params
+				
 			},
 			// 选择客户
 			chooseSupplier() {

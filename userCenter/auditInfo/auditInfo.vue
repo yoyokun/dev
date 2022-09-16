@@ -214,6 +214,7 @@
 					title: message,
 					icon: 'none'
 				})
+				this.getInfo(this.editId)
 				this.closePopup()
 
 			},

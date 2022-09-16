@@ -4,7 +4,8 @@
 			<view v-for="(item,index) in dataList" :key="item.id" class="chooseCommonBox" @click="chooseBox(index)">
 				<view class="center">
 					<view class="name">{{ item.name }}</view>
-					<text class="des">{{ item.phone }}</text>
+					<text class="des">{{ item.org.name }}</text>
+					<text class="des">{{ item.shop.name }}</text>
 				</view>
 				<image class="icon" v-if="item.active" mode="widthFix" src="/static/image/check.png" />
 				<image class="icon" v-else mode="widthFix" src="/static/image/uncheck.png" />
@@ -42,19 +43,18 @@
 		},
 		methods: {
 			// 属性标签最后一级数组合并
-			arrayMergingCommon(res, childs = []) {
-				res.forEach((v, i) => {
-					if (v.type === 3) {
-						// 最后一级
-						const obj = v
-						childs.push(obj)
-					} else {
-						if (v.children) {
-							this.arrayMergingCommon(v.children, childs)
-						}
-					}
+			arrayMergingCommon(res) {
+				let arr = []
+				res.forEach((item, index) => {
+					item.children.forEach((val, key) => {
+						val.children.forEach(o => {
+							o.shop = val
+							o.org = item
+							arr.push(o)
+						})
+					})
 				})
-				return childs
+				return arr
 			},
 			// 获取
 			async sysOrgWithEmp() {
@@ -70,7 +70,7 @@
 						ids.push(this.userIds)
 					}
 					arr.forEach(v => {
-						if (ids.indexOf(v.linkId) > -1) {
+						if (ids.indexOf(v.id) > -1) {
 							v.active = true
 						} else {
 							v.active = false
