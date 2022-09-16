@@ -9,6 +9,7 @@
 				<description :label="$t('security.addPatrolCheck.unitAddress')">{{ info.unitAddress }}</description>
 				<description :label="$t('security.addPatrolCheck.orgName')">{{ info.orgName }}</description>
 				<description :label="$t('security.addPatrolCheck.managerName')">{{ info.managerName }}</description>
+				<description :label="$t('security.addPatrolCheck.state')">{{ info.state | state }}</description>
 				<description :label="$t('security.addPatrolCheck.form.assetFacilityVos.label')">
 					<view v-for="(subItem,indexSub) in assetFacilityVos" :key="indexSub" class="box-case">
 						<text>{{ subItem.name }}-{{subItem.typeName}}</text>
@@ -50,15 +51,17 @@
 			:form-data-source="formDataSource1"
 			:form-data-value="formDataValue1">
 			<template v-slot:other>
-				<u-form-item v-if="endDecide.includes('2')" :label="$t('security.addPatrolCheck.form.customerSign.label')" borderBottom>
+				<u-form-item v-if="endDecide.includes('2')" :label="$t('security.addPatrolCheck.form.customerSign.label')" :borderBottom="endDecide.includes('3')">
 					<view class="singnImg" @click="signCanvas(1)">
 						<image class="img" v-if="customerSign" :src="customerSign" mode="widthFix"></image>
+						<text v-else class="text">点击签名</text>
 					</view>
 					<u-icon name="arrow-right" color="#666666" size="15" @click="signCanvas(1)"></u-icon> 
 				</u-form-item>
 				<u-form-item v-if="endDecide.includes('3')" :label="$t('security.addPatrolCheck.form.managerSign.label')">
-					<view class="singnImg"  @click="signCanvas(2)">
+					<view class="singnImg" @click="signCanvas(2)">
 						<image class="img" v-if="managerSign" :src="managerSign" mode="widthFix"></image>
+						<text v-else class="text">点击签名</text>
 					</view>
 					<u-icon name="arrow-right" color="#666666" size="15" @click="signCanvas(2)"></u-icon> 
 				</u-form-item>
@@ -77,10 +80,18 @@
 </template>
 
 <script>
+let that = null
 import { riskPollingSaveOrEdit, riskPollingFindById, riskPollingDeleteByIds, riskUnitFindById } from '@/api/lpgSecurityManageApi.js'
 import { settingMixin } from '@/common/settingMixin.js'
 export default {
 	mixins: [settingMixin],
+	// 过滤器
+	filters: {
+		state(value) {
+			const stateObj = that.$t('security.patrolCheckList.stateObj')
+			return stateObj[value] || ''
+		}
+	},
   data() {
     return {
 			isEdit: false,
@@ -166,6 +177,7 @@ export default {
 					type: 'textarea',
 					labelText: this.$t('security.addPatrolCheck.form.remarks.label'),
 					fieldName: 'remarks',
+					borderBottom: true,
 					placeholder: this.$t('security.addPatrolCheck.form.remarks.placeholder'),
 					maxlength: 100
 				},
@@ -215,6 +227,9 @@ export default {
 			}
 		})
 	},
+	async created(){
+		that = this
+	},
   methods: {
 		// 初始化
 		async init() {
@@ -237,6 +252,18 @@ export default {
 			const name = obj.name // 改变的字段
 			if (name === 'unitId' && queryParams.unitId) {
 				this.riskUnitChange(queryParams.unitId)
+			} else if (name === 'orgId' && queryParams.orgId) {
+				// 归属组织变化，查归属成员
+				await this.getManagerFindList({ orgId: queryParams.orgId })
+				this.formDataSource[1].options = this.managerList
+				if (queryParams.orgId === this.userInfo.orgId) {
+					// 默认归属成员
+					queryParams.managerId = this.userInfo.id
+				} else {
+					// 重置归属成员
+					queryParams.managerId = ''
+				}
+				this.formDataValue = queryParams
 			}
 		},
 		// 选择风险单元改变
@@ -252,6 +279,11 @@ export default {
 				this.endDecide = res.endDecide ? res.endDecide.Split(',') : []
 				if(this.endDecide.includes('1')) {
 					this.formDataSource1[2].show = true
+					if(this.endDecide.includes('2') || this.endDecide.includes('3')) {
+						this.formDataSource1[2].borderBottom = true
+					} else {
+						this.formDataSource1[2].borderBottom = false
+					}
 				} else {
 					this.formDataSource1[2].show = false
 				}
@@ -273,32 +305,46 @@ export default {
     },
     // 提交
     submitForm() {
-			this.$refs.dialogForm.handleSubmit(async(data) => {
+			if(this.editId) {
 				this.$refs.dialogForm1.handleSubmit(async(parma) => {
-					const obj = Object.assign(data,parma)
-					obj.id = this.editId || ''
-					obj.managerSign = this.managerSign
-					obj.customerSign = this.customerSign
-					obj.picture = this.$options.filters.isArrayToString(data.picture)
-					if (obj.levelId) {
-						const findIndex = this.riskLevelList.findIndex(item => item.value === obj.levelId)
-						obj.levelName = this.riskLevelList[findIndex].name
-					}
-					const { returnValue: res, message } = await riskPollingSaveOrEdit(obj)
-					if (res) {
-						this.$refs.uToast.show({
-							type: 'success',
-							message: message,
-						})
-						setTimeout(() => {
-							uni.navigateBack({
-								delta: 1
-							})
-						}, 2000)
-					}
+					const obj = parma
+					obj.orgId = this.info.orgId
+					obj.unitId = this.info.unitId
+					obj.managerId = this.info.managerId
+					this.handleSave(obj)
 				})
-			})
+			} else {
+				this.$refs.dialogForm.handleSubmit(async(data) => {
+					this.$refs.dialogForm1.handleSubmit(async(parma) => {
+						const obj = Object.assign(data,parma)
+						this.handleSave(obj)
+					})
+				})
+			}
     },
+		// 保存
+		async handleSave(obj) {
+			obj.id = this.editId || ''
+			obj.managerSign = this.managerSign
+			obj.customerSign = this.customerSign
+			obj.picture = this.$options.filters.isArrayToString(obj.picture)
+			if (obj.levelId) {
+				const findIndex = this.riskLevelList.findIndex(item => item.value === obj.levelId)
+				obj.levelName = this.riskLevelList[findIndex].name
+			}
+			const { returnValue: res, message } = await riskPollingSaveOrEdit(obj)
+			if (res) {
+				this.$refs.uToast.show({
+					type: 'success',
+					message: message,
+				})
+				setTimeout(() => {
+					uni.navigateBack({
+						delta: 1
+					})
+				}, 2000)
+			}
+		},
 		// 删除
 		handleDelete() {
 			uni.showModal({
@@ -331,6 +377,7 @@ export default {
 			this.formDataSource1.forEach(v=>{
 				v.disabled = false
 			})
+			this.$refs.dialogForm1.resetPicker('levelId', [0], [0])
 		},
 		// 签名
 		signCanvas(type) {
@@ -395,6 +442,9 @@ export default {
 	flex: 1;
 	.img{
 		width: 200rpx;
+	}
+	.text{
+		color: rgba(166, 166, 166, 1);
 	}
 }
 .description{

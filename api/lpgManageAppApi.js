@@ -1097,3 +1097,17 @@ export function cylinderArchivesFindByCodeKey(data = {}, message = '', custom = 
 		}
 	})
 }
+// 客户管理 客户详情(含列表信息)
+export function userCustomerFindByIdList(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/userCustomer/findById_list',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}

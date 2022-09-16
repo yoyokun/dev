@@ -18,7 +18,8 @@ import {
 	sysManagerFindList
 } from '@/api/loginApi.js'
 import {
-	riskUnitFindList
+	riskUnitFindList,
+	safeTemplateFindList
 } from '@/api/lpgSecurityManageApi.js'
 export const settingMixin = {
 	data() {
@@ -42,6 +43,7 @@ export const settingMixin = {
 			safeLevelList: [], // 安检风险等级
 			riskLevelList: [], // 巡检风险等级
 			billType: [], // 单据类型
+			templateList: [], // 安检模板
 		}
 	},
 	methods: {
@@ -485,6 +487,18 @@ export const settingMixin = {
 				})
 			})
 			this.riskLevelList = riskLevelList
+		},
+		// 获取组织模板列表
+		async getTemplateList(data = {}, type = 'id') {
+			const { returnValue: res } = await safeTemplateFindList(data)
+			const templateList = []
+			res.forEach(v => {
+				templateList.push({
+					name: v.name,
+					value: v[type]
+				})
+			})
+			this.templateList = templateList
 		},
 	}
 }

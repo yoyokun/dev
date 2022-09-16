@@ -122,7 +122,7 @@ export default {
 					placeholder: this.$t('addWork.form.customerIdPlace'),
 					maxlength: 30,
 					required: true,
-					show: true,
+					show: false,
 					disabled: false,
 					func: 'chooseCustomer',
 					rules: [
@@ -330,6 +330,7 @@ export default {
 					this.formDataSource[1].show = false
 					this.formDataSource[2].show = true
 				} else {
+					this.customerId = res.customerId
 					this.formDataSource[1].show = true
 					this.formDataSource[2].show = false
 				}
@@ -367,6 +368,8 @@ export default {
 					data.id = this.editId || ''
 					if (data.formKey === 'polling') {
 						data.customerId = data.unitId
+					} else {
+						data.customerId = this.customerId
 					}
 					const { returnValue: res, message } = await auditWorkSaveOrEdit(data)
 					if (res) {
