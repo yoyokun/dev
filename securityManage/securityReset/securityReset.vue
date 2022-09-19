@@ -13,7 +13,8 @@
 								</view>
 							</u-input>
 							<u-button class="code-btn" type="primary" shape="circle" size="small" @click="searchCode">
-								{{$t('cylinderMg.addCirculation.btn.conf')}}</u-button>
+								{{$t('cylinderMg.addCirculation.btn.conf')}}
+							</u-button>
 						</view>
 					</u-form-item>
 				</template>
@@ -110,9 +111,9 @@
 					codeKey: this.codeKey
 				}, this.$t('cylinderMg.addCirculation.loadTxt.finding'))
 				if (res) {
-					if(res.securityState==2){
+					if (res.securityState == 2) {
 						this.saveData(res)
-					}else{
+					} else {
 						this.$refs.uToast.show({
 							type: 'error',
 							message: this.$t('security.securityReset.tips.noSecurity')
@@ -128,19 +129,16 @@
 			// 扫码
 			async toScan() {
 				// #ifdef APP-PLUS
-				var result = await permision.requestAndroidPermission("android.permission.CAMERA")
-				if (result === 1) {
-					uni.scanCode({
-						success: async (res) => {
-							if (res.result) {
-								const code = await this.decodeQr(res.result)
-								if(code){
-									this.searchCode(code)
-								}
+				uni.scanCode({
+					success: async (res) => {
+						if (res.result) {
+							const code = await this.decodeQr(res.result)
+							if (code) {
+								this.searchCode(code)
 							}
 						}
-					});
-				}
+					}
+				});
 				// #endif
 				// #ifdef H5
 				uni.chooseImage({
@@ -159,7 +157,7 @@
 								})
 							} else {
 								const code = await this.decodeQr(imgRes)
-								if(code){
+								if (code) {
 									this.searchCode(code)
 								}
 							}
@@ -173,7 +171,9 @@
 				const {
 					isSuccess: res,
 					message
-				} = await assetCodeFillingState({codeKeys:this.codeKey}, this.$t('cylinderMg.addCirculation.loadTxt.saving'))
+				} = await assetCodeFillingState({
+					codeKeys: this.codeKey
+				}, this.$t('cylinderMg.addCirculation.loadTxt.saving'))
 				if (res) {
 					this.tableData.push(data)
 					this.$refs.uToast.show({

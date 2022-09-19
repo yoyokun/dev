@@ -116,7 +116,8 @@
 				}
 				setTimeout(() => {
 					this.$AppReady.then(async () => {
-						if (this.$Route.path == '/securityManage/cylinderArrive/cylinderArrive') {
+						if (this.$Route.path ==
+							'/securityManage/cylinderArrive/cylinderArrive') {
 							const {
 								returnValue: res,
 								returnObject
@@ -125,8 +126,12 @@
 							})
 							if (res === null || res.state !== 2) {
 								uni.showModal({
-									title: this.$t('security.cylinderArrive.modalTips.tle')[0],
-									content: this.$t('security.cylinderArrive.modalTips').tips(0),
+									title: this.$t(
+										'security.cylinderArrive.modalTips.tle'
+										)[0],
+									content: this.$t(
+											'security.cylinderArrive.modalTips')
+										.tips(0),
 									success: async (res) => {
 										if (res.confirm) {
 											this.$navigateTo(
@@ -137,8 +142,12 @@
 								})
 							} else if (res.result === 2) {
 								uni.showModal({
-									title: this.$t('security.cylinderArrive.modalTips.tle')[1],
-									content: this.$t('security.cylinderArrive.modalTips').tips(1,res.levelName),
+									title: this.$t(
+										'security.cylinderArrive.modalTips.tle'
+										)[1],
+									content: this.$t(
+											'security.cylinderArrive.modalTips')
+										.tips(1, res.levelName),
 									confirmText: '继续送达',
 									cancelText: '去安检',
 									success: async (res) => {
@@ -179,8 +188,8 @@
 		onShow() {},
 		methods: {
 			// 移除二维码
-			removeCode(key){
-				this.codeKeysArr.splice(key,1)
+			removeCode(key) {
+				this.codeKeysArr.splice(key, 1)
 			},
 			// 过滤二维码字符
 			changeCodeKey(e) {
@@ -193,7 +202,7 @@
 			// 重置数据
 			restData() {
 				this.formDataValue = {
-					customerName:''
+					customerName: ''
 				}
 				this.codeKeysArr = []
 				this.cylinderNum = ''
@@ -241,7 +250,7 @@
 				} else {
 					uni.showModal({
 						title: this.$t('security.cylinderArrive.modalTips.tle')[2],
-						content: this.$t('security.cylinderArrive.modalTips').tips(2,this.codeKey),
+						content: this.$t('security.cylinderArrive.modalTips').tips(2, this.codeKey),
 						success: async (res) => {
 							if (res.confirm) {
 								const {
@@ -265,19 +274,16 @@
 			// 扫码
 			async toScan() {
 				// #ifdef APP-PLUS
-				var result = await permision.requestAndroidPermission("android.permission.CAMERA")
-				if (result === 1) {
-					uni.scanCode({
-						success: async (res) => {
-							if (res.result) {
-								const code = await this.decodeQr(res.result)
-								if(code){
-									this.searchCode(code)
-								}
+				uni.scanCode({
+					success: async (res) => {
+						if (res.result) {
+							const code = await this.decodeQr(res.result)
+							if (code) {
+								this.searchCode(code)
 							}
 						}
-					});
-				}
+					}
+				});
 				// #endif
 				// #ifdef H5
 				uni.chooseImage({
@@ -296,7 +302,7 @@
 								})
 							} else {
 								const code = await this.decodeQr(imgRes)
-								if(code){
+								if (code) {
 									this.searchCode(code)
 								}
 							}

@@ -162,19 +162,16 @@
 			// 扫码
 			async toScan() {
 				// #ifdef APP-PLUS
-				var result = await permision.requestAndroidPermission("android.permission.CAMERA")
-				if (result === 1) {
-					uni.scanCode({
-						success: async (res) => {
-							if (res.result) {
-								const code = await this.decodeQr(res.result)
-								if(code){
-									this.searchCode(code)
-								}
+				uni.scanCode({
+					success: async (res) => {
+						if (res.result) {
+							const code = await this.decodeQr(res.result)
+							if(code){
+								this.searchCode(code)
 							}
 						}
-					});
-				}
+					}
+				});
 				// #endif
 				// #ifdef H5
 				uni.chooseImage({
