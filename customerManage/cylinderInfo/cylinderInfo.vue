@@ -13,18 +13,18 @@
 		</view>
 		<view class="gp-list" v-for="(item, index) in dataList" :key="index">
 			<view class="head">
-				<text>{{item.orderBillNo}}</text>
+				<text>{{item.goodsName}}</text>
 				<text class="time">{{item.createTime | dayjs}}</text>
 			</view>
 			<view class="ihead">
 				<text>{{item.orgName}}</text>
-				<text class="red">{{$t('cylinderInfo.borrow')}}</text>
+				<text class="red">{{item.inOutReasonName}}</text>
 			</view>
 			<view class="list-item">
 				<text>{{item.goodsNo}}</text>
-				<text>{{item.goodsName}}</text>
+				<text>{{item.propertyNames}}</text>
 				<text>{{item.standardName}}</text>
-				<text>{{item.residueNum}}{{$t('cylinderInfo.unit')}}</text>
+				<text>{{item.stockNum}}{{$t('cylinderInfo.unit')}}</text>
 			</view>
 		</view>
 	</view>
@@ -35,7 +35,7 @@
 		userCustomerfindByIdDefault
 	} from '@/api/lpgManageAppApi'
 	import {
-		findCylinderListByCustomerId
+		userCustomerStockLogFindList
 	} from '@/api/lpgSalesManageApi'
 	import {
 		UnixToDate
@@ -87,7 +87,7 @@
 				}
 				const {
 					returnValue: res,
-				} = await findCylinderListByCustomerId(data)
+				} = await userCustomerStockLogFindList(data)
 				this.dataList = res
 			},
 			// 详情

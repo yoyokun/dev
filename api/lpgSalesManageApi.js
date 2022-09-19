@@ -264,6 +264,21 @@ export function findCylinderListByCustomerId(data = {}, message = '', custom = {
 	})
 }
 
+// 客户钢瓶汇总列表 查询钢瓶商品详情-【某个客户钢瓶情况】
+export function userCustomerStockLogFindList(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/userCustomerStockLog/findList',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+
 // 库存管理/出入库单记录 根据条件查询列表信息
 export function stockBillLogFindList(data = {}, message = '', custom = {}) {
 	return request({

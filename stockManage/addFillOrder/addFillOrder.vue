@@ -894,10 +894,9 @@
 		.btn {
 			width: 632rpx;
 			margin: 60rpx auto;
-			@include flexMixin();
-
-			.u-button {
-				margin: 0rpx 10rpx;
+			@include flexMixin(column);
+			.u-button{
+				margin: 20rpx 10rpx;
 			}
 		}
 	}

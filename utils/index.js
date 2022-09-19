@@ -51,6 +51,62 @@ export function isNumber(val) {
 		return false
 	}
 }
+// 只能输入正整数(过滤其他字符返回)
+export function positiveInteger(val) {
+  if (val !== '' && val !== undefined && val !== null) {
+    val = val.replace(/[^\d]/g, '') // 清除“数字”以外的字符
+    return val ? parseInt(val) : ''
+  }
+  return ''
+}
+// 只能输入整数(过滤其他字符返回)(正数负数)
+export function integer(val) {
+  if (val !== '' && val !== undefined && val !== null) {
+    val = val.replace(/[^-\d]/g, '') // 清除“数字”以外的字符
+    val = val.replace(/\-{2,}/g, '-') // 只保留第一个- 清除多余的.
+    val = val.replace('-', '$#$').replace(/\-/g, '').replace('$#$', '-')
+    if (val.indexOf('-') !== -1) {
+      return val
+    } else {
+      return val ? parseInt(val) : ''
+    }
+  }
+  return ''
+}
+// 只能输入正金额，两位小数(过滤其他字符返回)
+export function positiveCheckPrice(val) {
+  if (val !== '' && val !== undefined && val !== null) {
+    val = val.replace(/[^\d.]/g, '') // 清除“数字”和“.”以外的字符
+    val = val.replace(/^\./g, '') // 验证第一个字符是数字而不是.
+    val = val.replace(/\.{2,}/g, '.') // 只保留第一个. 清除多余的.
+    val = val.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.')
+    const re = /([0-9]+.[0-9]{2})[0-9]*/
+    val = val.replace(re, '$1')
+    if (val.indexOf('.') !== -1) {
+      return val
+    } else {
+      return val ? parseFloat(val) : ''
+    }
+  }
+  return ''
+}
+// 只能输入正金额，五位小数(过滤其他字符返回)
+export function positiveCheckTon(val) {
+  if (val !== '' && val !== undefined && val !== null) {
+    val = val.replace(/[^\d.]/g, '') // 清除“数字”和“.”以外的字符
+    val = val.replace(/^\./g, '') // 验证第一个字符是数字而不是.
+    val = val.replace(/\.{2,}/g, '.') // 只保留第一个. 清除多余的.
+    val = val.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.')
+    const re = /([0-9]+.[0-9]{5})[0-9]*/
+    val = val.replace(re, '$1')
+    if (val.indexOf('.') !== -1) {
+      return val
+    } else {
+      return val ? parseFloat(val) : ''
+    }
+  }
+  return ''
+}
 // 只能输入金额，两位小数(过滤其他字符返回)(正数负数)
 export function checkPrice(val) {
   if (val !== '' && val !== undefined && val !== null) {
