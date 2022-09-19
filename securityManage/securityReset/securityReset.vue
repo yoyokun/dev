@@ -34,8 +34,7 @@
 	import qrcode from "@/utils/reqrcode.js"
 	import {
 		cylinderArchivesFindByCodeKey,
-		cylinderFlowScanCodeByType,
-		sysOrgFindById
+		assetCodeFillingState
 	} from '@/api/lpgManageAppApi'
 	export default {
 		mixins: [settingMixin],
@@ -44,25 +43,8 @@
 		},
 		data() {
 			return {
-				formDataSource: [{
-					type: 'picker',
-					labelText: this.$t('cylinderMg.addCirculation.form.holderIdBack.label'),
-					fieldName: 'holderId',
-					placeholder: this.$t('cylinderMg.addCirculation.form.holderIdBack.placeholder'),
-					options: [],
-					required: true,
-					rules: [{
-						required: true,
-						message: this.$t('cylinderMg.addCirculation.form.holderIdBack.placeholder'),
-						trigger: ['change', 'blur']
-					}]
-				}],
+				formDataSource: [],
 				codeKey: '',
-				nodeType: 'recycleCylinder',
-				cylinderId: null,
-				holderType: 1,
-				holderNo: null,
-				holderName: null,
 				formDataValue: {},
 				tableColumn: [{
 					prop: 'cylinderNo',
@@ -101,13 +83,9 @@
 		},
 		async onLoad(options) {
 			uni.setNavigationBarTitle({
-				title: this.$t('cylinderMg.addCirculationBack.titleText')
+				title: this.$t('security.securityReset.titleText')
 			});
-			// 获取应用组织
-			await this.getOrgList()
-			this.formDataSource[0].options = this.orgList
-			this.$set(this.formDataValue, 'holderId', this.userInfo.orgId)
-			await this.getHolderInfo(this.formDataValue.holderId)
+
 		},
 		onUnload() {
 
@@ -117,7 +95,7 @@
 		},
 		methods: {
 			// 查询二维码
-			searchCode(code = null) {
+			async searchCode(code = null) {
 				this.codeKey = code || this.codeKey
 				if (!this.codeKey) {
 					this.$refs.uToast.show({
@@ -126,23 +104,26 @@
 					})
 					return
 				}
-				this.$refs.dialogForm.handleSubmit(async (data) => {
-					const {
-						returnValue: res
-					} = await cylinderArchivesFindByCodeKey({
-						codeKey: this.codeKey
-					},this.$t('cylinderMg.addCirculation.loadTxt.finding'))
-					if (res) {
-						this.cylinderId = res.id // 钢瓶ID
-						await this.saveData()
-					} else {
+				const {
+					returnValue: res
+				} = await cylinderArchivesFindByCodeKey({
+					codeKey: this.codeKey
+				}, this.$t('cylinderMg.addCirculation.loadTxt.finding'))
+				if (res) {
+					if(res.securityState==2){
+						this.saveData(res)
+					}else{
 						this.$refs.uToast.show({
 							type: 'error',
-							message: this.$t('cylinderMg.addCirculation.tips.errCode')
+							message: this.$t('security.securityReset.tips.noSecurity')
 						})
-
 					}
-				})
+				} else {
+					this.$refs.uToast.show({
+						type: 'error',
+						message: this.$t('cylinderMg.addCirculation.tips.errCode')
+					})
+				}
 			},
 			// 扫码
 			async toScan() {
@@ -188,45 +169,21 @@
 				// #endif
 			},
 			// 保存数据
-			async saveData() {
-				let params = {
-					nodeType: this.nodeType, // 流转环节
-					holderType: this.holderType, // 持有人类型，1组织，2客户，3车辆，4供应商/检测厂 5，成员
-					holderId: this.formDataValue.holderId, // 持有人ID
-					holderName: this.holderName, // 持有人名称
-					holderNo: this.holderNo, // 持有人编号
-					cylinderId: this.cylinderId // 钢瓶ID
-				}
+			async saveData(data) {
 				const {
-					returnValue: res,
+					isSuccess: res,
 					message
-				} = await cylinderFlowScanCodeByType(params,this.$t('cylinderMg.addCirculation.loadTxt.saving'))
+				} = await assetCodeFillingState({codeKeys:this.codeKey}, this.$t('cylinderMg.addCirculation.loadTxt.saving'))
 				if (res) {
-					this.tableData.push(res)
+					this.tableData.push(data)
 					this.$refs.uToast.show({
 						type: 'success',
 						message: message,
 					})
 				}
 			},
-			async getHolderInfo(id) {
-				const {
-					returnValue: res
-				} = await sysOrgFindById({
-					id: id
-				})
-				if (res) {
-					this.holderName = res.name // 持有人名称
-					this.holderNo = res.orgNo // 持有人编号
-				}
-			},
 			// 表单
-			async changeForm(e) {
-				let params = e.queryParams
-				if (e.name == 'holderId' && params.holderId) {
-					this.getHolderInfo(params.holderId)
-				}
-			},
+			async changeForm(e) {},
 		},
 		options: {
 			styleIsolation: 'shared'

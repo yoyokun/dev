@@ -91,8 +91,7 @@
 		</view>
 
 		<!-- 作废 -->
-		<u-modal :show="showModal" :title="$t('common.descTle')" :closeOnClickOverlay="true"
-			:asyncClose="true" :showCancelButton="true" @cancel="closeModal" @close="closeModal" @confirm="confVoid">
+		<u-modal :show="showModal" :title="$t('common.descTle')" :closeOnClickOverlay="true" :showCancelButton="true" @cancel="closeModal" @close="closeModal" @confirm="confVoid">
 			<view class="modal-main">
 				<view>{{$t('common.descTips')}}</view>
 				<u-textarea v-model="modalParams.value" maxlength="100" class="modal-text" confirmType="done"
@@ -457,7 +456,7 @@
 						column = item
 					}
 				})
-				if (column.childrenList.length > 0) {
+				if (column&&column.childrenList&&column.childrenList.length > 0) {
 					column.childrenList.forEach((item, index) => {
 						skuId.push(item.defaultId)
 					})
