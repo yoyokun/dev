@@ -3,6 +3,7 @@ module.exports = {
 	circulationInfoList: {
 		titleText: '钢瓶流转信息',
 		modelName: '钢瓶型号',
+		codeKey: '钢瓶二维码',
 		flowNodeStr: '流转环节',
 		operator: '操作员',
 		operationTime: '更新时间',

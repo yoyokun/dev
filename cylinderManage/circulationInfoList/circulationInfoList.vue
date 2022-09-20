@@ -18,6 +18,10 @@
 							<view class="desc">{{item.modelName}}</view>
 						</view>
 						<view class="item">
+							<view class="label">{{$t('cylinderMg.circulationInfoList.codeKey')}}：</view>
+							<view class="desc">{{item.codeKey}}</view>
+						</view>
+						<view class="item">
 							<view class="label">{{$t('cylinderMg.circulationInfoList.flowNodeStr')}}：</view>
 							<view class="desc">{{item.flowNodeStr}}</view>
 						</view>

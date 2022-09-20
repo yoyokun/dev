@@ -176,6 +176,18 @@
 						"navigationBarTitleText": "我的整改",
 						"enablePullDownRefresh": false
 					}
+				},{
+					"path" : "systemMessage/systemMessage",
+					"style" : {
+						"navigationBarTitleText": "系统消息",
+						"enablePullDownRefresh": false
+					}
+				},{
+					"path" : "notice/notice",
+					"style" : {
+						"navigationBarTitleText": "公告通知",
+						"enablePullDownRefresh": false
+					}
 				}
 			]
 		},

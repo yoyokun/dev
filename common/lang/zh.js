@@ -1151,5 +1151,15 @@ module.exports = {
 	cylinderBindCode: {
 		titleText: '绑码记录',
 	},
-
+	// 系统消息
+	systemMessage: {
+		titleText: '系统消息',
+		viewBtn: '立即查看',
+	},
+	// 公告通知
+	notice: {
+		titleText: '公告通知',
+		source: '来源',
+		clickNum: '阅读'
+	},
 }

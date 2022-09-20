@@ -1099,8 +1099,8 @@ export function cylinderArchivesFindByCodeKey(data = {}, message = '', custom = 
 }
 // 客户管理 客户详情(含列表信息)
 export function userCustomerFindByIdList(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/info/userCustomer/findById_list',
+	return request({
+		url: baseURL + '/admin/info/userCustomer/findById_list',
 		method: 'post',
 		data,
 		message,
@@ -1171,6 +1171,21 @@ export function sysManagerFindById(data = {}, message = '', custom = {}) {
 export function assetCodeFillingState(data = {}, message = '', custom = {}) {
 	return request({
 		url: baseURL + '/admin/info/assetCode/fillingState',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+
+// 消息管理 系统消息查阅
+export function sysMessageHistoryDataById(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/sysMessage/historyDataById',
 		method: 'post',
 		data,
 		message,
