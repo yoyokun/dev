@@ -446,7 +446,7 @@ export default {
 					queryParams.thickness = this.sysSpecification[findIndex].designThickness // 设计壁厚
 					this.formDataValue = queryParams
 				}
-			} else if (name === 'codeKey' && queryParams.codeKey) {
+			} else if (obj.type == 'blur' && name === 'codeKey' && queryParams.codeKey) {
 				// 查询二维码存在，不存在新增
 				this.getCodeKey(queryParams.codeKey)
 			} else if (name === 'ownerType' && queryParams.ownerType ) {
@@ -565,37 +565,10 @@ export default {
 			if(!this.isSave){
 				return false
 			}
-			// #ifdef APP-PLUS
-			// 判断有无权限
-			var result = await permision.requestAndroidPermission("android.permission.CAMERA")
-			if (result === 1) {
-				uni.scanCode({
-					success: (res) => {
-						if (res.result) {
-							this.getCodeKey(res.result)
-						}
-					}
-				});
+			const code = await this.decodeQr()
+			if(code){
+				this.getCodeKey(code)
 			}
-			// #endif
-			// #ifdef H5
-			uni.chooseImage({
-				count: 1,
-				sourceType: ["camera"],
-				sizeType: ["original"],
-				success: (res) => {
-					const resFile = res.tempFilePaths[0]
-					qrcode.decode(resFile)
-					qrcode.callback = (imgRes) => {
-						if (imgRes === "error decoding QR Code") {
-							uni.$u.toast(this.$t('addCylinderArchives.codeErr'))
-						} else {
-							this.getCodeKey(imgRes)
-						}
-					}
-				}
-			});
-			// #endif
 		},
 		// 查询二维码是否存在
 		async getCodeKey(codeKey) {

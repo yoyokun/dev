@@ -42,7 +42,6 @@ export default {
 			}
 			return ''
 		},
-
 		// 扫码解析二维码
 		async decodeQr() {
 			return new Promise((resolved, rejected) => {
@@ -75,6 +74,7 @@ export default {
 					sizeType: ["original"],
 					success: async (res) => {
 						const resFile = res.tempFilePaths[0]
+						// 解析二维码
 						qrcode.decode(resFile)
 						qrcode.callback = async (imgRes) => {
 							if (imgRes === "error decoding QR Code") {
@@ -85,12 +85,12 @@ export default {
 										)
 								})
 							} else {
+								// 解析出来是链接，通过链接查询二维码code
 								const {
 									returnValue: code
 								} = await sysConfigParsingCodeKey({
 										url: imgRes,
-									}, this.$t(
-										'cylinderMg.addCirculation.loadTxt.finding'))
+									}, this.$t('cylinderMg.addCirculation.loadTxt.finding'))
 								resolved(code)
 							}
 						}

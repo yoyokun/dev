@@ -9,8 +9,8 @@
 		<block v-if="empty">
 			<view class="gp-box" v-if="dataList.length">
 				<view class="gp-main" v-for="(item, index) in dataList" :key="index">
-					<view class="head" v-if="item.billNo">
-						<text>{{item.billNo}}</text>
+					<view class="head" v-if="item.codeKey">
+						<text>{{item.codeKey}}</text>
 					</view>
 					<view class="main-box">
 						<view class="item">

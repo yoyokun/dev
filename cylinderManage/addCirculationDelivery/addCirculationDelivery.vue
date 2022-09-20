@@ -30,10 +30,6 @@
 				<view class="desc">{{ licenseInfo.certificateNo }}</view>
 			</view>
 			<view class="item">
-				<view class="label">{{$t('cylinderMg.addCirculationDelivery.orgName')}}：</view>
-				<view class="desc">{{ licenseInfo.orgName }}</view>
-			</view>
-			<view class="item">
 				<view class="label">{{$t('cylinderMg.addCirculationDelivery.principal')}}：</view>
 				<view class="desc">{{ licenseInfo.principal }}</view>
 			</view>
@@ -44,6 +40,10 @@
 			<view class="item">
 				<view class="label">{{$t('cylinderMg.addCirculationDelivery.vehicleModelName')}}：</view>
 				<view class="desc">{{ licenseInfo.vehicleModelName }}</view>
+			</view>
+			<view class="item">
+				<view class="label">{{$t('cylinderMg.addCirculationDelivery.orgName')}}：</view>
+				<view class="desc">{{ licenseInfo.orgName }}</view>
 			</view>
 		</view>
 
@@ -56,7 +56,6 @@
 </template>
 
 <script>
-	import qrcode from "@/utils/reqrcode.js"
 	import {
 		cylinderArchivesFindByCodeKey,
 		cylinderFlowScanCodeByType,

@@ -4,8 +4,8 @@
 			<view v-for="(item,index) in dataList" :key="item.id" class="chooseCommonBox" @click="chooseBox(index)">
 				<view class="center">
 					<view class="name">{{ item.name }}</view>
-					<text class="des">{{ item.org.name }}</text>
 					<text class="des">{{ item.shop.name }}</text>
+					<text class="des">{{ item.org.name }}</text>
 				</view>
 				<image class="icon" v-if="item.active" mode="widthFix" src="/static/image/check.png" />
 				<image class="icon" v-else mode="widthFix" src="/static/image/uncheck.png" />
