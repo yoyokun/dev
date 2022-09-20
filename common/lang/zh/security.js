@@ -374,7 +374,9 @@ module.exports = {
 			},
 		},
 		btn:{
-			conf:'确定'
+			conf:'确定',
+			continue:'继续送达',
+			cancel:'去安检',
 		},
 		typeTxt:{
 			1:'扫码',

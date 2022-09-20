@@ -148,8 +148,8 @@
 									content: this.$t(
 											'security.cylinderArrive.modalTips')
 										.tips(1, res.levelName),
-									confirmText: '继续送达',
-									cancelText: '去安检',
+									confirmText: this.$t('security.cylinderArrive.btn.continue'),
+									cancelText: this.$t('security.cylinderArrive.btn.cancel'),
 									success: async (res) => {
 										if (res.confirm) {
 											this.restData()
