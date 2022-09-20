@@ -4,7 +4,7 @@
 			<search :searchOptions="searchOptions" @search="search"></search>
 			<view class="total">
 				<view class="num">{{$t('security.cylinderSecurityList.totolTxt')}}：<text>{{totals}}</text></view>
-				<view class="add" v-permission="{ permission:'app_cylinderCheckList_add'}"
+				<view class="add" v-permission="{ permission:'app_cylinderSecurityList_add'}"
 					@click="goto('/securityManage/addCylinderSecurity/addCylinderSecurity')">
 					<u-icon name="plus" color="#2A82E4" size="16" bold></u-icon>{{$t('common.btn.add')}}
 				</view>

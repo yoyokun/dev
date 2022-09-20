@@ -104,7 +104,7 @@
 			that = this
 		},
 		async mounted() {
-
+			
 		},
 		async onLoad(options) {
 			uni.setNavigationBarTitle({
@@ -244,7 +244,7 @@
 					returnValue: res
 				} = await assetCodeFindByKey({
 					key: this.codeKey
-				}, this.$t('security.cylinderArrive.loadTxt.finding'))
+				}, this.$t('cylinderMg.addCirculation.loadTxt.finding'))
 				if (res) {
 					this.codeKeysArr.push(this.codeKey)
 				} else {

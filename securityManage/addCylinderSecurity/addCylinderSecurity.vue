@@ -43,10 +43,10 @@
 		</view>
 
 		<view class="btn" v-else>
-			<u-button :text="$t('common.btn.delete')" type="error" hairline shape="circle" v-if="infos.state==2" plain
+			<u-button v-permission="{ permission:'app_cylinderSecurityList_delete'}" :text="$t('common.btn.delete')" type="error" hairline shape="circle" v-if="infos.state==2" plain
 				@click="handleDelete(infos)">
 			</u-button>
-			<u-button :text="$t('common.btn.toVoid')" @click="handleVoid(infos)" v-if="infos.state==1" type="error"
+			<u-button v-permission="{ permission:'app_cylinderSecurityList_invalid'}" :text="$t('common.btn.toVoid')" @click="handleVoid(infos)" v-if="infos.state==1" type="error"
 				hairline shape="circle" plain></u-button>
 		</view>
 
