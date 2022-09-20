@@ -13,7 +13,8 @@
 								</view>
 							</u-input>
 							<u-button class="code-btn" type="primary" shape="circle" size="small" @click="searchCode">
-								{{$t('cylinderMg.addCirculation.btn.conf')}}</u-button>
+								{{$t('cylinderMg.addCirculation.btn.conf')}}
+							</u-button>
 						</view>
 					</u-form-item>
 				</template>
@@ -131,7 +132,7 @@
 						returnValue: res
 					} = await cylinderArchivesFindByCodeKey({
 						codeKey: this.codeKey
-					},this.$t('cylinderMg.addCirculation.loadTxt.finding'))
+					}, this.$t('cylinderMg.addCirculation.loadTxt.finding'))
 					if (res) {
 						this.cylinderId = res.id // 钢瓶ID
 						await this.saveData()
@@ -147,33 +148,37 @@
 			// 扫码
 			async toScan() {
 				// #ifdef APP-PLUS
-				var result = await permision.requestAndroidPermission("android.permission.CAMERA")
-				if (result === 1) {
-					uni.scanCode({
-						success: (res) => {
-							if (res.result) {
-								this.searchCode(imgRes)
+				uni.scanCode({
+					success: async (res) => {
+						if (res.result) {
+							const code = await this.decodeQr(res.result)
+							if (code) {
+								this.searchCode(code)
 							}
 						}
-					});
-				}
+					}
+				});
 				// #endif
 				// #ifdef H5
 				uni.chooseImage({
 					count: 1,
 					sourceType: ["camera"],
 					sizeType: ["original"],
-					success: (res) => {
+					success: async (res) => {
 						const resFile = res.tempFilePaths[0]
 						qrcode.decode(resFile)
-						qrcode.callback = (imgRes) => {
+						qrcode.callback = async (imgRes) => {
 							if (imgRes === "error decoding QR Code") {
 								this.$refs.uToast.show({
 									type: 'error',
-									message: this.$t('cylinderMg.addCirculation.tips.errImg')
+									message: this.$t(
+										'cylinderMg.addCirculation.tips.errImg')
 								})
 							} else {
-								this.searchCode(imgRes)
+								const code = await this.decodeQr(imgRes)
+								if (code) {
+									this.searchCode(code)
+								}
 							}
 						}
 					}
@@ -193,7 +198,7 @@
 				const {
 					returnValue: res,
 					message
-				} = await cylinderFlowScanCodeByType(params,this.$t('cylinderMg.addCirculation.loadTxt.saving'))
+				} = await cylinderFlowScanCodeByType(params, this.$t('cylinderMg.addCirculation.loadTxt.saving'))
 				if (res) {
 					this.tableData.push(res)
 					this.$refs.uToast.show({

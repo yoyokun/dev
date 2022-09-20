@@ -1167,3 +1167,17 @@ export function sysManagerFindById(data = {}, message = '', custom = {}) {
 		}
 	})
 }
+// 二维码  充装更改状态
+export function assetCodeFillingState(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/info/assetCode/fillingState',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}

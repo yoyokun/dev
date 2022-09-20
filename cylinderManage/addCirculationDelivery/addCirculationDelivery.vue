@@ -6,19 +6,20 @@
 				<template v-slot:other>
 					<u-form-item required :label="$t('cylinderMg.addCirculation.form.codeKey.label')">
 						<view class="code-box">
-							<u-input type="text" class="code-input" v-model="codeKey" shape="circle" :placeholder="$t('cylinderMg.addCirculation.form.codeKey.placeholder')">
+							<u-input type="text" class="code-input" v-model="codeKey" shape="circle"
+								:placeholder="$t('cylinderMg.addCirculation.form.codeKey.placeholder')">
 								<view slot="suffix">
-									<u-icon @click="toScan" size="40rpx" color="#3c9cff"
-										name="scan"></u-icon>
+									<u-icon @click="toScan" size="40rpx" color="#3c9cff" name="scan"></u-icon>
 								</view>
 							</u-input>
-							<u-button class="code-btn" type="primary" shape="circle" size="small" @click="searchCode">{{$t('cylinderMg.addCirculation.btn.conf')}}</u-button>
+							<u-button class="code-btn" type="primary" shape="circle" size="small" @click="searchCode">
+								{{$t('cylinderMg.addCirculation.btn.conf')}}</u-button>
 						</view>
 					</u-form-item>
 				</template>
 			</edit-form>
 		</view>
-		
+
 		<view class="car-info" v-if="licenseInfo">
 			<view class="item">
 				<view class="label">{{$t('cylinderMg.addCirculationDelivery.license')}}：</view>
@@ -45,7 +46,7 @@
 				<view class="desc">{{ licenseInfo.vehicleModelName }}</view>
 			</view>
 		</view>
-		
+
 		<view class="table">
 			<us-table :table-column="tableColumn" :table-data="tableData"></us-table>
 		</view>
@@ -68,19 +69,18 @@
 		data() {
 			return {
 				formDataSource: [{
-						type: 'text',
-						labelText: this.$t('cylinderMg.addCirculation.form.carNo.label'),
-						fieldName: 'holderNo',
-						placeholder: this.$t('cylinderMg.addCirculation.form.carNo.placeholder'),
+					type: 'text',
+					labelText: this.$t('cylinderMg.addCirculation.form.carNo.label'),
+					fieldName: 'holderNo',
+					placeholder: this.$t('cylinderMg.addCirculation.form.carNo.placeholder'),
+					required: true,
+					rules: [{
 						required: true,
-						rules: [{
-							required: true,
-							message: this.$t('cylinderMg.addCirculation.form.carNo.placeholder'),
-							trigger: ['change', 'blur']
-						}]
-					}
-				],
-				codeKey:'',
+						message: this.$t('cylinderMg.addCirculation.form.carNo.placeholder'),
+						trigger: ['change', 'blur']
+					}]
+				}],
+				codeKey: '',
 				nodeType: 'carDistribution',
 				cylinderId: null,
 				holderType: 3,
@@ -139,7 +139,7 @@
 			// 查询二维码
 			searchCode(code = null) {
 				this.codeKey = code || this.codeKey
-				if(!this.codeKey){
+				if (!this.codeKey) {
 					this.$refs.uToast.show({
 						type: 'error',
 						message: this.$t('cylinderMg.addCirculation.tips.errCode')
@@ -151,7 +151,7 @@
 						returnValue: res
 					} = await cylinderArchivesFindByCodeKey({
 						codeKey: this.codeKey
-					},this.$t('cylinderMg.addCirculation.loadTxt.finding'))
+					}, this.$t('cylinderMg.addCirculation.loadTxt.finding'))
 					if (res) {
 						this.cylinderId = res.id // 钢瓶ID
 						await this.saveData()
@@ -167,33 +167,37 @@
 			// 扫码
 			async toScan() {
 				// #ifdef APP-PLUS
-				var result = await permision.requestAndroidPermission("android.permission.CAMERA")
-				if (result === 1) {
-					uni.scanCode({
-						success: (res) => {
-							if (res.result) {
-								this.searchCode(imgRes)
+				uni.scanCode({
+					success: async (res) => {
+						if (res.result) {
+							const code = await this.decodeQr(res.result)
+							if (code) {
+								this.searchCode(code)
 							}
 						}
-					});
-				}
+					}
+				});
 				// #endif
 				// #ifdef H5
 				uni.chooseImage({
 					count: 1,
 					sourceType: ["camera"],
 					sizeType: ["original"],
-					success: (res) => {
+					success: async (res) => {
 						const resFile = res.tempFilePaths[0]
 						qrcode.decode(resFile)
-						qrcode.callback = (imgRes) => {
+						qrcode.callback = async (imgRes) => {
 							if (imgRes === "error decoding QR Code") {
 								this.$refs.uToast.show({
 									type: 'error',
-									message: this.$t('cylinderMg.addCirculation.tips.errImg')
+									message: this.$t(
+										'cylinderMg.addCirculation.tips.errImg')
 								})
 							} else {
-								this.searchCode(imgRes)
+								const code = await this.decodeQr(imgRes)
+								if (code) {
+									this.searchCode(code)
+								}
 							}
 						}
 					}
@@ -213,7 +217,7 @@
 				const {
 					returnValue: res,
 					message
-				} = await cylinderFlowScanCodeByType(params,this.$t('cylinderMg.addCirculation.loadTxt.saving'))
+				} = await cylinderFlowScanCodeByType(params, this.$t('cylinderMg.addCirculation.loadTxt.saving'))
 				if (res) {
 					this.tableData.push(res)
 					this.$refs.uToast.show({
@@ -256,15 +260,17 @@
 <style lang="scss" scoped>
 	.sk-info {
 		padding: 30rpx 20rpx;
-		.car-info{
+
+		.car-info {
 			border-radius: 20rpx;
 			background: white;
 			padding: 30rpx 15rpx;
 			margin-top: 30rpx;
-			box-shadow: 0px 2px 4px rgba(0,0,0,0.04);
+			box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
 			display: flex;
 			flex-wrap: wrap;
-			.item{
+
+			.item {
 				min-width: calc((100% - 30rpx) / 2);
 				padding: 0 15rpx;
 				box-sizing: border-box;
@@ -273,14 +279,17 @@
 				line-height: 34rpx;
 				color: rgba(112, 112, 112, 1);
 				line-height: 50rpx;
-				.label{
+
+				.label {
 					min-width: 140rpx;
 				}
-				.desc{
+
+				.desc {
 					color: rgba(56, 56, 56, 1);
 				}
 			}
 		}
+
 		::v-deep .normalForm {
 			.u-form {
 				background: rgba(255, 255, 255, 1);
@@ -303,17 +312,20 @@
 		.table {
 			margin-top: 30rpx;
 		}
-		.code-box{
+
+		.code-box {
 			width: 100%;
 			display: flex;
 			align-items: center;
-			.code-input{
+
+			.code-input {
 				flex: 1;
 				width: 1rpx;
 				margin-right: 30rpx;
 			}
-			.code-btn{
-				width: 100rpx!important;
+
+			.code-btn {
+				width: 100rpx !important;
 			}
 		}
 	}

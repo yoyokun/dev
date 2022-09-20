@@ -15,8 +15,7 @@ module.exports = {
 			result: '安检结果',
 			state: '安检状态',
 			rectifyState: '整改状态',
-			classifyOptions: [
-			 {
+			classifyOptions: [{
 					name: '居民',
 					value: 1
 				},
@@ -25,8 +24,7 @@ module.exports = {
 					value: 2
 				}
 			],
-			resultOptions: [
-				{
+			resultOptions: [{
 					name: '合格',
 					value: 1
 				},
@@ -35,8 +33,7 @@ module.exports = {
 					value: 2
 				}
 			],
-			stateOptions: [
-				{
+			stateOptions: [{
 					name: '未安检',
 					value: 1
 				},
@@ -57,8 +54,7 @@ module.exports = {
 					value: 5
 				}
 			],
-			rectifyStateOptions: [
-				{
+			rectifyStateOptions: [{
 					name: '未整改',
 					value: 1
 				},
@@ -105,8 +101,7 @@ module.exports = {
 		search: {
 			classify: '客户分类',
 			state: '整改状态',
-			classifyOptions: [
-			 {
+			classifyOptions: [{
 					name: '居民',
 					value: 1
 				},
@@ -115,8 +110,7 @@ module.exports = {
 					value: 2
 				}
 			],
-			stateOptions: [
-				{
+			stateOptions: [{
 					name: '未整改',
 					value: 1
 				},
@@ -160,8 +154,7 @@ module.exports = {
 		search: {
 			unitId: '风险单元',
 			state: '巡检状态',
-			stateOptions: [
-				{
+			stateOptions: [{
 					name: '未巡检',
 					value: 1
 				},
@@ -263,8 +256,7 @@ module.exports = {
 			state: {
 				label: '安检情况',
 				placeholder: '请选择安检情况',
-				options: [
-					{
+				options: [{
 						name: '正常安检',
 						value: 2
 					},
@@ -310,5 +302,96 @@ module.exports = {
 		datetimePlace: '选择日期时间',
 		pictureName: '安检照片',
 		rectifyPicture: '整改照片'
-	}
+	},
+	// 接收钢瓶列表
+	cylinderSecurityList: {
+		titleText: '接收钢瓶',
+		totolTxt: '总数',
+		vehicleNum: '车次',
+		cylinderNum: '钢瓶数量',
+		receiveDate: '接收日期',
+		creator: '操作人',
+		createTime: '更新时间',
+		stateTxt: {
+			1: '正常',
+			2: '作废'
+		},
+		searchOptions: {
+			createDateRange: {
+				label: '接收日期',
+				placeholder: ['开始日期', '结束日期']
+			},
+		},
+	},
+	// 安检重置
+	securityReset:{
+		titleText: '安检重置',
+		tips:{
+			noSecurity:'该钢瓶码未安检'
+		}
+	},
+	// 添加接收钢瓶
+	addCylinderSecurity: {
+		titleText: '添加接收钢瓶',
+		titleTextEdit: '接收钢瓶详情',
+		sysSpecification: '钢瓶型号',
+		numPlaceholder: '输入数量',
+		baseTle: '基本信息',
+		receiveDate: '接收日期',
+		vehicleNum: '车次',
+		cylinderNum: '钢瓶数量',
+		state: '状态',
+		creator: '操作人',
+		createTime: '更新时间',
+		invalidNote: '作废原因',
+		stateTxt: {
+			1: '正常',
+			2: '作废'
+		},
+		form:{
+			receiveDateStr:{
+				label:'接收日期',
+				placeholder:'请选择接收日期'
+			},
+			cylinderNum:{
+				label:'钢瓶数量',
+				placeholder:'请输入钢瓶数量'
+			},
+		},
+	},
+	// 钢瓶送达
+	cylinderArrive: {
+		titleText: '钢瓶送达',
+		form:{
+			customerName:{
+				label:'客户',
+				placeholder:'请选择客户'
+			},
+			type:{
+				label:'送达方式'
+			},
+			nums:{
+				label:'钢瓶数量',
+				placeholder:'请输入钢瓶数量'
+			},
+			codeKey:{
+				label: '钢瓶码',
+				placeholder: '请输入钢瓶码',
+			},
+		},
+		btn:{
+			conf:'确定',
+			continue:'继续送达',
+			cancel:'去安检',
+		},
+		typeTxt:{
+			1:'扫码',
+			2:'填数',
+			3:'无',
+		},
+		modalTips:{
+			tle:['安检提示','送达提示','添加提示'],
+			tips:(index,txt='') => ['客户未安检，是否要去安检?',`客户安检结果为${txt},是否继续送达？`,`没有 ${txt}，请问要添加该二维码吗？`][index]
+		},
+	},
 }

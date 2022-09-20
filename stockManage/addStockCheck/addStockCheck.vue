@@ -140,8 +140,7 @@
 		</view>
 
 		<!-- 作废 -->
-		<u-modal :show="showModal" :title="$t('common.descTle')" :closeOnClickOverlay="true" :asyncClose="false"
-			:showCancelButton="true" @cancel="closeModal" @close="closeModal" @confirm="confVoid">
+		<u-modal :show="showModal" :title="$t('common.descTle')" :closeOnClickOverlay="true" :showCancelButton="true" @cancel="closeModal" @close="closeModal" @confirm="confVoid">
 			<view class="modal-main">
 				<view>{{$t('common.descTips')}}</view>
 				<u-textarea v-model="modalParams.value" maxlength="100" class="modal-text" confirmType="done"

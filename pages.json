@@ -516,6 +516,34 @@
 						"navigationBarTitleText": "签名",
 						"enablePullDownRefresh": false
 					}
+				},
+				{
+					"path" : "cylinderSecurityList/cylinderSecurityList",
+					"style" : {
+						"navigationBarTitleText": "钢瓶接收",
+						"enablePullDownRefresh": false
+					}	
+				},
+				{
+					"path" : "addCylinderSecurity/addCylinderSecurity",
+					"style" : {
+						"navigationBarTitleText": "添加钢瓶接收",
+						"enablePullDownRefresh": false
+					}	
+				},
+				{
+					"path" : "cylinderArrive/cylinderArrive",
+					"style" : {
+						"navigationBarTitleText": "钢瓶送达",
+						"enablePullDownRefresh": false
+					}	
+				},
+				{
+					"path" : "securityReset/securityReset",
+					"style" : {
+						"navigationBarTitleText": "安检重置",
+						"enablePullDownRefresh": false
+					}	
 				}
 			]
 		}
