@@ -254,3 +254,31 @@ export function sysOrgWithRole(data = {}, message = '', custom = {}) {
     }
   })
 }
+// 授权pc登录  二维码权健解密
+export function sysManagerDecodeCode(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/sysManager/decodeCode',
+    method: 'POST',
+    data,
+    message,
+    custom: {
+    	auth: custom?.auth || true, // 是否需要token
+    	toast: custom?.toast || true, // 弹框
+    	catch: custom?.catch || true // catch返回
+    }
+  })
+}
+// 扫码登录
+export function sysManagerLoginCode(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/sysManager/loginCode',
+    method: 'POST',
+    data,
+    message,
+    custom: {
+    	auth: custom?.auth || true, // 是否需要token
+    	toast: custom?.toast || true, // 弹框
+    	catch: custom?.catch || true // catch返回
+    }
+  })
+}

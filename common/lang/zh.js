@@ -73,6 +73,13 @@ module.exports = {
 		forget: '忘记密码？',
 		loginSuccess: '登录成功'
 	},
+	// 授权登录
+	scanCodeLogin: {
+		titleText: '扫码授权',
+		title: '登录 Windows 气讯通',
+		signIn: '登录',
+		cancel: '取消登录',
+	},
 	// 忘记密码
 	forgetPassword: {
 		titleText: '忘记密码',
@@ -99,15 +106,24 @@ module.exports = {
 	// 秘钥
 	secretKey: {
 		titleText: '秘钥',
-		chinese: '简体中文',
-		english: '英语',
-		title: '当前语言',
 		form: {
 			title: '关联软件',
 			titlePlace: '请输入关联软件',
 			titleValue: 'LPG综合管理系统',
 			key: '密钥',
-			keyPlace: '请输入密钥'
+			keyPlace: '请输入密钥',
+			lang: '当前语言',
+			langPlace: '请选择当前语言',
+			langOptions: [
+				{
+					name: '简体中文',
+					value: 'zh-CN'
+				},
+				{
+					name: '英语',
+					value: 'en-US'
+				}
+			]
 		}
 	},
 	// 我的

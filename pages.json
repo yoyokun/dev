@@ -22,7 +22,27 @@
 			},
 			"style": {
 				"navigationBarTitleText": "工作台",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"text": "\ue749",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"fontSize": "22px",
+							"float": "right"
+						}]
+					}
+				},
+				"H5": {
+					"titleNView": {
+						"buttons": [{
+							"text": "\ue749",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"fontSize": "22px",
+							"float": "right"
+						}]
+					}
+				}
 			}
 		}
 		,{
@@ -75,6 +95,16 @@
 				"navigationBarTitleText": "忘记密码",
 				"enablePullDownRefresh": false
 			}
+		}
+		,{
+			"path" : "pages/scanCodeLogin/scanCodeLogin",
+			"style" : {
+				"navigationBarTitleText": "扫码授权",
+				"enablePullDownRefresh": false,
+				"app-plus": {
+					"titleNView": false
+				}
+			}	
 		}
   ],
 	"subPackages": [

@@ -42,6 +42,26 @@ export default {
 			text: this.$t('tabbar.personal')
 		})
 	},
+	async onNavigationBarButtonTap(e) {
+		if (e.index === 0) {
+			const res = await this.decodeQrLogin()
+			if(res){
+				const data = JSON.parse(res)
+				//  1：扫描登录
+				//  2：跳转链接
+				//  3：微信支付码
+				//  4：身份卡识别码
+				//  5：工单识别码
+				//  6：设备识别码
+				//  8: 登录后token
+				if (data.codeType === "1") {
+					this.goto('/pages/scanCodeLogin/scanCodeLogin',{
+						obj: encodeURIComponent(JSON.stringify(data))
+					})
+				}
+			}
+		}
+	},
 	methods: {
 		
 	}

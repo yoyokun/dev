@@ -1,16 +1,12 @@
 <template>
   <view class="container">
-		<view class="form-box" @click="show = true">
-			<view class="title">{{$t('secretKey.title')}}</view>
-			<view class="value">{{localeText}}</view>
-			<u-icon name="arrow-right" color="#666666" size="15"></u-icon>
-		</view>
 		<edit-form
 			ref="dialogForm"
 			labelWidth="80"
 			classForm="normalForm"
 			:form-data-source="formDataSource"
 			:form-data-value="formDataValue"
+			@change="changeForm"
 			>
 			<template v-slot:extra>
 				<view class="btn">
@@ -18,15 +14,6 @@
 				</view>
 			</template>
 		</edit-form>
-		<!--选择语言-->
-		<u-picker 
-		:show="show" 
-		ref="uPicker" 
-		:closeOnClickOverlay="true" 
-		:columns="columns" 
-		@confirm="switchLang" 
-		@close="show = false"
-		@cancel="show = false"></u-picker>
 		<!-- 请求 toast 提示 -->
 		<u-toast ref='uToast'></u-toast>
   </view>
@@ -38,12 +25,20 @@ export default {
     return {
 			formDataSource: [
 				{
+					type: 'picker',
+					labelText: this.$t('secretKey.form.lang'),
+					fieldName: 'lang',
+					placeholder: this.$t('secretKey.form.langPlace'),
+					showOptions: false,
+					options: this.$t('secretKey.form.langOptions'),
+					disabled: false
+				},
+				{
 					type: 'text',
 					labelText: this.$t('secretKey.form.title'),
 					fieldName: 'title',
 					placeholder: this.$t('secretKey.form.titlePlace'),
-					readonly: true,
-					borderBottom: true
+					disabled: true
 				},
 				{
 					type: 'text',
@@ -61,22 +56,9 @@ export default {
 					]
 				}
 			],
-			formDataValue: {},
-			show: false,
-			columns: [
-				[this.$t('secretKey.chinese'), this.$t('secretKey.english')],
-			]
+			formDataValue: {}
     }
   },
-	computed: {
-		localeText() {
-			if(this.locale === 'zh-CN'){
-				return this.$t('secretKey.chinese')
-			} else if(this.locale === 'en-US'){
-				return this.$t('secretKey.english')
-			}
-		}
-	},
 	onShow() {
 		uni.setNavigationBarTitle({
 			title: this.$t('secretKey.titleText')
@@ -84,22 +66,25 @@ export default {
 	},
 	mounted() {
 		this.formDataValue = {
+			lang: this.locale,
 			title: this.$t('secretKey.form.titleValue'),
 			key: this.secretKey
 		}
 	},
   methods: {
-		switchLang({indexs}) {
-			if(indexs[0] === 0){
-				// 中文
-				this.$i18n.locale = 'zh-CN'
-				this.$store.commit('settings/SET_LOCALE','zh-CN')
-			} else if(indexs[0] === 1){
-				// 英文
-				this.$i18n.locale = 'en-US'
-				this.$store.commit('settings/SET_LOCALE','en-US')
+		// 表单改变
+		async changeForm(obj) {
+			const queryParams = obj.queryParams
+			const name = obj.name // 改变的字段
+			if (name === 'lang' && queryParams.lang) {
+				this.$i18n.locale = queryParams.lang
+				this.$store.commit('settings/SET_LOCALE',queryParams.lang)
+				setTimeout(() => {
+					uni.navigateBack({
+						delta: 1
+					})
+				}, 1000)
 			}
-			this.show = false
 		},
     // 提交
     submitForm() {

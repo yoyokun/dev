@@ -25,15 +25,24 @@ module.exports = {
 	// 秘钥
 	secretKey: {
 		titleText: 'Secret key',
-		chinese: 'ZH-Chinese',
-		english: 'English',
-		title: 'Current language',
 		form: {
 			title: 'Associated software',
 			titlePlace: 'Please enter the associated software',
 			titleValue: 'LPG Integrated management system',
 			key: 'secret key',
-			keyPlace: 'Key please enter the key'
+			keyPlace: 'Key please enter the key',
+			lang: 'Current language',
+			langPlace: 'Please choose Current language',
+			langOptions: [
+				{
+					name: 'ZH-Chinese',
+					value: 'zh-CN'
+				},
+				{
+					name: 'English',
+					value: 'en-US'
+				}
+			]
 		},
 		save: 'preservation'
 	}
