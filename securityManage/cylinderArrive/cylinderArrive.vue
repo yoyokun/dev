@@ -50,7 +50,6 @@
 	import {
 		settingMixin
 	} from '@/common/settingMixin.js'
-	import qrcode from "@/utils/reqrcode.js"
 	import {
 		safeSecurityCheckCustomerValidity,
 		safeSecurityOrderDelivery
@@ -104,7 +103,7 @@
 			that = this
 		},
 		async mounted() {
-
+			
 		},
 		async onLoad(options) {
 			uni.setNavigationBarTitle({
@@ -244,7 +243,7 @@
 					returnValue: res
 				} = await assetCodeFindByKey({
 					key: this.codeKey
-				}, this.$t('security.cylinderArrive.loadTxt.finding'))
+				}, this.$t('cylinderMg.addCirculation.loadTxt.finding'))
 				if (res) {
 					this.codeKeysArr.push(this.codeKey)
 				} else {
@@ -273,43 +272,10 @@
 			},
 			// 扫码
 			async toScan() {
-				// #ifdef APP-PLUS
-				uni.scanCode({
-					success: async (res) => {
-						if (res.result) {
-							const code = await this.decodeQr(res.result)
-							if (code) {
-								this.searchCode(code)
-							}
-						}
-					}
-				});
-				// #endif
-				// #ifdef H5
-				uni.chooseImage({
-					count: 1,
-					sourceType: ["camera"],
-					sizeType: ["original"],
-					success: async (res) => {
-						const resFile = res.tempFilePaths[0]
-						qrcode.decode(resFile)
-						qrcode.callback = async (imgRes) => {
-							if (imgRes === "error decoding QR Code") {
-								this.$refs.uToast.show({
-									type: 'error',
-									message: this.$t(
-										'cylinderMg.addCirculation.tips.errImg')
-								})
-							} else {
-								const code = await this.decodeQr(imgRes)
-								if (code) {
-									this.searchCode(code)
-								}
-							}
-						}
-					}
-				});
-				// #endif
+				const code = await this.decodeQr()
+				if(code){
+					this.searchCode(code)
+				}
 			},
 			// 表单
 			async changeForm(e) {
