@@ -304,5 +304,11 @@ module.exports = {
 				label: '安检员签名'
 			}
 		}
+	},
+	// 安检项目
+	securityCheck: {
+		datetimePlace: '选择日期时间',
+		pictureName: '安检照片',
+		rectifyPicture: '整改照片'
 	}
 }

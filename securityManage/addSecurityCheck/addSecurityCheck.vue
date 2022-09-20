@@ -1,5 +1,8 @@
 <template>
   <view class="container">
+		<view class="location" v-if="location">
+			所在位置：{{ location }}
+		</view>
 		<edit-form
 			ref="dialogForm"
 			labelWidth="80"
@@ -10,7 +13,13 @@
 			:form-data-source="formDataSource"
 			:form-data-value="formDataValue">
 		</edit-form>
-
+		<!-- 安检项目 -->
+		<security-check
+			v-if="templateInfo.safeTemplateItemVo"
+			ref="securityCheck"
+			:safe-template-item-vo="templateInfo.safeTemplateItemVo"
+			@change="changeSecurity"
+		/>
 		<!-- 安检结果 -->
 		<edit-form
 			v-if="state === 2"
@@ -61,7 +70,11 @@ let that = null
 import { userCustomerFindByIdList } from '@/api/lpgManageAppApi.js'
 import { safeSecuritySaveOrEdit, safeSecurityFindById, safeSecurityDeleteByIds, safeTemplateFindById } from '@/api/lpgSecurityManageApi.js'
 import { settingMixin } from '@/common/settingMixin.js'
+import SecurityCheck from '@/securityManage/addSecurityCheck/common/securityCheck.vue'
 export default {
+	components: {
+		SecurityCheck
+	},
 	mixins: [settingMixin],
 	// 过滤器
 	filters: {
@@ -72,6 +85,7 @@ export default {
 	},
   data() {
     return {
+			location: '',
 			isEdit: false,
 			isSave: true,
 			editId: '',
@@ -220,7 +234,7 @@ export default {
 			],
 			formDataValue: {},
 			orgId: '', // 组织id
-			state: '', // 状态
+			state: '', // 状态 2 正常安检 3 无法安检 5客户拒检
 			customerId: '', // 客户id
 			addressId: '', // 客户联系人id
 			classify: '', // 客户类型 用来查询模板
@@ -247,7 +261,8 @@ export default {
 			],
 			formDataValue1: {},
 			customerSign: '',
-			managerSign: ''
+			managerSign: '',
+			templateInfo: {} //模板详情
 		}
   },
   async onLoad(options) {
@@ -276,7 +291,7 @@ export default {
   },
 	onShow() {
 		// 添加监听事件
-		uni.$once('saveSignCanvas', (data) => {
+		uni.$on('saveSignCanvas', (data) => {
 			if(data.type === '1') {
 				this.customerSign = data.url
 			} else if(data.type === '2') {
@@ -284,22 +299,70 @@ export default {
 			}
 		})
 		// 添加监听事件
-		uni.$once('chooseCustomer', async(data) => {
+		uni.$on('chooseCustomer', async(data) => {
 			this.customerId = data.id
 			await this.getCustomerInfo(this.customerId)
 		})
 		// 添加监听事件
-		uni.$once('chooseAddress', async(data) => {
+		uni.$on('chooseAddress', async(data) => {
 			this.addressId = data.id
 			this.formDataValue = {
 				address: this.$options.filters.addressSplicing(data)
 			}
 		})
 	},
+	onUnload() {
+		uni.$off('saveSignCanvas')
+		uni.$off('chooseCustomer')
+		uni.$off('chooseAddress')
+	},
 	async created(){
 		that = this
 	},
   methods: {
+		// 获取定位
+		getLocation() {
+			// #ifdef APP-PLUS
+			var result = await permision.requestAndroidPermission("android.permission.ACCESS_FINE_LOCATION")
+			if (result === 1) {
+				// 定位
+				uni.getLocation({
+					type: 'gcj02',
+					geocode: true,
+					success: (res) => {
+						console.log("定位成功");
+						const address = res.address
+						this.location = address.city + address.district + address.street + address
+							.streetNum +
+							address.poiName
+						this.longitude = res.longitude
+						this.latitude = res.latitude
+					},
+					fail: (err) => {
+						console.log(err)
+						console.log("定位失败")
+						this.location = err.errMsg
+					}
+				});
+			} else {
+				this.location = "定位失败，未开启定位服务"
+			}
+			// #endif
+			// #ifdef H5
+			uni.getLocation({
+				success: (res) => {
+					this.longitude = res.longitude
+					this.latitude = res.latitude
+					this.LongitudeAndLatitude()
+				},
+				fail: (err) => {
+					console.log(err)
+					console.log("定位失败")
+					this.location = err.errMsg
+				}
+			});
+			// #endif
+		},
 		// 初始化
 		async init() {
 			// 获取应用组织
@@ -413,8 +476,6 @@ export default {
 				for (const key in res.safeTemplateItemVo) {
 					res.safeTemplateItemVo[key].picture = []
 				}
-				// 对象的深度拷贝  Object.assign 只能实现对象属性的一层拷贝
-				this.safeTemplateItemVo = JSON.parse(JSON.stringify(res.safeTemplateItemVo))
 				this.templateInfo = res
 				this.endDecide = res.endDecide ? res.endDecide.Split(',') : [],
 				this.cylinderCode = res.cylinderCode
@@ -449,13 +510,16 @@ export default {
     // 提交
     submitForm() {
 			if(this.state === 2) {
+				// 正常安检
 				this.$refs.dialogForm.handleSubmit(async(data) => {
 					this.$refs.dialogForm1.handleSubmit(async(parma) => {
-						const obj = Object.assign(data,parma)
+						const securityResultData = this.$refs.securityCheck.getSecurity()
+						const obj = Object.assign(data,parma,{securityResultData: JSON.stringify(securityResultData)})
 						this.handleSave(obj)
 					})
 				})
 			} else {
+				// 无法安检 客户拒检
 				this.$refs.dialogForm.handleSubmit(async(parma) => {
 					this.handleSave(parma)
 				})

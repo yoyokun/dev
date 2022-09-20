@@ -394,26 +394,31 @@ export default {
   },
 	onShow() {
 		// 添加监听事件
-		uni.$once('chooseCustomer', (data) => {
+		uni.$on('chooseCustomer', (data) => {
 			this.ownerId = data.id
 			this.formDataValue = {
 				ownerName: data.customerName
 			}
 		})
 		// 添加监听事件
-		uni.$once('chooseOrg', (data) => {
+		uni.$on('chooseOrg', (data) => {
 			this.ownerId = data.id
 			this.formDataValue = {
 				ownerName: data.name
 			}
 		})
 		// 添加监听事件
-		uni.$once('chooseSupplier', (data) => {
+		uni.$on('chooseSupplier', (data) => {
 			this.ownerId = data.id
 			this.formDataValue = {
 				ownerName: data.supplierName
 			}
 		})
+	},
+	onUnload() {
+		uni.$off('chooseCustomer')
+		uni.$off('chooseOrg')
+		uni.$off('chooseSupplier')
 	},
   methods: {
 		// 初始化

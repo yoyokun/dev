@@ -294,12 +294,15 @@ export default {
   },
 	onShow() {
 		// 添加监听事件
-		uni.$once('chooseData', (data) => {
+		uni.$on('chooseData', (data) => {
 			this.toData = data
 			setTimeout(()=>{
 				this.$refs.cdtDraggrableSort.init()
 			},1000)
 		})
+	},
+	onUnload() {
+		uni.$off('chooseData')
 	},
   methods: {
     // 详情
