@@ -4,6 +4,8 @@ import {
 import {
 	sysConfigParsingCodeKey
 } from '@/api/lpgSecurityManageApi'
+import permision from "@/common/wa-permission/permission.js"
+import qrcode from "@/utils/reqrcode.js"
 export default {
 	computed: {
 		...mapGetters(['token', 'userInfo', 'menu', 'roles', 'avatar', 'secretKey', 'printSettings', 'mapKey',
@@ -41,14 +43,64 @@ export default {
 			return ''
 		},
 
-		// 解析二维码
-		async decodeQr(url) {
-			const {
-				returnValue: res
-			} = await sysConfigParsingCodeKey({
-				url: url,
-			}, this.$t('cylinderMg.addCirculation.loadTxt.finding'))
-			return res
+		// 扫码解析二维码
+		async decodeQr() {
+			return new Promise((resolved, rejected) => {
+				// #ifdef APP-PLUS
+				var result = await permision.requestAndroidPermission("android.permission.CAMERA")
+				if (result === 1) {
+					uni.scanCode({
+						success: async (res) => {
+							if (res.result) {
+								const {
+									returnValue: code
+								} = await sysConfigParsingCodeKey({
+									url: res.result,
+								}, this.$t('cylinderMg.addCirculation.loadTxt.finding'))
+								resolved(code)
+							}
+						},
+						fail(err) {
+							rejected(err)
+						}
+					});
+				}else{
+					rejected('err')
+				}
+				// #endif
+				// #ifdef H5
+				uni.chooseImage({
+					count: 1,
+					sourceType: ["camera"],
+					sizeType: ["original"],
+					success: async (res) => {
+						const resFile = res.tempFilePaths[0]
+						qrcode.decode(resFile)
+						qrcode.callback = async (imgRes) => {
+							if (imgRes === "error decoding QR Code") {
+								this.$refs.uToast.show({
+									type: 'error',
+									message: this.$t(
+										'cylinderMg.addCirculation.tips.errImg'
+										)
+								})
+							} else {
+								const {
+									returnValue: code
+								} = await sysConfigParsingCodeKey({
+										url: imgRes,
+									}, this.$t(
+										'cylinderMg.addCirculation.loadTxt.finding'))
+								resolved(code)
+							}
+						}
+					},
+					fail(err) {
+						rejected(err)
+					}
+				});
+				// #endif
+			})
 		},
 	}
 }

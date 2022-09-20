@@ -15,7 +15,6 @@
 						</view>
 					</u-form-item>
 				</template>
-
 			</edit-form>
 		</view>
 
@@ -68,7 +67,6 @@
 	import {
 		settingMixin
 	} from '@/common/settingMixin.js'
-	import qrcode from "@/utils/reqrcode.js"
 	import {
 		safeCylinderSaveOrEdit,
 		safeCylinderFindById,
