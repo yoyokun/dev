@@ -219,13 +219,16 @@ export default {
   },
 	onShow() {
 		// 添加监听事件
-		uni.$once('saveSignCanvas', (data) => {
+		uni.$on('saveSignCanvas', (data) => {
 			if(data.type === '1') {
 				this.customerSign = data.url
 			} else if(data.type === '2') {
 				this.managerSign = data.url
 			}
 		})
+	},
+	onUnload() {
+		uni.$off('saveSignCanvas')
 	},
 	async created(){
 		that = this
@@ -306,6 +309,7 @@ export default {
     // 提交
     submitForm() {
 			if(this.editId) {
+				// 编辑
 				this.$refs.dialogForm1.handleSubmit(async(parma) => {
 					const obj = parma
 					obj.orgId = this.info.orgId
@@ -314,6 +318,7 @@ export default {
 					this.handleSave(obj)
 				})
 			} else {
+				// 添加
 				this.$refs.dialogForm.handleSubmit(async(data) => {
 					this.$refs.dialogForm1.handleSubmit(async(parma) => {
 						const obj = Object.assign(data,parma)

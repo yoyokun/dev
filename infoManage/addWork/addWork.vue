@@ -269,12 +269,15 @@ export default {
   },
 	onShow() {
 		// 添加监听事件
-		uni.$once('chooseCustomer', (data) => {
+		uni.$on('chooseCustomer', (data) => {
 			this.customerId = data.id
 			this.formDataValue = {
 				customerName: data.customerName
 			}
 		})
+	},
+	onUnload() {
+		uni.$off('chooseCustomer')
 	},
   methods: {
 		// 初始化

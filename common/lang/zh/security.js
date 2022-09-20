@@ -297,6 +297,12 @@ module.exports = {
 			}
 		}
 	},
+	// 安检项目
+	securityCheck: {
+		datetimePlace: '选择日期时间',
+		pictureName: '安检照片',
+		rectifyPicture: '整改照片'
+	},
 	// 接收钢瓶列表
 	cylinderSecurityList: {
 		titleText: '接收钢瓶',
