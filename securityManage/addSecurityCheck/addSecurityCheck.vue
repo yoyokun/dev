@@ -321,7 +321,7 @@ export default {
 	},
   methods: {
 		// 获取定位
-		getLocation() {
+		async getLocation() {
 			// #ifdef APP-PLUS
 			var result = await permision.requestAndroidPermission("android.permission.ACCESS_FINE_LOCATION")
 			if (result === 1) {

@@ -153,6 +153,13 @@
 						"enablePullDownRefresh": false
 					}
 				}
+				,{
+					"path" : "version/version",
+					"style" : {
+						"navigationBarTitleText": "关于气讯通",
+						"enablePullDownRefresh": false
+					}
+				}
 			]
 		},
 		{
