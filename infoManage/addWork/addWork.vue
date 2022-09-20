@@ -74,7 +74,7 @@
 		</edit-form>
 		<!-- 作废 -->
 		<u-modal :show="show" :title="$t('common.descTle')" :closeOnClickOverlay="true"
-			:asyncClose="true" :showCancelButton="true" @confirm="confirm" @cancel="show = false" @close="show = false">
+			:asyncClose="true" :showCancelButton="true" @confirm="confirm" @cancel="closeModal" @close="closeModal">
 			<view class="modal-main">
 				<view>{{$t('common.descTips')}}</view>
 				<u-textarea v-model="invalidNote" maxlength="100" class="modal-text" confirmType="done"
@@ -419,22 +419,29 @@ export default {
 		},
 		// 作废确认
 		async confirm() {
-			if (!this.invalidNote) {
+			const remarks = this.invalidNote.replace(/\s*/g, "")
+			if (!remarks) {
 				uni.$u.toast(this.$t('common.descPlaceholder'))
 				return false
 			}
-			const { returnValue: res, message } = await auditWorkInvalidWork({ id: this.editId, invalidNote: this.invalidNote })
+			const { returnValue: res, message } = await auditWorkInvalidWork({ 
+				id: this.editId,
+				invalidNote: remarks || '' ,
+			}).catch(err=>{
+				this.closeModal()
+			})
 			if(res){
 				this.$refs.uToast.show({
 					type: 'success',
 					message: message,
 				})
-				setTimeout(() => {
-				  uni.navigateBack({
-				    delta: 1
-				  })
-				}, 2000)
+				this.getInfo()
 			}
+			this.closeModal()
+		},
+		closeModal() {
+			this.show = false
+			this.invalidNote = ''
 		},
 		// 分派
 		handleUpdate() {

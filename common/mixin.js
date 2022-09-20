@@ -42,6 +42,56 @@ export default {
 			}
 			return ''
 		},
+		// 扫码登录
+		async decodeQrLogin() {
+			return new Promise((resolved, rejected) => {
+				// #ifdef APP-PLUS
+				var result = await permision.requestAndroidPermission("android.permission.CAMERA")
+				if (result === 1) {
+					uni.scanCode({
+						success: async (res) => {
+							if (res.result) {
+								resolved(res.result)
+							}
+						},
+						fail(err) {
+							rejected(err)
+						}
+					});
+				}else{
+					rejected('err')
+				}
+				// #endif
+				// #ifdef H5
+				uni.chooseImage({
+					count: 1,
+					sourceType: ["camera"],
+					sizeType: ["original"],
+					success: async (res) => {
+						const resFile = res.tempFilePaths[0]
+						// 解析二维码
+						qrcode.decode(resFile)
+						qrcode.callback = async (imgRes) => {
+							if (imgRes === "error decoding QR Code") {
+								this.$refs.uToast.show({
+									type: 'error',
+									message: this.$t(
+										'cylinderMg.addCirculation.tips.errImg'
+										)
+								})
+							} else {
+								// 解析出来是对象
+								resolved(imgRes)
+							}
+						}
+					},
+					fail(err) {
+						rejected(err)
+					}
+				});
+				// #endif
+			})
+		},
 		// 扫码解析二维码
 		async decodeQr() {
 			return new Promise((resolved, rejected) => {

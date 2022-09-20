@@ -3,8 +3,8 @@
 		<view v-if="empty">
 			<view class="schedule">
 				<view v-for="(item,index) in dataList" :key="index" class="box">
-					<image v-if="item.type === 1" src="/static/image/AJJL.png" mode="widthFix" class="icon"></image>
-					<image v-if="item.type === 2" src="/static/image/AJJL.png" mode="widthFix" class="icon"></image>
+					<image v-if="item.type === 1" src="/static/image/system.png" mode="widthFix" class="icon"></image>
+					<image v-if="item.type === 2" src="/static/image/message.png" mode="widthFix" class="icon"></image>
 				  <view class="content">
 						<view class="title">
 							<view class="name">{{ item.title }}</view>

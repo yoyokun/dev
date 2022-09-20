@@ -60,9 +60,10 @@ export default {
 		getInfo(item) {
 			if(item.taskType === 1){
 				// 审批
-				this.$navigateTo('/userCenter/auditInfo/auditInfo',{
-					editId: item.id
-				})
+				this.goto('/userCenter/auditInfo/auditInfo',{ editId: item.id })
+			} else if(item.taskType === 2){
+				// 工单
+				this.goto('/userCenter/userWorkInfo/userWorkInfo',{ editId: item.id })
 			}
 		}
   },

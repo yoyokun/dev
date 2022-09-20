@@ -18,7 +18,7 @@
 					<u-button :text="$t('login.signIn')" type="primary" hairline shape="circle" @click="submitForm"></u-button>
 				</view>
 				<view class="btn">
-					<u-button :text="$t('login.scanCode')" type="primary" hairline shape="circle" plain @click="submitForm"></u-button>
+					<u-button :text="$t('login.scanCode')" type="primary" hairline shape="circle" plain @click="submitCode"></u-button>
 				</view>
 			</template>
 		</edit-form>
@@ -87,7 +87,24 @@ export default {
 				  }, 2000)
 				})
 			})
-    }
+    },
+		// 扫码登录
+		async submitCode() {
+			const res = await this.decodeQrLogin()
+			if(res){
+				const arr = res.Split(',')
+				const str = arr[0].slice( 16, arr[0].length-1)
+				// 设置token
+				this.$store.commit('user/SET_TOKEN', str)
+				this.$refs.uToast.show({
+					type: 'success',
+					message: this.$t('login.loginSuccess'),
+				})
+				setTimeout(() => {
+					this.goto('/pages/index/index')
+				}, 1000)
+			}
+		}
   },
 	options:{
 		styleIsolation: 'shared'
