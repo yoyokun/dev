@@ -2,7 +2,7 @@
   <view class="container">
 		<view class="loginKey" @click="goto('/pages/secretKey/secretKey', {}, false)">{{$t('login.setting')}}</view>
 		<view class="logo">
-			<image class="img" mode="widthFix" src="/static/image/qxt_logo.png"></image>
+			<image class="img" mode="widthFix" src="@/static/image/qxt_logo.png"></image>
 			<view class="name">{{$t('login.title')}}</view>
 		</view>
 		<edit-form
@@ -92,10 +92,9 @@ export default {
 		async submitCode() {
 			const res = await this.decodeQrLogin()
 			if(res){
-				const arr = res.Split(',')
-				const str = arr[0].slice( 16, arr[0].length-1)
+				const data = JSON.parse(res)
 				// 设置token
-				this.$store.commit('user/SET_TOKEN', str)
+				this.$store.commit('user/SET_TOKEN', data.codeContent)
 				this.$refs.uToast.show({
 					type: 'success',
 					message: this.$t('login.loginSuccess'),
