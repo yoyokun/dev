@@ -31,7 +31,6 @@
 	import {
 		settingMixin
 	} from '@/common/settingMixin.js'
-	import qrcode from "@/utils/reqrcode.js"
 	import {
 		cylinderArchivesFindByCodeKey,
 		cylinderFlowScanCodeByType,
