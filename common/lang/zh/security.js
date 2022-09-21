@@ -230,8 +230,8 @@ module.exports = {
 	// 添加安检
 	addSecurityCheck: {
 		titleText: '添加安检',
-		titleTextInfo: '安检详情',
 		titleTextEdit: '编辑安检',
+		saveTit: '保存中',
 		form: {
 			customerName: {
 				label: '客户名称',
@@ -284,7 +284,8 @@ module.exports = {
 			},
 			cylinderNum: {
 				label: '钢瓶',
-				placeholder: '请输入钢瓶数量'
+				placeholder: '请输入钢瓶数量',
+				placeholderChoose: '请选择钢瓶二维码',
 			},
 			picture: {
 				label: '拍照'
@@ -295,6 +296,76 @@ module.exports = {
 			managerSign: {
 				label: '安检员签名'
 			}
+		}
+	},
+	// 安检详情
+	securityCheckInfo: {
+		titleTextInfo: '安检详情',
+		tabSwitch: [{
+				id: '1',
+				name: '安检信息'
+			},
+			{
+				id: '2',
+				name: '整改信息'
+			}
+		],
+		customerName: '客户名称',
+		classify: '客户分类',
+		phone: '联系电话',
+		address: '联系地址',
+		orgName: '安检组织',
+		templateName: '安检模板',
+		managerName: '安检员',
+		levelName: '风险等级',
+		location: '安检定位',
+		state: '安检状态',
+		endTime: '截止时间',
+		result: '安检结果',
+		rectifyState: '整改状态',
+		customerSignRefuse: '客户拒签',
+		checkTime: '安检时间',
+		picture: '安检拍照',
+		customerSign: '客户签名',
+		managerSign: '安检员签名',
+		codeKeys: '钢瓶码',
+		cylinderNum: '钢瓶数量',
+		remarks: '备注',
+		stateObj: {
+			1: '未安检',
+			2: '已安检',
+			3: '无法安检',
+			4: '已超时'
+		},
+		classifyObj: {
+			1: '居民',
+			2: '非居民'
+		},
+		resultObj: {
+			1: '合格',
+			2: '不合格'
+		},
+		rectifyStateObj: {
+			1: '未整改',
+			2: '已整改',
+			3: '无法整改'
+		},
+		payStateObj: {
+			1: '未支付',
+			2: '已支付',
+			3: '部分支付'
+		},
+		stateRecObj: {
+			1: '未整改',
+			2: '已整改',
+			3: '无法整改',
+			4: '已作废',
+			5: '已超时',
+			6: '拒绝整改'
+		},
+		customerSignRefuseObj: {
+			1: '客户拒签',
+			2: '否'
 		}
 	},
 	// 安检项目

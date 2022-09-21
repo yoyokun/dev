@@ -102,7 +102,7 @@
 			uni.setNavigationBarTitle({
 				title: this.$t('cylinderMg.addCirculationTake.titleText')
 			});
-			uni.$on('chooseUser', (data) => {
+			uni.$once('chooseUser', (data) => {
 				setTimeout(async () => {
 					this.formDataValue = {
 						userName: data.name

@@ -109,7 +109,7 @@
 			uni.setNavigationBarTitle({
 				title: this.$t('security.cylinderArrive.titleText')
 			});
-			uni.$on('chooseCustomer', (data) => {
+			uni.$once('chooseCustomer', (data) => {
 				if (data.id == this.customerId) {
 					return
 				}

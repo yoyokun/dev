@@ -15,7 +15,7 @@
 		</edit-form>
 		<!-- 安检项目 -->
 		<security-check
-			v-if="templateInfo.safeTemplateItemVo"
+			v-if="templateInfo.safeTemplateItemVo && state === 2"
 			ref="securityCheck"
 			:safe-template-item-vo="templateInfo.safeTemplateItemVo"
 			@change="changeSecurity"
@@ -26,7 +26,6 @@
 			ref="dialogForm1"
 			labelWidth="80"
 			classForm="normalForm"
-			@change="changeForm"
 			:form-data-source="formDataSource1"
 			:form-data-value="formDataValue1">
 			<template v-slot:other>
@@ -45,20 +44,38 @@
 					<u-icon name="arrow-right" color="#666666" size="15" @click="signCanvas(2)"></u-icon> 
 				</u-form-item>
 				<u-form-item v-if="cylinderCode === 1 || cylinderCode === 2" :label="$t('security.addSecurityCheck.form.cylinderNum.label')">
-					<view class="singnImg" @click="signCanvas(2)">
-						<image class="img" v-if="managerSign" :src="managerSign" mode="widthFix"></image>
-						<text v-else class="text">点击签名</text>
+					<input 
+					v-if="cylinderCode === 2" 
+					class="input" 
+					step="1" 
+					:placeholder="$t('security.addSecurityCheck.form.cylinderNum.placeholder')" 
+					type="number"
+					v-model="cylinderNum" />
+					<view class="code-box">
+						<u-input type="text" class="code-input" v-model="codeKey" shape="circle"
+							:placeholder="$t('cylinderMg.addCirculation.form.codeKey.placeholder')">
+							<view slot="suffix">
+								<u-icon @click="toScan" size="40rpx" color="#3c9cff" name="scan"></u-icon>
+							</view>
+						</u-input>
+						<u-button class="code-btn" type="primary" shape="circle" size="small" @click="searchCode">
+							{{$t('cylinderMg.addCirculation.btn.conf')}}
+						</u-button>
 					</view>
-					<u-icon name="arrow-right" color="#666666" size="15" @click="signCanvas(2)"></u-icon> 
 				</u-form-item>
+				<view class="form-item" v-if="codeKeysArr.length">
+					<view class="item-bottom">
+						<view class="item-cell" v-for="(item, index) in codeKeysArr" :key="index">
+							<text>{{item}}</text>
+							<u-icon @click.stop.native="delCodekey(index)" color="#999" class="icon"
+								name="close-circle-fill" size="20"></u-icon>
+						</view>
+					</view>
+				</view>
 			</template>
 		</edit-form>
 		<view class="btn" v-if="isSave">
 			<u-button :text="$t('common.btn.save')" type="primary" hairline shape="circle" @click="submitForm"></u-button>
-		</view>
-		<view class="btn" v-else>
-			<u-button v-if="info.state === 1" v-permission="{ permission:'app_patrolCheckList_edit'}" :text="$t('common.btn.patrolCheck')" type="primary" hairline shape="circle" @click="handleEdit"></u-button>
-			<u-button v-permission="{ permission:'app_patrolCheckList_delete'}" :text="$t('common.btn.delete')" type="error" hairline shape="circle" plain @click="handleDelete"></u-button>
 		</view>
 		<!-- 请求 toast 提示 -->
 		<u-toast ref='uToast'></u-toast>
@@ -67,7 +84,7 @@
 
 <script>
 let that = null
-import { userCustomerFindByIdList } from '@/api/lpgManageAppApi.js'
+import { userCustomerFindByIdList, cylinderArchivesFindByCodeKey } from '@/api/lpgManageAppApi.js'
 import { safeSecuritySaveOrEdit, safeSecurityFindById, safeSecurityDeleteByIds, safeTemplateFindById } from '@/api/lpgSecurityManageApi.js'
 import { settingMixin } from '@/common/settingMixin.js'
 import SecurityCheck from '@/securityManage/addSecurityCheck/common/securityCheck.vue'
@@ -234,7 +251,7 @@ export default {
 			],
 			formDataValue: {},
 			orgId: '', // 组织id
-			state: '', // 状态 2 正常安检 3 无法安检 5客户拒检
+			state: 2, // 状态 2 正常安检 3 无法安检 5客户拒检
 			customerId: '', // 客户id
 			addressId: '', // 客户联系人id
 			classify: '', // 客户类型 用来查询模板
@@ -262,21 +279,18 @@ export default {
 			formDataValue1: {},
 			customerSign: '',
 			managerSign: '',
-			templateInfo: {} //模板详情
+			templateInfo: {},//模板详情
+			cylinderNum: '',
+			codeKeysArr: [],
+			codeKey: ''
 		}
   },
   async onLoad(options) {
 		this.editId = options.editId || ''
 		await this.init()
 		if (this.editId) {
-			this.isSave = false
-			uni.setNavigationBarTitle({
-				title: this.$t('security.addSecurityCheck.titleTextInfo')
-			});
-			this.formDataSource1.forEach(v=>{
-				v.disabled = true
-			})
-			this.getInfo()
+			await this.getInfo()
+			this.handleEdit()
 		} else {
 			this.isSave = true
 			uni.setNavigationBarTitle({
@@ -291,7 +305,7 @@ export default {
   },
 	onShow() {
 		// 添加监听事件
-		uni.$on('saveSignCanvas', (data) => {
+		uni.$once('saveSignCanvas', (data) => {
 			if(data.type === '1') {
 				this.customerSign = data.url
 			} else if(data.type === '2') {
@@ -299,12 +313,12 @@ export default {
 			}
 		})
 		// 添加监听事件
-		uni.$on('chooseCustomer', async(data) => {
+		uni.$once('chooseCustomer', async(data) => {
 			this.customerId = data.id
 			await this.getCustomerInfo(this.customerId)
 		})
 		// 添加监听事件
-		uni.$on('chooseAddress', async(data) => {
+		uni.$once('chooseAddress', async(data) => {
 			this.addressId = data.id
 			this.formDataValue = {
 				address: this.$options.filters.addressSplicing(data)
@@ -453,7 +467,7 @@ export default {
 			}
 		},
 		// 查询模板
-		async getTemplate(queryParams) {
+		async getTemplate(templateId) {
 			if(this.orgId && this.classify){
 				await this.getTemplateList({
 					orgId: this.orgId,
@@ -461,11 +475,15 @@ export default {
 					classify: this.classify
 				})
 				this.formDataSource[4].options = this.templateList
-				// 默认第一个
-				this.formDataValue = {
-					templateId: this.templateList[0].value
+				if(!templateId) {
+					// 默认第一个
+					this.formDataValue = {
+						templateId: this.templateList[0].value
+					}
+					this.templateChange(this.templateList[0].value)
+				} else {
+					this.templateChange(templateId)
 				}
-				this.templateChange(this.templateList[0].value)
 			}
 		},
 		// 选择模板改变
@@ -499,9 +517,18 @@ export default {
     async getInfo() {
 			const { returnValue: res } = await safeSecurityFindById({ id: this.editId })
       if (res) {
-				this.managerSign = res.managerSign
-				this.customerSign = res.customerSign
-				res.picture = this.$options.filters.pictureConversion(res.picture)
+				this.addressId = res.addressId
+				res.address = this.$options.filters.addressSplicing(res.userCustomerVo.userAddress)
+				this.orgId = res.orgId // 组织id
+				this.customerId = res.customerId // 客户id
+				this.addressId = res.addressId // 客户联系人id
+				this.classify = res.userCustomerVo.classify // 客户类型 用来查询模板
+				await this.getTemplate(res.templateId)
+				if(res.state === 1) {
+					res.state = 2
+				}
+				this.state = res.state
+				res.picture = res.picture || []
 				this.formDataValue = res
 				this.formDataValue1 = res
 				this.info = res
@@ -533,12 +560,15 @@ export default {
 			obj.managerSign = this.managerSign
 			obj.customerSign = this.customerSign
 			obj.picture = this.$options.filters.isArrayToString(obj.picture)
-			const { returnValue: res, message } = await safeSecuritySaveOrEdit(obj)
+			obj.codeKeys = this.codeKeysArr.join(',')
+			obj.cylinderNum = this.cylinderNum
+			const { returnValue: res, message } = await safeSecuritySaveOrEdit(obj,this.$t('security.addSecurityCheck.saveTit'))
 			if (res) {
 				this.$refs.uToast.show({
 					type: 'success',
 					message: message,
 				})
+				uni.$emit('updateInfo', true)
 				setTimeout(() => {
 					uni.navigateBack({
 						delta: 1
@@ -546,45 +576,56 @@ export default {
 				}, 2000)
 			}
 		},
-		// 删除
-		handleDelete() {
-			uni.showModal({
-				title: this.$t('common.tipsTle')[2],
-				content: this.$t('common').delTxt(this.formDataValue.billNo),
-				success: async(param) => {
-					if (param.confirm) {
-						const { returnValue: res, message } = await safeSecurityDeleteByIds({ ids: [this.editId] })
-						if(res){
-							this.$refs.uToast.show({
-								type: 'success',
-								message: message,
-							})
-							setTimeout(() => {
-							  uni.navigateBack({
-							    delta: 1
-							  })
-							}, 2000)
-						}
-					}
-				}
-			})
-		},
 		// 编辑
 		handleEdit() {
 			this.isSave = true
 			uni.setNavigationBarTitle({
 				title: this.$t('security.addSecurityCheck.titleTextEdit')
 			});
-			this.formDataSource1.forEach(v=>{
-				v.disabled = false
+			this.formDataSource.forEach((v,i)=>{
+				if(i === 0 || i === 2 || i === 3) {
+					v.disabled = true
+				} else {
+					v.disabled = false
+				}
 			})
-			this.$refs.dialogForm1.resetPicker('levelId', [0], [0])
 		},
 		// 签名
 		signCanvas(type) {
 			if(this.isSave) {
 				this.goto('/securityManage/signCanvas/signCanvas',{ type: type })
 			}
+		},
+		// 查询二维码
+		async searchCode(code = null) {
+			this.codeKey = code || this.codeKey
+			if (!this.codeKey) {
+				this.$refs.uToast.show({
+					type: 'error',
+					message: this.$t('cylinderMg.addCirculation.tips.errCode')
+				})
+				return
+			}
+			const { returnValue: res } = await cylinderArchivesFindByCodeKey({codeKey: this.codeKey}, this.$t('cylinderMg.addCirculation.loadTxt.finding'))
+			if (res) {
+				this.codeKeysArr.push(res.codeKey)
+			} else {
+				this.$refs.uToast.show({
+					type: 'error',
+					message: this.$t('cylinderMg.addCirculation.tips.errCode')
+				})
+			}
+		},
+		// 扫码
+		async toScan() {
+			const code = await this.decodeQr()
+			if(code){
+				this.searchCode(code)
+			}
+		},
+		// 删除二维码
+		delCodekey(index) {
+			this.codeKeysArr.splice(index,1)
 		}
   },
 	options:{
@@ -654,5 +695,45 @@ export default {
 	border-radius: 16rpx;
 	margin: 30rpx 20rpx 10rpx 20rpx;
 	width: 710rpx;
+}
+.code-box {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	.code-input {
+		flex: 1;
+		width: 1rpx;
+		margin-right: 30rpx;
+	}
+	.code-btn {
+		width: 100rpx !important;
+	}
+}
+.form-item {
+	padding: 0rpx 20rpx 20rpx 20rpx;
+	.item-bottom {
+		width: 100%;
+		border-radius: 10rpx;
+		background: rgba(247, 247, 247, 1);
+		padding: 24rpx 20rpx;
+		display: flex;
+		flex-wrap: wrap;
+		padding-top: 0;
+		box-sizing: border-box;
+		.item-cell {
+			display: flex;
+			align-items: center;
+			padding: 0 20rpx;
+			height: 56rpx;
+			border-radius: 56rpx;
+			background: rgba(0, 0, 0, 0.06);
+			margin-right: 20rpx;
+			margin-top: 24rpx;
+			font-size: 30rpx;
+			.icon {
+				margin-left: 30rpx;
+			}
+		}
+	}
 }
 </style>

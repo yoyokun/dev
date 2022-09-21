@@ -394,21 +394,21 @@ export default {
   },
 	onShow() {
 		// 添加监听事件
-		uni.$on('chooseCustomer', (data) => {
+		uni.$once('chooseCustomer', (data) => {
 			this.ownerId = data.id
 			this.formDataValue = {
 				ownerName: data.customerName
 			}
 		})
 		// 添加监听事件
-		uni.$on('chooseOrg', (data) => {
+		uni.$once('chooseOrg', (data) => {
 			this.ownerId = data.id
 			this.formDataValue = {
 				ownerName: data.name
 			}
 		})
 		// 添加监听事件
-		uni.$on('chooseSupplier', (data) => {
+		uni.$once('chooseSupplier', (data) => {
 			this.ownerId = data.id
 			this.formDataValue = {
 				ownerName: data.supplierName

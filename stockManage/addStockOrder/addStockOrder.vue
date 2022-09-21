@@ -293,7 +293,7 @@
 					title: this.$t('stockMg.addStockOrder.titleText')
 				});
 			}
-			uni.$on('chooseGoods', (res) => {
+			uni.$once('chooseGoods', (res) => {
 				res.forEach((item, index) => {
 					item.stockNum = 1
 					item.ids = createUniqueString()
@@ -303,7 +303,7 @@
 					this.listOrder[this.tempIndex].stockInoutLogDetailData.push(item)
 				})
 			})
-			uni.$on('chooseBill', async (res) => {
+			uni.$once('chooseBill', async (res) => {
 				if (res) {
 					this.linkId = res.billId
 					this.linkTypes = res.billType
@@ -320,17 +320,17 @@
 					}
 				}
 			})
-			uni.$on('chooseCustomer', (data) => {
+			uni.$once('chooseCustomer', (data) => {
 				this.customerId = data.id
 				this.$set(this.formDataValue, 'customerName', data.customerName)
 			})
 			// 添加监听事件
-			uni.$on('chooseOrg', (data) => {
+			uni.$once('chooseOrg', (data) => {
 				this.customerId = data.id
 				this.$set(this.formDataValue, 'customerName', data.name)
 			})
 			// 添加监听事件
-			uni.$on('chooseSupplier', (data) => {
+			uni.$once('chooseSupplier', (data) => {
 				console.log(data)
 				this.customerId = data.id
 				this.$set(this.formDataValue, 'customerName', data.supplierName)

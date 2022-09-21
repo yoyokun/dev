@@ -101,7 +101,7 @@
 			uni.setNavigationBarTitle({
 				title: this.$t('cylinderMg.addCirculationTest.titleText')
 			});
-			uni.$on('chooseSupplier', (data) => {
+			uni.$once('chooseSupplier', (data) => {
 				this.formDataValue = {
 					supplierName: data.supplierName
 				}

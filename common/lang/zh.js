@@ -50,7 +50,10 @@ module.exports = {
 			submit: '提交',
 			withdraw: '撤回',
 			clear: '清空',
-			patrolCheck: '去巡检'
+			patrolCheck: '去巡检',
+			check: '去安检',
+			work: '整改工单',
+			rectify: '去整改'
 		},
 		tipsTle: ['撤回提示', '提交提示', '删除提示', '禁用提示', '启用提示'],
 		backTxt: (txt) => `真的要撤回${txt}该条数据吗?`,
@@ -439,6 +442,7 @@ module.exports = {
 			2: '非居民'
 		}
 	},
+	// 选择地址
 	chooseAddress: {
 		titleText: '选择地址',
 	},
@@ -463,6 +467,19 @@ module.exports = {
 	// 选择组织成员 
 	chooseUser:{
 		titleText: '选择组织成员'
+	},
+	// 选择二维码
+	chooseCylinderCode: {
+		titleText: '选择钢瓶二维码',
+		prodState: {
+			1: '已生产',
+			2: '未生产'
+		},
+		state: {
+			1: '已使用',
+			2: '未使用',
+			3: '已作废'
+		}
 	},
 	// 编辑盘点记录
 	addCylinderCheck: {

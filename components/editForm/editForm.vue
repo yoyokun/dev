@@ -56,7 +56,7 @@
 				</view>
 				<u-icon 
 					@click="chooseChange(item)" 
-					v-if="(item.type === 'chooseText' && item.btnType !== 'btn') || item.type === 'chooseBtn'" 
+					v-if="((item.type === 'chooseText' && item.btnType !== 'btn') || item.type === 'chooseBtn') && !item.disabled" 
 					:name="item.btnType || 'arrow-right'" 
 					color="#666666" 
 					size="18">
@@ -107,7 +107,7 @@
 						:popup-title="item.placeholder"
 						@change="chooseProvinces($event,item.fieldName)"
 					/>
-					<u-icon name="arrow-right" color="#666666" size="15"></u-icon>
+					<u-icon v-if="!item.disabled" name="arrow-right" color="#666666" size="15" ></u-icon>
 				</view>
 				<!-- switch单选 -->
 				<view v-if="item.type === 'switch'" :class="['switch',item.inputAlign]">
@@ -124,7 +124,7 @@
 					<u-cell
 						v-if="formData[item.fieldName]" 
 						:value="formData[item.fieldName]" 
-						:isLink="true" 
+						:isLink="item.disabled ? false : true" 
 						:border="false" 
 						@click="!item.disabled ? item.showOptions = true : ''"></u-cell>
 					<u-cell 
@@ -156,14 +156,14 @@
 						:border="false"
 						@change="datetimePickerChange($event,item.fieldName)"	
 					></uni-datetime-picker>
-					<u-icon name="arrow-right" color="#666666" size="15"></u-icon>
+					<u-icon v-if="!item.disabled" name="arrow-right" color="#666666" size="15"></u-icon>
 				</view>
 				<!-- action-sheet 操作菜单  -->
 				<view :class="['formCell',item.inputAlign]" v-if="item.type === 'actionSheet'">
 					<u-cell 
 						v-if="formData[item.fieldName]" 
 						:value="formData[item.fieldName] | getName(item.options)" 
-						:isLink="true" 
+						:isLink="item.disabled ? false : true" 
 						:border="false" 
 						@click="!item.disabled ? item.showOptions = true : ''"></u-cell>
 					<u-cell 
@@ -189,7 +189,7 @@
 					<u-cell 
 						v-if="formData[item.fieldName]" 
 						:value="formData[item.fieldName] | getName(item.options)" 
-						:isLink="true" 
+						:isLink="item.disabled ? false : true" 
 						:border="false" 
 						@click="!item.disabled ? item.showOptions = true : ''"></u-cell>
 					<u-cell 
@@ -220,7 +220,7 @@
 								<u-icon v-if="!item.disabled" name="close-circle-fill" color="#8C8C8C" size="20"  @click="deleteMultiple(subItem,index,item.fieldName,indexSub)"></u-icon>
 							</view>
 						</view>
-						<u-icon name="arrow-right" color="#666666" size="15" @click="!item.disabled ? item.showOptions = true : ''"></u-icon>
+						<u-icon v-if="!item.disabled" name="arrow-right" color="#666666" size="15" @click="!item.disabled ? item.showOptions = true : ''"></u-icon>
 					</view>
 					<u-cell 
 						v-else 
@@ -530,7 +530,7 @@ export default {
 		},
 		// 选择
 		chooseChange(item) {
-			if(item.func){
+			if(item.func && !item.disabled){
 				this.$emit(item.func, {
 					item,
 					queryParams: this.formData

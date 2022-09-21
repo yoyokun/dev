@@ -2,9 +2,14 @@
 	<view class="project">
 		<view :class="['group',item.result === 2 ? 'result' : '']" v-for="(item,index) in safeTemplateItemVoArr" :key="item.id">
 			<view v-if="item.itemType === 1" class="box">
-				<view class="itemName">
+				<view class="itemName" >
 					<text>{{ item.projectName }}-{{ item.itemName }}</text>
+					<view class="right" @click="changeUpDown(index)" v-if="isResult">
+						<u-icon v-if="item.result === 2" name="arrow-down" color="#666666" size="18"></u-icon>
+						<u-icon v-else name="arrow-right" color="#666666" size="18"></u-icon>
+					</view>
 					<u-switch
+						v-else
 						v-model="item.result" 
 						:disabled="disabled"
 						:activeValue="1"
@@ -24,7 +29,12 @@
 			<view v-if="item.itemType === 2" class="box">
 				<view class="itemName">
 					<text>{{ item.projectName }}-{{ item.itemName }}</text>
+					<view class="right" @click="changeUpDown(index)" v-if="isResult">
+						<u-icon v-if="item.result === 2" name="arrow-down" color="#666666" size="18"></u-icon>
+						<u-icon v-else name="arrow-right" color="#666666" size="18"></u-icon>
+					</view>
 					<u-switch
+						v-else
 						v-model="item.result" 
 						:disabled="disabled"
 						:activeValue="1"
@@ -47,7 +57,7 @@
 					<u-icon v-if="item.result === 2" name="arrow-down" color="#666666" size="18"></u-icon>
 					<u-icon v-else name="arrow-right" color="#666666" size="18"></u-icon>
 				</view>
-				<view class="itemValue">
+				<view :class="['itemValue', isResult ? 'borderNo' : '']">
 					<u--input
 						v-model="item.resultData"
 						:disabled="disabled"
@@ -65,7 +75,7 @@
 					<u-icon v-if="item.result === 2" name="arrow-down" color="#666666" size="18"></u-icon>
 					<u-icon v-else name="arrow-right" color="#666666" size="18"></u-icon>
 				</view>
-				<view class="itemValue">
+				<view :class="['itemValue', isResult ? 'borderNo' : '']">
 					<uni-datetime-picker
 						type="datetime"
 						v-model="item.resultData"
@@ -91,7 +101,7 @@
 					></u-upload>
 				</view>
 			</view>
-			<view v-if="item.isPicture === 1" class="boxPic" >
+			<view v-if="item.isPicture === 1 || item.picture.length" class="boxPic" >
 				<view class="itemName">{{$t('security.securityCheck.pictureName')}}</view>
 				<u-upload
 					:fileList="item.picture"
@@ -146,6 +156,11 @@ export default{
 			type: Boolean,
 			default: true
 		},
+		// 是否展示安检结果
+		isResult: {
+			type: Boolean,
+			default: false
+		},
 		disabled: {
 			type: Boolean,
 			default: false
@@ -181,7 +196,7 @@ export default{
 						cehckData.forEach(v=>{
 							arr.push({
 								name: v,
-								disabled: false
+								disabled: this.isResult ? true : false
 							})
 						})
 						// 多选
@@ -195,10 +210,10 @@ export default{
 							itemName: obj.itemName,
 							itemType: obj.itemType,
 							templateId: obj.templateId,
-							resultData: obj.defData.Split(','),
+							resultData: this.isResult ? obj.resultData.Split(',') : obj.defData.Split(','),
 							isPicture: obj.isPicture,
 							result: 1, //  1 合格 2不合格
-							picture: []
+							picture: this.isResult ? this.$options.filters.pictureConversion(obj.picture) : []
 						})
 					} else if (obj.itemType === 2) {
 						const cehckData = obj.cehckData.Split(',')
@@ -206,7 +221,7 @@ export default{
 						cehckData.forEach(v=>{
 							arr.push({
 								name: v,
-								disabled: false
+								disabled: this.isResult ? true : false
 							})
 						})
 						// 单选
@@ -220,10 +235,10 @@ export default{
 							itemName: obj.itemName,
 							itemType: obj.itemType,
 							templateId: obj.templateId,
-							resultData: obj.defData,
+							resultData: this.isResult ? obj.resultData : obj.defData,
 							isPicture: obj.isPicture,
 							result: 1, //  1 合格 2不合格
-							picture: []
+							picture: this.isResult ? this.$options.filters.pictureConversion(obj.picture) : []
 						})
 					} else if (obj.itemType === 3) {
 						// 文本
@@ -237,10 +252,10 @@ export default{
 							itemName: obj.itemName,
 							itemType: obj.itemType,
 							templateId: obj.templateId,
-							resultData: obj.defData, // 安检数据
+							resultData: this.isResult ? obj.resultData : obj.defData, // 安检数据
 							isPicture: obj.isPicture,
 							result: 1, //  1 合格 2不合格
-							picture: []
+							picture: this.isResult ? this.$options.filters.pictureConversion(obj.picture) : []
 						})
 					} else if (obj.itemType === 4) {
 						// 时间
@@ -254,10 +269,10 @@ export default{
 							itemName: obj.itemName,
 							itemType: obj.itemType,
 							templateId: obj.templateId,
-							resultData: '', // 安检数据
+							resultData: this.isResult ? obj.resultData : obj.defData, // 安检数据
 							isPicture: obj.isPicture,
 							result: 1, //  1 合格 2不合格
-							picture: []
+							picture: this.isResult ? this.$options.filters.pictureConversion(obj.picture) : []
 						})
 					} else if (obj.itemType === 5) {
 						// 图片
@@ -271,11 +286,11 @@ export default{
 							itemName: obj.itemName,
 							itemType: obj.itemType,
 							templateId: obj.templateId,
-							resultData: [], // 安检数据
+							resultData: this.isResult ? this.$options.filters.pictureConversion(obj.resultData) : (obj.defData || []), // 安检数据
 							limit: 5,
 							isPicture: obj.isPicture,
 							result: 1, //  1 合格 2不合格
-							picture: []
+							picture: this.isResult ? this.$options.filters.pictureConversion(obj.picture) : []
 						})
 					}
 				})
@@ -587,9 +602,31 @@ export default{
 				line-height: 40rpx;
 				padding: 20rpx 0rpx;
 				@include flexMixin();
+				.right{
+					flex: 1;
+					::v-deep .u-icon--right{
+						justify-content: end;
+					}
+				}
 			}
 			.itemValue{
 				display: none;
+				padding-bottom: 20rpx;
+				&.borderNo{
+					::v-deep .u-input {
+						background: transparent !important;
+						border: none !important;
+					}
+					::v-deep .uni-date .uni-date-x--border{
+						border: none !important;
+					}
+					::v-deep .uni-date .uniui-calendar{
+						display: none;
+					}
+					::v-deep .uni-date .uni-date-x{
+						padding: 0;
+					}
+				}
 			}
 			::v-deep .u-checkbox-group{
 				flex-wrap: wrap;
@@ -617,7 +654,7 @@ export default{
 				font-weight: 400;
 				color: rgba(56, 56, 56, 1);
 				line-height: 40rpx;
-				padding: 20rpx 0rpx;
+				padding-bottom: 20rpx;
 			}
 		}
 	}

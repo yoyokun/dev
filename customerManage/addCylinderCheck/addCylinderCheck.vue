@@ -181,7 +181,7 @@
 			}
 		},
 		async onLoad(options) {
-			uni.$on('chooseCustomer', (data) => {
+			uni.$once('chooseCustomer', (data) => {
 				let customArr = []
 				let customerIds = []
 				data.forEach(i => {
