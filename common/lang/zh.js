@@ -1195,4 +1195,13 @@ module.exports = {
 		source: '来源',
 		clickNum: '阅读'
 	},
+	// 版本信息
+	version:{
+		titleText:'关于气讯通',
+		appName:'气讯通',
+		versionName:'版本',
+		release:'发布于',
+		updateBtn:'版本更新',
+		tips:['更新提示','已是最新版本']
+	},
 }

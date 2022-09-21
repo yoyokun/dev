@@ -44,7 +44,7 @@ export default {
 		},
 		// 扫码登录
 		async decodeQrLogin() {
-			return new Promise((resolved, rejected) => {
+			return new Promise(async(resolved, rejected) => {
 				// #ifdef APP-PLUS
 				var result = await permision.requestAndroidPermission("android.permission.CAMERA")
 				if (result === 1) {
@@ -94,7 +94,7 @@ export default {
 		},
 		// 扫码解析二维码
 		async decodeQr() {
-			return new Promise((resolved, rejected) => {
+			return new Promise(async(resolved, rejected) => {
 				// #ifdef APP-PLUS
 				var result = await permision.requestAndroidPermission("android.permission.CAMERA")
 				if (result === 1) {
