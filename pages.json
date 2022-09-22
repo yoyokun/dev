@@ -595,12 +595,24 @@
 					}	
 				}
 			]
+		},
+		{
+			"root": "salesManage",
+			"pages": [
+				{
+					"path" : "placeOrder/placeOrder",
+					"style" : {
+						"navigationBarTitleText": "快速下单",
+						"enablePullDownRefresh": false
+					}	
+				}
+			]
 		}
 	],
 	"preloadRule": {
 		"pages/index/index": {
 			"network": "all",
-			"packages": ["personalCenter","userCenter","infoManage","customerManage","cylinderManage","stockManage","securityManage"]
+			"packages": ["personalCenter","userCenter","infoManage","customerManage","cylinderManage","stockManage","securityManage","salesManage"]
 		}
 	},
 	"globalStyle": {

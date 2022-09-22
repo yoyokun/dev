@@ -1,6 +1,7 @@
 import auditInfo from './zh/auditInfo'
 import security from './zh/security'
 import stockMg from './zh/stockMg'
+import salesMg from './zh/salesMg'
 import cylinderMg from './zh/cylinderMg'
 module.exports = {
 	// tabbar
@@ -284,6 +285,8 @@ module.exports = {
 	stockMg: stockMg,
 	// 钢瓶溯源
 	cylinderMg:cylinderMg,
+	// 销售业务
+	salesMg:salesMg,
 	// 成员
 	addManager: {
 		titleText: '添加成员',

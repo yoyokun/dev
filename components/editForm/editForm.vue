@@ -15,6 +15,7 @@
 				:required="item.required"
 				:borderBottom="item.borderBottom"
 				:labelWidth="item.labelWidth"
+				:leftIcon="item.lIcon"
 				>
 				<!--文本框-->
 				<view class="chooseBtnText" v-if="item.type === 'chooseBtn'" @click.native="chooseChange(item)">

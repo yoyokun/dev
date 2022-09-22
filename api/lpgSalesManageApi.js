@@ -553,3 +553,17 @@ export function fillingChangeLogDeleteByIds(data = {}, message = '', custom = {}
 		}
 	})
 }
+// 销售子单模板管理 根据条件查询列表信息
+export function salesOrderTemplateFindList(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/salesOrderTemplate/findList',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
