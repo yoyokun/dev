@@ -269,7 +269,7 @@ export default {
   },
 	onShow() {
 		// 添加监听事件
-		uni.$on('chooseCustomer', (data) => {
+		uni.$once('chooseCustomer', (data) => {
 			this.customerId = data.id
 			this.formDataValue = {
 				customerName: data.customerName

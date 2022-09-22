@@ -256,7 +256,7 @@
 				});
 			}
 			this.getStockInoutReason()
-			uni.$on('chooseGoods', (res) => {
+			uni.$once('chooseGoods', (res) => {
 				res.forEach((item, index) => {
 					item.checkNums = 1
 					item.id = ''

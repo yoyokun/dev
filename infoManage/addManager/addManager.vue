@@ -294,7 +294,7 @@ export default {
   },
 	onShow() {
 		// 添加监听事件
-		uni.$on('chooseData', (data) => {
+		uni.$once('chooseData', (data) => {
 			this.toData = data
 			setTimeout(()=>{
 				this.$refs.cdtDraggrableSort.init()

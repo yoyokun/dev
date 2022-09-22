@@ -96,7 +96,7 @@
 			}
 		},
 		mounted() {
-			uni.$on('chooseGoods', (data) => {
+			uni.$once('chooseGoods', (data) => {
 				this.goodsName = data.goodsName + (data.propertyNames ? ('-' + data.propertyNames) : '')
 				this.goodsIdOffer = data.goodsId
 				this.goodsDetailIdOffer = data.goodsDetailId

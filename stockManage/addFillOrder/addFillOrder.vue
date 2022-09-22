@@ -256,7 +256,7 @@
 
 		},
 		async onLoad(options) {
-			uni.$on('chooseGoods', (res) => {
+			uni.$once('chooseGoods', (res) => {
 				res.forEach((item, index) => {
 					item.systemNum = 0
 					item.planWeight = 0

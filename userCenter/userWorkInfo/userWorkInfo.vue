@@ -120,6 +120,7 @@ export default {
 							})
 							if (this.info.formKey === 'security') {
 								// 跳转到安检
+								this.goto('/securityManage/addSecurityCheck/addSecurityCheck',{ editId: res.id })
 							} else if (this.info.formKey === 'rectify') {
 								// 跳转到整改
 							} else if (this.info.formKey === 'polling') {
@@ -195,9 +196,9 @@ export default {
 .btn{
 	width: 632rpx;
 	margin: 60rpx auto;
-	@include flexMixin();
+	@include flexMixin(column);
 	.u-button{
-		margin: 0rpx 10rpx;
+		margin: 20rpx 10rpx;
 	}
 }
 .userWorkInfo {

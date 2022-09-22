@@ -219,7 +219,7 @@ export default {
   },
 	onShow() {
 		// 添加监听事件
-		uni.$on('saveSignCanvas', (data) => {
+		uni.$once('saveSignCanvas', (data) => {
 			if(data.type === '1') {
 				this.customerSign = data.url
 			} else if(data.type === '2') {

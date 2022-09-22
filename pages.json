@@ -340,6 +340,13 @@
 						"enablePullDownRefresh": false
 					}
 				}
+				,{
+					"path" : "chooseCylinderCode/chooseCylinderCode",
+					"style" : {
+						"navigationBarTitleText": "选择钢瓶二维码",
+						"enablePullDownRefresh": false
+					}
+				}
 			]
 		},
 		{
@@ -593,6 +600,13 @@
 						"navigationBarTitleText": "安检重置",
 						"enablePullDownRefresh": false
 					}	
+				}
+				,{
+					"path" : "securityCheckInfo/securityCheckInfo",
+					"style" : {
+						"navigationBarTitleText": "安检详情",
+						"enablePullDownRefresh": false
+					}
 				}
 			]
 		},

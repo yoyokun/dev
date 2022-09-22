@@ -120,7 +120,7 @@
 			uni.setNavigationBarTitle({
 				title: this.$t('cylinderMg.addCirculationService.titleText')
 			});
-			uni.$on('chooseCustomer', (data) => {
+			uni.$once('chooseCustomer', (data) => {
 				this.formDataValue = {
 					customerName: data.customerName
 				}
