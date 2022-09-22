@@ -1,132 +1,17 @@
 <template>
 	<view class="sk-info">
 		<view class="form">
-			<edit-form ref="dialogForm" labelWidth="100" classForm="normalForm" :form-data-source="formDataSource"
-				:form-data-value="formDataValue" @change="changeForm" @chooseAddress="chooseAddress"
-				@chooseCustomer="chooseCustomer" @chooseTemp="chooseTemp">
+			<edit-form 
+				ref="dialogForm" 
+				labelWidth="100" 
+				classForm="normalForm" 
+				:form-data-source="formDataSource"
+				:form-data-value="formDataValue" 
+				@change="changeForm" 
+				@chooseAddress="chooseAddress"
+				@chooseCustomer="chooseCustomer">
 			</edit-form>
 		</view>
-
-		<view class="list-box" v-for="(item,index) in listOrder" :key="index">
-			<view class="list">
-				<view class="list-head">
-					<view class="head-tle">3432423</view>
-					<view class="act-btn" @click="chooseGoods(index)">
-						<u-icon class="add-icon" name="plus-circle"></u-icon>
-						<view class="add-txt">商品</view>
-					</view>
-				</view>
-				<view class="goods">
-					<view class="goods-list" v-for="(val,key) in item.salesOrderDetailGoodsJson" :key="key">
-						<view class="goods-head">
-							<view class="goods-tle">{{val.goodsNo}} - {{val.goodsName}}</view>
-							<view class="goods-price">￥{{val.unitPrice}}</view>
-						</view>
-						<view class="attr-del">
-							<view class="attr">
-								<view class="attr-txt">
-									{{ val.goodsClassifyName ? val.goodsClassifyName + "," : "" }}
-									{{ val.propertyNames ? val.propertyNames + "," : "" }}
-									{{ val.standardName ? val.standardName + "," : "" }}
-									{{ val.brandName }}
-								</view>
-								<u-icon class="arrow-right" name="arrow-right"></u-icon>
-								<view class="attr-box">
-									<view class="attr-item">
-										<view class="item-tle">{{$t('stockMg.common.goodsClassifyName')}}：</view>
-										<view class="item-txt">{{val.goodsClassifyName}}</view>
-									</view>
-									<view class="attr-item" v-if="val.propertyNames">
-										<view class="item-tle">{{$t('stockMg.common.propertyNames')}}：</view>
-										<view class="item-txt">{{val.propertyNames}}</view>
-									</view>
-									<view class="attr-item" v-if="val.standardName">
-										<view class="item-tle">{{$t('stockMg.common.standardName')}}：</view>
-										<view class="item-txt">{{val.standardName}}</view>
-									</view>
-									<view class="attr-item" v-if="val.brandName">
-										<view class="item-tle">{{$t('stockMg.common.brandName')}}：</view>
-										<view class="item-txt">{{val.brandName}}</view>
-									</view>
-									<view class="attr-item" v-if="val.unitsName">
-										<view class="item-tle">{{$t('stockMg.common.unitsName')}}：</view>
-										<view class="item-txt">{{val.unitsName}}</view>
-									</view>
-								</view>
-							</view>
-							<u-icon class="remove-goods" name="minus-circle-fill" @click="removeOrderGoods(index,key)">
-							</u-icon>
-						</view>
-
-						<view class="info-cell">
-							<view class="cell">
-								<view class="cell-label">规格：</view>
-								<view class="cell-content">{{val.standardName}}</view>
-							</view>
-							<view class="cell">
-								<view class="cell-label">数量：</view>
-								<view class="cell-content">
-									<view class="nums"><text>x</text><input min="1" maxlength="4" type="number"
-											v-model="val.amount" :placeholder="'数量'" step="1"
-											@input="checkNum($event,index,key)" />
-									</view>
-								</view>
-							</view>
-						</view>
-						<view class="info-cell">
-							<view class="cell">
-								<view class="cell-label">结算数量：</view>
-								<view class="cell-content">{{val.settleAmount}}</view>
-							</view>
-							<view class="cell">
-								<view class="cell-label">金额：</view>
-								<view class="cell-content">{{val.totalMoney}}</view>
-							</view>
-						</view>
-						<view class="info-cell">
-							<view class="cell">
-								<view class="cell-label">备注：</view>
-								<view class="cell-content">
-									<textarea v-model="val.remarks" placeholder="请输入备注"></textarea>
-								</view>
-							</view>
-						</view>
-					</view>
-					<view class="total">
-						<view class="total-tle">
-							<text>合计：</text>
-						</view>
-						<view class="total-main">
-							<view class="item">
-								<text>数量：</text>
-								<text>{{item.amount}}</text>
-							</view>
-							<view class="item">
-								<text>金额：</text>
-								<text class="red">{{item.totalMoney}}</text>
-							</view>
-						</view>
-					</view>
-				</view>
-			</view>
-		</view>
-
-		<u-popup :show="showTemp" :round="10" mode="bottom" @close="closeTemp" closeOnClickOverlay>
-			<view class="temp-box">
-				<view class="check-content">
-					<u-checkbox-group v-model="tempIds" size="22" class="check-box" shape="circle"
-						iconPlacement="right">
-						<u-checkbox v-for="(item,index) in templateList" :key="index" :label="item.templateName"
-							:name="item.id"></u-checkbox>
-					</u-checkbox-group>
-				</view>
-				<view class="check-btn">
-					<u-button class="btns" type="info" @click="closeTemp">取消</u-button>
-					<u-button class="btns" type="primary" @click="saveTemp">确定</u-button>
-				</view>
-			</view>
-		</u-popup>
-
 
 		<view class="btn">
 			<u-button :text="'结算'" type="success" hairline shape="circle" plain></u-button>
@@ -159,7 +44,8 @@
 		},
 		data() {
 			return {
-				formDataSource: [{
+				formDataSource: [
+					{
 						type: 'chooseBtn',
 						labelText: this.$t('salesMg.placeOrder.form.customerName.label'),
 						fieldName: 'customerName',
@@ -174,6 +60,15 @@
 							message: this.$t('salesMg.placeOrder.form.customerName.placeholder'),
 							trigger: ['change', 'blur']
 						}]
+					},
+					{
+						type: 'chooseBtn',
+						labelText: this.$t('salesMg.placeOrder.form.address.label'),
+						fieldName: 'address',
+						lIcon: '/static/image/plo4.png',
+						placeholder: this.$t('salesMg.placeOrder.form.address.placeholder'),
+						func: 'chooseAddress',
+						show:false,
 					},
 					{
 						type: 'text',
@@ -194,34 +89,21 @@
 						show:false,
 					},
 					{
-						type: 'chooseBtn',
-						labelText: this.$t('salesMg.placeOrder.form.address.label'),
-						fieldName: 'address',
-						lIcon: '/static/image/plo4.png',
-						placeholder: this.$t('salesMg.placeOrder.form.address.placeholder'),
-						func: 'chooseAddress',
-						show:false,
-					},
-					{
-						type: 'chooseBtn',
+						type: 'multiple',
 						labelText: this.$t('salesMg.placeOrder.form.orderTemp.label'),
-						fieldName: 'orderTemp',
+						fieldName: 'templateId',
 						placeholder: this.$t('salesMg.placeOrder.form.orderTemp.placeholder'),
 						lIcon: '/static/image/plo5.png',
-						func: 'chooseTemp',
+						options: [],
 						borderBottom: false,
 						show:false,
 					},
 				],
 				formDataValue: {},
-				listOrder: [],
-				tempIndex: null,
-				showTemp: false,
-				customerId: '',
-				customerInfo: null,
-				templateList: [],
-				tempIds: [],
-				realTempIds: [],
+				customerId: '', // 用户id
+				customerInfo: null, // 用户对象
+				addressId: '', // 地址id
+				addressObj: {} // 地址对象
 			}
 		},
 		// 过滤器
@@ -238,9 +120,11 @@
 		async onLoad(options) {
 			uni.setNavigationBarTitle({
 				title: this.$t('salesMg.placeOrder.titleText')
-			});
+			})
+		},
+		onShow() {
 			// 选择商品
-			uni.$on('chooseGoods', (res) => {
+			uni.$once('chooseGoods', (res) => {
 				res.forEach((item, index) => {
 					item.id = ''
 					item.unitPrice = this.$bigDecimal.round(item.unitPrice, 2)
@@ -249,7 +133,7 @@
 				})
 			})
 			// 选择地址
-			uni.$on('chooseAddress', (data) => {
+			uni.$once('chooseAddress', (data) => {
 				if (data.id == this.addressId) {
 					return
 				}
@@ -262,18 +146,23 @@
 				}
 			})
 			// 选择客户
-			uni.$on('chooseCustomer', async (data) => {
+			uni.$once('chooseCustomer', async (data) => {
 				if (data.id == this.customerId) {
 					return
 				}
 				this.customerId = data.id
+				// 获取客户信息
+				await this.getCustomerInfo(this.customerId)
+				
+				
+				
+				
 				this.formDataValue = {
 					...this.formDataValue,
 					orderTemp: '',
 				}
 				setTimeout(async () => {
-					// 获取客户信息
-					await this.getCustomerInfo(this.customerId)
+					
 					// 获取客户子单模板
 					if (this.customerInfo) {
 						let customerInfo = this.customerInfo
@@ -387,6 +276,29 @@
 				this.templateList = res
 				console.log(res)
 			},
+			
+			// 保存数据
+			saveData() {
+				this.$refs.dialogForm.handleSubmit(async (data) => {
+					
+				})
+			},
+			// 移除子单
+			removeOrderGoods(index, key = null) {
+				if (key != null) {
+					this.listOrder[index].salesOrderDetailGoodsJson.splice(key, 1)
+				} else {
+					this.listOrder.splice(index, 1)
+				}
+			},
+			// 选择客户
+			chooseCustomer() {
+				// 客户
+				this.goto('/infoManage/chooseCustomer/chooseCustomer', {
+					customerId: this.customerId,
+					orgId: this.userInfo.orgId
+				})
+			},
 			// 查询客户详情
 			async getCustomerInfo(id, addressId) {
 				const {
@@ -416,28 +328,6 @@
 						})
 					}
 				}
-			},
-			// 保存数据
-			saveData() {
-				this.$refs.dialogForm.handleSubmit(async (data) => {
-					
-				})
-			},
-			// 移除子单
-			removeOrderGoods(index, key = null) {
-				if (key != null) {
-					this.listOrder[index].salesOrderDetailGoodsJson.splice(key, 1)
-				} else {
-					this.listOrder.splice(index, 1)
-				}
-			},
-			// 选择客户
-			chooseCustomer() {
-				// 客户
-				this.goto('/infoManage/chooseCustomer/chooseCustomer', {
-					customerId: this.customerId,
-					orgId: this.userInfo.orgId
-				})
 			},
 			// 选择地址
 			chooseAddress() {
