@@ -10,7 +10,7 @@
 		<view class="list-box" v-for="(item,index) in listOrder" :key="index">
 			<view class="list">
 				<view class="list-head">
-					<view class="head-tle">3432423</view>
+					<view class="head-tle">{{item.billName}}</view>
 					<view class="act-btn" @click="chooseGoods(index)">
 						<u-icon class="add-icon" name="plus-circle"></u-icon>
 						<view class="add-txt">商品</view>
@@ -311,7 +311,7 @@
 			},
 			// 选择子单
 			chooseTemp() {
-				this.tempIds = this.realTempIds
+				this.tempIds = JSON.parse(JSON.stringify(this.realTempIds))
 				this.showTemp = true
 			},
 			closeTemp() {
@@ -319,14 +319,14 @@
 			},
 			saveTemp() {
 				let listOrder = this.listOrder
-				let tempName = this.formDataValue.orderTemp.split(',').filter(item => item)
+				let tempName = []
 				let realTempIds = this.realTempIds
+				listOrder = listOrder.filter(item=>!(realTempIds.filter(item=>!this.tempIds.some(el=>el==item)).indexOf(item.tempId)>-1))
 				this.templateList.forEach((item, index) => {
 					if (this.tempIds.indexOf(item.id) > -1 && this.realTempIds.indexOf(item.id) < 0) {
-						tempName.push(item.templateName)
-						realTempIds.push(item.id)
 						let obj = {
 							id: '',
+							tempId: item.id,
 							billName: item.templateName,
 							totalMoney: 0,
 							amount:0,
@@ -342,8 +342,6 @@
 						if (item.goodsVoList && item.goodsVoList.length) {
 							item.goodsVoList.forEach((val, key) => {
 								val.id = ''
-								val.unitPrice = this.$bigDecimal.round(val.unitPrice, 2)
-								val.totalMoney = this.$bigDecimal.round(this.$bigDecimal.multiply(val.amount, val.unitPrice), 2)
 								obj.totalMoney = this.$bigDecimal.round(this.$bigDecimal.add(obj.totalMoney, val.totalMoney), 2)
 								obj.amount = this.$bigDecimal.round(this.$bigDecimal.add(obj.amount, val.amount), 2)
 								// retreatState
@@ -355,8 +353,9 @@
 						listOrder.push(obj)
 					}
 				})
+				listOrder.forEach(item=>tempName.push(item.billName))
 				this.listOrder = listOrder
-				this.realTempIds = realTempIds
+				this.realTempIds = JSON.parse(JSON.stringify(this.tempIds))
 				this.formDataValue = {
 					...this.formDataValue,
 					orderTemp:tempName.join(',')
