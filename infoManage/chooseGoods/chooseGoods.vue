@@ -84,6 +84,10 @@
 	export default {
 		mixins: [paginationMixin, settingMixin],
 		props: {
+			goodsIdStr: '', // 商品sku
+			propertyIdStr: '', // 客户属性
+			goodsCustomerDate: '', // 日期
+			customerId: '', // 客户id
 			// 组织id
 			orgId: {
 				type: String,
@@ -178,6 +182,10 @@
 		},
 		onLoad(options) {
 			this.goodsId = options.goodsId || ''
+			this.goodsIdStr = options.goodsIdStr || ''
+			this.propertyIdStr = options.propertyIdStr || ''
+			this.goodsCustomerDate = options.goodsCustomerDate || ''
+			this.customerId = options.customerId || ''
 			this.multiple = options.multiple || false
 		},
 		onShow() {
@@ -198,6 +206,10 @@
 					...(this.params||{}),
 					...{
 						state: 4,
+						propertyIdStr: this.propertyIdStr,
+						goodsCustomerDate: this.goodsCustomerDate,
+						customerId: this.customerId,
+						goodsIdStr: this.goodsIdStr,
 						page: this.pagination.getCurrentPage(),
 						size: this.pagination.getCurrentSize()
 					}

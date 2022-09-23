@@ -421,10 +421,12 @@ export default {
 		},
 		// 选择地址
 		chooseAddress() {
-			this.goto('/infoManage/chooseAddress/chooseAddress',{
-				customerId: this.customerId,
-				addressId: this.addressId
-			})
+			if(this.customerId) {
+				this.goto('/infoManage/chooseAddress/chooseAddress',{
+					customerId: this.customerId,
+					addressId: this.addressId
+				})
+			}
 		},
 		// 表单改变
 		async changeForm(obj) {

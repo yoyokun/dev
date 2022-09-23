@@ -367,6 +367,15 @@ export default {
 								const options = this.renderDataSource[findIndex].options
 								const findIndex1 = options.findIndex(item=>item.value === formDataValue[key])
 								this.renderDataSource[findIndex].defaultIndex = [findIndex1]
+							} else if(this.renderDataSource[findIndex].type === 'multiple'){
+								// 多选
+								const options = this.renderDataSource[findIndex].options
+								options.forEach(v=>{
+									if(formDataValue[key].includes(v.value)) {
+										v.active = true
+									}
+								})
+								this.renderDataSource[findIndex].options = options
 							}
 							if(this.renderDataSource[findIndex].isProvinces && formDataValue[key].length){
 								// 省市区 转换成code
@@ -616,6 +625,10 @@ export default {
 					v.active = false
 				}
 			})
+			// 对部分字段校验
+			this.$refs.form.validateField(name)
+			this.handleFiltrate(name)
+			this.renderDataSource[index].showOptions = false
 		}
 	},
 	options:{

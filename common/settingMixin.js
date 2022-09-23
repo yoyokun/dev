@@ -13,6 +13,7 @@ import {
 } from '@/api/lpgManageAppApi'
 import {
 	stockInoutReasonFindList,
+	sysSpecificationClassifySelectPropertyBox
 } from '@/api/lpgSalesManageApi'
 import {
 	sysManagerFindList
@@ -44,6 +45,7 @@ export const settingMixin = {
 			riskLevelList: [], // 巡检风险等级
 			billType: [], // 单据类型
 			templateList: [], // 安检模板
+			sysSpecificationClassifyData: [], // 钢瓶分类
 		}
 	},
 	methods: {
@@ -361,9 +363,9 @@ export const settingMixin = {
 			this.customertProperty = this.getchildsProperty(res)
 		},
 		// 属性标签最后一级数组合并
-		arrayMergingCommon(res, childs = [], name = '') {
+		arrayMergingCommon(res,type=3, childs = [], name = '') {
 			res.forEach((v, i) => {
-				if (v.type === 3) {
+				if (v.type === type) {
 					// 最后一级
 					const obj = {
 						name: v.name,
@@ -376,7 +378,7 @@ export const settingMixin = {
 				} else {
 					const label = name ? name + '/' + v.name : v.name
 					if (v.children) {
-						childs = this.arrayMergingCommon(v.children, childs, label) // 获取子节点
+						childs = this.arrayMergingCommon(v.children, type, childs, label) // 获取子节点
 					}
 				}
 			})
@@ -499,6 +501,24 @@ export const settingMixin = {
 				})
 			})
 			this.templateList = templateList
+		},
+		// 获取组织模板列表
+		async getTemplateList(data = {}, type = 'id') {
+			const { returnValue: res } = await safeTemplateFindList(data)
+			const templateList = []
+			res.forEach(v => {
+				templateList.push({
+					name: v.name,
+					value: v[type]
+				})
+			})
+			this.templateList = templateList
+		},
+		// 查询钢瓶型号分类
+		async getSysSpecificationClassifySelectPropertyBox() {
+			const { returnValue: res } = await sysSpecificationClassifySelectPropertyBox()
+			const arr = this.getchildsProperty(res)
+			this.sysSpecificationClassifyData = this.arrayMergingCommon(arr,2)
 		},
 	}
 }

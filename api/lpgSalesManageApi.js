@@ -567,3 +567,59 @@ export function salesOrderTemplateFindList(data = {}, message = '', custom = {})
 		}
 	})
 }
+// 销售子单模板管理 获取子单模板详情
+export function salesOrderTemplateFindDataByTemplate(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/salesOrderTemplate/findDataByTemplate',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 收费项管理 根据条件查询列表信息
+export function salesPayItemsFindList(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/sales/salesPayItems/findList',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 模块通用设置管理 根据单个组织id查询调拨单设置信息
+export function moduleCommonSetFindByOrgId(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/sales/moduleCommonSet/findByOrgId',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 获取钢瓶规格
+export function sysSpecificationClassifySelectPropertyBox(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/info/sysSpecificationClassify/selectPropertyBox',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
