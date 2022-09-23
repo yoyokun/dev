@@ -581,6 +581,20 @@ export function salesOrderTemplateFindDataByTemplate(data = {}, message = '', cu
 		}
 	})
 }
+// 业务单管理 根据条件查询列表信息
+export function salesBusinessFindList(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/salesBusiness/findList',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
 // 收费项管理 根据条件查询列表信息
 export function salesPayItemsFindList(data = {}, message = '', custom = {}) {
   return request({
@@ -613,6 +627,20 @@ export function moduleCommonSetFindByOrgId(data = {}, message = '', custom = {})
 export function sysSpecificationClassifySelectPropertyBox(data = {}, message = '', custom = {}) {
   return request({
     url: baseURL + '/admin/info/sysSpecificationClassify/selectPropertyBox',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 调拨单管理 根据条件查询列表信息
+export function salesTransferFindList(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/salesTransfer/findList',
 		method: 'post',
 		data,
 		message,

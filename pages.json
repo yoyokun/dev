@@ -619,6 +619,34 @@
 						"navigationBarTitleText": "快速下单",
 						"enablePullDownRefresh": false
 					}	
+				},
+				{
+					"path" : "salesOrderList/salesOrderList",
+					"style" : {
+						"navigationBarTitleText": "销售订单",
+						"enablePullDownRefresh": false
+					}	
+				},
+				{
+					"path" : "bizOrderList/bizOrderList",
+					"style" : {
+						"navigationBarTitleText": "业务单",
+						"enablePullDownRefresh": false
+					}	
+				},
+				{
+					"path" : "allotOrderList/allotOrderList",
+					"style" : {
+						"navigationBarTitleText": "调拨单",
+						"enablePullDownRefresh": false
+					}	
+				},
+				{
+					"path" : "allotReciveList/allotReciveList",
+					"style" : {
+						"navigationBarTitleText": "接收列表",
+						"enablePullDownRefresh": false
+					}	
 				}
 			]
 		}
