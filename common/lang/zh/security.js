@@ -218,6 +218,7 @@ module.exports = {
 				label: '巡检员签名'
 			}
 		},
+		sigin: '点击签名',
 		billNo: '编号',
 		unitOrgName: '单元组织',
 		unitName: '风险单元',
@@ -293,6 +294,9 @@ module.exports = {
 			customerSign: {
 				label: '客户签名'
 			},
+			customerSignRefuse: {
+				label: '客户拒签'
+			},
 			managerSign: {
 				label: '安检员签名'
 			}
@@ -310,6 +314,7 @@ module.exports = {
 				name: '整改信息'
 			}
 		],
+		customerNo: '客户编号',
 		customerName: '客户名称',
 		classify: '客户分类',
 		phone: '联系电话',
@@ -373,6 +378,65 @@ module.exports = {
 		datetimePlace: '选择日期时间',
 		pictureName: '安检照片',
 		rectifyPicture: '整改照片'
+	},
+	// 添加整改
+	addRectification: {
+		titleText: '添加整改',
+		titleTextInfo: '整改详情',
+		titleTextEdit: '编辑整改',
+		form: {
+			orgId: {
+				label: '整改组织',
+				placeholder: '请选择整改组织'
+			},
+			managerId: {
+				label: '整改员',
+				placeholder: '请选择整改员'
+			},
+			state: {
+				label: '整改情况',
+				placeholder: '请选择整改情况',
+				options: [{
+						name: '正常整改',
+						value: 2
+					},
+					{
+						name: '无法整改',
+						value: 3
+					},
+					{
+						name: '拒绝整改',
+						value: 5
+					}
+				]
+			},
+			refuseNote: {
+				label: '无法整改',
+				placeholder: '请输入无法整改原因'
+			},
+			refuseNote1: {
+				label: '拒绝整改',
+				placeholder: '请输入拒绝整改原因'
+			},
+			remarks: {
+				label: '备注',
+				placeholder: '请输入备注'
+			},
+			picture: {
+				label: '拍照'
+			},
+			customerSign: {
+				label: '客户签名'
+			},
+			customerSignRefuse: {
+				label: '客户拒签'
+			},
+			managerSign: {
+				label: '整改员签名'
+			}
+		},
+		securityNo: '安检记录',
+		checkTime: '安检时间'
 	},
 	// 接收钢瓶列表
 	cylinderSecurityList: {

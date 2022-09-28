@@ -229,11 +229,11 @@ export default {
 		},
 		// 工单
 		handleWork() {
-			
+			this.goto('/infoManage/addWork/addWork',{ customerId: this.info.customerId, isSafeSecurity: 1, editId: this.editId })
 		},
 		// 整改
 		handleRectify() {
-			
+			this.goto('/securityManage/addRectification/addRectification',{ securityId: this.editId })
 		}
 	}
 }

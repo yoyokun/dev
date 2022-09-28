@@ -1,7 +1,8 @@
 <template>
   <view class="container">
 		<view class="location" v-if="location">
-			所在位置：{{ location }}
+			<image src="@/static/image/location.png" mode="widthFix"></image>
+			{{ location }}
 		</view>
 		<edit-form
 			ref="dialogForm"
@@ -18,7 +19,6 @@
 			v-if="templateInfo.safeTemplateItemVo && state === 2"
 			ref="securityCheck"
 			:safe-template-item-vo="templateInfo.safeTemplateItemVo"
-			@change="changeSecurity"
 		/>
 		<!-- 安检结果 -->
 		<edit-form
@@ -30,16 +30,21 @@
 			:form-data-value="formDataValue1">
 			<template v-slot:other>
 				<u-form-item v-if="endDecide.includes('2')" :label="$t('security.addSecurityCheck.form.customerSign.label')" :borderBottom="endDecide.includes('3')">
-					<view class="singnImg" @click="signCanvas(1)">
-						<image class="img" v-if="customerSign" :src="customerSign" mode="widthFix"></image>
-						<text v-else class="text">点击签名</text>
+					<view class="singnImg">
+						<view class='sigin' @click="signCanvas(1)">
+							<image class="img" v-if="customerSign" :src="customerSign" mode="widthFix"></image>
+							<text v-else class="text">{{$t('security.addPatrolCheck.sigin')}}</text>
+						</view>
+						<u-checkbox-group>
+							<u-checkbox v-model="customerSignRefuse" :label="$t('security.addSecurityCheck.form.customerSignRefuse.label')"></u-checkbox>
+						</u-checkbox-group>
 					</view>
 					<u-icon name="arrow-right" color="#666666" size="15" @click="signCanvas(1)"></u-icon> 
 				</u-form-item>
 				<u-form-item v-if="endDecide.includes('3')" :label="$t('security.addSecurityCheck.form.managerSign.label')" :borderBottom="cylinderCode === 1 || cylinderCode === 2">
 					<view class="singnImg" @click="signCanvas(2)">
 						<image class="img" v-if="managerSign" :src="managerSign" mode="widthFix"></image>
-						<text v-else class="text">点击签名</text>
+						<text v-else class="text">{{$t('security.addPatrolCheck.sigin')}}</text>
 					</view>
 					<u-icon name="arrow-right" color="#666666" size="15" @click="signCanvas(2)"></u-icon> 
 				</u-form-item>
@@ -88,6 +93,7 @@ import { userCustomerFindByIdList, cylinderArchivesFindByCodeKey } from '@/api/l
 import { safeSecuritySaveOrEdit, safeSecurityFindById, safeSecurityDeleteByIds, safeTemplateFindById } from '@/api/lpgSecurityManageApi.js'
 import { settingMixin } from '@/common/settingMixin.js'
 import SecurityCheck from '@/securityManage/addSecurityCheck/common/securityCheck.vue'
+import permision from "@/common/wa-permission/permission.js"
 export default {
 	components: {
 		SecurityCheck
@@ -103,7 +109,8 @@ export default {
   data() {
     return {
 			location: '',
-			isEdit: false,
+			longitude: '',
+			latitude: '',
 			isSave: true,
 			editId: '',
 			info: {},
@@ -282,11 +289,13 @@ export default {
 			templateInfo: {},//模板详情
 			cylinderNum: '',
 			codeKeysArr: [],
-			codeKey: ''
+			codeKey: '',
+			customerSignRefuse: false
 		}
   },
   async onLoad(options) {
 		this.editId = options.editId || ''
+		this.getLocation()
 		await this.init()
 		if (this.editId) {
 			await this.getInfo()
@@ -367,7 +376,7 @@ export default {
 				success: (res) => {
 					this.longitude = res.longitude
 					this.latitude = res.latitude
-					this.LongitudeAndLatitude()
+					this.longitudeAndLatitude(this.longitude,this.latitude)
 				},
 				fail: (err) => {
 					console.log(err)
@@ -376,6 +385,18 @@ export default {
 				}
 			});
 			// #endif
+		},
+		// 根据经纬度查地址
+		longitudeAndLatitude(longitude,latitude) {
+			this.$jsonp('https://apis.map.qq.com/ws/geocoder/v1/', {
+			  key: this.mapKey,
+			  callbackName: 'getJsonData',
+			  output: 'jsonp',
+			  location: latitude+','+longitude
+			}).then(json => {
+				const result = json.result
+				this.location = result.address
+			})
 		},
 		// 初始化
 		async init() {
@@ -564,6 +585,10 @@ export default {
 			obj.picture = this.$options.filters.isArrayToString(obj.picture)
 			obj.codeKeys = this.codeKeysArr.join(',')
 			obj.cylinderNum = this.cylinderNum
+			obj.location = this.location
+			obj.longitude = this.longitude
+			obj.latitude = this.latitude
+			obj.customerSignRefuse = this.customerSignRefuse === true ? 1 : 2 // 客户拒签
 			const { returnValue: res, message } = await safeSecuritySaveOrEdit(obj,this.$t('security.addSecurityCheck.saveTit'))
 			if (res) {
 				this.$refs.uToast.show({
@@ -637,6 +662,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.location{
+	font-size: 32rpx;
+	font-weight: 400;
+	color: rgba(42, 130, 228, 1);
+	width: 100%;
+	padding: 20rpx 20rpx 0rpx 20rpx;
+	box-sizing: border-box;
+}
 ::v-deep .u-form-item .u-line{
 	border-bottom: 1rpx solid rgba(229, 229, 229, 1) !important;
 }
@@ -684,6 +717,10 @@ export default {
 }
 .singnImg{
 	flex: 1;
+	@include flexMixin();
+	.sigin{
+		flex: 1;
+	}
 	.img{
 		width: 200rpx;
 	}

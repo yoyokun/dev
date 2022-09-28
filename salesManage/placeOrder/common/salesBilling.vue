@@ -341,33 +341,42 @@
 				// 计算 遍历辅助单位
 				// 辅助单位相等，第一个有值，用第一个计算，否则用第二个 第三个
 				// 辅助单位都不相等 用数量
-				for (const i in this.settleData) {
-					const v = this.settleData[i]
-					// 取值
-					const numValue = this.tableData[index].templateGoodsAssistList[i] ? this.tableData[index].templateGoodsAssistList[i].numValue : null
-					if (v.settleUnitsId === row.unitsId && numValue) {
-						// 单位相等 并有值
-						this.tableData[index].settleAmount = this.$bigDecimal.multiply(this.$bigDecimal.multiply(this.tableData[index]['netContent-' + v.assistUnitsId],
-							this.tableData[index].amount), v.changeValue)
-						this.tableData[index].weight = this.$bigDecimal.multiply(this.tableData[index]['netContent-' + v.assistUnitsId], v.changeValue)
-						// 按照商品精度计算金额
-						this.tableData[index].totalMoney = this.$bigDecimal.round(this.$bigDecimal.multiply(this.tableData[index].unitPrice,
-							this.tableData[index].settleAmount), row.staffPre)
-						// 保留2位
-						this.tableData[index].totalMoney = this.$bigDecimal.round(this.tableData[index].totalMoney, 2)
-						// 跳出循环
-						break
-					} else if (v.settleUnitsId === row.unitsId && !numValue) {
-						// 单位相等 没值 跳出此次循环，继续执行下一次循环
-						continue
-					} else if (v.settleUnitsId !== row.unitsId) {
-						// 单位不相等
-						this.tableData[index].settleAmount = this.tableData[index].amount
-						this.tableData[index].weight = 1
-						// 按照商品精度计算金额
-						this.tableData[index].totalMoney = this.$bigDecimal.round(this.$bigDecimal.multiply(this.tableData[index].unitPrice, this.tableData[index].settleAmount), row.staffPre)
-						this.tableData[index].totalMoney = this.$bigDecimal.round(this.tableData[index].totalMoney, 2)
+				if(this.settleData.length){
+					for (const i in this.settleData) {
+						const v = this.settleData[i]
+						// 取值
+						const numValue = this.tableData[index].templateGoodsAssistList[i] ? this.tableData[index].templateGoodsAssistList[i].numValue : null
+						if (v.settleUnitsId === row.unitsId && numValue) {
+							// 单位相等 并有值
+							this.tableData[index].settleAmount = this.$bigDecimal.multiply(this.$bigDecimal.multiply(this.tableData[index]['netContent-' + v.assistUnitsId],
+								this.tableData[index].amount), v.changeValue)
+							this.tableData[index].weight = this.$bigDecimal.multiply(this.tableData[index]['netContent-' + v.assistUnitsId], v.changeValue)
+							// 按照商品精度计算金额
+							this.tableData[index].totalMoney = this.$bigDecimal.round(this.$bigDecimal.multiply(this.tableData[index].unitPrice,
+								this.tableData[index].settleAmount), row.staffPre)
+							// 保留2位
+							this.tableData[index].totalMoney = this.$bigDecimal.round(this.tableData[index].totalMoney, 2)
+							// 跳出循环
+							break
+						} else if (v.settleUnitsId === row.unitsId && !numValue) {
+							// 单位相等 没值 跳出此次循环，继续执行下一次循环
+							continue
+						} else if (v.settleUnitsId !== row.unitsId) {
+							// 单位不相等
+							this.tableData[index].settleAmount = this.tableData[index].amount
+							this.tableData[index].weight = 1
+							// 按照商品精度计算金额
+							this.tableData[index].totalMoney = this.$bigDecimal.round(this.$bigDecimal.multiply(this.tableData[index].unitPrice, this.tableData[index].settleAmount), row.staffPre)
+							this.tableData[index].totalMoney = this.$bigDecimal.round(this.tableData[index].totalMoney, 2)
+						}
 					}
+				}  else {
+					// 没有辅助单位
+					this.tableData[index].settleAmount = this.tableData[index].amount
+					this.tableData[index].weight = 1
+					// 按照商品精度计算金额
+					this.tableData[index].totalMoney = this.$bigDecimal.round(this.$bigDecimal.multiply(this.tableData[index].unitPrice, this.tableData[index].settleAmount), row.staffPre)
+					this.tableData[index].totalMoney = this.$bigDecimal.round(this.tableData[index].totalMoney, 2)
 				}
 			},
 			// 获取商品数据（给外部调用）

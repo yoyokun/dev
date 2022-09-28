@@ -88,6 +88,7 @@
 
 <script>
 import { auditWorkSaveOrEdit, auditWorkFindById, auditWorkDeleteByIds, auditWorkInvalidWork, auditWorkAssignWork } from '@/api/lpgManageAppApi.js'
+import { safeSecurityCreateWork } from '@/api/lpgSecurityManageApi.js'
 import { UnixToDate } from '@/utils/util.js'
 import { settingMixin } from '@/common/settingMixin.js'
 export default {
@@ -106,6 +107,7 @@ export default {
 					required: true,
 					showOptions: false,
 					disabled: false,
+					show: true,
 					options: [],
 					rules: [
 						{
@@ -239,31 +241,42 @@ export default {
 			info: {},
 			show: false,
 			invalidNote: '',
-			customerId: ''
+			customerId: '',
+			isSafeSecurity: '' // 1是整改工单
 		}
   },
   async onLoad(options) {
 		this.editId = options.editId || ''
-		if (this.editId) {
-			this.isSave = false
-			uni.setNavigationBarTitle({
-				title: this.$t('addWork.titleTextInfo')
-			});
-		} else {
-			this.isSave = true
+		this.customerId = options.customerId || ''
+		this.isSafeSecurity = options.isSafeSecurity || ''
+		await this.init()
+		if(this.isSafeSecurity === '1'){
+			// 整改工单
+			this.formDataSource[0].show = false
 			uni.setNavigationBarTitle({
 				title: this.$t('addWork.titleText')
 			});
-		}
-		await this.init()
-		if (this.editId) {
-			this.formDataSource.forEach(v=>{
-				v.disabled = true
-			})
-			this.getInfo()
-		} else {
 			this.formDataValue = {
 				toOrgId: this.userInfo.orgId
+			}
+		} else {
+			if (this.editId) {
+				this.isSave = false
+				uni.setNavigationBarTitle({
+					title: this.$t('addWork.titleTextInfo')
+				});
+				this.formDataSource.forEach(v=>{
+					v.disabled = true
+				})
+				this.getInfo()
+			} else {
+				this.isSave = true
+				uni.setNavigationBarTitle({
+					title: this.$t('addWork.titleText')
+				});
+				this.formDataValue = {
+					toOrgId: this.userInfo.orgId
+				}
 			}
 		}
   },
@@ -367,26 +380,47 @@ export default {
 				})
 			} else {
 				// 添加编辑
-				this.$refs.dialogForm.handleSubmit(async(data) => {
-					data.id = this.editId || ''
-					if (data.formKey === 'polling') {
-						data.customerId = data.unitId
-					} else {
+				if(this.isSafeSecurity === '1'){
+					// 整改工单
+					this.$refs.dialogForm.handleSubmit(async(data) => {
+						data.id = this.editId || ''
 						data.customerId = this.customerId
-					}
-					const { returnValue: res, message } = await auditWorkSaveOrEdit(data)
-					if (res) {
-						this.$refs.uToast.show({
-							type: 'success',
-							message: message,
-						})
-						setTimeout(() => {
-							uni.navigateBack({
-								delta: 1
+						const { returnValue: res, message } = await safeSecurityCreateWork(data)
+						if (res) {
+							this.$refs.uToast.show({
+								type: 'success',
+								message: message,
 							})
-						}, 2000)
-					}
-				})
+							setTimeout(() => {
+								uni.navigateBack({
+									delta: 1
+								})
+							}, 2000)
+						}
+					})
+				} else {
+					this.$refs.dialogForm.handleSubmit(async(data) => {
+						data.id = this.editId || ''
+						if (data.formKey === 'polling') {
+							data.customerId = data.unitId
+						} else {
+							data.customerId = this.customerId
+						}
+						const { returnValue: res, message } = await auditWorkSaveOrEdit(data)
+						if (res) {
+							this.$refs.uToast.show({
+								type: 'success',
+								message: message,
+							})
+							setTimeout(() => {
+								uni.navigateBack({
+									delta: 1
+								})
+							}, 2000)
+						}
+					})
+				}
+				
 			}
     },
 		// 删除
