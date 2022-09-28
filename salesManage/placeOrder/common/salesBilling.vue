@@ -197,9 +197,10 @@
 		},
 		mounted() {
 			// 选择商品
-			uni.$once('chooseGoods', (data) => {
-				this.initGoodData(data)
-			})
+			
+		},
+		beforeDestroy(){
+			
 		},
 		methods: {
 			// 添加商品处理商品数据

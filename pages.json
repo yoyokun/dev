@@ -304,6 +304,12 @@
 						"navigationBarTitleText": "选择组织成员",
 						"enablePullDownRefresh": true
 					}
+				},{
+					"path" : "chooseCoupon/chooseCoupon",
+					"style" : {
+						"navigationBarTitleText": "选择优惠券",
+						"enablePullDownRefresh": true
+					}
 				}
 				,{
 					"path" : "cylinderArchivesList/cylinderArchivesList",

@@ -49,12 +49,6 @@ module.exports = {
 			1: '自提',
 			3: '车辆配送'
 		},
-		deliveryStateTxt: {
-			1: '待接单',
-			2: '待发货',
-			3: '配送中',
-			4: '已送达'
-		},
 		searchOptions: {
 			stateStr: {
 				label: '订单状态',
