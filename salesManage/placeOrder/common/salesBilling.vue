@@ -196,8 +196,6 @@
 			}
 		},
 		mounted() {
-			// 选择商品
-			
 		},
 		beforeDestroy(){
 			
