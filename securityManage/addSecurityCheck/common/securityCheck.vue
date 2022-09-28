@@ -296,7 +296,7 @@ export default{
 						// 多选
 						safeTemplateItemVoArr.push({
 							cehckData: arr,
-							defData: obj.resultData.Split(','),
+							defData: obj.defData.Split(','),
 							id: obj.id,
 							projectName: obj.projectName,
 							itemKey: obj.itemKey,
@@ -321,7 +321,7 @@ export default{
 						// 单选
 						safeTemplateItemVoArr.push({
 							cehckData: arr,
-							defData: obj.resultData,
+							defData: obj.defData,
 							id: obj.id,
 							projectName: obj.projectName,
 							itemKey: obj.itemKey,
@@ -335,10 +335,10 @@ export default{
 							rectifyPicture: obj.rectifyPicture ? obj.rectifyPicture : []
 						})
 					} else if (obj.itemType === 3 || obj.itemType === 4) {
-						// 文本  时间  图片
+						// 文本  时间
 						safeTemplateItemVoArr.push({
 							cehckData: obj.cehckData, // 提示
-							defData: obj.resultData, // 默认值
+							defData: obj.defData, // 默认值
 							id: obj.id,
 							projectName: obj.projectName,
 							itemKey: obj.itemKey,
@@ -355,7 +355,7 @@ export default{
 						// 图片
 						safeTemplateItemVoArr.push({
 							cehckData: obj.cehckData, // 提示
-							defData: this.$options.filters.pictureConversion(obj.resultData), // 默认值
+							defData: obj.defData || [], // 默认值
 							id: obj.id,
 							projectName: obj.projectName,
 							itemKey: obj.itemKey,

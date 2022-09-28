@@ -57,8 +57,11 @@
 				</u-form-item>
 			</template>
 		</edit-form>
+		<!-- 整改商品数据 -->
+		<add-shop ref="addShop" :shop-data="shopData"/>
 		<view class="btn" v-if="isSave">
-			<u-button :text="$t('common.btn.save')" type="primary" hairline shape="circle" @click="submitForm"></u-button>
+			<u-button :text="$t('common.btn.rectification')" type="primary" hairline shape="circle" @click="submitForm(1)"></u-button>
+			<u-button :text="$t('common.btn.settle')" type="primary" hairline shape="circle" @click="submitForm(2)"></u-button>
 		</view>
 		<!-- 请求 toast 提示 -->
 		<u-toast ref='uToast'></u-toast>
@@ -66,12 +69,14 @@
 </template>
 
 <script>
-import { safeSecurityFindById } from '@/api/lpgSecurityManageApi.js'
+import { safeSecurityFindById, safeRectifySaveOrEdit } from '@/api/lpgSecurityManageApi.js'
 import { settingMixin } from '@/common/settingMixin.js'
 import SecurityCheck from '@/securityManage/addSecurityCheck/common/securityCheck.vue'
+import AddShop from '@/securityManage/addRectification/common/addShop.vue'
 export default {
 	components: {
-		SecurityCheck
+		SecurityCheck,
+		AddShop
 	},
 	mixins: [settingMixin],
 	data() {
@@ -200,6 +205,7 @@ export default {
 			address: '', // 地址信息
 			info: {}, // 安检详情
 			safeSecurityResultNot: [], // 整改项目
+			shopData: [] // 商品信息回填
 		}
 	},
 	async onLoad(options) {
@@ -284,6 +290,80 @@ export default {
 				}
 			}
 		},
+		// 提交
+		submitForm(payState) {
+			if(this.state === 2) {
+				// 正常整改
+				this.$refs.dialogForm.handleSubmit(async(data) => {
+					this.$refs.dialogForm1.handleSubmit(async(parma) => {
+						const securityResultData = this.$refs.securityCheck.getSecurity()
+						const shop = this.$refs.addShop.getShop()
+						const obj = Object.assign(data,parma,{securityResultData: JSON.stringify(securityResultData)})
+						// 商品信息
+						obj.rectifyGoodsData = shop.data ? JSON.stringify(shop.data) : JSON.stringify([])// 商品
+						obj.rectifyPaysData = [] // 支付
+						const paymentObj = this.$refs.payment.getSettlement()
+						if (payState === 2) {
+							// 结算必传 rectifyPaysData
+							if (paymentObj.residue !== 0) {
+								this.$refs.uToast.show({
+									type: 'error',
+									message: '应付金额跟支付方式金额不一致',
+								})
+								return false
+							}
+						}
+						obj.rectifyPaysData = JSON.stringify(paymentObj.payType)
+						this.handleSave(obj,payState)
+					})
+				})
+			} else {
+				// 无法整改 拒绝整改
+				this.$refs.dialogForm.handleSubmit(async(parma) => {
+					this.handleSave(parma)
+				})
+			}
+		},
+		// 保存
+		async handleSave(obj,payState) {
+			obj.id = this.editId || ''
+			data.securityId = this.securityId
+			obj.customerId = this.info.customerId
+			obj.managerSign = this.managerSign
+			obj.customerSign = this.customerSign
+			obj.picture = this.$options.filters.isArrayToString(obj.picture)
+			obj.customerSignRefuse = this.customerSignRefuse === true ? 1 : 2 // 客户拒签
+			data.payState = payState // 支付状态
+			const { returnValue: res, message } = await safeRectifySaveOrEdit(obj,this.$t('security.addSecurityCheck.saveTit'))
+			if (res) {
+				this.$refs.uToast.show({
+					type: 'success',
+					message: message,
+				})
+				uni.$emit('updateInfo', true)
+				setTimeout(() => {
+					uni.navigateBack({
+						delta: 1
+					})
+				}, 2000)
+			}
+		},
+		// 编辑
+		handleEdit() {
+			this.isSave = true
+			uni.setNavigationBarTitle({
+				title: this.$t('security.addRectification.titleTextEdit')
+			});
+			this.formDataSource.forEach((v,i)=>{
+				v.disabled = true
+			})
+		},
+		// 签名
+		signCanvas(type) {
+			if(this.isSave) {
+				this.goto('/securityManage/signCanvas/signCanvas',{ type: type })
+			}
+		}
 	}
 }
 </script>

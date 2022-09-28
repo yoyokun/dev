@@ -54,7 +54,9 @@ module.exports = {
 			patrolCheck: '去巡检',
 			check: '去安检',
 			work: '整改工单',
-			rectify: '去整改'
+			rectify: '去整改',
+			settle: '结算',
+			rectification: '整改'
 		},
 		tipsTle: ['撤回提示', '提交提示', '删除提示', '禁用提示', '启用提示'],
 		backTxt: (txt) => `真的要撤回${txt}该条数据吗?`,

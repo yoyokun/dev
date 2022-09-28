@@ -83,17 +83,6 @@
 	let that = null
 	export default {
 		mixins: [paginationMixin, settingMixin],
-		props: {
-			goodsIdStr: '', // 商品sku
-			propertyIdStr: '', // 客户属性
-			goodsCustomerDate: '', // 日期
-			customerId: '', // 客户id
-			// 组织id
-			orgId: {
-				type: String,
-				default: ''
-			},
-		},
 		data() {
 			return {
 				searchOptions: [{
@@ -186,6 +175,7 @@
 			this.propertyIdStr = options.propertyIdStr || ''
 			this.goodsCustomerDate = options.goodsCustomerDate || ''
 			this.customerId = options.customerId || ''
+			this.orgId = options.orgId || ''
 			this.multiple = options.multiple || false
 		},
 		onShow() {
