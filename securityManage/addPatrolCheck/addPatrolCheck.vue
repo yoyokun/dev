@@ -54,14 +54,14 @@
 				<u-form-item v-if="endDecide.includes('2')" :label="$t('security.addPatrolCheck.form.customerSign.label')" :borderBottom="endDecide.includes('3')">
 					<view class="singnImg" @click="signCanvas(1)">
 						<image class="img" v-if="customerSign" :src="customerSign" mode="widthFix"></image>
-						<text v-else class="text">点击签名</text>
+						<text v-else class="text">{{$t('security.addPatrolCheck.sigin')}}</text>
 					</view>
 					<u-icon name="arrow-right" color="#666666" size="15" @click="signCanvas(1)"></u-icon> 
 				</u-form-item>
 				<u-form-item v-if="endDecide.includes('3')" :label="$t('security.addPatrolCheck.form.managerSign.label')">
 					<view class="singnImg" @click="signCanvas(2)">
 						<image class="img" v-if="managerSign" :src="managerSign" mode="widthFix"></image>
-						<text v-else class="text">点击签名</text>
+						<text v-else class="text">{{$t('security.addPatrolCheck.sigin')}}</text>
 					</view>
 					<u-icon name="arrow-right" color="#666666" size="15" @click="signCanvas(2)"></u-icon> 
 				</u-form-item>

@@ -136,27 +136,31 @@ export default{
 		}
 	},
 	props: {
+		// 整改数组
 		safeSecurityResultNot: {
 			type: Array,
 			default: () => {
 				return []
-			} // 整改数组
+			} 
 		},
+		// 安检项数据对象
 		safeTemplateItemVo: {
 			type: Object,
 			default: function() {
 				return {}
 			}
-		}, // 安检项数据对象
+		}, 
+		// 限制图片数
 		limit: {
 			type: Number,
 			default: 5
-		}, // 限制图片数
+		}, 
+		// 是否是安检
 		isSafeSecurity: {
 			type: Boolean,
 			default: true
 		},
-		// 是否展示安检结果
+		// 是否展示安检结果（安检详情）
 		isResult: {
 			type: Boolean,
 			default: false
@@ -240,25 +244,8 @@ export default{
 							result: 1, //  1 合格 2不合格
 							picture: this.isResult ? this.$options.filters.pictureConversion(obj.picture) : []
 						})
-					} else if (obj.itemType === 3) {
-						// 文本
-						safeTemplateItemVoArr.push({
-							cehckData: obj.cehckData, // 提示
-							defData: obj.defData, // 默认值
-							id: obj.id,
-							itemId: obj.itemId,
-							projectName: obj.projectName,
-							itemKey: obj.itemKey,
-							itemName: obj.itemName,
-							itemType: obj.itemType,
-							templateId: obj.templateId,
-							resultData: this.isResult ? obj.resultData : obj.defData, // 安检数据
-							isPicture: obj.isPicture,
-							result: 1, //  1 合格 2不合格
-							picture: this.isResult ? this.$options.filters.pictureConversion(obj.picture) : []
-						})
-					} else if (obj.itemType === 4) {
-						// 时间
+					} else if (obj.itemType === 3 || obj.itemType === 4) {
+						// 文本 时间
 						safeTemplateItemVoArr.push({
 							cehckData: obj.cehckData, // 提示
 							defData: obj.defData, // 默认值
@@ -298,9 +285,17 @@ export default{
 				// 整改
 				this.safeSecurityResultNot.forEach((obj) => {
 					if (obj.itemType === 1) {
+						const cehckData = obj.cehckData.Split(',')
+						const arr = []
+						cehckData.forEach(v=>{
+							arr.push({
+								name: v,
+								disabled: this.isResult ? true : false
+							})
+						})
 						// 多选
 						safeTemplateItemVoArr.push({
-							cehckData: obj.cehckData.Split(','),
+							cehckData: arr,
 							defData: obj.resultData.Split(','),
 							id: obj.id,
 							projectName: obj.projectName,
@@ -309,14 +304,23 @@ export default{
 							itemType: obj.itemType,
 							templateItemId: obj.templateItemId,
 							resultData: obj.resultData.Split(','),
-							picture: obj.picture,
+							picture: this.$options.filters.pictureConversion(obj.picture),
 							score: obj.score,
+							result: 2, //  1 合格 2不合格
 							rectifyPicture: obj.rectifyPicture ? obj.rectifyPicture : []
 						})
 					} else if (obj.itemType === 2) {
+						const cehckData = obj.cehckData.Split(',')
+						const arr = []
+						cehckData.forEach(v=>{
+							arr.push({
+								name: v,
+								disabled: this.isResult ? true : false
+							})
+						})
 						// 单选
 						safeTemplateItemVoArr.push({
-							cehckData: obj.cehckData.Split(','),
+							cehckData: arr,
 							defData: obj.resultData,
 							id: obj.id,
 							projectName: obj.projectName,
@@ -325,8 +329,9 @@ export default{
 							itemType: obj.itemType,
 							templateItemId: obj.templateItemId,
 							resultData: obj.resultData,
-							picture: obj.picture,
+							picture: this.$options.filters.pictureConversion(obj.picture),
 							score: obj.score,
+							result: 2, //  1 合格 2不合格
 							rectifyPicture: obj.rectifyPicture ? obj.rectifyPicture : []
 						})
 					} else if (obj.itemType === 3 || obj.itemType === 4) {
@@ -341,25 +346,27 @@ export default{
 							itemType: obj.itemType,
 							templateItemId: obj.templateItemId,
 							resultData: obj.resultData, // 安检数据
-							picture: obj.picture,
+							picture: this.$options.filters.pictureConversion(obj.picture),
 							score: obj.score,
+							result: 2, //  1 合格 2不合格
 							rectifyPicture: obj.rectifyPicture ? obj.rectifyPicture : []
 						})
 					} else if (obj.itemType === 5) {
 						// 图片
 						safeTemplateItemVoArr.push({
 							cehckData: obj.cehckData, // 提示
-							defData: obj.resultData, // 默认值
+							defData: this.$options.filters.pictureConversion(obj.resultData), // 默认值
 							id: obj.id,
 							projectName: obj.projectName,
 							itemKey: obj.itemKey,
 							itemName: obj.itemName,
 							itemType: obj.itemType,
 							templateItemId: obj.templateItemId,
-							resultData: obj.resultData, // 安检数据
+							resultData: this.$options.filters.pictureConversion(obj.resultData), // 安检数据
 							limit: 5,
 							picture: obj.picture,
 							score: obj.score,
+							result: 2, //  1 合格 2不合格
 							rectifyPicture: obj.rectifyPicture ? obj.rectifyPicture : []
 						})
 					}
