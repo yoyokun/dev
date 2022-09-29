@@ -595,7 +595,10 @@
 					// 获取折扣
 					const objDiscount = this.$refs.discount.getDiscount()
 					if (payData.data.pickMode == 4 && !payData.data.deliverManId) {
-						// this.$message.error('配送员不能为空')
+						this.$refs.uToast.show({
+							type: 'error',
+							message: '配送员不能为空',
+						})
 						return false
 					}
 					// 提交
@@ -721,7 +724,10 @@
 							data.salesOrderPayDetailData.push(obj)
 						})
 						if (settlementData.residue !== 0 && state === 3) {
-							// this.$message.error('支付金额跟应收金额不一致')
+							this.$refs.uToast.show({
+								type: 'error',
+								message: '支付金额跟应收金额不一致',
+							})
 							return false
 						}
 					}

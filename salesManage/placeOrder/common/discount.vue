@@ -9,7 +9,7 @@
 					<view class="content">
 						<input class="input" placeholder="请输入优惠券号" type="text" @input="changeCoupon" v-model="couponNo"
 							:disabled="isSettle" />
-						<u-icon name="arrow-right"></u-icon>
+						<u-button size="small" class="choose-coupon" type="primary" @click="chooseCoupon">选择</u-button>
 					</view>
 				</view>
 			</view>
@@ -161,6 +161,16 @@
 		},
 		mounted() {
 			this.getConfigGetCylinder()
+			uni.$on('chooseCoupon', (data) => {
+				console.log(data)
+				if(data){
+					this.couponNo = data.couponNo
+					this.couponDetailId = data.couponDetailId
+					this.couponMoney = data.goodsCouponMoney
+					this.discountCalculate()
+				}
+				
+			})
 		},
 		methods: {
 			async getConfigGetCylinder() {
@@ -200,10 +210,25 @@
 						// 折扣金额 = 优惠完的金额-成交金额
 						this.disCountMoney = this.$bigDecimal.round(this.$bigDecimal.subtract(this.money, val), 2)
 						// 折扣率 折扣金额除成交金额*100
-						this.disCountRate = this.$bigDecimal.round(this.$bigDecimal.multiply(this.$bigDecimal.divide(this.disCountMoney, val), 100), 2)
+						this.disCountRate = this.$bigDecimal.round(this.$bigDecimal.multiply(this.$bigDecimal.divide(this
+							.disCountMoney, val), 100), 2)
 					}
 					this.$emit('change', this.getDiscount())
 				}
+			},
+			// 选择优惠券
+			chooseCoupon() {
+				if (!this.customerId) {
+					this.$u.toast('请选择客户')
+					return
+				}
+				console.log(this.customerId)
+				this.goto('/infoManage/chooseCoupon/chooseCoupon', {
+					customerId: this.customerId,
+					orgId: this.orgId,
+					goodsDetailIdStr: encodeURIComponent(JSON.stringify(this.goodsDetailIdStr)),
+					couponMoney: this.totalMoneyAll
+				})
 			},
 			// 优惠券计算
 			async changeCoupon() {
@@ -389,6 +414,7 @@
 					width: 1px;
 					display: flex;
 					flex-wrap: wrap;
+					align-items: center;
 
 					>.picker {
 						width: 100%;
@@ -533,5 +559,9 @@
 
 			}
 		}
+	}
+
+	.choose-coupon {
+		width: 100rpx !important;
 	}
 </style>
