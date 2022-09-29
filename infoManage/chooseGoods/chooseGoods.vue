@@ -83,9 +83,6 @@
 	let that = null
 	export default {
 		mixins: [paginationMixin, settingMixin],
-		props: {
-			
-		},
 		data() {
 			return {
 				goodsIdStr: '', // 商品sku
@@ -184,6 +181,7 @@
 			this.propertyIdStr = options.propertyIdStr || ''
 			this.goodsCustomerDate = options.goodsCustomerDate || ''
 			this.customerId = options.customerId || ''
+			this.orgId = options.orgId || ''
 			this.multiple = options.multiple || false
 		},
 		onShow() {

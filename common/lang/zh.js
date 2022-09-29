@@ -54,7 +54,9 @@ module.exports = {
 			patrolCheck: '去巡检',
 			check: '去安检',
 			work: '整改工单',
-			rectify: '去整改'
+			rectify: '去整改',
+			settle: '结算',
+			rectification: '整改'
 		},
 		tipsTle: ['撤回提示', '提交提示', '删除提示', '禁用提示', '启用提示'],
 		backTxt: (txt) => `真的要撤回${txt}该条数据吗?`,
@@ -619,7 +621,7 @@ module.exports = {
 	chooseGoods: {
 		titleText: '选择商品',
 		brandName: '品牌',
-		goodsClassifyName: '分类',
+		goodsClassifyName: '商品分类',
 		unitsName: '单位',
 		standardName: '规格',
 		propertyNames: '属性参数',
@@ -660,7 +662,16 @@ module.exports = {
 				label: '日期范围',
 				placeholder: ['开始日期', '选择日期']
 			}
-		}
+		},
+		addShop: '商品',
+		businessTagName: '商品标记',
+		amount: '数量',
+		settleAmount: '结算数量',
+		weight: '重量',
+		totalMoney: '金额',
+		remarks: '备注',
+		remarksPlace: '请输入备注',
+		total: '合计'
 	},
 	search: {
 		searchTxt: '搜索',
