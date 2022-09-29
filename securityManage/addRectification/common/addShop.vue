@@ -3,7 +3,7 @@
 		<view class="list-head">
 			<view class="act-btn" @click="chooseGoods">
 				<u-icon class="add-icon" name="plus-circle"></u-icon>
-				<view class="add-txt">商品</view>
+				<view class="add-txt">{{$t('chooseGoods.addShop')}}</view>
 			</view>
 		</view>
 		<view class="goods" v-if="tableData.length">
@@ -23,19 +23,19 @@
 						<u-icon class="arrow-right" name="arrow-right"></u-icon>
 						<view class="attr-box">
 							<view class="attr-item">
-								<view class="item-tle">{{$t('stockMg.common.goodsClassifyName')}}：</view>
+								<view class="item-tle">{{$t('chooseGoods.goodsClassifyName')}}：</view>
 								<view class="item-txt">{{item.goodsClassifyName}}</view>
 							</view>
 							<view class="attr-item" v-if="item.propertyNames">
-								<view class="item-tle">{{$t('stockMg.common.propertyNames')}}：</view>
+								<view class="item-tle">{{$t('chooseGoods.propertyNames')}}：</view>
 								<view class="item-txt">{{item.propertyNames}}</view>
 							</view>
 							<view class="attr-item" v-if="item.businessTagName">
-								<view class="item-tle">商品标记：</view>
+								<view class="item-tle">{{$t('chooseGoods.businessTagName')}}：</view>
 								<view class="item-txt">{{item.businessTagName}}</view>
 							</view>
 							<view class="attr-item" v-if="item.brandName">
-								<view class="item-tle">{{$t('stockMg.common.brandName')}}：</view>
+								<view class="item-tle">{{$t('chooseGoods.brandName')}}：</view>
 								<view class="item-txt">{{item.brandName}}</view>
 							</view>
 						</view>
@@ -45,63 +45,63 @@
 				</view>
 				<view class="info-cell">
 					<view class="cell">
-						<view class="cell-label">规格：</view>
+						<view class="cell-label">{{$t('chooseGoods.standardName')}}：</view>
 						<view class="cell-content">{{item.standardName}}</view>
 					</view>
 					<view class="cell">
-						<view class="cell-label">单位：</view>
+						<view class="cell-label">{{$t('chooseGoods.unitsName')}}：</view>
 						<view class="cell-content">{{item.unitsName}}</view>
 					</view>
 				</view>
 				<view class="info-cell">
 					<view class="cell">
-						<view class="cell-label">数量：</view>
+						<view class="cell-label">{{$t('chooseGoods.amount')}}：</view>
 						<view class="cell-content">
 							<view class="nums">
-								<input min="1" maxlength="4" type="number" v-model="item.amount" placeholder="数量" step="1"
+								<input min="1" maxlength="4" type="number" v-model="item.amount" :placeholder="$t('chooseGoods.weight')" step="1"
 									@input="validateInput(index,item,'amount')" />
 							</view>
 						</view>
 					</view>
 					<view class="cell">
-						<view class="cell-label">重量：</view>
+						<view class="cell-label">{{$t('chooseGoods.weight')}}：</view>
 						<view class="cell-content">
 							<view class="nums">
-								<input v-model="item.weight" placeholder="重量" @input="validateInput(index,item,'weight')" />
+								<input v-model="item.weight" :placeholder="$t('chooseGoods.weight')" @input="validateInput(index,item,'weight')" />
 							</view>
 						</view>
 					</view>
 				</view>
 				<view class="info-cell">
 					<view class="cell">
-						<view class="cell-label">金额：</view>
+						<view class="cell-label">{{$t('chooseGoods.totalMoney')}}：</view>
 						<view class="cell-content">{{item.totalMoney}}</view>
 					</view>
 				</view>
 				<view class="info-cell">
 					<view class="cell remarks">
-						<view class="cell-label">备注：</view>
+						<view class="cell-label">{{$t('chooseGoods.remarks')}}：</view>
 						<view class="cell-content">
-							<textarea v-model="item.remarks" placeholder="请输入备注"></textarea>
+							<textarea v-model="item.remarks" :placeholder="$t('chooseGoods.remarksPlace')"></textarea>
 						</view>
 					</view>
 				</view>
 			</view>
 			<view class="total">
 				<view class="total-tle">
-					<text>合计：</text>
+					<text>{{$t('chooseGoods.total')}}：</text>
 				</view>
 				<view class="total-main">
 					<view class="item">
-						<text>数量：</text>
+						<text>{{$t('chooseGoods.amount')}}：</text>
 						<text>{{totalAmount}}</text>
 					</view>
 					<view class="item">
-						<text>重量：</text>
+						<text>{{$t('chooseGoods.weight')}}：</text>
 						<text>{{totalNetWeight}}</text>
 					</view>
 					<view class="item">
-						<text>金额：</text>
+						<text>{{$t('chooseGoods.totalMoney')}}：</text>
 						<text class="red">{{totalMoney}}</text>
 					</view>
 				</view>

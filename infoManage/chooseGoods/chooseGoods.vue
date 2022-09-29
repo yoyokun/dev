@@ -85,6 +85,12 @@
 		mixins: [paginationMixin, settingMixin],
 		data() {
 			return {
+				goodsIdStr: '', // 商品sku
+				propertyIdStr: '', // 客户属性
+				goodsCustomerDate: '', // 日期
+				customerId: '', // 客户id
+				// 组织id
+				orgId: '',
 				searchOptions: [{
 						type: 'select',
 						labelText: this.$t('chooseGoods.searchOptions.goodsClassifyId.label'),

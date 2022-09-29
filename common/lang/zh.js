@@ -621,7 +621,7 @@ module.exports = {
 	chooseGoods: {
 		titleText: '选择商品',
 		brandName: '品牌',
-		goodsClassifyName: '分类',
+		goodsClassifyName: '商品分类',
 		unitsName: '单位',
 		standardName: '规格',
 		propertyNames: '属性参数',
@@ -662,7 +662,16 @@ module.exports = {
 				label: '日期范围',
 				placeholder: ['开始日期', '选择日期']
 			}
-		}
+		},
+		addShop: '商品',
+		businessTagName: '商品标记',
+		amount: '数量',
+		settleAmount: '结算数量',
+		weight: '重量',
+		totalMoney: '金额',
+		remarks: '备注',
+		remarksPlace: '请输入备注',
+		total: '合计'
 	},
 	search: {
 		searchTxt: '搜索',

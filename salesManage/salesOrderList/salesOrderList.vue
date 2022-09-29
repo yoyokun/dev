@@ -15,8 +15,7 @@
 		<scroll-view class="scroll-box" scroll-y="true" @scrolltolower="loadMore">
 			<block v-if="empty">
 				<view class="gp-box" v-if="dataList.length">
-					<view class="gp-main" v-for="(item, index) in dataList" :key="index"
-						@click="">
+					<view class="gp-main" v-for="(item, index) in dataList" :key="index" @click="">
 						<view class="head">
 							<text>{{item.billNo}}</text>
 							<text class="status green"

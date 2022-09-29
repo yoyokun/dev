@@ -28,23 +28,23 @@
 								<u-icon class="arrow-right" name="arrow-right"></u-icon>
 								<view class="attr-box">
 									<view class="attr-item">
-										<view class="item-tle">{{$t('stockMg.common.goodsClassifyName')}}：</view>
+										<view class="item-tle">{{$t('chooseGoods.goodsClassifyName')}}：</view>
 										<view class="item-txt">{{item.goodsClassifyName}}</view>
 									</view>
 									<view class="attr-item" v-if="item.propertyNames">
-										<view class="item-tle">{{$t('stockMg.common.propertyNames')}}：</view>
+										<view class="item-tle">{{$t('chooseGoods.propertyNames')}}：</view>
 										<view class="item-txt">{{item.propertyNames}}</view>
 									</view>
 									<view class="attr-item" v-if="item.standardName">
-										<view class="item-tle">{{$t('stockMg.common.standardName')}}：</view>
+										<view class="item-tle">{{$t('chooseGoods.standardName')}}：</view>
 										<view class="item-txt">{{item.standardName}}</view>
 									</view>
 									<view class="attr-item" v-if="item.brandName">
-										<view class="item-tle">{{$t('stockMg.common.brandName')}}：</view>
+										<view class="item-tle">{{$t('chooseGoods.brandName')}}：</view>
 										<view class="item-txt">{{item.brandName}}</view>
 									</view>
 									<view class="attr-item" v-if="item.unitsName">
-										<view class="item-tle">{{$t('stockMg.common.unitsName')}}：</view>
+										<view class="item-tle">{{$t('chooseGoods.unitsName')}}：</view>
 										<view class="item-txt">{{item.unitsName}}</view>
 									</view>
 								</view>

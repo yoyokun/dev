@@ -2,11 +2,6 @@ module.exports = {
 	common: {
 		totalTxt: '总数',
 		checkStateTxt: ['已审核', '待提交', '待审核', '已作废', '未通过', '无审核'],
-		propertyNames: '属性参数',
-		standardName: '规格',
-		unitsName: '基本单位',
-		brandName: '品牌',
-		goodsClassifyName: '商品分类',
 		stockTypeTxt: {
 			in: '入库',
 			out: '出库'
@@ -232,7 +227,6 @@ module.exports = {
 			},
 		},
 	},
-
 	// 添加库存盘点
 	addStockCheck: {
 		titleText: '添加库存盘点',
