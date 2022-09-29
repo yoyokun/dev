@@ -136,7 +136,9 @@
 			// 验证输入
 			validateInput(val, index) {
 				if (this.payType[index].value) {
-					this.payType[index].value = checkPrice(val)
+					this.$nextTick(()=>{
+						this.payType[index].value = checkPrice(val)
+					})
 				}
 				this.handleResidue()
 			},
@@ -167,15 +169,6 @@
 					residue: (this.residue - 0)
 				}
 			},
-			// 获取焦点
-			onBlur(index) {
-				this.blurIndex = index
-			},
-			// 点击
-			onResidue() {
-				this.payType[this.blurIndex].value = this.residue
-				this.handleResidue()
-			}
 		}
 	}
 </script>
