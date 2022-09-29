@@ -48,7 +48,7 @@
 					<view class="cell">
 						<view class="cell-label">{{$t('chooseGoods.standardName')}}：</view>
 						<view class="cell-content" v-if="item.unitsType === 1">{{item.standardName}}</view>
-						<view class="cell-content" v-if="item.unitsType === 2">
+						<view class="cell-content" v-if="item.unitsType === 2" @click="chooseSku(item, index)">
 							<text>{{item.standardName}}</text>
 							<u-icon class="arrow-right" name="arrow-right"></u-icon>
 						</view>
@@ -67,7 +67,8 @@
 							<!-- 编辑 -->
 							<view class="cell-content" v-if="item.unitsType === 2">
 								<view class="nums">
-									<input v-model="item[val.propValue]" :placeholder="val.labelName" @input="validateInput(index,item,val.propValue)" />
+									<input v-model="item[val.propValue]" :placeholder="val.labelName"
+										@input="validateInput(index,item,val.propValue)" />
 								</view>
 							</view>
 						</view>
@@ -76,7 +77,8 @@
 						<view class="cell-label">{{$t('chooseGoods.amount')}}：</view>
 						<view class="cell-content">
 							<view class="nums">
-								<input min="1" maxlength="4" type="number" v-model="item.amount" :placeholder="$t('chooseGoods.amount')" step="1"
+								<input min="1" maxlength="4" type="number" v-model="item.amount"
+									:placeholder="$t('chooseGoods.amount')" step="1"
 									@input="validateInput(index,item,'amount')" />
 							</view>
 						</view>
@@ -117,11 +119,32 @@
 				</view>
 			</view>
 		</view>
+		<u-popup class="multiplePopup" mode="bottom" :show="showSku" :closeOnClickOverlay="false">
+			<view class="btn">
+				<text class="cancel" @click="closeSku">{{$t('common.editForm.cancelText')}}</text>
+				<text class="confirm" @click="confirmSku">{{$t('common.editForm.confirmText')}}</text>
+			</view>
+			<scroll-view class="multipleBox" scroll-y="true">
+				<view class="box" v-for="(subItems,subIndex) in sysSpecificationClassifyData" :key="subItems.value"
+					@click="checkSku(subIndex)">
+					<view class="center">
+						<view class="name">{{ subItems.name }}</view>
+					</view>
+					<image class="icon" v-if="subItems.active" mode="widthFix" src="/static/image/check.png" />
+					<image class="icon" v-else mode="widthFix" src="/static/image/uncheck.png" />
+				</view>
+			</scroll-view>
+		</u-popup>
 	</view>
 </template>
 
 <script>
-	import { createUniqueString, positiveInteger, checkPrice, integer } from '@/utils'
+	import {
+		createUniqueString,
+		positiveInteger,
+		checkPrice,
+		integer
+	} from '@/utils'
 	export default {
 		name: 'salesBilling',
 		props: {
@@ -133,14 +156,14 @@
 			// 模板详情
 			templateData: {
 				type: Object,
-				default() {
+				default () {
 					return {}
 				}
 			},
 			// 钢瓶分类
-			sysSpecificationClassifyData:  {
+			sysSpecificationClassifyData: {
 				type: Array,
-				default() {
+				default () {
 					return []
 				}
 			},
@@ -177,7 +200,9 @@
 				tableColumn: [], // 表头
 				tableData: [], // 商品数据
 				totalMoney: '', // 模板总金额
-				totalNum: '' // 模板总数量
+				totalNum: '', // 模板总数量
+				showSku: false,
+				tempIndex: null,
 			}
 		},
 		watch: {
@@ -195,12 +220,41 @@
 				immediate: true
 			}
 		},
-		mounted() {
-		},
-		beforeDestroy(){
-			
+		mounted() {},
+		beforeDestroy() {
+
 		},
 		methods: {
+			// 选择sku
+			chooseSku(item, index) {
+				this.showSku = true
+				this.sysSpecificationClassifyData.forEach((o, i) => {
+					o.active = false
+					if (o.value == item.standardId) {
+						o.active = true
+					}
+				})
+				this.tempIndex = index
+			},
+			checkSku(index) {
+				this.sysSpecificationClassifyData.forEach(item => {
+					item.active = false
+				})
+				let obj = this.sysSpecificationClassifyData[index]
+				obj.active = true
+				this.$set(this.sysSpecificationClassifyData, index, obj)
+			},
+			confirmSku() {
+				let obj = this.sysSpecificationClassifyData.filter(item => item.active == true)[0]
+				this.tableData[this.tempIndex].standardId = obj.value
+				this.tableData[this.tempIndex].standardName = obj.name
+				this.tableChange()
+				this.closeSku()
+			},
+			// 关闭sku
+			closeSku() {
+				this.showSku = false
+			},
 			// 添加商品处理商品数据
 			initGoodData(data) {
 				data.forEach(v => {
@@ -250,7 +304,8 @@
 										if (l.settleUnitsId === v.unitsId && !isWeight) {
 											isWeight = true
 											// 重量值 = 乘 转换值
-											v.weight = this.$bigDecimal.multiply(v[m.propValue], l.changeValue)
+											v.weight = this.$bigDecimal.multiply(v[m
+												.propValue], l.changeValue)
 										}
 									}
 								})
@@ -295,7 +350,7 @@
 					const value1 = Number(item.totalMoney)
 					totalMoney = this.$bigDecimal.add(totalMoney, value1)
 				})
-				
+
 				const num = new this.$bigDecimal(totalMoney)
 				if (this.templateDataObj.decimalMode === 'ROUND_DOWN') {
 					// 向下取整
@@ -325,7 +380,9 @@
 						if (key === 'netContent-' + v.assistUnitsId) {
 							const val = checkPrice(row['netContent-' + v.assistUnitsId])
 							this.tableData[index][key] = val
-							this.tableData[index].templateGoodsAssistList[i].numValue = this.tableData[index][key] // 表头辅助单位值（提交的时候用）
+							this.tableData[index].templateGoodsAssistList[i].numValue = this.tableData[index][
+								key
+							] // 表头辅助单位值（提交的时候用）
 							// 新添加的字段，强制table重新渲染
 							this.$set(this.tableData, index, this.tableData[index])
 						}
@@ -340,18 +397,23 @@
 				// 计算 遍历辅助单位
 				// 辅助单位相等，第一个有值，用第一个计算，否则用第二个 第三个
 				// 辅助单位都不相等 用数量
-				if(this.settleData.length){
+				if (this.settleData.length) {
 					for (const i in this.settleData) {
 						const v = this.settleData[i]
 						// 取值
-						const numValue = this.tableData[index].templateGoodsAssistList[i] ? this.tableData[index].templateGoodsAssistList[i].numValue : null
+						const numValue = this.tableData[index].templateGoodsAssistList[i] ? this.tableData[index]
+							.templateGoodsAssistList[i].numValue : null
 						if (v.settleUnitsId === row.unitsId && numValue) {
 							// 单位相等 并有值
-							this.tableData[index].settleAmount = this.$bigDecimal.multiply(this.$bigDecimal.multiply(this.tableData[index]['netContent-' + v.assistUnitsId],
+							this.tableData[index].settleAmount = this.$bigDecimal.multiply(this.$bigDecimal.multiply(this
+								.tableData[index]['netContent-' + v.assistUnitsId],
 								this.tableData[index].amount), v.changeValue)
-							this.tableData[index].weight = this.$bigDecimal.multiply(this.tableData[index]['netContent-' + v.assistUnitsId], v.changeValue)
+							this.tableData[index].weight = this.$bigDecimal.multiply(this.tableData[index]['netContent-' +
+								v.assistUnitsId
+							], v.changeValue)
 							// 按照商品精度计算金额
-							this.tableData[index].totalMoney = this.$bigDecimal.round(this.$bigDecimal.multiply(this.tableData[index].unitPrice,
+							this.tableData[index].totalMoney = this.$bigDecimal.round(this.$bigDecimal.multiply(this
+								.tableData[index].unitPrice,
 								this.tableData[index].settleAmount), row.staffPre)
 							// 保留2位
 							this.tableData[index].totalMoney = this.$bigDecimal.round(this.tableData[index].totalMoney, 2)
@@ -365,16 +427,18 @@
 							this.tableData[index].settleAmount = this.tableData[index].amount
 							this.tableData[index].weight = 1
 							// 按照商品精度计算金额
-							this.tableData[index].totalMoney = this.$bigDecimal.round(this.$bigDecimal.multiply(this.tableData[index].unitPrice, this.tableData[index].settleAmount), row.staffPre)
+							this.tableData[index].totalMoney = this.$bigDecimal.round(this.$bigDecimal.multiply(this
+								.tableData[index].unitPrice, this.tableData[index].settleAmount), row.staffPre)
 							this.tableData[index].totalMoney = this.$bigDecimal.round(this.tableData[index].totalMoney, 2)
 						}
 					}
-				}  else {
+				} else {
 					// 没有辅助单位
 					this.tableData[index].settleAmount = this.tableData[index].amount
 					this.tableData[index].weight = 1
 					// 按照商品精度计算金额
-					this.tableData[index].totalMoney = this.$bigDecimal.round(this.$bigDecimal.multiply(this.tableData[index].unitPrice, this.tableData[index].settleAmount), row.staffPre)
+					this.tableData[index].totalMoney = this.$bigDecimal.round(this.$bigDecimal.multiply(this.tableData[
+						index].unitPrice, this.tableData[index].settleAmount), row.staffPre)
 					this.tableData[index].totalMoney = this.$bigDecimal.round(this.tableData[index].totalMoney, 2)
 				}
 			},
@@ -401,276 +465,340 @@
 </script>
 
 <style lang="scss" scoped>
-.list {
-	margin-top: 40rpx;
-	.list-head {
-		height: 90rpx;
-		display: flex;
-		align-items: center;
-		// padding: 0 30rpx;
-		position: relative;
+	.multiplePopup {
+		.btn {
+			@include flexMixin();
+			height: 80rpx;
 
-		&:before {
-			display: block;
-			content: '';
-			height: 40rpx;
-			width: 8rpx;
-			border-radius: 8rpx;
-			background: rgba(42, 130, 228, 1);
-		}
+			.confirm {
+				font-size: 30rpx;
+				padding: 0 30rpx;
+				color: rgb(60, 156, 255);
+			}
 
-		.head-tle {
-			margin-left: 16rpx;
-			font-size: 36rpx;
-			width: 1px;
-			flex: 1;
-			color: #000;
-		}
-
-		.head-icon {
-			::v-deep .u-icon__icon {
-				color: red !important;
-				font-size: 44rpx !important;
+			.cancel {
+				font-size: 30rpx;
+				padding: 0 30rpx;
+				color: rgb(144, 145, 147);
 			}
 		}
 
-		.act-btn {
-			display: flex;
-			height: 60rpx;
-			border-radius: 60rpx;
-			background: white;
-			box-shadow: 0px 2px 4px 0px rgba(229, 229, 229, 0.5);
-			align-items: center;
-			padding: 0 20rpx;
-			font-size: 28rpx;
-			color: rgba(42, 130, 228, 1);
+		.multipleBox {
+			height: 600rpx;
+			padding: 0rpx 20rpx;
+			box-sizing: border-box;
 
-			.add-icon {
-				::v-deep .u-icon__icon {
-					color: rgba(42, 130, 228, 1) !important;
-					line-height: auto !important;
-					font-size: 34rpx !important;
+			.box {
+				padding: 20rpx;
+				border-bottom: 1rpx solid #eee;
+				@include flexMixin();
+
+				&:last-child {
+					border-bottom: 0rpx;
 				}
-			}
 
-			.add-txt {
-				margin-left: 10rpx;
+				.center {
+					flex: 1;
+
+					.name {
+						flex: 1;
+						color: rgba(56, 56, 56, 1);
+						font-size: 36rpx;
+						font-weight: 500;
+					}
+
+					.desc {
+						flex: 1;
+						font-size: 32rpx;
+						color: #707070;
+						margin-right: 20rpx;
+					}
+				}
+
+				.icon {
+					width: 48rpx;
+					height: 48rpx;
+				}
 			}
 		}
 	}
-	.goods {
-	background: rgba(255, 255, 255, 1);
-	box-shadow: 0rpx 4rpx 8rpx rgba(0, 0, 0, 0.04);
-	border-radius: 16rpx;
-	overflow: hidden;
 
-	.goods-list {
-		padding: 30rpx 30rpx;
-		border-bottom: 1px solid #eee;
+	.list {
+		margin-top: 40rpx;
 
-		&:last-child {
-			border-bottom: none;
-		}
-
-		.goods-head {
-			display: flex;
-
-			.goods-tle {
-				flex: 1;
-				width: 1px;
-				word-break: break-all;
-				font-size: 28rpx;
-				color: #000;
-				line-height: 38rpx;
-				font-weight: bold;
-			}
-
-			.goods-price {
-				font-size: 28rpx;
-				line-height: 38rpx;
-				font-weight: bold;
-				color: red;
-				margin-left: 10rpx;
-			}
-		}
-
-		.attr-del {
-			display: flex;
-			justify-content: space-between;
-			margin-top: 30rpx;
-			align-items: center;
-
-			.remove-goods {
-				::v-deep .u-icon__icon {
-					color: rgba(255, 79, 35, 1.0) !important;
-					font-size: 46rpx !important;
-				}
-			}
-		}
-
-		.attr {
-			padding: 0 10rpx;
-			height: 50rpx;
+		.list-head {
+			height: 90rpx;
 			display: flex;
 			align-items: center;
-			width: 360rpx;
-			background: rgba(247, 247, 247, 1);
-			border-radius: 4rpx;
+			// padding: 0 30rpx;
 			position: relative;
 
-			&:hover {
-				.arrow-right {
-					transform: rotate(90deg);
-				}
-
-				.attr-box {
-					display: block;
-				}
+			&:before {
+				display: block;
+				content: '';
+				height: 40rpx;
+				width: 8rpx;
+				border-radius: 8rpx;
+				background: rgba(42, 130, 228, 1);
 			}
 
-			.attr-txt {
-				color: rgba(56, 56, 56, 1);
-				font-size: 28rpx;
+			.head-tle {
+				margin-left: 16rpx;
+				font-size: 36rpx;
 				width: 1px;
 				flex: 1;
-				text-overflow: ellipsis;
-				overflow: hidden;
-				white-space: nowrap;
+				color: #000;
 			}
 
-			.attr-box {
-				display: none;
-				z-index: 20;
-				position: absolute;
-				left: 0;
-				background: rgba(247, 247, 247, 1);
-				border-radius: 16rpx;
-				top: 74rpx;
-				width: 100%;
-				padding: 20rpx;
-				box-sizing: border-box;
-
-				.attr-item {
-					display: flex;
-					font-size: 24rpx;
-					margin-bottom: 10rpx;
-					color: #000;
-					font-weight: bold;
-
-					&:last-child {
-						margin-bottom: 0;
-					}
-
-					.item-tle {
-						color: rgba(56, 56, 56, 1);
-						font-weight: normal;
-					}
-				}
-
-				&::before {
-					content: '';
-					position: absolute;
-					top: -15rpx;
-					left: calc(50% - 15rpx);
-					transform: translate(-50%, 0%);
-					transform: rotate(45deg);
-					display: block;
-					width: 30rpx;
-					height: 30rpx;
-					background: rgba(247, 247, 247, 1);
+			.head-icon {
+				::v-deep .u-icon__icon {
+					color: red !important;
+					font-size: 44rpx !important;
 				}
 			}
 
+			.act-btn {
+				display: flex;
+				height: 60rpx;
+				border-radius: 60rpx;
+				background: white;
+				box-shadow: 0px 2px 4px 0px rgba(229, 229, 229, 0.5);
+				align-items: center;
+				padding: 0 20rpx;
+				font-size: 28rpx;
+				color: rgba(42, 130, 228, 1);
+
+				.add-icon {
+					::v-deep .u-icon__icon {
+						color: rgba(42, 130, 228, 1) !important;
+						line-height: auto !important;
+						font-size: 34rpx !important;
+					}
+				}
+
+				.add-txt {
+					margin-left: 10rpx;
+				}
+			}
 		}
 
-		.info-cell {
-			display: flex;
-			align-items: center;
-			font-size: 28rpx;
-			line-height: 28rpx;
-			flex-wrap: wrap;
-			.cell {
-				width: 50%;
-				display: flex;
-				align-items: center;
-				margin-top: 30rpx;
-				&.remarks{
-					width: 100%;
+		.goods {
+			background: rgba(255, 255, 255, 1);
+			box-shadow: 0rpx 4rpx 8rpx rgba(0, 0, 0, 0.04);
+			border-radius: 16rpx;
+			overflow: hidden;
+
+			.goods-list {
+				padding: 30rpx 30rpx;
+				border-bottom: 1px solid #eee;
+
+				&:last-child {
+					border-bottom: none;
 				}
 
-				.cell-label {
-					color: rgba(128, 128, 128, 1);
-					white-space: nowrap;
-				}
-
-				.cell-content {
-					flex: 1;
+				.goods-head {
 					display: flex;
-					.nums {
-						color: rgba(128, 128, 128, 1);
-						display: flex;
-						align-items: center;
+
+					.goods-tle {
 						flex: 1;
-						input {
-							width: 150rpx;
-							text-align: right;
-							font-size: 28rpx;
-							border-bottom: 1px solid #ccc;
-							text-align: center;
+						width: 1px;
+						word-break: break-all;
+						font-size: 28rpx;
+						color: #000;
+						line-height: 38rpx;
+						font-weight: bold;
+					}
+
+					.goods-price {
+						font-size: 28rpx;
+						line-height: 38rpx;
+						font-weight: bold;
+						color: red;
+						margin-left: 10rpx;
+					}
+				}
+
+				.attr-del {
+					display: flex;
+					justify-content: space-between;
+					margin-top: 30rpx;
+					align-items: center;
+
+					.remove-goods {
+						::v-deep .u-icon__icon {
+							color: rgba(255, 79, 35, 1.0) !important;
+							font-size: 46rpx !important;
+						}
+					}
+				}
+
+				.attr {
+					padding: 0 10rpx;
+					height: 50rpx;
+					display: flex;
+					align-items: center;
+					width: 360rpx;
+					background: rgba(247, 247, 247, 1);
+					border-radius: 4rpx;
+					position: relative;
+
+					&:hover {
+						.arrow-right {
+							transform: rotate(90deg);
+						}
+
+						.attr-box {
+							display: block;
 						}
 					}
 
-					textarea {
-						width: 100%;
+					.attr-txt {
+						color: rgba(56, 56, 56, 1);
+						font-size: 28rpx;
+						width: 1px;
+						flex: 1;
+						text-overflow: ellipsis;
+						overflow: hidden;
+						white-space: nowrap;
+					}
+
+					.attr-box {
+						display: none;
+						z-index: 20;
+						position: absolute;
+						left: 0;
 						background: rgba(247, 247, 247, 1);
-						height: 110rpx;
-						border-radius: 14rpx;
+						border-radius: 16rpx;
+						top: 74rpx;
+						width: 100%;
 						padding: 20rpx;
 						box-sizing: border-box;
-						font-size: 28rpx;
+
+						.attr-item {
+							display: flex;
+							font-size: 24rpx;
+							margin-bottom: 10rpx;
+							color: #000;
+							font-weight: bold;
+
+							&:last-child {
+								margin-bottom: 0;
+							}
+
+							.item-tle {
+								color: rgba(56, 56, 56, 1);
+								font-weight: normal;
+							}
+						}
+
+						&::before {
+							content: '';
+							position: absolute;
+							top: -15rpx;
+							left: calc(50% - 15rpx);
+							transform: translate(-50%, 0%);
+							transform: rotate(45deg);
+							display: block;
+							width: 30rpx;
+							height: 30rpx;
+							background: rgba(247, 247, 247, 1);
+						}
+					}
+
+				}
+
+				.info-cell {
+					display: flex;
+					align-items: center;
+					font-size: 28rpx;
+					line-height: 28rpx;
+					flex-wrap: wrap;
+
+					.cell {
+						width: 50%;
+						display: flex;
+						align-items: center;
+						margin-top: 30rpx;
+
+						&.remarks {
+							width: 100%;
+						}
+
+						.cell-label {
+							color: rgba(128, 128, 128, 1);
+							white-space: nowrap;
+						}
+
+						.cell-content {
+							flex: 1;
+							display: flex;
+
+							.nums {
+								color: rgba(128, 128, 128, 1);
+								display: flex;
+								align-items: center;
+								flex: 1;
+
+								input {
+									width: 150rpx;
+									text-align: right;
+									font-size: 28rpx;
+									border-bottom: 1px solid #ccc;
+									text-align: center;
+								}
+							}
+
+							textarea {
+								width: 100%;
+								background: rgba(247, 247, 247, 1);
+								height: 110rpx;
+								border-radius: 14rpx;
+								padding: 20rpx;
+								box-sizing: border-box;
+								font-size: 28rpx;
+							}
+						}
+					}
+
+
+				}
+			}
+
+			.total {
+				display: flex;
+				font-size: 28rpx;
+
+				.total-tle {
+					height: 80rpx;
+					padding: 0 20rpx;
+					background: rgba(42, 130, 228, 1);
+					color: white;
+					display: flex;
+					// justify-content: center;
+					align-items: center;
+				}
+
+				.total-main {
+					display: flex;
+					flex: 1;
+					width: 1px;
+					background: rgba(240, 247, 255, 0.35);
+					align-items: center;
+					padding: 0 20rpx;
+
+					.item {
+						margin-right: 30rpx;
+
+						>text:first-child {
+							color: gray;
+						}
+
+						&:last-child {
+							margin-right: 0;
+						}
 					}
 				}
 			}
-
-
 		}
 	}
-
-	.total {
-		display: flex;
-		font-size: 28rpx;
-
-		.total-tle {
-			height: 80rpx;
-			padding: 0 20rpx;
-			background: rgba(42, 130, 228, 1);
-			color: white;
-			display: flex;
-			// justify-content: center;
-			align-items: center;
-		}
-
-		.total-main {
-			display: flex;
-			flex: 1;
-			width: 1px;
-			background: rgba(240, 247, 255, 0.35);
-			align-items: center;
-			padding: 0 20rpx;
-
-			.item {
-				margin-right: 30rpx;
-
-				>text:first-child {
-					color: gray;
-				}
-
-				&:last-child {
-					margin-right: 0;
-				}
-			}
-		}
-	}
-}
-}
 </style>

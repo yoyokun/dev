@@ -162,7 +162,6 @@
 		mounted() {
 			this.getConfigGetCylinder()
 			uni.$on('chooseCoupon', (data) => {
-				console.log(data)
 				if(data){
 					this.couponNo = data.couponNo
 					this.couponDetailId = data.couponDetailId

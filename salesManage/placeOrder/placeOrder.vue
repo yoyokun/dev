@@ -265,6 +265,7 @@
 				this.orgIdShipment = this.userInfo.orgId
 				// 获取规格
 				await this.getSysSpecificationClassifySelectPropertyBox()
+				console.log(this.sysSpecificationClassifyData)
 			},
 			// 销售单基础设置，查询是否可以结算，折扣，优惠券，积分抵扣
 			async handleDelivery() {
