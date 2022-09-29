@@ -245,7 +245,6 @@
 		},
 		methods: {
 			changeDelivery(data){
-				console.log(data)
 				if(data&&data.formDataValue){
 					this.formDataValue = data.formDataValue
 				}
