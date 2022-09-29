@@ -105,75 +105,12 @@
 				</view>
 			</view>
 		</view>
-		<!-- ========优惠券======= -->
-		<view class="block" v-if="couponTag == 1">
-			<view class="block-head">优惠券</view>
-			<view class="block-box">
-				<view class="item">
-					<view class="label">优惠券号：</view>
-					<view class="content">
-						<input class="input" placeholder="请输入优惠券号" type="text" @input="changeCoupon" v-model="couponNo"
-							:disabled="isSettle" />
-						<u-icon name="arrow-right"></u-icon>
-					</view>
-				</view>
-			</view>
-		</view>
 
-		<!-- ========订单折扣======= -->
-		<view class="block" v-if="disCountTag == 1">
-			<view class="block-head">订单折扣</view>
-			<view class="block-box">
-				<view class="item">
-					<view class="content dfee">
-						<view class="fee-item">
-							<view class="fee-label">折扣金额</view>
-							<input class="fee-input" type="number" placeholder="折扣金额" v-model="disCountMoney"
-								:disabled="isSettle" @blur="orderDiscount(disCountMoney, 'disCountMoney')" />
-						</view>
-						<view class="fee-item">
-							<view class="fee-label">折扣率%</view>
-							<input v-model="disCountRate" class="fee-input" type="number" placeholder="折扣率%"
-								@blur="orderDiscount(disCountRate, 'disCountRate')" />
-							<view class="fee-total">%</view>
-						</view>
-						<view class="fee-item">
-							<view class="fee-label">成交金额</view>
-							<input v-model="discountDeal" class="fee-input" type="number" placeholder="成交金额"
-								@blur="orderDiscount(discountDeal, 'discountDeal')" />
-						</view>
-					</view>
-				</view>
-			</view>
-		</view>
-		<!-- ==========积分抵扣=========== -->
-		<view class="block" v-if="integralTag===1">
-			<view class="block-head">积分抵扣</view>
-			<view class="block-box">
-				<view class="item">
-					<view class="label">客户积分：</view>
-					<view class="content">{{integralUse}}</view>
-				</view>
-				<view class="item">
-					<view class="label">可用积分：</view>
-					<view class="content">{{ maxIntegral }}</view>
-				</view>
-				<view class="item">
-					<view class="content dfee">
-						<view class="fee-item" :class="isUse?'on':''" @click="usePoint">
-							<u-icon size="32rpx" class="fee-check" name="checkmark-circle-fill"></u-icon>
-							<view class="fee-label">抵扣积分</view>
-							<input @click.stop v-if="isUse" class="fee-input" type="number" placeholder="抵扣积分"
-								@input="integralValueChange" step="1" v-model="integralValue" />
-						</view>
-						<view class="fee-item" v-if="isUse">
-							<view class="fee-label">抵扣金额：</view>
-							<view>-{{ integralMoney }}</view>
-						</view>
-					</view>
-				</view>
-			</view>
-		</view>
+		<discount ref="discount" :is-settle="isSettle" :org-id="orgId" :dis-count-tag="disCountTag"
+			:integral-tag="integralTag" :coupon-tag="couponTag" :customer-id="customerId"
+			:goods-detail-id-str="goodsDetailIdStr" :total-money-all="totalMoneyTwoAll" :integral-use="integralUse"
+			@change="changeDiscount" />
+
 
 		<!-- ==========结算信息=========== -->
 		<view class="block">
@@ -203,27 +140,10 @@
 					<view class="label bold">应收合计(元)：</view>
 					<view class="content">{{totalMoneyAll}}</view>
 				</view>
-				<view class="item">
-					<view class="label">支付情况：</view>
-					<view class="content fill">
-						<view class="fill-box pay-box">
-							<view class="pay-item">线上支付：{{ onlinePayment }}</view>
-							<view class="pay-item">未支付：{{nonPayment}}</view>
-							<view class="pay-item">剩余金额：{{ residue }}</view>
-						</view>
-					</view>
-				</view>
-				<view class="item">
-					<view class="label">支付方式：</view>
-					<view class="content dfee">
-						<view class="fee-item" :class="item.checked?'on':''" v-for="(item,index) in payType"
-							:key="index" @click="checkPay(index)">
-							<u-icon size="32rpx" class="fee-check" name="checkmark-circle-fill"></u-icon>
-							<view class="fee-label">{{item.name}}</view>
-							<input @click.stop v-if="item.checked" class="fee-input" v-model="item.value" type="number" placeholder="请输入费用" @input="validateInput(item.value, index)" />
-						</view>
-					</view>
-				</view>
+			</view>
+			<settlement v-if="settleTag === 1 || isSettle" ref="settlement" :collection-type-id="collectionTypeId"
+				:total-money-all="totalMoneyAll" :pay-data="payData" />
+			<view class="block-box">
 				<view class="item">
 					<view class="label">备注：</view>
 					<view class="content fill">
@@ -235,8 +155,7 @@
 
 		<view class="btn">
 			<u-button :text="'结算'" @click="saveData(3)" type="primary" hairline shape="circle"></u-button>
-			<u-button :text="'结算并打印'" @click="saveData(5)" type="success" hairline shape="circle" plain>
-			</u-button>
+			<!-- <u-button :text="'结算并打印'" @click="saveData(5)" type="success" hairline shape="circle" plain></u-button> -->
 		</view>
 		<u-popup class="multiplePopup" mode="bottom" :show="showItem" :closeOnClickOverlay="false">
 			<view class="btn">
@@ -269,12 +188,10 @@
 		salesPayItemsFindList,
 		moduleCommonSetFindByOrgId,
 		salesOrderTemplateFindDataByTemplate,
-		couponFindCouponToVerify,
 		salesOrderSaveOrEdit
 	} from '@/api/lpgSalesManageApi'
 	import {
 		userCustomerFindByIdList,
-		sysConfigGetCylinderSwitch
 	} from '@/api/lpgManageAppApi'
 	import {
 		createUniqueString,
@@ -286,10 +203,14 @@
 		getTodayDate
 	} from '@/utils/util.js'
 	import SalesBilling from '@/salesManage/placeOrder/common/salesBilling.vue'
+	import settlement from '@/salesManage/placeOrder/common/settlement.vue'
+	import Discount from '@/salesManage/placeOrder/common/discount.vue'
 	export default {
 		mixins: [settingMixin],
 		components: {
-			SalesBilling
+			SalesBilling,
+			settlement,
+			Discount
 		},
 		props: {
 
@@ -369,9 +290,8 @@
 				templateObj: {}, // 模板列表
 				chooseTempalte: [], // 选中的模板
 				tempKey: null,
-				totalMoneyAll: 0, // 应收金额
 				// =========
-				goodsDetailIdStr: '',
+				goodsDetailIdStr: [],
 				allShop: [],
 				showItem: false,
 				itemList: [],
@@ -383,29 +303,12 @@
 				transportName: '', // 配送员名称
 				chooseLicenseNum: '', // 车牌号
 				bookingTime: '', // 预约时间
-				couponNo: '', // 优惠券号
-				couponMoney: '', // 优惠券金额
-				couponDetailId: '', // 优惠券id
-				disCountMoney: '', // 折扣金额
-				disCountRate: '', // 折扣率%
-				discountDeal: '', // 成交金额
-				integralValue: '', // 抵扣积分
-				integralMoney: '', // 抵扣金额
-				maxIntegral: 0, // 可用积分
-				paraValue: 0, // 多少积分等于1元
-				money: '', // 打折前金额 - 优惠金额(优惠完的金额打折)
-				proportion: 0, // 抵扣比例 总金额的多少钱
-				isUse: false,
-				couponMoneyAll: 0, // 优惠金额
 				totalMoneyOrderAll: 0, // 订单合计
 				totalMoneyTwoAll: 0, // 总合计
 				totalChargeMoneyAll: 0, // 收费项
-				onlinePayment: 0,
-				nonPayment: 0,
-				residue: 0,
-				payType: [],
+				couponMoneyAll: 0, // 优惠金额
+				totalMoneyAll: 0, // 应收金额
 				remarks: '',
-				objDiscount: null,
 				// =============
 				callRecordId: '',
 				recordType: '',
@@ -415,6 +318,7 @@
 				billNo: '',
 				pickModeId: '',
 				editId: '',
+				payData: [],
 			}
 		},
 		// 过滤器
@@ -475,8 +379,6 @@
 				this.customerId = data.id
 				// 获取客户信息
 				await this.getCustomerInfo(this.customerId)
-				this.handleResidue()
-				this.initPayType()
 			})
 			// 选择配送点
 			uni.$on('chooseOrg', async (data) => {
@@ -496,6 +398,11 @@
 			uni.$off('chooseOrg')
 		},
 		methods: {
+			// 订单折扣改变
+			changeDiscount(data) {
+				this.couponMoneyAll = data.couponMoneyAll // 优惠金额
+				this.totalMoneyAll = data.discountDeal // 应收金额
+			},
 			// 提货方式改变
 			pickModeChange() {
 				// 清空选择的配送费
@@ -506,177 +413,7 @@
 				// 计算金额
 				this.totalMoneyCalculate()
 			},
-			// 验证输入
-			validateInput(val, index) {
-				if (this.payType[index].value) {
-					this.$nextTick(()=>{
-						this.payType[index].value = checkPrice(val)
-					})
-				}
-				this.handleResidue()
-			},
-			// 计算剩余金额
-			handleResidue() {
-				let totalMoney = 0
-				this.payType.forEach((v, i) => {
-					if (v.checked) {
-						totalMoney = this.$bigDecimal.add(totalMoney, v.value)
-					}
-				})
-				// 保留两位
-				totalMoney = this.$bigDecimal.round(totalMoney, 2)
-				this.residue = this.$bigDecimal.round(this.$bigDecimal.subtract(this.nonPayment, totalMoney), 2)
-			},
-			// 计算积分
-			usePoint() {
-				this.isUse = this.isUse ? false : true
-				this.integralValue = ''
-				this.integralMoney = ''
-				// 计算
-				this.totalMoneyCalculate()
-			},
-			async getConfigGetCylinder() {
-				const {
-					returnValue: res
-				} = await sysConfigGetCylinderSwitch({
-					key: 'sales_integral_use_rule'
-				})
-				if (res) {
-					const arr = res.paraValue.Split(',')
-					this.paraValue = arr[0]
-					this.proportion = arr[1] || 0
-				}
-			},
-			// 积分填写计算
-			integralValueChange(e) {
-				let val = e.detail.value
-				// 抵扣金额=使用积分除积分规则
-				this.integralMoney = this.$bigDecimal.round(this.$bigDecimal.divide(val, this.paraValue), 2)
-				// 计算
-				this.totalMoneyCalculate()
-				if (val > this.maxIntegral || val < 0) {
-					this.$nextTick(() => {
-						this.integralValue = ''
-						this.integralMoney = ''
-						this.totalMoneyCalculate()
-					})
-				}
-			},
-			// 订单折扣计算
-			orderDiscount(val, name) {
-				// val = val.detail.value
-				if (this.money) {
-					// 优惠完的金额打折
-					if (name === 'disCountMoney') {
-						// 折扣金额
-						// 成交金额 = 优惠完的金额-折扣金额
-						this.discountDeal = this.$bigDecimal.subtract(this.money, val)
-						// 折扣率 折扣金额除成交金额*100
-						this.disCountRate = this.$bigDecimal.round(this.$bigDecimal.multiply(this.$bigDecimal.divide(val,
-							this.discountDeal), 100), 2)
-					} else if (name === 'disCountRate') {
-						// 折扣率
-						// 折扣除100
-						const rate = this.$bigDecimal.divide(val, 100)
-						// 折扣金额 = 优惠完的金额*折扣率
-						this.disCountMoney = this.$bigDecimal.round(this.$bigDecimal.multiply(rate, this.money), 2)
-						// 成交金额 = 优惠完的金额-折扣金额
-						this.discountDeal = this.$bigDecimal.subtract(this.money, this.disCountMoney)
-					} else if (name === 'discountDeal') {
-						// 成交金额
-						// 折扣金额 = 优惠完的金额-成交金额
-						this.disCountMoney = this.$bigDecimal.round(this.$bigDecimal.subtract(this.money, val), 2)
-						// 折扣率 折扣金额除成交金额*100
-						this.disCountRate = this.$bigDecimal.round(this.$bigDecimal.multiply(this.$bigDecimal.divide(this
-							.disCountMoney, val), 100), 2)
-					}
-					this.totalMoneyCalculate()
-				}
-			},
-			// 优惠券计算
-			async changeCoupon() {
-				this.couponDetailId = ''
-				this.couponMoney = 0
-				if (!this.customerId) {
-					this.$u.toast('请选择客户')
-					return
-				}
-				const res = await couponFindCouponToVerify({
-					couponNo: this.couponNo,
-					orgId: this.orgId,
-					customerId: this.customerId,
-					couponMoney: this.totalMoneyAll,
-					goodsDetailIdStr: JSON.stringify(this.goodsDetailIdStr)
-				}).catch(err => {
-					this.totalMoneyCalculate()
-				})
-				if (res && res.isSuccess) {
-					this.couponNo = res.returnValue.couponNo
-					this.couponDetailId = res.returnValue.couponDetailId
-					this.couponMoney = res.returnValue.goodsCouponMoney
-					this.totalMoneyCalculate()
-				} else {
-					this.totalMoneyCalculate()
-				}
-			},
-			// 计算
-			discountCalculate() {
-				// 打折前金额 = 总金额 - 优惠券金额
-				this.money = this.$bigDecimal.subtract(this.totalMoneyAll, this.couponMoney)
-				// 成交金额 = 打折前金额 - 折扣金额
-				this.discountDeal = this.$bigDecimal.subtract(this.money, this.disCountMoney)
-				if (Number(this.discountDeal) === 0) {
-					this.disCountRate = 0
-				} else {
-					// 折扣率 折扣金额除成交金额*100
-					this.disCountRate = this.$bigDecimal.round(this.$bigDecimal.multiply(this.$bigDecimal.divide(this
-						.disCountMoney, this.discountDeal), 100), 2)
-				}
-				// 可抵扣金额 = 成交金额 * 积分使用比例 除 100
-				const maxMoney = this.$bigDecimal.round(this.$bigDecimal.multiply(this.discountDeal, this.$bigDecimal
-					.divide(this.proportion, 100)), 2)
-				// 最大可抵扣积分
-				const maxIntegral = this.$bigDecimal.multiply(maxMoney, this.paraValue)
-				if (maxIntegral > this.integralUse) {
-					this.maxIntegral = this.integralUse
-				} else {
-					this.maxIntegral = parseInt(maxIntegral)
-				}
-				this.getDiscount()
-			},
-			getDiscount() {
-				const momet = this.$bigDecimal.add(this.couponMoney, this.disCountMoney)
-				const couponMoneyAll = this.$bigDecimal.add(momet, this.integralMoney)
-				let data = {
-					couponNo: this.couponNo,
-					couponDetailId: this.couponDetailId,
-					couponMoney: this.couponMoney, // 优惠券金额
-					couponMoneyAll: couponMoneyAll, // 优惠总金额
-					disCountMoney: this.disCountMoney, // 折扣金额
-					disCountRate: this.disCountRate, // 折扣率%
-					discountDeal: this.$bigDecimal.subtract(this.discountDeal, this.integralMoney), // 应收金额 成交金额-抵扣金额
-					integralValue: this.integralValue, // 抵扣积分
-					integralMoney: this.integralMoney // 抵扣金额
-				}
-				this.couponMoneyAll = data.couponMoneyAll // 优惠金额
-				this.totalMoneyAll = data.discountDeal // 应收金额
-				this.nonPayment = this.$bigDecimal.round(this.$bigDecimal.subtract(this.totalMoneyAll, this.onlinePayment),
-					2)
-				this.objDiscount = data
-				this.handleResidue()
-				this.initPayType()
-			},
-			// 选择支付
-			checkPay(index) {
-				let obj = this.payType[index]
-				obj.checked = obj.checked ? false : true
-				if (!obj.checked) {
-					// 没选中
-					obj.value = ''
-				}
-				this.$set(this.payType, index, obj)
-				this.handleResidue()
-			},
+
 			// 选择收费项
 			checkFee(index) {
 				let obj = this.choosePayItemsData[index]
@@ -756,16 +493,8 @@
 			async init() {
 				// 销售单基础设置
 				await this.handleDelivery()
-				// 获取配送点
-				// await this.getOrgListType({})
-				// console.log(this.orgTypeList)
-				// 获取积分配置
-				await this.getConfigGetCylinder()
 				// 获取收费项
 				await this.getPayItems()
-				// 获取支付方式
-				await this.getCustomerCollectionType()
-				this.initPayType()
 				// 获取规格
 				await this.getSysSpecificationClassifySelectPropertyBox()
 			},
@@ -785,26 +514,6 @@
 					this.decimalNum = res.decimalNum // 保留位数，
 					this.decimalMode = res.decimalMode // 保留小数方式，
 				}
-			},
-			// 重置payType
-			initPayType() {
-				const payType = []
-				this.customerCollectionType.forEach((v, index) => {
-					payType.push({
-						name: v.name,
-						value: v.value === this.collectionTypeId ? this.totalMoneyAll : ((index ===
-							0 && (this.collectionTypeId === null || this.collectionTypeId ===
-								'')) ? this.totalMoneyAll : ''),
-						checked: v.value === this.collectionTypeId ? true : (!!((index === 0 && (this
-							.collectionTypeId === null || this.collectionTypeId === ''
-						)))),
-						id: '',
-						collectionTypeId: v.value,
-						payType: v.type
-					})
-				})
-				this.payType = payType
-				this.residue = 0
 			},
 			// 获取收费项
 			async getPayItems() {
@@ -1234,8 +943,8 @@
 				this.totalMoneyOrderAll = totalMoneyOrderAll // 订单合计
 				this.totalMoneyTwoAll = this.$bigDecimal.round(this.$bigDecimal.add(totalChargeMoneyAll,
 					totalMoneyOrderAll), 2) // 总合计
-				this.totalMoneyAll = this.totalMoneyTwoAll
-				this.discountCalculate()
+				// this.totalMoneyAll = this.totalMoneyTwoAll
+				// this.discountCalculate()
 			},
 			// 保存数据
 			saveData(state = 3) {
@@ -1357,10 +1066,7 @@
 					})
 					if (this.settleTag === 1) {
 						// 有结算
-						const settlementData = {
-							payType: this.payType.filter(item => item.checked && item.value),
-							residue: (this.residue - 0)
-						}
+						const settlementData = this.$refs.settlement.getSettlement()
 						// 遍历结算
 						settlementData.payType.forEach((v) => {
 							const obj = {
@@ -1394,9 +1100,9 @@
 									type: 'success',
 									message: message,
 								})
-								setTimeout(()=>{
+								setTimeout(() => {
 									uni.navigateBack()
-								},3000)
+								}, 3000)
 								// this.handleReset()
 							} else {
 								this.$refs.uToast.show({
@@ -1409,9 +1115,9 @@
 								type: 'success',
 								message: message,
 							})
-							setTimeout(()=>{
+							setTimeout(() => {
 								uni.navigateBack()
-							},3000)
+							}, 3000)
 						}
 					}
 				})
