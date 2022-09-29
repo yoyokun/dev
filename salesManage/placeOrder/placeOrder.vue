@@ -952,7 +952,7 @@
 					// 获取所有商品
 					this.getAllShop()
 					// 获取折扣
-					const objDiscount = this.objDiscount
+					const objDiscount = this.$refs.discount.getDiscount()
 					if (this.pickMode == 4 && !this.deliverManId) {
 						// this.$message.error('配送员不能为空')
 						return false
