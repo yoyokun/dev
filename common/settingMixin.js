@@ -25,7 +25,7 @@ import {
 export const settingMixin = {
 	data() {
 		return {
-			propertyClassifySelectProperty: [], //属性分类
+			propertyClassifySelectProperty: [], // 属性分类
 			workType: [], // 工单类型
 			workLevel: [], // 工单等级
 			orgList: [], // 组织列表
@@ -194,20 +194,6 @@ export const settingMixin = {
 				})
 			})
 			this.managerDeliveryman = managerDeliveryman
-		},
-		// 获取风险单元
-		async getRiskUnitList(data = {}, type = 'id') {
-			const {
-				returnValue: res
-			} = await riskUnitFindList(data)
-			const riskUnitList = []
-			res.forEach(v => {
-				riskUnitList.push({
-					name: v.name,
-					value: v[type]
-				})
-			})
-			this.riskUnitList = riskUnitList
 		},
 		// 获取钢瓶型号
 		async getSysSpecificationFindList(obj = {}, type = 'id') {
@@ -443,7 +429,7 @@ export const settingMixin = {
 		// 分类tree转list
 		treeToList(tree, list = []) {
 			tree.forEach((item, index) => {
-				let obj = {
+				const obj = {
 					name: item.name,
 					value: item.id,
 				}
@@ -466,7 +452,7 @@ export const settingMixin = {
 			})
 			this.riskUnitList = riskUnitList
 		},
-	 // 获取安检风险等级
+    // 获取安检风险等级
 		async getSafeLevelList(data = {}, type = 'id') {
 			const { returnValue: res } = await sysFieldFindList(Object.assign({}, data, { groups: 'safe_level' }))
 			const safeLevelList = []
@@ -489,18 +475,6 @@ export const settingMixin = {
 				})
 			})
 			this.riskLevelList = riskLevelList
-		},
-		// 获取组织模板列表
-		async getTemplateList(data = {}, type = 'id') {
-			const { returnValue: res } = await safeTemplateFindList(data)
-			const templateList = []
-			res.forEach(v => {
-				templateList.push({
-					name: v.name,
-					value: v[type]
-				})
-			})
-			this.templateList = templateList
 		},
 		// 获取组织模板列表
 		async getTemplateList(data = {}, type = 'id') {

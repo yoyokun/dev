@@ -188,7 +188,6 @@
 
 <style lang="scss" scoped>
 	.block-box {
-		padding: 0px 20rpx;
 		.item {
 			display: flex;
 			min-height: 88rpx;
@@ -198,9 +197,6 @@
 			color: #333;
 			flex-wrap: wrap;
 			border-bottom: 1px solid #eee;
-			&:last-child{
-				border-bottom: none;
-			}
 			.label {
 				min-width: 144rpx;
 				height: 88rpx;

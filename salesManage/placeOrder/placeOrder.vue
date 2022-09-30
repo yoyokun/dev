@@ -67,7 +67,7 @@
 			<u-button :text="'结算'" @click="saveData(3)" type="primary" hairline shape="circle"></u-button>
 			<!-- <u-button :text="'结算并打印'" @click="saveData(5)" type="success" hairline shape="circle" plain></u-button> -->
 		</view>
-		
+
 		<!-- 请求 toast 提示 -->
 		<u-toast ref='uToast'></u-toast>
 	</view>
@@ -78,8 +78,7 @@
 		settingMixin
 	} from '@/common/settingMixin.js'
 	import {
-		salesOrderTemplateFindList,
-		salesPayItemsFindList,
+    salesOrderTemplateFindOnlyList,
 		moduleCommonSetFindByOrgId,
 		salesOrderTemplateFindDataByTemplate,
 		salesOrderSaveOrEdit
@@ -89,13 +88,8 @@
 	} from '@/api/lpgManageAppApi'
 	import {
 		createUniqueString,
-		positiveInteger,
 		objectValueEmpty,
-		checkPrice
 	} from '@/utils'
-	import {
-		getTodayDate
-	} from '@/utils/util.js'
 	import SalesBilling from '@/salesManage/placeOrder/common/salesBilling.vue'
 	import settlement from '@/salesManage/placeOrder/common/settlement.vue'
 	import Discount from '@/salesManage/placeOrder/common/discount.vue'
@@ -181,27 +175,27 @@
 				decimalMode: '', // 保留小数方式
 				templateObj: {}, // 模板列表
 				chooseTempalte: [], // 选中的模板
-				tempKey: null,
-				// =========
-				goodsDetailIdStr: [],
-				allShop: [],
-				totalMoneyOrderAll: 0, // 订单合计
-				totalMoneyTwoAll: 0, // 总合计
-				totalChargeMoneyAll: 0, // 收费项
-				couponMoneyAll: 0, // 优惠金额
-				totalMoneyAll: 0, // 应收金额
-				remarks: '',
-				// =============
-				callRecordId: '',
-				recordType: '',
-				telId: '',
-				orderSource: '',
-				orderTime: '',
-				billNo: '',
-				pickModeId: '',
-				editId: '',
-				payData: [],
-				orgIdShipment:'',
+        tempKey: null,
+        // =========
+        goodsDetailIdStr: [], // 所有商品id（优惠券用到）
+        allShop: [], // 所有填写的商品
+        totalMoneyOrderAll: 0, // 订单合计
+        totalMoneyTwoAll: 0, // 总合计
+        totalChargeMoneyAll: 0, // 收费项
+        couponMoneyAll: 0, // 优惠金额
+        totalMoneyAll: 0, // 应收金额
+        remarks: '',
+        // =============
+        callRecordId: '', // 电话id
+        recordType: '', // 是否是补录单（0 否  1 是）
+        telId: '', // 电话id
+        orderSource: '', // 单据详情的订单来源
+        billNo: '', // 单据号 补录单会用到
+        pickModeId: '', // 配送方式的id
+        editId: '',
+        payData: [], // 收款数据
+        orgIdShipment: '', // 单据的组织
+        info: null, // 单据详情
 			}
 		},
 		// 过滤器
@@ -230,8 +224,8 @@
 		},
 		onShow() {
 			// 选择客户
-			uni.$once('chooseCustomer', async (data) => {
-				if (data.id == this.customerId) {
+			uni.$once('chooseCustomer', async(data) => {
+				if (data.id === this.customerId) {
 					return
 				}
 				this.customerId = data.id
@@ -245,7 +239,7 @@
 		},
 		methods: {
 			changeDelivery(data){
-				if(data&&data.formDataValue){
+				if(data && data.formDataValue){
 					this.formDataValue = data.formDataValue
 				}
 				this.totalMoneyCalculate()
@@ -283,7 +277,7 @@
 					this.decimalMode = res.decimalMode // 保留小数方式，
 				}
 			},
-			
+
 			// 选择客户
 			chooseCustomer() {
 				// 客户
@@ -292,7 +286,7 @@
 					orgId: this.userInfo.orgId
 				})
 			},
-			
+
 			// 表单
 			async changeForm(obj) {
 				const queryParams = obj.queryParams
@@ -325,7 +319,6 @@
 							phone: res.userAddress.phone,
 						}
 						this.addressObj = res.userAddress
-
 					} else if (!res.userAddress) {
 						this.$refs.uToast.show({
 							type: 'error',
@@ -335,17 +328,16 @@
 					// 客户的默认值
 					this.collectionTypeId = res.userSettlement.collectionTypeId // 客户默认支付方式
 					this.pickMode = (res.userSettlement.pickMode ? res.userSettlement.pickMode : 4).toString() // 提货方式
-					this.licenseNumArr = res.userSettlement.licenseNum ? res.userSettlement.licenseNum.Split(',') :
-					[] // 车牌号码
+					this.licenseNumArr = res.userSettlement.licenseNum ? res.userSettlement.licenseNum.Split(',') : [] // 车牌号码
 					this.integralUse = res.userSettlement.integralUse // 客户积分
 					// 客户属性参数
-					let propertyId = []
+					const propertyId = []
 					propertyId.push(res.userSettlement.propertyIds)
 					propertyId.push(res.userSettlement.salePropertyIds)
 					propertyId.push(res.userSettlement.typeId)
 					propertyId.push(res.userSettlement.regionId)
 					// 过滤 null 空 undefined
-					let propertyIdStr = propertyId.filter(item => item)
+					const propertyIdStr = propertyId.filter(item => item)
 					this.propertyIdStr = [...new Set(propertyIdStr)].join(',')
 					this.orderType = res.userSettlement.orderType
 					// 重置muban
@@ -360,7 +352,7 @@
 				const {
 					returnValue: res,
 					returnObject
-				} = await salesOrderTemplateFindList({
+				} = await salesOrderTemplateFindOnlyList({
 					state: 1,
 					salesType: this.orderSourceParam === 'internet' ? 2 : 1,
 				}, '加载中')
@@ -380,13 +372,13 @@
 				if (chooseTempalte.length) {
 					this.chooseTempalte = chooseTempalte
 				} else {
-					const arr = res.map(i => i.id)
-					arr.forEach(async (item, index) => {
-						if (!this.templateObj[item]) {
+					const arr = returnObject ? (returnObject.customerOrderTemplates ? returnObject.customerOrderTemplates.Split(',') : []) : []
+					for(const key of arr) {
+						if(!this.templateObj[key]) {
 							// 查询模板详情
-							await this.getTemplateDetail(res[index])
+							await this.getTemplateDetail(key)
 						}
-					})
+					}
 					// 默认选中
 					this.chooseTempalte = arr
 					this.formDataValue = {
@@ -395,7 +387,7 @@
 				}
 			},
 			// 获取子单模板详情
-			async getTemplateDetail(o) {
+			async getTemplateDetail(id = '') {
 				let goodsCustomerDate = ''
 				// 处理日期，日期不同价格不同
 				if (this.orderTime === '') {
@@ -404,15 +396,15 @@
 				} else {
 					goodsCustomerDate = this.orderTime
 				}
-				// const {
-				// 	returnValue: o
-				// } = await salesOrderTemplateFindDataByTemplate({
-				// 	orderTypeIdstr: this.orderType,
-				// 	propertyIdStr: this.propertyIdStr,
-				// 	customerId: this.customerId,
-				// 	goodsCustomerDate,
-				// 	id
-				// }, '加载中')
+				const {
+					returnValue: o
+				} = await salesOrderTemplateFindDataByTemplate({
+					orderTypeIdstr: this.orderType,
+					propertyIdStr: this.propertyIdStr,
+					customerId: this.customerId,
+					goodsCustomerDate,
+					id
+				}, '加载中')
 				// 处理数据
 				o.templateId = o.id
 				o.id = '' // 清除id
@@ -472,8 +464,7 @@
 											// 有保存的值
 											v[m.propValue] = l.numValue
 											// 基本单位的id 等于 结算数量的单位 id
-											if (l.settleUnitsId === v.unitsId && !
-												isWeight) {
+											if (l.settleUnitsId === v.unitsId && !isWeight) {
 												isWeight = true
 												// 重量值 = 乘 转换值
 												v.weight = this.$bigDecimal.multiply(v[
@@ -487,8 +478,7 @@
 											l.numValue = n
 												.netContent // 表头辅助单位值（提交的时候用）
 											// 基本单位的id 等于 结算数量的单位 id
-											if (l.settleUnitsId === v.unitsId && !
-												isWeight) {
+											if (l.settleUnitsId === v.unitsId && !isWeight) {
 												isWeight = true
 												// 重量值 = 乘 转换值
 												v.weight = this.$bigDecimal.multiply(v[
@@ -563,7 +553,7 @@
 			},
 			// 计算
 			totalMoneyCalculate() {
-				let payData = this.$refs.delivery.getPayData()
+				const payData = this.$refs.delivery.getPayData()
 				// 计算收费项
 				this.payTotalMoney()
 				let totalChargeMoneyAll = 0 // 合计收费项
@@ -588,13 +578,13 @@
 			},
 			// 保存数据
 			saveData(state = 3) {
-				this.$refs.dialogForm.handleSubmit(async (obj) => {
-					let payData = this.$refs.delivery.getPayData()
+				this.$refs.dialogForm.handleSubmit(async(obj) => {
+					const payData = this.$refs.delivery.getPayData()
 					// 获取所有商品
 					this.getAllShop()
 					// 获取折扣
 					const objDiscount = this.$refs.discount.getDiscount()
-					if (payData.data.pickMode == 4 && !payData.data.deliverManId) {
+					if (payData.data.pickMode === 4 && !payData.data.deliverManId) {
 						this.$refs.uToast.show({
 							type: 'error',
 							message: '配送员不能为空',
@@ -604,12 +594,12 @@
 					// 提交
 					const data = {
 						id: this.editId,
-						callRecordId: this.callRecordId ? this.callRecordId : (this.billType == 3 ? this
+						callRecordId: this.callRecordId ? this.callRecordId : (this.billType === 3 ? this
 							.telId : ''), // 电话id
-						recordType: this.recordType != '' ? this.recordType : (this.billType == 1 ? 0 :
-							this.billType == 2 ? 1 : 0), // 是否是补录单（0 否  1 是）
-						orderSource: this.orderSource ? this.orderSource : (this.billType == 3 ? 'phone' :
-							'store'),
+						recordType: this.recordType !== '' ? this.recordType : (this.billType === 1 ? 0
+							: this.billType === 2 ? 1 : 0), // 是否是补录单（0 否  1 是）
+						orderSource: this.orderSource ? this.orderSource : (this.billType === 3 ? 'phone'
+							: 'store'),
 						orderTimeStr: this.orderTime, // 开单时间
 						customerId: this.customerId,
 						disCountMoney: objDiscount.disCountMoney, // 折扣金额
@@ -693,7 +683,7 @@
 							data.salesOrderDetaiData.push(obj)
 						}
 					})
-					
+
 					// 遍历收费项
 					payData.choosePayItemsData.forEach((v) => {
 						if (v.isChoose) {
@@ -741,9 +731,8 @@
 						message
 					} = await salesOrderSaveOrEdit(data)
 					if (res) {
-						if (state == 5) {
+						if (state === 5) {
 							if (res1) {
-								setPrint(res1)
 								this.$refs.uToast.show({
 									type: 'success',
 									message: message,
@@ -1013,5 +1002,5 @@
 			}
 		}
 	}
-	
+
 </style>

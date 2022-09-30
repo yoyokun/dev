@@ -111,7 +111,7 @@ export function addressSplicing(obj) {
 }
 // 获取name值
 export function getName(val,arr) {
-  const findIndex = arr.findIndex(item=>item.value === val)
+  const findIndex = arr.findIndex(item => item.value === val)
 	if (findIndex !== -1) {
 		return arr[findIndex].name
 	} else {

@@ -141,12 +141,11 @@
 <script>
 	import {
 		createUniqueString,
-		positiveInteger,
 		checkPrice,
 		integer
 	} from '@/utils'
 	export default {
-		name: 'salesBilling',
+		name: 'SalesBilling',
 		props: {
 			// 模板ids
 			id: {
@@ -156,14 +155,14 @@
 			// 模板详情
 			templateData: {
 				type: Object,
-				default () {
+				default() {
 					return {}
 				}
 			},
 			// 钢瓶分类
 			sysSpecificationClassifyData: {
 				type: Array,
-				default () {
+				default() {
 					return []
 				}
 			},
@@ -242,7 +241,7 @@
 				this.showSku = true
 				this.sysSpecificationClassifyData.forEach((o, i) => {
 					o.active = false
-					if (o.value == item.standardId) {
+					if (o.value === item.standardId) {
 						o.active = true
 					}
 				})
@@ -252,12 +251,12 @@
 				this.sysSpecificationClassifyData.forEach(item => {
 					item.active = false
 				})
-				let obj = this.sysSpecificationClassifyData[index]
+				const obj = this.sysSpecificationClassifyData[index]
 				obj.active = true
 				this.$set(this.sysSpecificationClassifyData, index, obj)
 			},
 			confirmSku() {
-				let obj = this.sysSpecificationClassifyData.filter(item => item.active == true)[0]
+				const obj = this.sysSpecificationClassifyData.filter(item => item.active === true)[0]
 				this.tableData[this.tempIndex].standardId = obj.value
 				this.tableData[this.tempIndex].standardName = obj.name
 				this.tableChange()

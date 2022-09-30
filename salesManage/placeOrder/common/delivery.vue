@@ -197,7 +197,7 @@
 				await this.getPayItems()
 			}
 			// 选择配送点
-			uni.$on('chooseOrg', async (data) => {
+			uni.$on('chooseOrg', async(data) => {
 				// 配送点名称
 				this.defDeliveryName = data.name
 				this.deliverOrgId = data.id // 配送点
@@ -206,8 +206,8 @@
 				this.transportName = ''
 			})
 			// 选择地址
-			uni.$on('chooseAddress', async (data) => {
-				if (data.id == this.addressId) {
+			uni.$on('chooseAddress', async(data) => {
+				if (data.id === this.addressId) {
 					return
 				}
 				this.addressId = data.id
@@ -253,9 +253,9 @@
 			},
 			// 选择收费项
 			checkFee(index) {
-				let obj = this.choosePayItemsData[index]
-				obj.check = obj.check ? false : true
-				let key = this.choosePayItems.indexOf(obj.itemId)
+				const obj = this.choosePayItemsData[index]
+				obj.check = !obj.check
+				const key = this.choosePayItems.indexOf(obj.itemId)
 				if (key > -1) {
 					this.choosePayItems.splice(key, 1)
 				} else {
@@ -266,7 +266,7 @@
 			},
 			// 选择选项
 			async chooseItem(type, index = null) {
-				if (type == 'choosePSY') {
+				if (type === 'choosePSY') {
 					if (!this.deliverOrgId) {
 						return
 					}
@@ -276,8 +276,8 @@
 					this.itemList = this.managerDeliveryman
 					this.itemId = this.deliverManId
 				}
-				if (type == 'floorFee') {
-					let obj = this.choosePayItemsData[index].salesPayItemsDetailList
+				if (type === 'floorFee') {
+					const obj = this.choosePayItemsData[index].salesPayItemsDetailList
 					obj.forEach(i => {
 						i.name = i.floor
 						i.value = i.floor
@@ -288,7 +288,7 @@
 				this.itemType = type
 				this.itemList.forEach(item => {
 					item.active = false
-					if (item.value == this.itemId) {
+					if (item.value === this.itemId) {
 						item.active = true
 					}
 				})
@@ -298,7 +298,7 @@
 				this.itemList.forEach(item => {
 					item.active = false
 				})
-				let obj = this.itemList[index]
+				const obj = this.itemList[index]
 				obj.active = true
 				this.$set(this.itemList, index, obj)
 			},
@@ -306,15 +306,15 @@
 				this.showItem = false
 			},
 			confirmItem() {
-				let obj = this.itemList.filter(item => item.active == true)[0]
+				const obj = this.itemList.filter(item => item.active === true)[0]
 				this.itemId = obj.value
-				if (this.itemType == 'choosePSY') {
+				if (this.itemType === 'choosePSY') {
 					this.deliverManId = obj.value // 配送员
 					this.transportName = obj.name // 配送员名称
 				}
-				if (this.itemType == 'floorFee') {
+				if (this.itemType === 'floorFee') {
 					this.choosePayItemsData.forEach((item, index) => {
-						if (item.chargeMode == 2) {
+						if (item.chargeMode === 2) {
 							item.floor = obj.value
 						}
 					})

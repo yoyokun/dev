@@ -5,7 +5,8 @@
 	"author": "胡旦旦",
 	"id": "uview-ui",
 	"scripts": {
-		"test": "eslint . --fix"
+		"test": "eslint . --fix",
+    "lint": "eslint --ext .js,.vue ./"
 	},
 	"dependencies": {
 		"element-china-area-data": "^5.0.2",
@@ -23,6 +24,8 @@
 		"babel-eslint": "^10.1.0",
 		"eslint": "^7.32.0",
 		"eslint-config-airbnb": "^19.0.4",
-		"eslint-plugin-vue": "^5.2.3"
+		"eslint-plugin-vue": "^5.2.3",
+		"husky": "^8.0.1",
+		"lint-staged": "^13.0.3"
 	}
 }
