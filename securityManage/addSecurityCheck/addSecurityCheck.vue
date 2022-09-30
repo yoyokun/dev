@@ -1,7 +1,7 @@
 <template>
   <view class="container">
 		<view class="location" v-if="location">
-			<image src="@/static/image/location.png" mode="widthFix"></image>
+			<image class="img" src="@/static/image/location.png" mode="widthFix"></image>
 			{{ location }}
 		</view>
 		<edit-form
@@ -669,6 +669,11 @@ export default {
 	width: 100%;
 	padding: 20rpx 20rpx 0rpx 20rpx;
 	box-sizing: border-box;
+	@include flexMixin(row,flex-start);
+	.img{
+		width: 32rpx;
+		height: 32rpx;
+	}
 }
 ::v-deep .u-form-item .u-line{
 	border-bottom: 1rpx solid rgba(229, 229, 229, 1) !important;

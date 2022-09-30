@@ -614,7 +614,16 @@
 						"enablePullDownRefresh": false
 					}
 				}
-			]
+			    ,{
+                    "path" : "rectificationInfo/rectificationInfo",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "整改详情",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 		},
 		{
 			"root": "salesManage",

@@ -1,24 +1,24 @@
 <template>
 	<view class="block-box">
 		<view class="item">
-			<view class="label">支付情况：</view>
+			<view class="label">{{$t('salesMg.settlement.payment')}}：</view>
 			<view class="content fill">
 				<view class="fill-box pay-box">
-					<view class="pay-item">线上支付：{{ onlinePayment }}</view>
-					<view class="pay-item">未支付：{{nonPayment}}</view>
-					<view class="pay-item">剩余金额：{{ residue }}</view>
+					<view class="pay-item" v-if="onlineShow">{{$t('salesMg.settlement.onlinePayment')}}：{{ onlinePayment }}</view>
+					<view class="pay-item">{{$t('salesMg.settlement.nonPayment')}}：{{nonPayment}}</view>
+					<view class="pay-item">{{$t('salesMg.settlement.residue')}}：<text class="red">{{ residue }}</text></view>
 				</view>
 			</view>
 		</view>
 		<view class="item">
-			<view class="label">支付方式：</view>
+			<view class="label">{{$t('salesMg.settlement.paymentMethod')}}：</view>
 			<view class="content dfee">
-				<view class="fee-item" :class="item.checked?'on':''" v-for="(item,index) in payType" :key="index"
-					@click="checkPay(index)">
-					<u-icon size="32rpx" class="fee-check" name="checkmark-circle-fill"></u-icon>
+				<view @click="checkPay(index)" class="fee-item" :class="item.checked?'on':''" v-for="(item,index) in payType" :key="index">
+					<image v-if="item.checked" class="fee-check" src="@/static/image/payA.png" mode="widthFix" ></image>
+					<image v-else class="fee-check" src="@/static/image/pay.png" mode="widthFix"></image>
 					<view class="fee-label">{{item.name}}</view>
 					<input @click.stop v-if="item.checked" class="fee-input" v-model="item.value" type="number"
-						placeholder="请输入费用" @input="validateInput(item.value, index)" />
+						:placeholder="$t('salesMg.settlement.pricePlace')" @input="validateInput(item.value, index)" />
 				</view>
 			</view>
 		</view>
@@ -41,6 +41,7 @@
 				type: [Number, String],
 				default: 0
 			},
+			// 默认选中的id
 			collectionTypeId: {
 				type: [Number, String],
 				default: ''
@@ -57,6 +58,18 @@
 					return []
 				}
 			},
+			// 线上支付显隐
+			onlineShow: {
+				type: Boolean,
+				default: true
+			},
+			// 支付方式查询
+			requestParameters: {
+				type: Object,
+				default () {
+					return {}
+				}
+			}
 		},
 		data() {
 			return {
@@ -100,7 +113,7 @@
 		},
 		async mounted() {
 			// 获取支付方式
-			await this.getCustomerCollectionType()
+			await this.getCustomerCollectionType(this.requestParameters)
 			this.init()
 		},
 		methods: {
@@ -182,6 +195,7 @@
 
 <style lang="scss" scoped>
 	.block-box {
+		padding: 0px 20rpx;
 		.item {
 			display: flex;
 			min-height: 88rpx;
@@ -191,7 +205,9 @@
 			color: #333;
 			flex-wrap: wrap;
 			border-bottom: 1px solid #eee;
-
+			&:last-child{
+				border-bottom: none;
+			}
 			.label {
 				min-width: 144rpx;
 				height: 88rpx;
@@ -237,8 +253,6 @@
 						border-bottom: 1px solid #eee;
 
 						&.on {
-
-							::v-deep.fee-check .u-icon__icon,
 							.fee-label {
 								color: rgba(42, 130, 228, 1) !important;
 							}
@@ -248,8 +262,10 @@
 							border-bottom: none;
 						}
 
-						::v-deep.fee-check {
+						.fee-check {
 							margin-right: 12rpx;
+							width: 32rpx;
+							height: 32rpx;
 						}
 
 						.fee-label {
@@ -261,11 +277,11 @@
 
 						.fee-input {
 							height: 60rpx;
-							width: 180rpx;
+							width: 200rpx;
 							background: rgba(247, 247, 247, 1);
 							border-radius: 10rpx;
 							font-size: 28rpx;
-							margin-left: 10rpx;
+							margin-left: 20rpx;
 							padding: 0 20rpx;
 							box-sizing: border-box;
 							color: rgba(212, 48, 48, 1) !important;

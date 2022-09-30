@@ -5,6 +5,15 @@ module.exports = {
 		checkStateTxt: ['已审核', '待提交', '待审核', '已作废', '未通过', '无审核'],
 		allotStateTxt: ['待提交', '待接收', '正常接收', '异常接收', '已作废']
 	},
+	// 支付方式
+	settlement: {
+		payment: '支付情况',
+		onlinePayment: '线上支付',
+		nonPayment: '未支付',
+		residue: '剩余金额',
+		paymentMethod: '支付方式',
+		pricePlace: '请输入金额'
+	},
 	// 快速下单
 	placeOrder: {
 		titleText: '快速下单',

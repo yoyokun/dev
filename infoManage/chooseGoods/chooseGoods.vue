@@ -85,6 +85,7 @@
 		mixins: [paginationMixin, settingMixin],
 		data() {
 			return {
+				goodsId: '', // 选中的商品id
 				goodsIdStr: '', // 商品sku
 				propertyIdStr: '', // 客户属性
 				goodsCustomerDate: '', // 日期
@@ -223,7 +224,7 @@
 						ids.push(this.goodsId)
 					}
 					res.forEach(v => {
-						if (ids.indexOf(v.id) > -1) {
+						if (ids.indexOf(v.goodsDetailId) > -1) {
 							v.active = true
 						} else {
 							v.active = false

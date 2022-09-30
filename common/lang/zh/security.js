@@ -436,7 +436,30 @@ module.exports = {
 			}
 		},
 		securityNo: '安检记录',
-		checkTime: '安检时间'
+		checkTime: '安检时间',
+		residue: '应付金额跟支付方式金额不一致'
+	},
+	// 整改详情
+	rectificationInfo: {
+		titleTextInfo: '整改详情',
+		billNo: '整改单号',
+		state: '整改状态',
+		orgName: '整改组织',
+		managerName: '整改员',
+		totalMoney: '金额',
+		payState: '支付状态',
+		rectifyTime: '整改时间',
+		customerNo: '客户编号',
+		customerName: '客户名称',
+		linkName: '联系人',
+		phone: '联系电话',
+		address: '联系地址',
+		remarks: '备注',
+		safeRectifyPaysName: '支付方式',
+		picture: '整改照片',
+		customerSign: '客户签名',
+		customerSignRefuse: '客户拒签',
+		managerSign: '整改员签名'
 	},
 	// 接收钢瓶列表
 	cylinderSecurityList: {

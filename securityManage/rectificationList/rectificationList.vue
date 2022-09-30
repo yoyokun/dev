@@ -8,7 +8,7 @@
 		</view>
 		<view v-if="empty">
 			<view class="workList">
-				<view v-for="(item,index) in dataList" :key="index" class="box" @click="goto('/securityManage/addRectification/addRectification',{ editId: item.id })">
+				<view v-for="(item,index) in dataList" :key="index" class="box" @click="goto('/securityManage/rectificationInfo/rectificationInfo',{ editId: item.id })">
 					<view class="top">
 						<view class="number">{{item.billNo}}</view>
 						<view v-if="item.state === 1" class="state green">{{item.state | state}}</view>
