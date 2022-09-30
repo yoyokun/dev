@@ -65,7 +65,8 @@
 		</view>
 
 		<view class="btn">
-			<u-button :text="'结算'" @click="saveData(3)" type="primary" hairline shape="circle"></u-button>
+			<u-button :text="'保存'" @click="saveData(1)" type="primary" hairline shape="circle"></u-button>
+			<u-button :text="'结算'" @click="saveData(3)" type="primary" hairline shape="circle" plain></u-button>
 			<!-- <u-button :text="'结算并打印'" @click="saveData(5)" type="success" hairline shape="circle" plain></u-button> -->
 		</view>
 
