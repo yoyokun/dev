@@ -213,8 +213,10 @@
 					this.settleData = this.templateDataObj.templateAssistUnitsList
 					this.tableColumn = this.templateDataObj.tableColumn
 					this.tableData = this.templateDataObj.tableData
-					// 合计
-					this.getSummaries()
+					if (this.tableData) {
+						// 合计
+						this.getSummaries()
+					}
 				},
 				deep: true,
 				immediate: true
@@ -225,6 +227,16 @@
 
 		},
 		methods: {
+			writeData(data) {
+				this.templateDataObj = JSON.parse(JSON.stringify(this.templateData))
+				this.settleData = this.templateDataObj.templateAssistUnitsList
+				this.tableColumn = this.templateDataObj.tableColumn
+				this.tableData = this.templateDataObj.tableData
+				if (this.tableData) {
+					// 合计
+					this.getSummaries()
+				}
+			},
 			// 选择sku
 			chooseSku(item, index) {
 				this.showSku = true
@@ -338,7 +350,6 @@
 			},
 			// 合计
 			getSummaries(param) {
-				console.log('合计')
 				let totalMoney = 0 // 模板总金额
 				let totalNum = 0 // 模板总数量
 				// 合计

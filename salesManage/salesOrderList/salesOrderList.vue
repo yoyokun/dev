@@ -7,7 +7,7 @@
 			<search :searchOptions="searchOptions" @search="search"></search>
 			<view class="total">
 				<view class="num">{{$t('salesMg.common.totalTxt')}}：<text>{{totals}}</text></view>
-				<view class="add" @click="">
+				<view class="add" @click="goto('/salesManage/addSalesOrder/addSalesOrder')">
 					<u-icon name="plus" color="#2A82E4" size="16" bold></u-icon>{{$t('common.btn.add')}}
 				</view>
 			</view>
@@ -15,7 +15,7 @@
 		<scroll-view class="scroll-box" scroll-y="true" @scrolltolower="loadMore">
 			<block v-if="empty">
 				<view class="gp-box" v-if="dataList.length">
-					<view class="gp-main" v-for="(item, index) in dataList" :key="index" @click="">
+					<view class="gp-main" v-for="(item, index) in dataList" :key="index" @click="goto('/salesManage/addSalesOrder/addSalesOrder',{editId: item.id,orderSourceParam:item.orderSource})">
 						<view class="head">
 							<text>{{item.billNo}}</text>
 							<text class="status green"

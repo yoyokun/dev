@@ -175,6 +175,12 @@
 					this.deliverManId = data.defDeliveryman // 配送员id
 					this.defDeliveryName = data.defDeliveryName // 配送点名称
 					this.transportName = data.defDeliverymanName // 配送员名称
+					if (data.bookingTime) {
+						this.bookingTime = data.bookingTime
+					}
+					if (data.chooseLicenseNum) {
+						this.chooseLicenseNum = data.chooseLicenseNum
+					}
 					this.addressInfo = data
 				},
 				deep: true,
@@ -186,9 +192,10 @@
 			uni.$off('chooseOrg')
 		},
 		async mounted() {
-
-			// 获取收费项
-			await this.getPayItems()
+			if (!this.choosePayItemsData || !this.choosePayItemsData.length) {
+				// 获取收费项
+				await this.getPayItems()
+			}
 			// 选择配送点
 			uni.$on('chooseOrg', async (data) => {
 				// 配送点名称
@@ -215,10 +222,35 @@
 				this.deliverManId = data.defDeliveryman // 配送员
 				this.defDeliveryName = data.defDeliveryName // 配送点名称
 				this.transportName = data.defDeliverymanName // 配送员名称
-				this.$emit('change', {formDataValue:formDataValue})
+				this.$emit('change', {
+					formDataValue: formDataValue
+				})
 			})
 		},
 		methods: {
+			async writeData(res) {
+				if (!this.choosePayItemsData || !this.choosePayItemsData.length) {
+					// 获取收费项
+					await this.getPayItems()
+				}
+				const salesOrderPayitemsList = res.salesOrderPayitemsList
+				const choosePayItems = []
+				salesOrderPayitemsList.forEach((v) => {
+					const findIndex = this.choosePayItemsData.findIndex((item) => item.itemId === v.payItemsId)
+					// 回填id
+					this.choosePayItemsData[findIndex].isChoose = true
+					this.choosePayItemsData[findIndex].id = v.id
+					this.choosePayItemsData[findIndex].chargeMoney = v.payItemsMoney
+					this.choosePayItemsData[findIndex].totalMoney = v.payItemsTotalMoney
+					this.choosePayItemsData[findIndex].payItemsDataStr = v.payItemsDataStr
+					this.choosePayItemsData[findIndex].check = true
+					this.choosePayItemsData[findIndex].floor = v.floor
+					this.choosePayItemsData[findIndex].disabled = JSON.parse(v.payItemsDataStr).chargeMode !==
+						1
+					choosePayItems.push(v.payItemsId)
+				})
+				this.choosePayItems = choosePayItems // 选中的收费项
+			},
 			// 选择收费项
 			checkFee(index) {
 				let obj = this.choosePayItemsData[index]
@@ -317,16 +349,16 @@
 			},
 			getPayData() {
 				return {
-					choosePayItemsData:this.choosePayItemsData,
-					data:{
-						pickMode:this.pickMode,
-						bookingTime:this.bookingTime,
-						chooseLicenseNum:this.chooseLicenseNum,
-						addressObj:this.addressInfo,
-						deliverManId:this.deliverManId,
-						deliverMan:this.deliverMan,
-						deliverOrgId:this.deliverOrgId,
-						deliverOrgName:this.deliverOrgName
+					choosePayItemsData: this.choosePayItemsData,
+					data: {
+						pickMode: this.pickMode,
+						bookingTime: this.bookingTime,
+						chooseLicenseNum: this.chooseLicenseNum,
+						addressObj: this.addressInfo,
+						deliverManId: this.deliverManId,
+						transportName: this.transportName,
+						deliverOrgId: this.deliverOrgId,
+						defDeliveryName: this.defDeliveryName
 					}
 				}
 			},
