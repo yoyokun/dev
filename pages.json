@@ -650,6 +650,13 @@
 					}	
 				},
 				{
+					"path" : "salesOrderInfo/salesOrderInfo",
+					"style" : {
+						"navigationBarTitleText": "订单详情",
+						"enablePullDownRefresh": false
+					}	
+				},
+				{
 					"path" : "bizOrderList/bizOrderList",
 					"style" : {
 						"navigationBarTitleText": "业务单",
