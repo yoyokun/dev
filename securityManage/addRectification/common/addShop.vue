@@ -58,7 +58,7 @@
 						<view class="cell-label">{{$t('chooseGoods.amount')}}：</view>
 						<view class="cell-content">
 							<view class="nums">
-								<input min="1" maxlength="4" type="number" v-model="item.amount" :placeholder="$t('chooseGoods.weight')" step="1"
+								<input min="1" maxlength="4" type="number" v-model="item.amount" :placeholder="$t('chooseGoods.amount')" step="1"
 									@input="validateInput(index,item,'amount')" />
 							</view>
 						</view>
@@ -130,7 +130,8 @@
 				totalAmount: '', // 总数量
 				totalNetWeight: '', // 总重量
 				totalMoney: '', // 总金额
-				tableData: []
+				tableData: [],
+				goodsDetailId: new Set()
 			}
 		},
 		watch: {
@@ -145,9 +146,12 @@
 		},
 		mounted() {
 			// 选择商品
-			uni.$once('chooseGoods', (data) => {
+			uni.$on('chooseGoods', (data) => {
 				this.initGoodData(data)
 			})
+		},
+		destroyed() {
+			uni.$off('chooseGoods')
 		},
 		methods: {
 			// 添加商品处理商品数据
@@ -167,6 +171,9 @@
 							totalMoney: 0,
 							remarks: ''
 						}})
+						if (!this.goodsDetailId.has(v.goodsDetailId)) {
+							this.goodsDetailId.add(v.goodsDetailId)
+						}
 					}
 				})
 				this.tableChange(data, '', 'add')
@@ -174,7 +181,8 @@
 			// 选择商品
 			chooseGoods() {
 				this.$navigateTo('/infoManage/chooseGoods/chooseGoods', {
-					multiple: true
+					multiple: true,
+					goodsId: Array.from(this.goodsDetailId).join(',')
 				})
 			},
 			// 保存商品的回调数据
@@ -250,9 +258,24 @@
 					totalMoney: this.totalMoney // 总金额
 				}
 				this.tableData.forEach((v) => {
-					if (v.amount) {
+					if (v.amount > 0) {
 						// 多个商品 数量不能位0和空
-						obj.data.push(v)
+						obj.data.push({
+							goodsDetailId: v.goodsDetailId, // 属性id
+							goodsId: v.goodsId,
+							id: v.id,
+							isCostTag: v.isCostTag,
+							goodsName: v.goodsName,
+							propertyNames: v.propertyNames,
+							unitsName: v.unitsName,
+							standardName: v.standardName,
+							amount: v.amount,
+							weight: v.weight,
+							totalWeight: v.totalWeight,
+							unitPrice: v.unitPrice,
+							totalMoney: v.totalMoney,
+							remarks: v.remarks,
+						})
 					}
 				})
 				return obj

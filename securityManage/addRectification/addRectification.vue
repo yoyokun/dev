@@ -58,7 +58,17 @@
 			</template>
 		</edit-form>
 		<!-- 整改商品数据 -->
-		<add-shop ref="addShop" :shop-data="shopData"/>
+		<add-shop v-if="state === 2" ref="addShop" :shop-data="shopData" @changeTable="changeTable"/>
+		<!-- 结算 -->
+		<view class="settlement" v-if="state === 2">
+			<settlement
+				ref="settlement"
+				:total-money-all="totalMoneyAll"
+				:onlineShow="false"
+				:pay-data="payData"
+				:requestParameters="requestParameters"
+			/>
+		</view>
 		<view class="btn" v-if="isSave">
 			<u-button :text="$t('common.btn.rectification')" type="primary" hairline shape="circle" @click="submitForm(1)"></u-button>
 			<u-button :text="$t('common.btn.settle')" type="primary" hairline shape="circle" @click="submitForm(2)"></u-button>
@@ -73,10 +83,12 @@ import { safeSecurityFindById, safeRectifySaveOrEdit } from '@/api/lpgSecurityMa
 import { settingMixin } from '@/common/settingMixin.js'
 import SecurityCheck from '@/securityManage/addSecurityCheck/common/securityCheck.vue'
 import AddShop from '@/securityManage/addRectification/common/addShop.vue'
+import Settlement from '@/salesManage/placeOrder/common/settlement.vue'
 export default {
 	components: {
 		SecurityCheck,
-		AddShop
+		AddShop,
+		Settlement
 	},
 	mixins: [settingMixin],
 	data() {
@@ -88,9 +100,9 @@ export default {
 			formDataSource: [
 				{
 					type: 'picker',
-					labelText: this.$t('security.addSecurityCheck.form.orgId.label'),
+					labelText: this.$t('security.addRectification.form.orgId.label'),
 					fieldName: 'orgId',
-					placeholder: this.$t('security.addSecurityCheck.form.orgId.placeholder'),
+					placeholder: this.$t('security.addRectification.form.orgId.placeholder'),
 					showOptions: false,
 					required: true,
 					options: [],
@@ -98,16 +110,16 @@ export default {
 					rules: [
 						{
 							required: true,
-							message: this.$t('security.addSecurityCheck.form.orgId.placeholder'),
+							message: this.$t('security.addRectification.form.orgId.placeholder'),
 							trigger: ['change','blur']
 						}
 					]
 				},
 				{
 					type: 'picker',
-					labelText: this.$t('security.addSecurityCheck.form.managerId.label'),
+					labelText: this.$t('security.addRectification.form.managerId.label'),
 					fieldName: 'managerId',
-					placeholder: this.$t('security.addSecurityCheck.form.managerId.placeholder'),
+					placeholder: this.$t('security.addRectification.form.managerId.placeholder'),
 					showOptions: false,
 					required: true,
 					options: [],
@@ -115,35 +127,35 @@ export default {
 					rules: [
 						{
 							required: true,
-							message: this.$t('security.addSecurityCheck.form.managerId.placeholder'),
+							message: this.$t('security.addRectification.form.managerId.placeholder'),
 							trigger: ['change','blur']
 						}
 					]
 				},
 				{
 					type: 'actionSheet',
-					labelText: this.$t('security.addSecurityCheck.form.state.label'),
+					labelText: this.$t('security.addRectification.form.state.label'),
 					fieldName: 'state',
-					placeholder: this.$t('security.addSecurityCheck.form.state.placeholder'),
+					placeholder: this.$t('security.addRectification.form.state.placeholder'),
 					showOptions: false,
 					required: true,
-					options: this.$t('security.addSecurityCheck.form.state.options'),
+					options: this.$t('security.addRectification.form.state.options'),
 					disabled: false,
 					borderBottom: false,
 					rules: [
 						{
 							required: true,
 							type: 'number',
-							message: this.$t('security.addSecurityCheck.form.state.placeholder'),
+							message: this.$t('security.addRectification.form.state.placeholder'),
 							trigger: ['change','blur']
 						}
 					]
 				},
 				{
 					type: 'textarea',
-					labelText: this.$t('security.addSecurityCheck.form.refuseNote.label'),
+					labelText: this.$t('security.addRectification.form.refuseNote.label'),
 					fieldName: 'refuseNote',
-					placeholder: this.$t('security.addSecurityCheck.form.refuseNote.placeholder'),
+					placeholder: this.$t('security.addRectification.form.refuseNote.placeholder'),
 					maxlength: 100,
 					show: false,
 					borderBottom: false,
@@ -151,16 +163,16 @@ export default {
 					rules: [
 						{
 							required: true,
-							message: this.$t('security.addSecurityCheck.form.refuseNote.placeholder'),
+							message: this.$t('security.addRectification.form.refuseNote.placeholder'),
 							trigger: ['change','blur']
 						}
 					]
 				},
 				{
 					type: 'textarea',
-					labelText: this.$t('security.addSecurityCheck.form.refuseNote1.label'),
+					labelText: this.$t('security.addRectification.form.refuseNote1.label'),
 					fieldName: 'refuseNote',
-					placeholder: this.$t('security.addSecurityCheck.form.refuseNote1.placeholder'),
+					placeholder: this.$t('security.addRectification.form.refuseNote1.placeholder'),
 					maxlength: 100,
 					show: false,
 					borderBottom: false,
@@ -168,7 +180,7 @@ export default {
 					rules: [
 						{
 							required: true,
-							message: this.$t('security.addSecurityCheck.form.refuseNote1.placeholder'),
+							message: this.$t('security.addRectification.form.refuseNote1.placeholder'),
 							trigger: ['change','blur']
 						}
 					]
@@ -180,15 +192,15 @@ export default {
 			formDataSource1: [
 				{
 					type: 'textarea',
-					labelText: this.$t('security.addSecurityCheck.form.remarks.label'),
+					labelText: this.$t('security.addRectification.form.remarks.label'),
 					fieldName: 'remarks',
 					borderBottom: true,
-					placeholder: this.$t('security.addSecurityCheck.form.remarks.placeholder'),
+					placeholder: this.$t('security.addRectification.form.remarks.placeholder'),
 					maxlength: 100
 				},
 				{
 					type: 'upload',
-					labelText: this.$t('security.addSecurityCheck.form.picture.label'),
+					labelText: this.$t('security.addRectification.form.picture.label'),
 					fieldName: 'picture',
 					limit: 2,
 					borderBottom: true,
@@ -205,7 +217,13 @@ export default {
 			address: '', // 地址信息
 			info: {}, // 安检详情
 			safeSecurityResultNot: [], // 整改项目
-			shopData: [] // 商品信息回填
+			shopData: [], // 商品信息回填
+			totalMoneyAll: '', // 总金额
+			shopObj: {} ,// 填写的商品信息
+			payData: [] ,// 支付信息回填
+			requestParameters: {
+				type: 1
+			}
 		}
 	},
 	async onLoad(options) {
@@ -231,6 +249,19 @@ export default {
 			}
 		}
 	},
+	onShow() {
+		// 添加监听事件
+		uni.$once('saveSignCanvas', (data) => {
+			if(data.type === '1') {
+				this.customerSign = data.url
+			} else if(data.type === '2') {
+				this.managerSign = data.url
+			}
+		})
+	},
+	onUnload() {
+		uni.$off('saveSignCanvas')
+	},
 	methods: {
 		// 初始化
 		async init() {
@@ -250,6 +281,20 @@ export default {
 				this.info = res
 				this.endDecide = res.endDecideRectify ? res.endDecideRectify.Split(',') : []
 				this.safeSecurityResultNot = res.safeSecurityResultNot
+				if(this.endDecide.includes('1')) {
+					this.formDataSource1[0].borderBottom = true
+					this.formDataSource1[1].show = true
+					if(this.endDecide.includes('2') || this.endDecide.includes('3')) {
+						this.formDataSource1[1].borderBottom = true
+					} else {
+						this.formDataSource1[1].borderBottom = false
+					}
+				} else {
+					this.formDataSource1[1].show = false
+				}
+				if(this.endDecide.length === 0) {
+					this.formDataSource1[0].borderBottom = false
+				}
 			}
 		},
 		// 表单改变
@@ -300,20 +345,34 @@ export default {
 						const shop = this.$refs.addShop.getShop()
 						const obj = Object.assign(data,parma,{securityResultData: JSON.stringify(securityResultData)})
 						// 商品信息
-						obj.rectifyGoodsData = shop.data ? JSON.stringify(shop.data) : JSON.stringify([])// 商品
+						obj.rectifyGoodsData = []
 						obj.rectifyPaysData = [] // 支付
-						const paymentObj = this.$refs.payment.getSettlement()
-						if (payState === 2) {
-							// 结算必传 rectifyPaysData
-							if (paymentObj.residue !== 0) {
-								this.$refs.uToast.show({
-									type: 'error',
-									message: '应付金额跟支付方式金额不一致',
-								})
-								return false
+						if(shop.data.length){
+							// 有商品数据
+							obj.rectifyGoodsData = shop.data
+							const paymentObj = this.$refs.settlement.getSettlement()
+							if (payState === 2) {
+								// 结算必传 rectifyPaysData
+								if (paymentObj.residue !== 0) {
+									this.$refs.uToast.show({
+										type: 'error',
+										message: this.$t('security.addRectification.residue'),
+									})
+									return false
+								}
 							}
+							paymentObj.payType.forEach(v=>{
+								obj.rectifyPaysData.push({
+									collectionTypeName: v.name,
+									payMoney: v.value,
+									id: v.id,
+									collectionTypeId: v.collectionTypeId,
+									payType: v.payType
+								})
+							})
 						}
-						obj.rectifyPaysData = JSON.stringify(paymentObj.payType)
+						obj.rectifyGoodsData = JSON.stringify(obj.rectifyGoodsData)
+						obj.rectifyPaysData = JSON.stringify(obj.rectifyPaysData)
 						this.handleSave(obj,payState)
 					})
 				})
@@ -327,13 +386,13 @@ export default {
 		// 保存
 		async handleSave(obj,payState) {
 			obj.id = this.editId || ''
-			data.securityId = this.securityId
+			obj.securityId = this.securityId
 			obj.customerId = this.info.customerId
 			obj.managerSign = this.managerSign
 			obj.customerSign = this.customerSign
 			obj.picture = this.$options.filters.isArrayToString(obj.picture)
 			obj.customerSignRefuse = this.customerSignRefuse === true ? 1 : 2 // 客户拒签
-			data.payState = payState // 支付状态
+			obj.payState = payState // 支付状态
 			const { returnValue: res, message } = await safeRectifySaveOrEdit(obj,this.$t('security.addSecurityCheck.saveTit'))
 			if (res) {
 				this.$refs.uToast.show({
@@ -363,6 +422,12 @@ export default {
 			if(this.isSave) {
 				this.goto('/securityManage/signCanvas/signCanvas',{ type: type })
 			}
+		},
+		// table改变
+		changeTable() {
+			const obj = this.$refs.addShop.getShop()
+			this.totalMoneyAll = obj.totalMoney
+			this.shopObj = obj
 		}
 	}
 }
@@ -410,5 +475,14 @@ export default {
 	.text{
 		color: rgba(166, 166, 166, 1);
 	}
+}
+.settlement{
+	background: rgba(255, 255, 255, 1);
+	box-shadow: 0rpx 4rpx 8rpx rgba(0, 0, 0, 0.04);
+	border-radius: 16rpx;
+	width: 710rpx;
+	padding: 10rpx 10rpx;
+	box-sizing: border-box;
+	margin-top: 20rpx;
 }
 </style>
