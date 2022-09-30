@@ -8,31 +8,24 @@
 				<view class="list" v-for="(item,index) in dataList" :key="index" @click="chooseBox(index)">
 					<view class="main-content">
 						<view>
-							<view class="tle">{{item.billNo}}</view>
+							<view class="tle">{{item.couponNo}}</view>
 							<view class="desc">
 								<view class="item">
-									<text class="label">{{$t('chooseBill.billTypeName')}}</text>
-									<text class="txt">{{item.billTypeName}}</text>
+									<text class="label">优惠券名称</text>
+									<text class="txt">{{item.couponName}}</text>
 								</view>
 								<view class="item">
-									<text class="label">{{$t('chooseBill.orgName')}}</text>
-									<text class="txt">{{item.orgName}}</text>
+									<text class="label">使用商品</text>
+									<text class="txt">{{item.useGoodsType | useGoodsType}}</text>
 								</view>
 								<view class="item">
-									<text class="label">{{$t('chooseBill.customerName')}}</text>
-									<text class="txt">{{item.customerName}}</text>
+									<text class="label">使用门槛</text>
+									<text class="txt">{{item.useType | useType}}</text>
 								</view>
 								<view class="item">
-									<text class="label">{{$t('chooseBill.billStateName')}}</text>
-									<text class="txt">{{item.billStateName}}</text>
-								</view>
-								<view class="item">
-									<text class="label">{{$t('chooseBill.operator')}}</text>
-									<text class="txt">{{item.operator}}</text>
-								</view>
-								<view class="item">
-									<text class="label">{{$t('chooseBill.operationTime')}}</text>
-									<text class="txt">{{item.operationTime|dayjs}}</text>
+									<text class="label">有效期</text>
+									<text class="txt">{{item.vaildStartTime | dayjs}} -
+										{{item.vaildEndTime | dayjs}}</text>
 								</view>
 							</view>
 						</view>
@@ -61,66 +54,100 @@
 
 <script>
 	import {
-		sysLinkBillFindLinkBillList,
-		sysLinkBillFindList
-	} from '@/api/lpgManageAppApi'
+		couponFindCustomerCouponList
+	} from '@/api/lpgSalesManageApi'
 	import paginationMixin from '@/common/paginationMixin.js'
-	import {
-		settingMixin
-	} from '@/common/settingMixin.js'
 	export default {
-		mixins: [paginationMixin, settingMixin],
+		mixins: [paginationMixin],
 		props: {
 
 		},
 		data() {
 			return {
-				formType: '',
-				orgId: '',
+				couponMoney: '',
 				customerId: '',
-				billsType: '',
-				linkScope: 'stock',
-				searchOptions: [
-					{
-						labelText: this.$t('chooseBill.searchOptions.billCodeTypeStr.label'),
+				goodsDetailIdStr: '',
+				orgId: '',
+				multiple: false,
+				searchOptions: [{
 						type: 'select',
-						fieldName: 'billCodeTypeStr',
-						defaultValue: '',
-						multiple:true,
-						options: [],
+						labelText: '优惠券类型',
+						fieldName: 'couponType',
+						options: [{
+								name: '线上',
+								value: 1
+							},
+							{
+								name: '线下',
+								value: 2
+							}
+						]
 					},
 					{
-						labelText: this.$t('chooseBill.searchOptions.createDateRange.label'),
-						type: 'datetimerange',
-						fieldName: 'createDateRange', // 固定
-						startName: 'startDate', // 开始日期字段
-						endName: 'endDate', // 结束日期字段
-						placeholder: this.$t('chooseBill.searchOptions.createDateRange.placeholder')
+						type: 'select',
+						labelText: '使用门槛',
+						fieldName: 'useType',
+						options: [{
+								name: '无门槛',
+								value: 1
+							},
+							{
+								name: '满减',
+								value: 2
+							}
+						]
+					},
+					{
+						type: 'select',
+						labelText: '使用门槛',
+						fieldName: 'useGoodsType',
+						options: [{
+								name: '全部商品',
+								value: 1
+							},
+							{
+								name: '部分商品',
+								value: 2
+							}
+						]
 					}
 				]
 			}
 		},
 		computed: {
 			onePageRow() {
-				return 5
+				return 6
 			}
 		},
 		// 过滤器
-		filters: {},
-		created() {},
-		async mounted() {
-			// 获取单据类型
-			await this.getBillType({ linkScope: this.linkScope })
-			this.searchOptions[0].options = this.billType
+		filters: {
+			useType(value) {
+				const stateObj = {
+					1: '无门槛',
+					2: '满减'
+				}
+				return stateObj[value] || ''
+			},
+			useGoodsType(value) {
+				const stateObj = {
+					1: '全部商品',
+					2: '部分商品'
+				}
+				return stateObj[value] || ''
+			}
 		},
+		created() {},
+		async mounted() {},
 		onLoad(options) {
-			this.orgId = this.userInfo.orgId
-			this.billId = options.billId || ''
+			this.orgId = options.orgId || ''
+			this.couponMoney = options.couponMoney || ''
+			this.goodsDetailIdStr = decodeURIComponent(options.goodsDetailIdStr) || ''
+			this.customerId = options.customerId || ''
 			this.multiple = options.multiple || false
 		},
 		onShow() {
 			uni.setNavigationBarTitle({
-				title: this.$t('chooseBill.titleText')
+				title: '选择优惠券'
 			})
 		},
 		methods: {
@@ -137,17 +164,16 @@
 					...{
 						page: this.pagination.getCurrentPage(),
 						size: this.pagination.getCurrentSize(),
-						formType: this.formType,
-						orgIdStr: this.orgId,
+						orgId: this.orgId,
+						couponMoney: this.couponMoney,
 						customerId: this.customerId,
-						moneyType: this.billsType,
-						linkScope: this.linkScope
+						goodsDetailIdStr: this.goodsDetailIdStr
 					}
 				}
 				const {
 					returnValue: res,
 					totals
-				} = await sysLinkBillFindLinkBillList(data)
+				} = await couponFindCustomerCouponList(data)
 				if (res) {
 					let ids = []
 					if (this.multiple) {
@@ -185,9 +211,9 @@
 				let data = []
 				data = this.dataList.filter(v => v.active === true)
 				if (this.multiple) {
-					uni.$emit('chooseBill', data)
+					uni.$emit('chooseCoupon', data)
 				} else {
-					uni.$emit('chooseBill', data[0])
+					uni.$emit('chooseCoupon', data[0])
 				}
 				uni.navigateBack({
 					delta: 1
@@ -269,7 +295,9 @@
 						}
 
 						margin-right: 30rpx;
-						min-width: calc(100% / 3);
+						// min-width: calc(100% / 3);
+						width: 100%;
+						word-break: break-all;
 						display: flex;
 						align-items: flex-start;
 						flex-wrap: wrap;

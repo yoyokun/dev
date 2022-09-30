@@ -215,8 +215,8 @@
 				<!-- 多选 -->
 				<view :class="['formCell',item.inputAlign]" v-if="item.type === 'multiple'">
 					<view v-if="formData[item.fieldName]" class="multipleLable">
-						<view class="content">
-							<view v-for="(subItem,indexSub) in formData[item.fieldName]" :key="indexSub" class="box-case">
+						<view class="content" @click="!item.disabled ? item.showOptions = true : ''">
+							<view v-for="(subItem,indexSub) in formData[item.fieldName]" :key="indexSub" class="box-case" @click.stop>
 								<text>{{subItem | getName(item.options)}}</text>
 								<u-icon v-if="!item.disabled" name="close-circle-fill" color="#8C8C8C" size="20"  @click="deleteMultiple(subItem,index,item.fieldName,indexSub)"></u-icon>
 							</view>
@@ -373,6 +373,8 @@ export default {
 								options.forEach(v=>{
 									if(formDataValue[key].includes(v.value)) {
 										v.active = true
+									}else{
+										v.active = false
 									}
 								})
 								this.renderDataSource[findIndex].options = options

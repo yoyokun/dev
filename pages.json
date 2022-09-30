@@ -636,6 +636,13 @@
 					}	
 				},
 				{
+					"path" : "addSalesOrder/addSalesOrder",
+					"style" : {
+						"navigationBarTitleText": "销售开单",
+						"enablePullDownRefresh": false
+					}	
+				},
+				{
 					"path" : "salesOrderList/salesOrderList",
 					"style" : {
 						"navigationBarTitleText": "销售订单",

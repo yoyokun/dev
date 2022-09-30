@@ -679,3 +679,17 @@ export function salesOrderSaveOrEdit(data = {}, message = '', custom = {}) {
 		}
 	})
 }
+// 根据客户查询可使用的优惠券
+export function couponFindCustomerCouponList(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/coupon/findCustomerCouponList',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
