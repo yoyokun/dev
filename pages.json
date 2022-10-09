@@ -683,6 +683,13 @@
 						"navigationBarTitleText": "确认送达",
 						"enablePullDownRefresh": false
 					}	
+				},
+				{
+					"path" : "addBizOrder/addBizOrder",
+					"style" : {
+						"navigationBarTitleText": "业务开单",
+						"enablePullDownRefresh": false
+					}	
 				}
 			]
 		}

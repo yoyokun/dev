@@ -208,7 +208,7 @@
 			</view>
 		</view>
 		<view class="btn">
-			<u-button :text="$t('common.btn.edit')" type="primary" hairline shape="circle" @click=""></u-button>
+			<u-button :text="$t('common.btn.edit')" type="primary" hairline shape="circle" @click="goto('/salesManage/addSalesOrder/addSalesOrder',{editId:info.id,orderSourceParam:info.orderSource})"></u-button>
 			<u-button :text="$t('salesMg.salesOrderInfo.btn.receive')" type="primary" hairline plain shape="circle"
 				@click="handleReceiving(info)">
 			</u-button>

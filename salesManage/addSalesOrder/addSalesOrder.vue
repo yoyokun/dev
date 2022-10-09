@@ -499,7 +499,9 @@
 					}
 					// 选择了模板
 					this.chooseTempalte = queryParams.templateId
-					this.totalMoneyCalculate()
+					setTimeout(()=>{
+						this.totalMoneyCalculate()
+					},1)
 				}
 			},
 			// 查询客户详情
@@ -582,7 +584,7 @@
 					// 默认选中
 					this.chooseTempalte = arr
 					this.formDataValue = {
-						templateId: arr
+						templateId: this.chooseTempalte && this.chooseTempalte.length ? this.chooseTempalte : ''
 					}
 				}
 			},
@@ -717,6 +719,7 @@
 				const goodsDetailIdStr = []
 				// 遍历选择的模板
 				this.chooseTempalte.forEach((v) => {
+					
 					if (this.$refs[`billTable-${v}`][0]) {
 						this.$refs[`billTable-${v}`][0].getShop((data) => {
 							allShop.push(data)

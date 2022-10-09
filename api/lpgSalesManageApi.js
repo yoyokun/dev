@@ -791,3 +791,31 @@ export function salesOrderDeleteByIds(data = {}, message = '', custom = {}) {
 		}
 	})
 }
+// 调拨单模板设置 根据单个组织id查询调拨单设置信息
+export function salesTransferTemplateFindByOrgId(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/salesTransferTemplate/findByOrgId',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 供应商列表 根据id查询信息
+export function purSupplierFindById(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/purSupplier/findById',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}

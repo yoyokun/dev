@@ -9,7 +9,7 @@
 						<view class="fill-box">
 							<u-radio-group class="radio-group" size="14" v-model="pickMode" placement="row"
 								@change="pickModeChange">
-								<u-radio class="radio-item" labelSize="13" label="送气员配送" name="4"></u-radio>
+								<u-radio class="radio-item" labelSize="13" label="送气员配送" name="4" v-if="type=='sales'"></u-radio>
 								<u-radio class="radio-item" labelSize="13" label="车辆配送" name="3"></u-radio>
 								<u-radio class="radio-item" labelSize="13" label="车辆自提" name="2"></u-radio>
 								<u-radio class="radio-item" labelSize="13" label="自提" name="1"></u-radio>
@@ -60,7 +60,7 @@
 					<view class="content" @click="chooseAddress">
 						<input class="input" :placeholder="$t('salesMg.delivery.addressPlaceholder')" type="text" disabled v-if="!address" />
 						<view class="choose-address" v-else>{{ address }}</view>
-						<u-icon name="arrow-right"></u-icon>
+						<u-icon name="arrow-right" v-if="type=='sales'"></u-icon>
 					</view>
 				</view>
 				<view class="item" v-if="pickMode == 4 || pickMode == 3">
@@ -122,6 +122,14 @@
 		name: '',
 		components: {},
 		props: {
+			chargeMode:{
+				type: [Number, String],
+				default: ''
+			},
+			type: {
+				type: String,
+				default: 'sales'
+			},
 			pickModes: {
 				type: [Number, String],
 				default: '4'
@@ -435,7 +443,8 @@
 					returnValue: res
 				} = await salesPayItemsFindList({
 					state: 1,
-					itemType: this.orderSourceParam === 'internet' ? 2 : 1
+					itemType: this.orderSourceParam === 'internet' ? 2 : 1,
+					chargeMode:this.chargeMode
 				})
 				if (res) {
 					const choosePayItemsData = []

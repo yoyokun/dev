@@ -71,7 +71,9 @@ export const settingMixin = {
 			const stockInoutReason = []
 			res.forEach((v, i) => {
 				stockInoutReason.push({
-					name: v.reasonName + (v.type === 1 ? this.$t('stockMg.common.stockTypeTxt.in') : this.$t('stockMg.common.stockTypeTxt.out')),
+					name: v.reasonName + (v.type === 1 ? this.$t(
+						'stockMg.common.stockTypeTxt.in') : this.$t(
+						'stockMg.common.stockTypeTxt.out')),
 					value: v[type],
 					type: v.type,
 					reasonName: v.reasonName
@@ -349,7 +351,7 @@ export const settingMixin = {
 			this.customertProperty = this.getchildsProperty(res)
 		},
 		// 属性标签最后一级数组合并
-		arrayMergingCommon(res,type=3, childs = [], name = '') {
+		arrayMergingCommon(res, type = 3, childs = [], name = '') {
 			res.forEach((v, i) => {
 				if (v.type === type) {
 					// 最后一级
@@ -442,7 +444,9 @@ export const settingMixin = {
 		},
 		// 获取风险单元
 		async getRiskUnitList(data = {}, type = 'id') {
-			const { returnValue: res } = await riskUnitFindList(data)
+			const {
+				returnValue: res
+			} = await riskUnitFindList(data)
 			const riskUnitList = []
 			res.forEach(v => {
 				riskUnitList.push({
@@ -452,9 +456,13 @@ export const settingMixin = {
 			})
 			this.riskUnitList = riskUnitList
 		},
-    // 获取安检风险等级
+		// 获取安检风险等级
 		async getSafeLevelList(data = {}, type = 'id') {
-			const { returnValue: res } = await sysFieldFindList(Object.assign({}, data, { groups: 'safe_level' }))
+			const {
+				returnValue: res
+			} = await sysFieldFindList(Object.assign({}, data, {
+				groups: 'safe_level'
+			}))
 			const safeLevelList = []
 			res.forEach(v => {
 				safeLevelList.push({
@@ -466,7 +474,11 @@ export const settingMixin = {
 		},
 		// 获取风险等级
 		async getRiskLevelList(data = {}, type = 'id') {
-			const { returnValue: res } = await sysFieldFindList(Object.assign({}, data, { groups: 'risk_leve' }))
+			const {
+				returnValue: res
+			} = await sysFieldFindList(Object.assign({}, data, {
+				groups: 'risk_leve'
+			}))
 			const riskLevelList = []
 			res.forEach(v => {
 				riskLevelList.push({
@@ -478,7 +490,9 @@ export const settingMixin = {
 		},
 		// 获取组织模板列表
 		async getTemplateList(data = {}, type = 'id') {
-			const { returnValue: res } = await safeTemplateFindList(data)
+			const {
+				returnValue: res
+			} = await safeTemplateFindList(data)
 			const templateList = []
 			res.forEach(v => {
 				templateList.push({
@@ -490,9 +504,25 @@ export const settingMixin = {
 		},
 		// 查询钢瓶型号分类
 		async getSysSpecificationClassifySelectPropertyBox() {
-			const { returnValue: res } = await sysSpecificationClassifySelectPropertyBox()
+			const {
+				returnValue: res
+			} = await sysSpecificationClassifySelectPropertyBox()
 			const arr = this.getchildsProperty(res)
-			this.sysSpecificationClassifyData = this.arrayMergingCommon(arr,2)
+			this.sysSpecificationClassifyData = this.arrayMergingCommon(arr, 2)
+		},
+		// 获取业务类型
+		async getBusinessTypeList(obj = {}, type = 'id') {
+			const res = await sysFieldFindList(Object.assign({}, {
+				groups: 'field_business_type'
+			}, obj))
+			const businessTypeList = []
+			res.returnValue.forEach(v => {
+				businessTypeList.push({
+					name: v.name,
+					value: v[type]
+				})
+			})
+			this.businessTypeList = businessTypeList
 		},
 	}
 }

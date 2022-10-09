@@ -109,14 +109,16 @@
 		filters: {},
 		created() {},
 		async mounted() {
-			// 获取单据类型
-			await this.getBillType({ linkScope: this.linkScope })
-			this.searchOptions[0].options = this.billType
+			
 		},
-		onLoad(options) {
+		async onLoad(options) {
 			this.orgId = this.userInfo.orgId
 			this.billId = options.billId || ''
 			this.multiple = options.multiple || false
+			this.linkScope = options.type || this.linkScope
+			// 获取单据类型
+			await this.getBillType({ linkScope: this.linkScope })
+			this.searchOptions[0].options = this.billType
 		},
 		onShow() {
 			uni.setNavigationBarTitle({

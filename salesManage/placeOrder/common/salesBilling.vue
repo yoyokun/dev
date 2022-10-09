@@ -378,6 +378,7 @@
 			// 删除商品
 			removeOrderGoods(index) {
 				this.tableData.splice(index, 1)
+				this.tableChange()
 			},
 			// 验证 只能输入正整数,价格
 			validateInput(index, row, key) {

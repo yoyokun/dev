@@ -15,7 +15,7 @@
 		<scroll-view class="scroll-box" scroll-y="true" @scrolltolower="loadMore">
 			<block v-if="empty">
 				<view class="gp-box" v-if="dataList.length">
-					<view class="gp-main" v-for="(item, index) in dataList" :key="index" @click="goto('/salesManage/addSalesOrder/addSalesOrder',{editId: item.id,orderSourceParam:item.orderSource})">
+					<view class="gp-main" v-for="(item, index) in dataList" :key="index" @click="goto('/salesManage/salesOrderInfo/salesOrderInfo',{editId: item.id})">
 						<view class="head">
 							<text>{{item.billNo}}</text>
 							<text class="status green"
