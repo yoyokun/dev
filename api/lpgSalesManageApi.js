@@ -707,3 +707,87 @@ export function couponFindCustomerCouponList(data = {}, message = '', custom = {
 		}
 	})
 }
+// 销售订单管理 订单-接单
+export function salesOrderTakeOrder(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/salesOrder/takeOrder',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 销售订单管理 提交审核
+export function salesOrderCheckOrderData(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/salesOrder/checkOrderData',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 销售订单管理 订单作废
+export function salesOrderToVoid(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/salesOrder/toVoid',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 销售订单管理 挂起/解挂
+export function salesOrderUpdateHangUpType(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/salesOrder/updateHangUpType',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 销售订单管理 订单配送
+export function salesOrderToDistribution(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/salesOrder/toDistribution',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 销售订单管理 删除
+export function salesOrderDeleteByIds(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/salesOrder/deleteByIds',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}

@@ -676,6 +676,13 @@
 						"navigationBarTitleText": "接收列表",
 						"enablePullDownRefresh": false
 					}	
+				},
+				{
+					"path" : "confSend/confSend",
+					"style" : {
+						"navigationBarTitleText": "确认送达",
+						"enablePullDownRefresh": false
+					}	
 				}
 			]
 		}

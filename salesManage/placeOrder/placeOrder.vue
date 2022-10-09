@@ -14,7 +14,8 @@
 				@changeTable="changeTable" @click.native="getTempKey(item)" />
 		</view>
 		<!-- ====运输信息==== -->
-		<delivery ref="delivery" :customer-id="customerId" :pick-modes="pickMode" :address-obj="addressObj" @change="changeDelivery" />
+		<delivery ref="delivery" :customer-id="customerId" :pick-modes="pickMode" :address-obj="addressObj"
+			@change="changeDelivery" />
 
 		<discount ref="discount" :is-settle="isSettle" :org-id="orgIdShipment" :dis-count-tag="disCountTag"
 			:integral-tag="integralTag" :coupon-tag="couponTag" :customer-id="customerId"
@@ -24,30 +25,30 @@
 
 		<!-- ==========结算信息=========== -->
 		<view class="block">
-			<view class="block-head">结算信息</view>
+			<view class="block-head">{{$t('salesMg.common.countInfoTle')}}</view>
 			<view class="block-box">
 				<view class="item">
-					<view class="label">合计收费项(元)：</view>
+					<view class="label">{{$t('salesMg.common.totalFee')}}：</view>
 					<view class="content">{{totalChargeMoneyAll}}</view>
 				</view>
 				<view class="item">
-					<view class="label">合计订单金额(元)：</view>
+					<view class="label">{{$t('salesMg.common.totalOrderMoney')}}：</view>
 					<view class="content">{{totalMoneyOrderAll}}</view>
 				</view>
 				<view class="item">
-					<view class="label">合计金额(元)：</view>
+					<view class="label">{{$t('salesMg.common.totalMoney')}}：</view>
 					<view class="content">{{totalMoneyTwoAll}}</view>
 				</view>
 				<view class="item">
-					<view class="label">优惠金额(元)：</view>
+					<view class="label">{{$t('salesMg.common.dicountMoney')}}：</view>
 					<view class="content">{{couponMoneyAll}}</view>
 				</view>
 				<view class="item">
-					<view class="label">应收金额(元)：</view>
+					<view class="label">{{$t('salesMg.common.payMoney')}}：</view>
 					<view class="content">{{totalMoneyAll}}</view>
 				</view>
 				<view class="item">
-					<view class="label bold">应收合计(元)：</view>
+					<view class="label bold">{{$t('salesMg.common.countPay')}}：</view>
 					<view class="content">{{totalMoneyAll}}</view>
 				</view>
 			</view>
@@ -55,16 +56,17 @@
 				:total-money-all="totalMoneyAll" :pay-data="payData" />
 			<view class="block-box">
 				<view class="item">
-					<view class="label">备注：</view>
+					<view class="label">{{$t('salesMg.common.remarks.label')}}：</view>
 					<view class="content fill">
-						<textarea placeholder="请输入备注" v-model="remarks"></textarea>
+						<textarea :placeholder="$t('salesMg.common.remarks.placeholder')" v-model="remarks"></textarea>
 					</view>
 				</view>
 			</view>
 		</view>
 
 		<view class="btn">
-			<u-button :text="'结算'" @click="saveData(3)" type="primary" hairline shape="circle"></u-button>
+			<u-button :text="$t('salesMg.common.btn.pay')" @click="saveData(3)" type="primary" hairline shape="circle">
+			</u-button>
 			<!-- <u-button :text="'结算并打印'" @click="saveData(5)" type="success" hairline shape="circle" plain></u-button> -->
 		</view>
 
@@ -78,7 +80,7 @@
 		settingMixin
 	} from '@/common/settingMixin.js'
 	import {
-    salesOrderTemplateFindOnlyList,
+		salesOrderTemplateFindOnlyList,
 		moduleCommonSetFindByOrgId,
 		salesOrderTemplateFindDataByTemplate,
 		salesOrderSaveOrEdit
@@ -113,37 +115,37 @@
 				orderTime: '', // 开单时间 用来做补录单
 				formDataSource: [{
 						type: 'chooseBtn',
-						labelText: this.$t('salesMg.placeOrder.form.customerName.label'),
+						labelText: this.$t('salesMg.common.form.customerName.label'),
 						fieldName: 'customerName',
-						placeholder: this.$t('salesMg.placeOrder.form.customerName.placeholder'),
+						placeholder: this.$t('salesMg.common.form.customerName.placeholder'),
 						options: [],
 						func: 'chooseCustomer',
 						required: true,
 						rules: [{
 							required: true,
-							message: this.$t('salesMg.placeOrder.form.customerName.placeholder'),
+							message: this.$t('salesMg.common.form.customerName.placeholder'),
 							trigger: ['change', 'blur']
 						}]
 					},
 					{
 						type: 'text',
-						labelText: this.$t('salesMg.placeOrder.form.linkMan.label'),
+						labelText: this.$t('salesMg.common.form.linkMan.label'),
 						fieldName: 'linkMan',
-						placeholder: this.$t('salesMg.placeOrder.form.linkMan.placeholder'),
+						placeholder: this.$t('salesMg.common.form.linkMan.placeholder'),
 						disabled: true
 					},
 					{
 						type: 'number',
-						labelText: this.$t('salesMg.placeOrder.form.phone.label'),
+						labelText: this.$t('salesMg.common.form.phone.label'),
 						fieldName: 'phone',
-						placeholder: this.$t('salesMg.placeOrder.form.phone.placeholder'),
+						placeholder: this.$t('salesMg.common.form.phone.placeholder'),
 						disabled: true
 					},
 					{
 						type: 'multiple',
-						labelText: this.$t('salesMg.placeOrder.form.orderTemp.label'),
+						labelText: this.$t('salesMg.common.form.orderTemp.label'),
 						fieldName: 'templateId',
-						placeholder: this.$t('salesMg.placeOrder.form.orderTemp.placeholder'),
+						placeholder: this.$t('salesMg.common.form.orderTemp.placeholder'),
 						showOptions: false,
 						options: [],
 						disabled: false,
@@ -152,7 +154,7 @@
 						rules: [{
 							type: 'array',
 							required: true,
-							message: this.$t('salesMg.placeOrder.form.orderTemp.placeholder'),
+							message: this.$t('salesMg.common.form.orderTemp.placeholder'),
 							trigger: ['change', 'blur']
 						}]
 					},
@@ -175,27 +177,27 @@
 				decimalMode: '', // 保留小数方式
 				templateObj: {}, // 模板列表
 				chooseTempalte: [], // 选中的模板
-        tempKey: null,
-        // =========
-        goodsDetailIdStr: [], // 所有商品id（优惠券用到）
-        allShop: [], // 所有填写的商品
-        totalMoneyOrderAll: 0, // 订单合计
-        totalMoneyTwoAll: 0, // 总合计
-        totalChargeMoneyAll: 0, // 收费项
-        couponMoneyAll: 0, // 优惠金额
-        totalMoneyAll: 0, // 应收金额
-        remarks: '',
-        // =============
-        callRecordId: '', // 电话id
-        recordType: '', // 是否是补录单（0 否  1 是）
-        telId: '', // 电话id
-        orderSource: '', // 单据详情的订单来源
-        billNo: '', // 单据号 补录单会用到
-        pickModeId: '', // 配送方式的id
-        editId: '',
-        payData: [], // 收款数据
-        orgIdShipment: '', // 单据的组织
-        info: null, // 单据详情
+				tempKey: null,
+				// =========
+				goodsDetailIdStr: [], // 所有商品id（优惠券用到）
+				allShop: [], // 所有填写的商品
+				totalMoneyOrderAll: 0, // 订单合计
+				totalMoneyTwoAll: 0, // 总合计
+				totalChargeMoneyAll: 0, // 收费项
+				couponMoneyAll: 0, // 优惠金额
+				totalMoneyAll: 0, // 应收金额
+				remarks: '',
+				// =============
+				callRecordId: '', // 电话id
+				recordType: '', // 是否是补录单（0 否  1 是）
+				telId: '', // 电话id
+				orderSource: '', // 单据详情的订单来源
+				billNo: '', // 单据号 补录单会用到
+				pickModeId: '', // 配送方式的id
+				editId: '',
+				payData: [], // 收款数据
+				orgIdShipment: '', // 单据的组织
+				info: null, // 单据详情
 			}
 		},
 		// 过滤器
@@ -224,7 +226,7 @@
 		},
 		onShow() {
 			// 选择客户
-			uni.$once('chooseCustomer', async(data) => {
+			uni.$once('chooseCustomer', async (data) => {
 				if (data.id === this.customerId) {
 					return
 				}
@@ -238,8 +240,8 @@
 			uni.$off('chooseGoods')
 		},
 		methods: {
-			changeDelivery(data){
-				if(data && data.formDataValue){
+			changeDelivery(data) {
+				if (data && data.formDataValue) {
 					this.formDataValue = data.formDataValue
 				}
 				this.totalMoneyCalculate()
@@ -309,7 +311,7 @@
 					returnValue: res
 				} = await userCustomerFindByIdList({
 					id
-				}, '加载中...')
+				}, this.$t('salesMg.common.loading'))
 				if (res) {
 					this.customerInfo = res
 					if (res.userAddress) {
@@ -322,13 +324,14 @@
 					} else if (!res.userAddress) {
 						this.$refs.uToast.show({
 							type: 'error',
-							message: '该客户无地址，请添加！',
+							message: this.$t('salesMg.common.message')[0],
 						})
 					}
 					// 客户的默认值
 					this.collectionTypeId = res.userSettlement.collectionTypeId // 客户默认支付方式
 					this.pickMode = (res.userSettlement.pickMode ? res.userSettlement.pickMode : 4).toString() // 提货方式
-					this.licenseNumArr = res.userSettlement.licenseNum ? res.userSettlement.licenseNum.Split(',') : [] // 车牌号码
+					this.licenseNumArr = res.userSettlement.licenseNum ? res.userSettlement.licenseNum.Split(',') :
+					[] // 车牌号码
 					this.integralUse = res.userSettlement.integralUse // 客户积分
 					// 客户属性参数
 					const propertyId = []
@@ -355,7 +358,7 @@
 				} = await salesOrderTemplateFindOnlyList({
 					state: 1,
 					salesType: this.orderSourceParam === 'internet' ? 2 : 1,
-				}, '加载中')
+				}, this.$t('salesMg.common.loading'))
 				// 子单模板多选
 				const templateOption = []
 				// 处理数据
@@ -372,9 +375,10 @@
 				if (chooseTempalte.length) {
 					this.chooseTempalte = chooseTempalte
 				} else {
-					const arr = returnObject ? (returnObject.customerOrderTemplates ? returnObject.customerOrderTemplates.Split(',') : []) : []
-					for(const key of arr) {
-						if(!this.templateObj[key]) {
+					const arr = returnObject ? (returnObject.customerOrderTemplates ? returnObject
+						.customerOrderTemplates.Split(',') : []) : []
+					for (const key of arr) {
+						if (!this.templateObj[key]) {
 							// 查询模板详情
 							await this.getTemplateDetail(key)
 						}
@@ -404,7 +408,7 @@
 					customerId: this.customerId,
 					goodsCustomerDate,
 					id
-				}, '加载中')
+				}, this.$t('salesMg.common.loading'))
 				// 处理数据
 				o.templateId = o.id
 				o.id = '' // 清除id
@@ -464,7 +468,8 @@
 											// 有保存的值
 											v[m.propValue] = l.numValue
 											// 基本单位的id 等于 结算数量的单位 id
-											if (l.settleUnitsId === v.unitsId && !isWeight) {
+											if (l.settleUnitsId === v.unitsId && !
+												isWeight) {
 												isWeight = true
 												// 重量值 = 乘 转换值
 												v.weight = this.$bigDecimal.multiply(v[
@@ -478,7 +483,8 @@
 											l.numValue = n
 												.netContent // 表头辅助单位值（提交的时候用）
 											// 基本单位的id 等于 结算数量的单位 id
-											if (l.settleUnitsId === v.unitsId && !isWeight) {
+											if (l.settleUnitsId === v.unitsId && !
+												isWeight) {
 												isWeight = true
 												// 重量值 = 乘 转换值
 												v.weight = this.$bigDecimal.multiply(v[
@@ -578,7 +584,7 @@
 			},
 			// 保存数据
 			saveData(state = 3) {
-				this.$refs.dialogForm.handleSubmit(async(obj) => {
+				this.$refs.dialogForm.handleSubmit(async (obj) => {
 					const payData = this.$refs.delivery.getPayData()
 					// 获取所有商品
 					this.getAllShop()
@@ -587,7 +593,7 @@
 					if (payData.data.pickMode === 4 && !payData.data.deliverManId) {
 						this.$refs.uToast.show({
 							type: 'error',
-							message: '配送员不能为空',
+							message: this.$t('salesMg.common.message')[1],
 						})
 						return false
 					}
@@ -596,10 +602,10 @@
 						id: this.editId,
 						callRecordId: this.callRecordId ? this.callRecordId : (this.billType === 3 ? this
 							.telId : ''), // 电话id
-						recordType: this.recordType !== '' ? this.recordType : (this.billType === 1 ? 0
-							: this.billType === 2 ? 1 : 0), // 是否是补录单（0 否  1 是）
-						orderSource: this.orderSource ? this.orderSource : (this.billType === 3 ? 'phone'
-							: 'store'),
+						recordType: this.recordType !== '' ? this.recordType : (this.billType === 1 ? 0 :
+							this.billType === 2 ? 1 : 0), // 是否是补录单（0 否  1 是）
+						orderSource: this.orderSource ? this.orderSource : (this.billType === 3 ? 'phone' :
+							'store'),
 						orderTimeStr: this.orderTime, // 开单时间
 						customerId: this.customerId,
 						disCountMoney: objDiscount.disCountMoney, // 折扣金额
@@ -716,7 +722,7 @@
 						if (settlementData.residue !== 0 && state === 3) {
 							this.$refs.uToast.show({
 								type: 'error',
-								message: '支付金额跟应收金额不一致',
+								message: this.$t('salesMg.common.message')[2],
 							})
 							return false
 						}
@@ -743,7 +749,7 @@
 							} else {
 								this.$refs.uToast.show({
 									type: 'error',
-									message: '无打印内容,请先设置打印模板',
+									message: this.$t('salesMg.common.message')[3],
 								})
 							}
 						} else {
@@ -1002,5 +1008,4 @@
 			}
 		}
 	}
-
 </style>

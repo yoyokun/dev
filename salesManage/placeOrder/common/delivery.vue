@@ -1,10 +1,10 @@
 <template>
 	<view>
 		<view class="block">
-			<view class="block-head">运输信息</view>
+			<view class="block-head">{{$t('salesMg.delivery.tle')}}</view>
 			<view class="block-box">
 				<view class="item">
-					<view class="label">提货方式：</view>
+					<view class="label">{{$t('salesMg.delivery.pickMode')}}：</view>
 					<view class="content fill">
 						<view class="fill-box">
 							<u-radio-group class="radio-group" size="14" v-model="pickMode" placement="row"
@@ -20,52 +20,51 @@
 				<!-- ========= -->
 				<block v-if="pickMode == 4">
 					<view class="item">
-						<view class="label">配送点：</view>
+						<view class="label">{{$t('salesMg.delivery.defDeliveryName')}}：</view>
 						<view class="content" @click="chooseOrg">
-							<input class="input" placeholder="请选择配送点" type="text" disabled :value="defDeliveryName" />
+							<input class="input" :placeholder="$t('salesMg.delivery.defDeliveryNamePlaceholder')" type="text" disabled :value="defDeliveryName" />
 							<u-icon name="arrow-right"></u-icon>
 						</view>
 					</view>
 					<view class="item">
-						<view class="label">配送员：</view>
+						<view class="label">{{$t('salesMg.delivery.transportName')[0]}}：</view>
 						<view class="content" @click="chooseItem('choosePSY')">
-							<input class="input" placeholder="请选择配送员" type="text" disabled :value="transportName" />
+							<input class="input" :placeholder="$t('salesMg.delivery.transportNamePlaceholder')[0]" type="text" disabled :value="transportName" />
 							<u-icon name="arrow-right"></u-icon>
 						</view>
 					</view>
 				</block>
 				<!-- ========= -->
 				<view class="item" v-if="pickMode == 3 || pickMode == 2">
-					<view class="label">车牌号：</view>
+					<view class="label">{{$t('salesMg.delivery.chooseLicenseNum')}}：</view>
 					<view class="content">
-						<input class="input" :disabled="isSettle" v-model="chooseLicenseNum" placeholder="请输入车牌号"
+						<input class="input" :disabled="isSettle" v-model="chooseLicenseNum" :placeholder="$t('salesMg.delivery.chooseLicenseNumPlaceholder')"
 							type="text" />
 					</view>
 				</view>
 				<view class="item" v-if="pickMode == 3">
-					<view class="label">运输员：</view>
+					<view class="label">{{$t('salesMg.delivery.transportName')[1]}}：</view>
 					<view class="content">
-						<input class="input" v-model="transportName" :disabled="isSettle" placeholder="请输入运输员"
-							type="text" />
+						<input class="input" v-model="transportName" :disabled="isSettle" :placeholder="$t('salesMg.delivery.transportNamePlaceholder')[1]" type="text" />
 					</view>
 				</view>
 				<!-- =========== -->
 				<view class="item">
-					<view class="label">预约时间：</view>
+					<view class="label">{{$t('salesMg.delivery.bookingTime')}}：</view>
 					<view class="content">
 						<uni-datetime-picker :disabled="isSettle" v-model="bookingTime"></uni-datetime-picker>
 					</view>
 				</view>
 				<view class="item" v-if="pickMode != 1">
-					<view class="label">地址：</view>
+					<view class="label">{{$t('salesMg.delivery.address')}}：</view>
 					<view class="content" @click="chooseAddress">
-						<input class="input" placeholder="请选择地址" type="text" disabled v-if="!address" />
+						<input class="input" :placeholder="$t('salesMg.delivery.addressPlaceholder')" type="text" disabled v-if="!address" />
 						<view class="choose-address" v-else>{{ address }}</view>
 						<u-icon name="arrow-right"></u-icon>
 					</view>
 				</view>
 				<view class="item" v-if="pickMode == 4 || pickMode == 3">
-					<view class="label">{{pickMode==4?'配送费':'运费'}}：</view>
+					<view class="label">{{pickMode==4?$t('salesMg.delivery.feeName')[0]:$t('salesMg.delivery.feeName')[1]}}：</view>
 					<view class="content dfee">
 						<view class="fee-item" :class="item.check?'on':''" v-for="(item,index) in choosePayItemsData"
 							:key="index" @click="checkFee(index)">
@@ -73,19 +72,19 @@
 							<view class="fee-label">{{ item.itemName }}</view>
 							<block v-if="item.chargeMode == 2">
 								<view class="fee-flr" v-show="item.check" @click.stop="chooseItem('floorFee',index)">
-									<view class="flr">{{item.floor}}楼</view>
+									<view class="flr">{{item.floor}}{{$t('salesMg.delivery.floor')}}</view>
 									<u-icon size="32rpx" class="" name="arrow-down"></u-icon>
 								</view>
 								<input v-show="item.check" @click.stop class="fee-input" type="number"
-									placeholder="请输入费用" :disabled="item.disabled || isSettle" v-model="item.chargeMoney"
+									:placeholder="$t('salesMg.delivery.feePlaceholder')" :disabled="item.disabled || isSettle" v-model="item.chargeMoney"
 									@input="$emit('change','')" />
 							</block>
 							<block v-else>
-								<input v-show="item.check" class="fee-input" type="number" placeholder="请输入费用"
+								<input v-show="item.check" class="fee-input" type="number" :placeholder="$t('salesMg.delivery.feePlaceholder')"
 									:disabled="item.disabled || isSettle" v-model="item.chargeMoney"
 									@input="$emit('change','')" @click.stop />
 							</block>
-							<view v-show="item.check" class="fee-total">共{{ item.totalMoney }}</view>
+							<view v-show="item.check" class="fee-total">{{$t('salesMg.delivery.total')}}{{ item.totalMoney }}</view>
 						</view>
 					</view>
 				</view>
@@ -100,7 +99,7 @@
 				<view class="box" v-for="(subItems,subIndex) in itemList" :key="subItems.id"
 					@click="checkItem(subIndex)">
 					<view class="center">
-						<view class="name" v-if="itemType=='floorFee'">{{ subItems.name }}楼</view>
+						<view class="name" v-if="itemType=='floorFee'">{{ subItems.name }}{{$t('salesMg.delivery.floor')}}</view>
 						<view class="name" v-else>{{ subItems.name }}</view>
 					</view>
 					<image class="icon" v-if="subItems.active" mode="widthFix" src="/static/image/check.png" />

@@ -3,20 +3,7 @@ module.exports = {
 		totalTxt: '总数',
 		orderStateTxt: ['待支付', '已结算', '已完成', '已关闭', '已作废'],
 		checkStateTxt: ['已审核', '待提交', '待审核', '已作废', '未通过', '无审核'],
-		allotStateTxt: ['待提交', '待接收', '正常接收', '异常接收', '已作废']
-	},
-	// 支付方式
-	settlement: {
-		payment: '支付情况',
-		onlinePayment: '线上支付',
-		nonPayment: '未支付',
-		residue: '剩余金额',
-		paymentMethod: '支付方式',
-		pricePlace: '请输入金额'
-	},
-	// 快速下单
-	placeOrder: {
-		titleText: '快速下单',
+		allotStateTxt: ['待提交', '待接收', '正常接收', '异常接收', '已作废'],
 		form: {
 			customerName: {
 				label: '客户',
@@ -39,9 +26,74 @@ module.exports = {
 				placeholder: '请选择子单模板'
 			},
 		},
+		countInfoTle: '结算信息',
+		totalFee: '合计收费项(元)',
+		totalOrderMoney: '合计订单金额(元)',
+		totalMoney: '合计金额(元)',
+		dicountMoney: '优惠金额(元)',
+		payMoney: '应收金额(元)',
+		countPay: '应收合计(元)',
+		remarks: {
+			label: '备注',
+			placeholder: '请输入备注',
+		},
+		btn: {
+			save:'保存',
+			pay: '结算'
+		},
+		message: ['该客户无地址，请添加！', '配送员不能为空', '支付金额跟应收金额不一致', '无打印内容,请先设置打印模板'],
+		loading:'加载中...',
+	},
+	// 支付方式
+	settlement: {
+		payment: '支付情况',
+		onlinePayment: '线上支付',
+		nonPayment: '未支付',
+		residue: '剩余金额',
+		paymentMethod: '支付方式',
+		pricePlace: '请输入金额'
+	},
+	// 优惠券
+	discount:{
+		couponName:'优惠券',
+		couponNo:'优惠券号',
+		couponNoPlaceholder:'请输入优惠券号',
+		chooseBtn:'选择',
+		discountName:'订单折扣',
+		disCountMoney:'折扣金额',
+		disCountRate:'折扣率%',
+		discountDeal:'成交金额',
+		pointName:'积分抵扣',
+		integralUse:'客户积分',
+		maxIntegral:'可用积分',
+		integralValue:'抵扣积分',
+		integralMoney:'抵扣金额',
+		tips:'请选择客户',
+	},
+	// 运输信息
+	delivery:{
+		tle:'运输信息',
+		pickMode:'提货方式',
+		defDeliveryName:'配送点',
+		defDeliveryNamePlaceholder:'请选择配送点',
+		transportName:['配送员','运输员'],
+		transportNamePlaceholder:['请选择配送员','请输入运输员'],
+		chooseLicenseNum:'车牌号',
+		chooseLicenseNumPlaceholder:'请输入车牌号',
+		bookingTime:'预约时间',
+		address:'地址',
+		addressPlaceholder:'请选择地址',
+		floor:'楼',
+		feeName:['配送费','运费'],
+		feePlaceholder:'请输入费用',
+		total:'共',
+	},
+	// 快速下单
+	placeOrder: {
+		titleText: '快速下单',
 	},
 	// 接收列表
-	allotReciveList:{
+	allotReciveList: {
 		titleText: '接收列表',
 		outOrgName: '调出组织',
 		inOrgName: '调入组织',
@@ -83,10 +135,10 @@ module.exports = {
 					}
 				]
 			},
-			outOrgId:{
+			outOrgId: {
 				label: '调出组织'
 			},
-			createDateRange:{
+			createDateRange: {
 				label: '更新日期',
 				placeholder: ['开始日期', '结束日期']
 			},
@@ -135,13 +187,13 @@ module.exports = {
 					}
 				]
 			},
-			outOrgId:{
+			outOrgId: {
 				label: '调出组织'
 			},
-			inOrgId:{
+			inOrgId: {
 				label: '调入组织'
 			},
-			hangUpType:{
+			hangUpType: {
 				label: '是否挂起',
 				options: [{
 						name: '是',
@@ -153,7 +205,7 @@ module.exports = {
 					}
 				]
 			},
-			createDateRange:{
+			createDateRange: {
 				label: '更新日期',
 				placeholder: ['开始日期', '结束日期']
 			},
@@ -431,6 +483,166 @@ module.exports = {
 			orgIdStr: {
 				label: '销售组织',
 			}
+		},
+	},
+	// 添加销售单
+	addSalesOrder: {
+		titleText:'销售开单',
+	},
+	// 销售单详情
+	salesOrderInfo: {
+		btn: {
+			receive: '接单',
+			sub: '提交审批',
+			void: '作废',
+			del: '删除',
+			up: '挂起',
+			down: '解挂',
+			count: '结算',
+			delivery: '配送',
+			conf: '确认送达',
+		},
+		titleText: '订单详情',
+		tab: [{
+			name: '基本信息'
+		}, {
+			name: '订单信息'
+		}, {
+			name: '回瓶信息'
+		}, {
+			name: '溯源信息'
+		}],
+		basicTle: '基础信息',
+		customerTle: '客户信息',
+		deliverTle: '运输信息',
+		discountTle: '订单折扣',
+		orderTle: '订单信息',
+		backTle: '回瓶信息',
+		sourceTle: '溯源信息',
+		sendTle: '送达钢瓶',
+		recycleTle: '回收钢瓶',
+		billNo: '订单编号',
+		orderSource: '订单来源',
+		goodsTotalMoney: '订单金额',
+		payItemsMoney: '收费项金额',
+		couponTotalMoney: '优惠金额',
+		totalMoney: '应收金额',
+		orderState: '订单状态',
+		deliveryState: '物流状态',
+		payState: '支付状态',
+		payType: '支付类型',
+		payTypeName: '支付方式',
+		orderTime: '销售时间',
+		createTime: '制单时间',
+		finishTime: '完成时间',
+		operationTime: '操作时间',
+		remarks: '备注信息',
+		customerNo: '客户编号',
+		customerName: '客户名称',
+		customerPhone: '客户电话',
+		customerAccount: '会员编号',
+		customerClassify: '客户分类',
+		regionName: '客户区域',
+		customerTypeName: '客户类型',
+		propertyNames: '客户标签',
+		pickMode: '提货方式',
+		bookingTime: '预约时间',
+		licenseNo: '车牌号',
+		linkman: '收货人',
+		phone: '收货电话',
+		addressSplicing: '收货地址',
+		deliverOrgName: '配送组织',
+		deliverMan: '配送员/运输员',
+		payItemsName: '费用详细',
+		payItemsMoney: '合计运费',
+		couponNo: '优惠券号',
+		couponMoney: '优惠券金额',
+		integralValue: '抵扣积分',
+		integralMoney: '抵扣积分金额',
+		disCountMoney: '折扣金额',
+		disCountRate: '折扣率（%）',
+		couponTotalMoney: '合计优惠',
+		totalMoney: '成交金额（元）',
+		orderNums: '子单编号',
+		costMoney: '收费项',
+		totalUnit: '共',
+		orderStateTxt: {
+			1: '待支付',
+			2: '已结算',
+			3: '已完成',
+			4: '已关闭',
+			5: '已作废 '
+		},
+		customerClassifyTxt: {
+			1: '居民',
+			2: '非居民'
+		},
+		payStateTxt: {
+			1: '待支付',
+			2: '已支付',
+			3: '已取消'
+		},
+		pickModeTxt: {
+			1: '自提',
+			2: '车辆自提',
+			3: '车辆配送',
+			4: '送气员配送'
+		},
+		payTypeTxt: {
+			1: '线上支付',
+			2: '线下支付',
+			3: '线下支付 '
+		},
+		deliveryStateTxt: {
+			1: '待接单',
+			2: '待发货',
+			3: '配送中',
+			4: '已送达'
+		},
+		orderSourceTxt: {
+			store: '门店',
+			internet: '网上',
+			phone: '电话至门店',
+			callCenter: '客服中心'
+		},
+		tableColumnBack: {
+			goodsName: '商品名称',
+			propertyNames: '属性参数',
+			standardName: '规格',
+			unitsName: '单位',
+			totalNum: '出库数',
+			backNum: '回瓶数',
+			lendNum: '借瓶数',
+			returnNum: '还瓶数',
+			count: '合计',
+		},
+		infoData: {
+			countFee: '合计收费项(元)',
+			countOrder: '合计订单金额(元)',
+			freeMoney: '优惠金额(元)',
+			money: '应收金额(元)',
+		},
+		form: {
+			deliverOrgId: {
+				label: '配送点',
+				placeholder: '请选择配送点',
+			},
+			deliverManId: {
+				label: '配送员',
+				placeholder: '请选择配送员',
+			},
+			bookingTimeStr: {
+				label: '预约时间',
+				placeholder: '请选择预约时间',
+			},
+			licenseNo: {
+				label: '车牌号',
+				placeholder: '请输入车牌号',
+			},
+			deliverMan: {
+				label: '运输员',
+				placeholder: '请输入运输员',
+			},
 		},
 	},
 }

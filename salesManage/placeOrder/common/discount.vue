@@ -2,14 +2,14 @@
 	<view>
 		<!-- ========优惠券======= -->
 		<view class="block" v-if="couponTag == 1">
-			<view class="block-head">优惠券</view>
+			<view class="block-head">{{$t('salesMg.discount.couponName')}}</view>
 			<view class="block-box">
 				<view class="item">
-					<view class="label">优惠券号：</view>
+					<view class="label">{{$t('salesMg.discount.couponNo')}}：</view>
 					<view class="content">
-						<input class="input" placeholder="请输入优惠券号" type="text" @input="changeCoupon" v-model="couponNo"
+						<input class="input" :placeholder="$t('salesMg.discount.couponNoPlaceholder')" type="text" @input="changeCoupon" v-model="couponNo"
 							:disabled="isSettle" />
-						<u-button size="small" class="choose-coupon" type="primary" @click="chooseCoupon">选择</u-button>
+						<u-button size="small" class="choose-coupon" type="primary" @click="chooseCoupon">{{$t('salesMg.discount.chooseBtn')}}</u-button>
 					</view>
 				</view>
 			</view>
@@ -17,25 +17,24 @@
 
 		<!-- ========订单折扣======= -->
 		<view class="block" v-if="disCountTag == 1">
-			<view class="block-head">订单折扣</view>
+			<view class="block-head">{{$t('salesMg.discount.discountName')}}</view>
 			<view class="block-box">
 				<view class="item">
 					<view class="content dfee">
 						<view class="fee-item">
-							<view class="fee-label">折扣金额</view>
-							<input class="fee-input" type="number" placeholder="折扣金额" v-model="disCountMoney"
+							<view class="fee-label">{{$t('salesMg.discount.disCountMoney')}}</view>
+							<input class="fee-input" type="number" :placeholder="$t('salesMg.discount.disCountMoney')" v-model="disCountMoney"
 								:disabled="isSettle" @blur="orderDiscount(disCountMoney, 'disCountMoney')" />
 						</view>
 						<view class="fee-item">
-							<view class="fee-label">折扣率%</view>
-							<input v-model="disCountRate" class="fee-input" type="number" placeholder="折扣率%"
+							<view class="fee-label">{{$t('salesMg.discount.disCountRate')}}</view>
+							<input v-model="disCountRate" class="fee-input" type="number" :placeholder="$t('salesMg.discount.disCountRate')"
 								@blur="orderDiscount(disCountRate, 'disCountRate')" />
 							<view class="fee-total">%</view>
 						</view>
 						<view class="fee-item">
-							<view class="fee-label">成交金额</view>
-							<input v-model="discountDeal" class="fee-input" type="number" placeholder="成交金额"
-								@blur="orderDiscount(discountDeal, 'discountDeal')" />
+							<view class="fee-label">{{$t('salesMg.discount.discountDeal')}}</view>
+							<input v-model="discountDeal" class="fee-input" type="number" :placeholder="$t('salesMg.discount.discountDeal')" @blur="orderDiscount(discountDeal, 'discountDeal')" />
 						</view>
 					</view>
 				</view>
@@ -43,26 +42,25 @@
 		</view>
 		<!-- ==========积分抵扣=========== -->
 		<view class="block" v-if="integralTag===1">
-			<view class="block-head">积分抵扣</view>
+			<view class="block-head">{{$t('salesMg.discount.pointName')}}</view>
 			<view class="block-box">
 				<view class="item">
-					<view class="label">客户积分：</view>
+					<view class="label">{{$t('salesMg.discount.integralUse')}}：</view>
 					<view class="content">{{integralUse}}</view>
 				</view>
 				<view class="item">
-					<view class="label">可用积分：</view>
+					<view class="label">{{$t('salesMg.discount.maxIntegral')}}：</view>
 					<view class="content">{{ maxIntegral }}</view>
 				</view>
 				<view class="item">
 					<view class="content dfee">
 						<view class="fee-item" :class="isUse?'on':''" @click="usePoint">
 							<u-icon size="32rpx" class="fee-check" name="checkmark-circle-fill"></u-icon>
-							<view class="fee-label">抵扣积分</view>
-							<input @click.stop v-if="isUse" class="fee-input" type="number" placeholder="抵扣积分"
-								@input="integralValueChange" step="1" v-model="integralValue" />
+							<view class="fee-label">{{$t('salesMg.discount.integralValue')}}</view>
+							<input @click.stop v-if="isUse" class="fee-input" type="number" :placeholder="$t('salesMg.discount.integralValue')" @input="integralValueChange" step="1" v-model="integralValue" />
 						</view>
 						<view class="fee-item" v-if="isUse">
-							<view class="fee-label">抵扣金额：</view>
+							<view class="fee-label">{{$t('salesMg.discount.integralMoney')}}：</view>
 							<view>-{{ integralMoney }}</view>
 						</view>
 					</view>
@@ -218,7 +216,7 @@
 			// 选择优惠券
 			chooseCoupon() {
 				if (!this.customerId) {
-					this.$u.toast('请选择客户')
+					this.$u.toast(this.$t('salesMg.discount.tips'))
 					return
 				}
 				console.log(this.customerId)
@@ -234,7 +232,7 @@
 				this.couponDetailId = ''
 				this.couponMoney = 0
 				if (!this.customerId) {
-					this.$u.toast('请选择客户')
+					this.$u.toast(this.$t('salesMg.discount.tips'))
 					return
 				}
 				const res = await couponFindCouponToVerify({

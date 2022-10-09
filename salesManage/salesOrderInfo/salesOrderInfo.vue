@@ -13,124 +13,164 @@
 		<view class="container" v-show="current==0">
 			<view class="customerBox">
 				<view class="title" @click="isShow = !isShow">
-					<text class="name">基础信息</text>
+					<text class="name">{{$t('salesMg.salesOrderInfo.basicTle')}}</text>
 					<u-icon v-if="isShow" name="arrow-down" color="#666666" size="18"></u-icon>
 					<u-icon v-else name="arrow-right" color="#666666" size="18"></u-icon>
 				</view>
 				<view class="content" v-show="isShow">
 					<description-list>
-						<description :label="'订单编号'">{{ info.billNo }}</description>
-						<description :label="'订单来源'">{{ info.orderSource | orderSource }}</description>
-						<description :label="'订单金额'">{{ info.goodsTotalMoney }}</description>
-						<description :label="'收费项金额'">{{ info.payItemsMoney }}</description>
-						<description :label="'优惠金额'">{{ info.couponTotalMoney }}</description>
-						<description :label="'应收金额'">{{ info.totalMoney }}</description>
-						<description :label="'订单状态'">{{ info.orderState | orderState }}</description>
-						<description :label="'物流状态'">{{ info.deliveryState | deliveryState }}</description>
-						<description :label="'支付状态'">{{ info.payState | payState }}</description>
-						<description :label="'支付类型'">{{ info.payType | payType }}</description>
-						<description :label="'支付方式'">{{ info.payTypeName }}</description>
-						<description :label="'销售时间'">{{ info.orderTime | dayjs }}
+						<description :label="$t('salesMg.salesOrderInfo.billNo')">{{ info.billNo }}</description>
+						<description :label="$t('salesMg.salesOrderInfo.orderSource')">
+							{{ info.orderSource | orderSource }}
 						</description>
-						<description :label="'制单时间'">{{ info.createTime | dayjs }}</description>
-						<description :label="'完成时间'">{{ info.finishTime | dayjs }}
+						<description :label="$t('salesMg.salesOrderInfo.goodsTotalMoney')">{{ info.goodsTotalMoney }}
 						</description>
-						<description :label="'操作时间'">{{ info.operationTime | dayjs }}
+						<description :label="$t('salesMg.salesOrderInfo.payItemsMoney')">{{ info.payItemsMoney }}
 						</description>
-						<description :label="'备注信息'">{{ info.remarks }}</description>
+						<description :label="$t('salesMg.salesOrderInfo.couponTotalMoney')">{{ info.couponTotalMoney }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.totalMoney')">{{ info.totalMoney }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.orderState')">{{ info.orderState | orderState }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.deliveryState')">
+							{{ info.deliveryState | deliveryState }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.payState')">{{ info.payState | payState }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.payType')">{{ info.payType | payType }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.payTypeName')">{{ info.payTypeName }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.orderTime')">{{ info.orderTime | dayjs }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.createTime')">{{ info.createTime | dayjs }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.finishTime')">{{ info.finishTime | dayjs }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.operationTime')">
+							{{ info.operationTime | dayjs }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.remarks')">{{ info.remarks }}</description>
 					</description-list>
 				</view>
 			</view>
 			<view class="customerBox">
 				<view class="title" @click="isShow1 = !isShow1">
-					<text class="name">客户信息</text>
+					<text class="name">{{$t('salesMg.salesOrderInfo.customerTle')}}</text>
 					<u-icon v-if="isShow1" name="arrow-down" color="#666666" size="18"></u-icon>
 					<u-icon v-else name="arrow-right" color="#666666" size="18"></u-icon>
 				</view>
 				<view class="content" v-show="isShow1">
 					<description-list>
-						<description :label="'客户编号'">{{ info.customerNo }}</description>
-						<description :label="'客户名称'">{{ info.customerName }}</description>
-						<description :label="'客户电话'">{{ salesOrderExtend.customerPhone }}</description>
-						<description :label="'会员编号'">{{ salesOrderExtend.customerAccount }}</description>
-						<description :label="'客户分类'">{{ salesOrderExtend.customerClassify | customerClassify }}
+						<description :label="$t('salesMg.salesOrderInfo.customerNo')">{{ info.customerNo }}
 						</description>
-						<description :label="'客户区域'">{{ salesOrderExtend.regionName }}</description>
-						<description :label="'客户类型'">{{ salesOrderExtend.customerTypeName }}</description>
-						<description :label="'客户标签'">{{ salesOrderExtend.propertyNames }}</description>
+						<description :label="$t('salesMg.salesOrderInfo.customerName')">{{ info.customerName }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.customerPhone')">
+							{{ salesOrderExtend.customerPhone }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.customerAccount')">
+							{{ salesOrderExtend.customerAccount }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.customerClassify')">
+							{{ salesOrderExtend.customerClassify | customerClassify }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.regionName')">{{ salesOrderExtend.regionName }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.customerTypeName')">
+							{{ salesOrderExtend.customerTypeName }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.propertyNames')">
+							{{ salesOrderExtend.propertyNames }}
+						</description>
 					</description-list>
 				</view>
 			</view>
 			<view class="customerBox">
 				<view class="title" @click="isShow2 = !isShow2">
-					<text class="name">运输信息</text>
+					<text class="name">{{$t('salesMg.salesOrderInfo.deliverTle')}}</text>
 					<u-icon v-if="isShow2" name="arrow-down" color="#666666" size="18"></u-icon>
 					<u-icon v-else name="arrow-right" color="#666666" size="18"></u-icon>
 				</view>
 				<view class="content" v-show="isShow2">
 					<description-list>
-						<description :label="'提货方式'">{{ salesOrderTransport.pickMode | pickMode }}</description>
-						<description :label="'预约时间'">{{ salesOrderTransport.bookingTime | dayjs }}</description>
-						<description :label="'车牌号'">
+						<description :label="$t('salesMg.salesOrderInfo.pickMode')">
+							{{ salesOrderTransport.pickMode | pickMode }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.bookingTime')">
+							{{ salesOrderTransport.bookingTime | dayjs }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.licenseNo')">
 							{{ (salesOrderTransport.pickMode !==1 && salesOrderTransport.pickMode !==4) ? salesOrderTransport.licenseNo : '' }}
 						</description>
-						<description :label="'收货人'">{{ salesOrderTransport.linkman }}</description>
-						<description :label="'收货电话'">{{ salesOrderTransport.phone }}</description>
-						<description :label="'收货地址'">{{ salesOrderTransport | addressSplicing }}</description>
-						<description :label="'配送组织'">
+						<description :label="$t('salesMg.salesOrderInfo.linkman')">{{ salesOrderTransport.linkman }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.phone')">{{ salesOrderTransport.phone }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.addressSplicing')">
+							{{ salesOrderTransport | addressSplicing }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.deliverOrgName')">
 							{{ salesOrderTransport.pickMode === 4 ? salesOrderTransport.deliverOrgName : '' }}
 						</description>
-						<description :label="'配送员/运输员'">
+						<description :label="$t('salesMg.salesOrderInfo.deliverMan')">
 							{{ (salesOrderTransport.pickMode === 3 || salesOrderTransport.pickMode === 4) ? salesOrderTransport.deliverMan : '' }}
 						</description>
-						<description :label="'费用详细'">{{ info.payItemsName }}</description>
-						<description :label="'合计运费'">{{ info.payItemsMoney }}</description>
+						<description :label="$t('salesMg.salesOrderInfo.payItemsName')">{{ info.payItemsName }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.payItemsMoney')">{{ info.payItemsMoney }}
+						</description>
 					</description-list>
 				</view>
 			</view>
 			<view class="customerBox">
 				<view class="title" @click="isShow3 = !isShow3">
-					<text class="name">订单折扣</text>
+					<text class="name">{{$t('salesMg.salesOrderInfo.discountTle')}}</text>
 					<u-icon v-if="isShow3" name="arrow-down" color="#666666" size="18"></u-icon>
 					<u-icon v-else name="arrow-right" color="#666666" size="18"></u-icon>
 				</view>
 				<view class="content" v-show="isShow3">
 					<description-list>
-						<description :label="'优惠券号'">{{ info.coupon ? info.coupon.couponNo : '' }}</description>
-						<description :label="'优惠券金额'">{{ info.couponMoney }}</description>
-						<description :label="'抵扣积分'">{{ info.integralValue }}</description>
-						<description :label="'抵扣积分金额'">{{ info.integralMoney }}</description>
-						<description :label="'折扣金额'">{{ info.disCountMoney }}</description>
-						<description :label="'折扣率（%）'">{{ info.disCountRate }}%</description>
-						<description :label="'合计优惠'">{{ info.couponTotalMoney }}</description>
-						<description :label="'成交金额（元）'">{{ info.totalMoney }}</description>
+						<description :label="$t('salesMg.salesOrderInfo.couponNo')">
+							{{ info.coupon ? info.coupon.couponNo : '' }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.couponMoney')">{{ info.couponMoney }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.integralValue')">{{ info.integralValue }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.integralMoney')">{{ info.integralMoney }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.disCountMoney')">{{ info.disCountMoney }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.disCountRate')">{{ info.disCountRate }}%
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.couponTotalMoney')">{{ info.couponTotalMoney }}
+						</description>
+						<description :label="$t('salesMg.salesOrderInfo.totalMoney')">{{ info.totalMoney }}
+						</description>
 					</description-list>
 				</view>
-			</view>
-			<view class="btn">
-				<u-button :text="$t('common.btn.edit')" type="primary" hairline shape="circle" @click="submitForm">
-				</u-button>
 			</view>
 		</view>
 		<view class="container" v-show="current==1">
 			<view class="customerBox">
 				<view class="title">
-					<text class="name">订单信息</text>
+					<text class="name">{{$t('salesMg.salesOrderInfo.orderTle')}}</text>
 				</view>
 				<view class="content">
 					<description-list v-for="item in salesOrderDetailList" :key="item.id">
 						<view class="basic-tle">{{item.billName}}
-							<text
-								class="tip-tle">{{$t('auditInfo.salesOrdersInfo.orderNums')}}：{{ item.subBillNo }}</text>
+							<text class="tip-tle">{{$t('salesMg.salesOrderInfo.orderNums')}}：{{ item.subBillNo }}</text>
 						</view>
 						<us-table :table-column="item.printSetVo.tableColumn"
 							:table-data="item.salesOrderDetailGoodsList || []"></us-table>
 					</description-list>
 					<description-list v-if="salesOrderPayitemsList.length"
-						:title="$t('auditInfo.salesOrdersInfo.costMoney')">
+						:title="$t('salesMg.salesOrderInfo.costMoney')">
 						<description v-for="(item,index) in salesOrderPayitemsList" :key="item.id"
 							:label="item.payItemsName">
-							{{ item.payItemsMoney }},{{$t('auditInfo.salesOrdersInfo.totalUnit')}}{{item.payItemsTotalMoney}}
+							{{ item.payItemsMoney }},{{$t('salesMg.salesOrderInfo.totalUnit')}}{{item.payItemsTotalMoney}}
 						</description>
 						<view class="p-20">
 							<total :info-data="infoData"></total>
@@ -142,7 +182,7 @@
 		<view class="container" v-show="current==2">
 			<view class="customerBox">
 				<view class="title">
-					<text class="name">回瓶信息</text>
+					<text class="name">{{$t('salesMg.salesOrderInfo.backTle')}}</text>
 				</view>
 				<view class="content">
 					<description-list>
@@ -155,89 +195,130 @@
 		<view class="container" v-show="current==3">
 			<view class="customerBox">
 				<view class="title">
-					<text class="name">溯源信息</text>
+					<text class="name">{{$t('salesMg.salesOrderInfo.sourceTle')}}</text>
 				</view>
 				<view class="content">
-					<description-list v-if="editId" :title="$t('auditInfo.salesOrdersInfo.sendTle')">
+					<description-list v-if="editId" :title="$t('salesMg.salesOrderInfo.sendTle')">
 						<service-cylinder-info node-type="confirmDelivery" :link-id="editId" />
 					</description-list>
-					<description-list v-if="editId" :title="$t('auditInfo.salesOrdersInfo.recycleTle')">
+					<description-list v-if="editId" :title="$t('salesMg.salesOrderInfo.recycleTle')">
 						<service-cylinder-info node-type="recycleCylinder" :link-id="editId" />
 					</description-list>
 				</view>
 			</view>
 		</view>
+		<view class="btn">
+			<u-button :text="$t('common.btn.edit')" type="primary" hairline shape="circle" @click=""></u-button>
+			<u-button :text="$t('salesMg.salesOrderInfo.btn.receive')" type="primary" hairline plain shape="circle"
+				@click="handleReceiving(info)">
+			</u-button>
+			<u-button :text="$t('salesMg.salesOrderInfo.btn.sub')" type="success" plain hairline shape="circle"
+				@click="handleSubmit(info)">
+			</u-button>
+			<u-button :text="$t('salesMg.salesOrderInfo.btn.void')" type="error" plain hairline shape="circle"
+				@click="handleVoid(info)"></u-button>
+			<u-button :text="$t('salesMg.salesOrderInfo.btn.del')" type="error" plain hairline shape="circle"
+				@click="handleDelete(info)">
+			</u-button>
+			<u-button :text="$t('salesMg.salesOrderInfo.btn.up')" type="success" plain hairline shape="circle"
+				@click="handleHangUp(info,true)">
+			</u-button>
+			<u-button :text="$t('salesMg.salesOrderInfo.btn.down')" type="warning" plain hairline shape="circle"
+				@click="handleHangUp(info,false)">
+			</u-button>
+			<u-button :text="$t('salesMg.salesOrderInfo.btn.count')" type="primary" plain hairline shape="circle"
+				@click=""></u-button>
+			<u-button :text="$t('salesMg.salesOrderInfo.btn.delivery')" type="success" plain hairline shape="circle"
+				@click="handleAssign(info)"></u-button>
+			<u-button :text="$t('salesMg.salesOrderInfo.btn.conf')" type="success" plain hairline shape="circle"
+				@click=""></u-button>
+		</view>
+		<!-- 配送 -->
+		<u-modal :show="psShow" :title="'配送'" :closeOnClickOverlay="true" :showCancelButton="true" @cancel="closePs"
+			@close="closePs" @confirm="confPs">
+			<view class="ps-main">
+				<edit-form v-if="info.pickMode == 4" ref="dialogFormManager" form-width="100%"
+					:form-data-source="formDataSourceManager" :form-data-value="formDataValueManager"
+					@change="changeForm">
+					<template v-slot:other>
+						<u-form-item label="地址">
+							<view style="line-height: 40rpx;">{{ salesOrderTransport | addressSplicing }}</view>
+						</u-form-item>
+					</template>
+				</edit-form>
+				<edit-form v-if="info.pickMode == 3" ref="dialogFormVehicle" form-width="100%"
+					:form-data-source="formDataSourceVehicle" :form-data-value="formDataValueVehicle">
+					<template v-slot:other>
+						<u-form-item label="地址">
+							<view style="line-height: 40rpx;">{{ salesOrderTransport | addressSplicing }}</view>
+						</u-form-item>
+					</template>
+				</edit-form>
+			</view>
+		</u-modal>
+		<!-- 请求 toast 提示 -->
+		<!-- 作废 -->
+		<u-modal :show="showModal" :title="$t('common.descTle')" :closeOnClickOverlay="true" :showCancelButton="true"
+			@cancel="closeModal" @close="closeModal" @confirm="confVoid">
+			<view class="modal-main">
+				<view>{{$t('common.descTips')}}</view>
+				<u-textarea v-model="modalParams.value" maxlength="100" class="modal-text" confirmType="done"
+					:placeholder="$t('common.descPlaceholder')"></u-textarea>
+			</view>
+		</u-modal>
 		<!-- 请求 toast 提示 -->
 		<u-toast ref='uToast'></u-toast>
 	</view>
 </template>
 
 <script>
+	let that = null
 	import {
-		salesOrderFindById
+		settingMixin
+	} from '@/common/settingMixin.js'
+	import {
+		salesOrderFindById,
+		salesOrderTakeOrder,
+		salesOrderCheckOrderData,
+		salesOrderToVoid,
+		salesOrderUpdateHangUpType,
+		salesOrderToDistribution,
+		salesOrderDeleteByIds,
 	} from '@/api/lpgSalesManageApi'
 	import ServiceCylinderInfo from '../../userCenter/auditInfo/common/serviceCylinderInfo'
+	import {
+		UnixToDate
+	} from '@/utils/util.js'
 	export default {
+		mixins: [settingMixin],
 		// 过滤器
 		filters: {
 			orderState(value) {
-				const stateObj = {
-					1: '待支付',
-					2: '已结算',
-					3: '已完成',
-					4: '已关闭',
-					5: '已作废 '
-				}
+				const stateObj = that.$t('salesMg.salesOrderInfo.orderStateTxt')
 				return stateObj[value] || ''
 			},
 			customerClassify(value) {
-				const stateObj = {
-					1: '居民',
-					2: '非居民'
-				}
+				const stateObj = that.$t('salesMg.salesOrderInfo.customerClassifyTxt')
 				return stateObj[value] || ''
 			},
 			payState(value) {
-				const stateObj = {
-					1: '待支付',
-					2: '已支付',
-					3: '已取消'
-				}
+				const stateObj = that.$t('salesMg.salesOrderInfo.payStateTxt')
 				return stateObj[value] || ''
 			},
 			pickMode(value) {
-				const stateObj = {
-					1: '自提',
-					2: '车辆自提',
-					3: '车辆配送',
-					4: '送气员配送'
-				}
+				const stateObj = that.$t('salesMg.salesOrderInfo.pickModeTxt')
 				return stateObj[value] || ''
 			},
 			payType(value) {
-				const stateObj = {
-					1: '线上支付',
-					2: '线下支付',
-					3: '线下支付 '
-				}
+				const stateObj = that.$t('salesMg.salesOrderInfo.payTypeTxt')
 				return stateObj[value] || ''
 			},
 			deliveryState(value) {
-				const stateObj = {
-					1: '待接单',
-					2: '待发货',
-					3: '配送中',
-					4: '已送达'
-				}
+				const stateObj = that.$t('salesMg.salesOrderInfo.deliveryStateTxt')
 				return stateObj[value] || ''
 			},
 			orderSource(value) {
-				const stateObj = {
-					store: '门店',
-					internet: '网上',
-					phone: '电话至门店',
-					callCenter: '客服中心'
-				}
+				const stateObj = that.$t('salesMg.salesOrderInfo.orderSourceTxt')
 				return stateObj[value] || ''
 			}
 		},
@@ -246,15 +327,9 @@
 		},
 		data() {
 			return {
-				tabSwitch: [{
-					name: '基本信息'
-				}, {
-					name: '订单信息'
-				}, {
-					name: '回瓶信息'
-				}, {
-					name: '溯源信息'
-				}],
+				showModal: false,
+				modalParams: {},
+				tabSwitch: this.$t('salesMg.salesOrderInfo.tab'),
 				current: 0,
 				isShow: true,
 				isShow1: true,
@@ -265,71 +340,431 @@
 				salesOrderExtend: {},
 				salesOrderDetailList: [],
 				salesOrderPayitemsList: [],
+				salesOrderBackDetailList: [],
 				tableColumnBack: [{
 						prop: 'goodsName',
-						label: this.$t('auditInfo.salesOrdersInfo.tableColumnBack.goodsName')
+						label: this.$t('salesMg.salesOrderInfo.tableColumnBack.goodsName')
 					},
 					{
 						prop: 'propertyNames',
-						label: this.$t('auditInfo.salesOrdersInfo.tableColumnBack.propertyNames')
+						label: this.$t('salesMg.salesOrderInfo.tableColumnBack.propertyNames')
 					},
 					{
 						prop: 'standardName',
-						label: this.$t('auditInfo.salesOrdersInfo.tableColumnBack.standardName')
+						label: this.$t('salesMg.salesOrderInfo.tableColumnBack.standardName')
 					},
 					{
 						prop: 'unitsName',
-						label: this.$t('auditInfo.salesOrdersInfo.tableColumnBack.unitsName')
+						label: this.$t('salesMg.salesOrderInfo.tableColumnBack.unitsName')
 					},
 					{
 						prop: 'totalNum',
-						label: this.$t('auditInfo.salesOrdersInfo.tableColumnBack.totalNum')
+						label: this.$t('salesMg.salesOrderInfo.tableColumnBack.totalNum')
 					},
 					{
 						prop: 'backNum',
-						label: this.$t('auditInfo.salesOrdersInfo.tableColumnBack.backNum')
+						label: this.$t('salesMg.salesOrderInfo.tableColumnBack.backNum')
 					},
 					{
 						prop: 'lendNum',
-						label: this.$t('auditInfo.salesOrdersInfo.tableColumnBack.lendNum')
+						label: this.$t('salesMg.salesOrderInfo.tableColumnBack.lendNum')
 					},
 					{
 						prop: 'returnNum',
-						label: this.$t('auditInfo.salesOrdersInfo.tableColumnBack.returnNum')
+						label: this.$t('salesMg.salesOrderInfo.tableColumnBack.returnNum')
 					}
 				],
 				infoData: [{
-						name: '合计收费项(元)',
+						name: this.$t('salesMg.salesOrderInfo.infoData.countFee'),
 						value: '0',
 						type: 'money'
 					},
 					{
-						name: '合计订单金额(元)',
+						name: this.$t('salesMg.salesOrderInfo.infoData.countOrder'),
 						value: '0',
 						type: 'money'
 					},
 					{
-						name: '优惠金额(元)',
+						name: this.$t('salesMg.salesOrderInfo.infoData.freeMoney'),
 						value: '0',
 						type: 'money'
 					},
 					{
-						name: '应收金额(元)',
+						name: this.$t('salesMg.salesOrderInfo.infoData.money'),
 						value: '0',
 						type: 'money'
 					}
-				]
+				],
+				formDataSourceManager: [{
+						type: 'picker',
+						labelText: this.$t('salesMg.salesOrderInfo.form.deliverOrgId.label'),
+						fieldName: 'deliverOrgId',
+						placeholder: this.$t('salesMg.salesOrderInfo.form.deliverOrgId.placeholder'),
+						options: [],
+						required: true,
+						rules: [{
+							required: true,
+							message: this.$t('salesMg.salesOrderInfo.form.deliverOrgId.placeholder'),
+							trigger: ['change', 'blur']
+						}]
+					},
+					{
+						type: 'picker',
+						labelText: this.$t('salesMg.salesOrderInfo.form.deliverManId.label'),
+						fieldName: 'deliverManId',
+						placeholder: this.$t('salesMg.salesOrderInfo.form.deliverManId.placeholder'),
+						options: [],
+						required: true,
+						rules: [{
+							required: true,
+							message: this.$t('salesMg.salesOrderInfo.form.deliverManId.placeholder'),
+							trigger: ['change', 'blur']
+						}]
+					},
+					{
+						type: 'datetime',
+						labelText: this.$t('salesMg.salesOrderInfo.form.bookingTimeStr.label'),
+						fieldName: 'bookingTimeStr',
+						placeholder: this.$t('salesMg.salesOrderInfo.form.bookingTimeStr.placeholder'),
+						required: true,
+						rules: [{
+							required: true,
+							message: this.$t('salesMg.salesOrderInfo.form.bookingTimeStr.placeholder'),
+							trigger: ['change', 'blur']
+						}]
+					}
+				],
+				formDataValueManager: {},
+				formDataSourceVehicle: [{
+						type: 'text',
+						labelText: this.$t('salesMg.salesOrderInfo.form.licenseNo.label'),
+						fieldName: 'licenseNo',
+						placeholder: this.$t('salesMg.salesOrderInfo.form.licenseNo.placeholder'),
+						required: true,
+						rules: [{
+							required: true,
+							message: this.$t('salesMg.salesOrderInfo.form.licenseNo.placeholder'),
+							trigger: ['change', 'blur']
+						}]
+					},
+					{
+						type: 'text',
+						labelText: this.$t('salesMg.salesOrderInfo.form.deliverMan.label'),
+						fieldName: 'deliverMan',
+						placeholder: this.$t('salesMg.salesOrderInfo.form.deliverMan.placeholder'),
+						required: true,
+						rules: [{
+							required: true,
+							message: this.$t('salesMg.salesOrderInfo.form.deliverMan.placeholder'),
+							trigger: ['change', 'blur']
+						}]
+					},
+					{
+						type: 'datetime',
+						labelText: this.$t('salesMg.salesOrderInfo.form.bookingTimeStr.label'),
+						fieldName: 'bookingTimeStr',
+						placeholder: this.$t('salesMg.salesOrderInfo.form.bookingTimeStr.placeholder'),
+						required: true,
+						rules: [{
+							required: true,
+							message: this.$t('salesMg.salesOrderInfo.form.bookingTimeStr.placeholder'),
+							trigger: ['change', 'blur']
+						}]
+					}
+				],
+				formDataValueVehicle: {},
+				psShow: false,
 			}
 		},
 		async onLoad(options) {
-			this.editId = options.editId||''
+			that = this
+			uni.setNavigationBarTitle({
+				title: this.$t('salesMg.salesOrderInfo.titleText')
+			})
+			this.editId = options.editId || ''
 			if (options.editId) {
 				this.getInfo(options.editId)
 			}
-
+			await this.getOrgList()
+			this.formDataSourceManager[0].options = this.orgList
+			this.$set(this.formDataValueManager, 'deliverOrgId', this.userInfo.orgId)
+			await this.getManagerDeliveryman()
+			this.formDataSourceManager[1].options = this.managerDeliveryman
 		},
 		onShow() {},
 		methods: {
+			// 配送
+			confPs() {
+				const temp = this.info.salesOrderTransport
+				if (this.info.pickMode == 3) {
+					this.$refs.dialogFormVehicle.handleSubmit(async (param) => {
+						const data = {
+							id: this.editId,
+							salesOrderTransportData: {
+								id: temp.id,
+								pickMode: temp.pickMode, // 提货方式（1 自提 ，2 车辆自提 ，3 车辆配送 ，4 送气员配送
+								bookingTimeStr: param.bookingTimeStr, // 预约时间
+								licenseNo: param.licenseNo, // 车牌号，
+								province: temp.province, // 省，
+								city: temp.city, // 市，
+								area: temp.area, // 区，
+								address: temp.address, // 详细地址，
+								doorplate: temp.doorplate, // 门牌号，
+								linkman: temp.linkman, // 收货人，
+								phone: temp.phone, // 收货电话，
+								latitude: temp.latitude, // 纬度，
+								longitude: temp.longitude, // 经度，
+								floor: temp.floor, // 楼层，
+								deliverMan: param.deliverMan, // 运输员/配送员
+							}
+						}
+						data.salesOrderTransportData = JSON.stringify(data.salesOrderTransportData)
+						const {
+							returnValue: res,
+							message
+						} = await salesOrderToDistribution(data)
+						if (res) {
+							this.psShow = false
+							this.$refs.uToast.show({
+								type: 'success',
+								message: message,
+							})
+							this.getInfo(this.editId)
+						}
+					})
+				} else if (this.info.pickMode == 4) {
+					this.$refs.dialogFormManager.handleSubmit(async (param) => {
+						const data = {
+							id: this.editId,
+							salesOrderTransportData: {
+								id: temp.id,
+								pickMode: temp.pickMode, // 提货方式（1 自提 ，2 车辆自提 ，3 车辆配送 ，4 送气员配送
+								bookingTimeStr: param.bookingTimeStr, // 预约时间
+								province: temp.province, // 省，
+								city: temp.city, // 市，
+								area: temp.area, // 区，
+								address: temp.address, // 详细地址，
+								doorplate: temp.doorplate, // 门牌号，
+								linkman: temp.linkman, // 收货人，
+								phone: temp.phone, // 收货电话，
+								latitude: temp.latitude, // 纬度，
+								longitude: temp.longitude, // 经度，
+								floor: temp.floor, // 楼层，
+								deliverManId: param.deliverManId, // 运输员id/配送员id
+								deliverMan: this.managerDeliveryman.filter((item) => item.value == param
+									.deliverManId)[0].name, // 运输员/配送员
+								deliverOrgId: param.deliverOrgId, // 配送点id，
+								deliverOrgName: this.orgList.filter((item) => item.value == param
+									.deliverOrgId)[0].name // 配送点名称
+							}
+						}
+						data.salesOrderTransportData = JSON.stringify(data.salesOrderTransportData)
+						const {
+							returnValue: res,
+							message
+						} = await salesOrderToDistribution(data)
+						if (res) {
+							this.psShow = false
+							this.$refs.uToast.show({
+								type: 'success',
+								message: message,
+							})
+							this.getInfo(this.editId)
+						}
+					})
+				}
+
+			},
+			closePs() {
+				this.psShow = false
+			},
+			async handleAssign(data) {
+				const salesOrderTransport = data.salesOrderTransport
+				if (salesOrderTransport.pickMode == 3) {
+					this.psShow = true
+					// 车辆配送
+					setTimeout(() => {
+						this.formDataValueVehicle = {
+							deliverMan: salesOrderTransport.deliverMan,
+							licenseNo: salesOrderTransport.licenseNo,
+							bookingTimeStr: salesOrderTransport.bookingTime ? UnixToDate(
+								salesOrderTransport
+								.bookingTime) : ''
+						}
+					}, 100)
+				} else if (salesOrderTransport.pickMode == 4) {
+					this.psShow = true
+					// 配送员配送
+					setTimeout(() => {
+						this.formDataValueManager = {
+							deliverManId: salesOrderTransport.deliverManId,
+							deliverOrgId: salesOrderTransport.deliverOrgId,
+							bookingTimeStr: salesOrderTransport.bookingTime ? UnixToDate(
+								salesOrderTransport
+								.bookingTime) : ''
+						}
+					}, 100)
+					console.log(this.formDataValueManager)
+				}
+			},
+			// 配送员form表单改变
+			async changeForm(obj) {
+				const queryParams = obj.queryParams
+				const name = obj.name // 改变的字段
+				if (name === 'deliverOrgId' && queryParams.deliverOrgId) {
+					// 配送点改变，重新查找配送员
+					await this.getManagerDeliveryman({
+						orgId: queryParams.deliverOrgId
+					})
+					this.formDataSourceManager[1].options = this.managerDeliveryman
+					queryParams.deliverManId = ''
+					this.$refs.dialogFormManager.resetPicker('deliverManId', [0], [0])
+					this.formDataValueManager = queryParams
+				}
+			},
+			// 挂起
+			handleHangUp(data, type) {
+				uni.showModal({
+					title: this.$t('common.tipsTle')[2],
+					content: this.$t('common').delTxt(data.billNo),
+					title: type?this.$t('common.tipsTle')[6]:this.$t('common.tipsTle')[7],
+					content: type?this.$t('common').hangUpTxt(data.billNo):this.$t('common').hangDownTxt(data.billNo),
+					success: async (ret) => {
+						if (ret.confirm) {
+							const obj = {
+								ids: [],
+								hangUpType: type
+							}
+							obj.ids.push(data.id)
+							const {
+								returnValue: res,
+								message
+							} = await salesOrderUpdateHangUpType(obj)
+							if (res) {
+								this.$refs.uToast.show({
+									type: 'success',
+									message: message,
+								})
+								this.getInfo(this.editId)
+							}
+						}
+					},
+				})
+			},
+			// 作废
+			async confVoid() {
+				const remarks = this.modalParams.value && this.modalParams.value.replace(/\s*/g, "")
+				if (!remarks) {
+					this.$refs.uToast.show({
+						type: 'error',
+						message: this.$t('common.descPlaceholder'),
+					})
+					return
+				}
+				const {
+					returnValue: res,
+					message
+				} = await salesOrderToVoid({
+					ids: [this.modalParams.voidData.id],
+					invalidRemarks: remarks || ''
+				}).catch(err => {
+					this.closeModal()
+				})
+				if (res) {
+					this.$refs.uToast.show({
+						type: 'success',
+						message: message,
+					})
+					this.getInfo(this.editId)
+				}
+				this.closeModal()
+			},
+			closeModal() {
+				this.showModal = false
+				this.modalParams = {}
+			},
+			handleVoid(data) {
+				this.showModal = true
+				this.modalParams.voidData = data
+			},
+			handleSubmit(data) {
+				uni.showModal({
+					title: this.$t('common.tipsTle')[1],
+					content: this.$t('common').subTxt(data.billNo),
+					success: async (ret) => {
+						if (ret.confirm) {
+							const obj = {
+								ids: []
+							}
+							obj.ids.push(data.id)
+							const {
+								returnValue: res,
+								message
+							} = await salesOrderCheckOrderData(obj)
+							if (res) {
+								this.$refs.uToast.show({
+									type: 'success',
+									message: message,
+								})
+								this.getInfo(this.editId)
+							}
+						}
+					},
+				})
+			},
+			handleDelete(data) {
+				uni.showModal({
+					title: this.$t('common.tipsTle')[2],
+					content: this.$t('common').delTxt(data.billNo),
+					success: async (ret) => {
+						if (ret.confirm) {
+							const {
+								returnValue: res,
+								message
+							} = await salesOrderDeleteByIds({
+								ids: [data.id]
+							})
+							if (res) {
+								this.$refs.uToast.show({
+									type: 'success',
+									message: message,
+								})
+								setTimeout(function() {
+									uni.navigateBack({
+										delta: 1
+									})
+								}, 1500)
+							}
+						}
+					},
+				})
+			},
+			// 接单
+			handleReceiving(data) {
+				uni.showModal({
+					title: this.$t('common.tipsTle')[5],
+					content: this.$t('common').receiveTxt(data.billNo),
+					success: async (ret) => {
+						if (ret.confirm) {
+							const obj = {
+								ids: []
+							}
+							obj.ids.push(data.id)
+							const {
+								returnValue: res,
+								message
+							} = await salesOrderTakeOrder(obj)
+							if (res) {
+								this.$refs.uToast.show({
+									type: 'success',
+									message: message,
+								})
+								this.getInfo(this.editId)
+							}
+						}
+					}
+				})
+			},
 			// 详情
 			async getInfo(id) {
 				const {
@@ -375,7 +810,7 @@
 							totalWeight: v.totalWeight,
 							goodsName: '',
 							propertyNames: '',
-							unitsName: '合计',
+							unitsName: that.$t('salesMg.salesOrderInfo.tableColumnBack.count'),
 							unitPrice: '',
 							remarks: ''
 						})
@@ -403,6 +838,23 @@
 </script>
 
 <style lang="scss" scoped>
+	.modal-main {
+		width: 100%;
+		font-size: 28rpx;
+
+		&>view {
+			margin-bottom: 20rpx;
+		}
+
+		::v-deep .modal-text {
+			font-size: 28rpx;
+
+			.u-textarea__field {
+				font-size: 28rpx;
+			}
+		}
+	}
+
 	.basic-tle {
 		padding: 0 20rpx;
 		height: 80rpx;
@@ -469,11 +921,11 @@
 
 	.btn {
 		width: 632rpx;
-		margin: 40rpx auto;
-		@include flexMixin(column);
+		margin: 60rpx auto;
+		@include flexMixin();
 
 		.u-button {
-			margin: 20rpx 10rpx;
+			margin: 0rpx 10rpx;
 		}
 	}
 </style>

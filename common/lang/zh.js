@@ -58,12 +58,15 @@ module.exports = {
 			settle: '结算',
 			rectification: '整改'
 		},
-		tipsTle: ['撤回提示', '提交提示', '删除提示', '禁用提示', '启用提示'],
+		tipsTle: ['撤回提示', '提交提示', '删除提示', '禁用提示', '启用提示', '接单提示', '挂起提示', '解挂提示'],
 		backTxt: (txt) => `真的要撤回${txt}该条数据吗?`,
 		subTxt: (txt) => `真的要提交${txt}该条数据吗?`,
 		delTxt: (txt) => `真的要删除${txt}该条数据吗?`,
 		disableTxt: (txt) => `真的要禁用${txt}该条数据吗?`,
 		enableTxt: (txt) => `真的要启用${txt}该条数据吗?`,
+		receiveTxt: (txt) => `真的要接单 ${txt} 该条数据吗?`,
+		hangUpTxt: (txt) => `真的要挂起${txt}该条数据吗?`,
+		hangDownTxt: (txt) => `真的要解挂${txt}该条数据吗?`,
 	},
 	// 登录页面
 	login: {

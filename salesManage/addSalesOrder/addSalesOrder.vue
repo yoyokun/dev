@@ -47,30 +47,30 @@
 			@change="changeDiscount" />
 		<!-- ==========结算信息=========== -->
 		<view class="block">
-			<view class="block-head">结算信息</view>
+			<view class="block-head">{{$t('salesMg.common.countInfoTle')}}</view>
 			<view class="block-box">
 				<view class="item">
-					<view class="label">合计收费项(元)：</view>
+					<view class="label">{{$t('salesMg.common.totalFee')}}：</view>
 					<view class="content">{{totalChargeMoneyAll}}</view>
 				</view>
 				<view class="item">
-					<view class="label">合计订单金额(元)：</view>
+					<view class="label">{{$t('salesMg.common.totalOrderMoney')}}：</view>
 					<view class="content">{{totalMoneyOrderAll}}</view>
 				</view>
 				<view class="item">
-					<view class="label">合计金额(元)：</view>
+					<view class="label">{{$t('salesMg.common.totalMoney')}}：</view>
 					<view class="content">{{totalMoneyTwoAll}}</view>
 				</view>
 				<view class="item">
-					<view class="label">优惠金额(元)：</view>
+					<view class="label">{{$t('salesMg.common.dicountMoney')}}：</view>
 					<view class="content">{{couponMoneyAll}}</view>
 				</view>
 				<view class="item">
-					<view class="label">应收金额(元)：</view>
+					<view class="label">{{$t('salesMg.common.payMoney')}}：</view>
 					<view class="content">{{totalMoneyAll}}</view>
 				</view>
 				<view class="item">
-					<view class="label bold">应收合计(元)：</view>
+					<view class="label bold">{{$t('salesMg.common.countPay')}}：</view>
 					<view class="content">{{totalMoneyAll}}</view>
 				</view>
 			</view>
@@ -82,17 +82,17 @@
 				:pay-data="payData" />
 			<view class="block-box">
 				<view class="item">
-					<view class="label">备注：</view>
+					<view class="label">{{$t('salesMg.common.remarks.label')}}：</view>
 					<view class="content fill">
-						<textarea placeholder="请输入备注" v-model="remarks"></textarea>
+						<textarea :placeholder="$t('salesMg.common.remarks.placeholder')" v-model="remarks"></textarea>
 					</view>
 				</view>
 			</view>
 		</view>
 
 		<view class="btn">
-			<u-button :text="'保存'" @click="saveData(1)" type="primary" hairline shape="circle"></u-button>
-			<u-button :text="'结算'" @click="saveData(3)" type="primary" hairline shape="circle" plain></u-button>
+			<u-button :text="$t('salesMg.common.btn.save')" @click="saveData(1)" type="primary" hairline shape="circle"></u-button>
+			<u-button :text="$t('salesMg.common.btn.pay')" @click="saveData(3)" type="primary" hairline shape="circle" plain></u-button>
 			<!-- <u-button :text="'结算并打印'" @click="saveData(5)" type="success" hairline shape="circle" plain></u-button> -->
 		</view>
 
@@ -145,37 +145,37 @@
 				orderTime: '', // 开单时间 用来做补录单
 				formDataSource: [{
 						type: 'chooseBtn',
-						labelText: this.$t('salesMg.placeOrder.form.customerName.label'),
+						labelText: this.$t('salesMg.common.form.customerName.label'),
 						fieldName: 'customerName',
-						placeholder: this.$t('salesMg.placeOrder.form.customerName.placeholder'),
+						placeholder: this.$t('salesMg.common.form.customerName.placeholder'),
 						options: [],
 						func: 'chooseCustomer',
 						required: true,
 						rules: [{
 							required: true,
-							message: this.$t('salesMg.placeOrder.form.customerName.placeholder'),
+							message: this.$t('salesMg.common.form.customerName.placeholder'),
 							trigger: ['change', 'blur']
 						}]
 					},
 					{
 						type: 'text',
-						labelText: this.$t('salesMg.placeOrder.form.linkMan.label'),
+						labelText: this.$t('salesMg.common.form.linkMan.label'),
 						fieldName: 'linkMan',
-						placeholder: this.$t('salesMg.placeOrder.form.linkMan.placeholder'),
+						placeholder: this.$t('salesMg.common.form.linkMan.placeholder'),
 						disabled: true
 					},
 					{
 						type: 'number',
-						labelText: this.$t('salesMg.placeOrder.form.phone.label'),
+						labelText: this.$t('salesMg.common.form.phone.label'),
 						fieldName: 'phone',
-						placeholder: this.$t('salesMg.placeOrder.form.phone.placeholder'),
+						placeholder: this.$t('salesMg.common.form.phone.placeholder'),
 						disabled: true
 					},
 					{
 						type: 'multiple',
-						labelText: this.$t('salesMg.placeOrder.form.orderTemp.label'),
+						labelText: this.$t('salesMg.common.form.orderTemp.label'),
 						fieldName: 'templateId',
-						placeholder: this.$t('salesMg.placeOrder.form.orderTemp.placeholder'),
+						placeholder: this.$t('salesMg.common.form.orderTemp.placeholder'),
 						showOptions: false,
 						options: [],
 						disabled: false,
@@ -184,7 +184,7 @@
 						rules: [{
 							type: 'array',
 							required: true,
-							message: this.$t('salesMg.placeOrder.form.orderTemp.placeholder'),
+							message: this.$t('salesMg.common.form.orderTemp.placeholder'),
 							trigger: ['change', 'blur']
 						}]
 					},
@@ -248,7 +248,7 @@
 			this.billType = options.billType || 1
 			this.isSettle = options.isSettle || false
 			uni.setNavigationBarTitle({
-				title: this.$t('销售开单')
+				title: this.$t(this.$t('salesMg.addSalesOrder.titleText'))
 			})
 			// 子单添加商品
 			uni.$on('chooseGoods', (data) => {
@@ -508,7 +508,7 @@
 					returnValue: res
 				} = await userCustomerFindByIdList({
 					id
-				}, '加载中...')
+				}, this.$t('salesMg.common.loading'))
 				if (res) {
 					this.customerInfo = res
 					if (res.userAddress) {
@@ -521,7 +521,7 @@
 					} else if (!res.userAddress) {
 						this.$refs.uToast.show({
 							type: 'error',
-							message: '该客户无地址，请添加！',
+							message: this.$t('salesMg.common.message')[0],
 						})
 					}
 					// 客户的默认值
@@ -555,7 +555,7 @@
 				} = await salesOrderTemplateFindOnlyList({
 					state: 1,
 					salesType: this.orderSourceParam === 'internet' ? 2 : 1,
-				}, '加载中')
+				}, this.$t('salesMg.common.loading'))
 				// 子单模板多选
 				const templateOption = []
 				// 处理数据
@@ -604,7 +604,7 @@
 					customerId: this.customerId,
 					goodsCustomerDate,
 					id
-				}, '加载中')
+				}, this.$t('salesMg.common.loading'))
 				// 处理数据
 				o.templateId = o.id
 				o.id = '' // 清除id
@@ -782,7 +782,7 @@
 					if (payData.data.pickMode === 4 && !payData.data.deliverManId) {
 						this.$refs.uToast.show({
 							type: 'error',
-							message: '配送员不能为空',
+							message: this.$t('salesMg.common.message')[1],
 						})
 						return false
 					}
@@ -911,7 +911,7 @@
 						if (settlementData.residue !== 0 && state === 3) {
 							this.$refs.uToast.show({
 								type: 'error',
-								message: '支付金额跟应收金额不一致',
+								message: this.$t('salesMg.common.message')[2],
 							})
 							return false
 						}
@@ -938,7 +938,7 @@
 							} else {
 								this.$refs.uToast.show({
 									type: 'error',
-									message: '无打印内容,请先设置打印模板',
+									message: this.$t('salesMg.common.message')[3],
 								})
 							}
 						} else {
