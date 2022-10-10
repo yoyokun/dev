@@ -31,7 +31,8 @@
 								<text class="label">{{$t('chooseGoods.propertyNames')}}</text>
 								<text class="txt">{{val.propertyNames}}</text>
 							</view>
-							<block v-if="val.assistUnitsList&&val.assistUnitsList.length" v-for="(i,k) in val.assistUnitsList" :key="k">
+							<block v-if="val.assistUnitsList&&val.assistUnitsList.length"
+								v-for="(i,k) in val.assistUnitsList" :key="k">
 								<view class="item" v-if="i.unitsName&&i.netContent">
 									<text class="label">{{i.unitsName}}</text>
 									<text class="txt">{{i.netContent}}</text>
@@ -90,6 +91,7 @@
 				propertyIdStr: '', // 客户属性
 				goodsCustomerDate: '', // 日期
 				customerId: '', // 客户id
+				businessTag: '',
 				// 组织id
 				orgId: '',
 				searchOptions: [{
@@ -106,7 +108,7 @@
 						fieldName: 'brandId',
 						defaultValue: '',
 						options: [],
-						placeholder:this.$t('chooseGoods.searchOptions.brandId.placeholder')
+						placeholder: this.$t('chooseGoods.searchOptions.brandId.placeholder')
 					},
 					{
 						labelText: this.$t('chooseGoods.searchOptions.unitsId.label'),
@@ -114,7 +116,7 @@
 						fieldName: 'unitsId',
 						defaultValue: '',
 						options: [],
-						placeholder:this.$t('chooseGoods.searchOptions.unitsId.placeholder')
+						placeholder: this.$t('chooseGoods.searchOptions.unitsId.placeholder')
 					},
 					{
 						type: 'text',
@@ -132,7 +134,7 @@
 						type: 'text',
 						labelText: this.$t('chooseGoods.searchOptions.startCostPrice.label'),
 						fieldName: 'startCostPrice',
-						placeholder:this.$t('chooseGoods.searchOptions.startCostPrice.placeholder')
+						placeholder: this.$t('chooseGoods.searchOptions.startCostPrice.placeholder')
 					},
 					{
 						type: 'text',
@@ -184,6 +186,7 @@
 			this.customerId = options.customerId || ''
 			this.orgId = options.orgId || ''
 			this.multiple = options.multiple || false
+			this.businessTag = options.businessTag || ''
 		},
 		onShow() {
 			uni.setNavigationBarTitle({
@@ -200,13 +203,14 @@
 			// 获取列表
 			async findDataList() {
 				const data = {
-					...(this.params||{}),
+					...(this.params || {}),
 					...{
 						state: 4,
 						propertyIdStr: this.propertyIdStr,
 						goodsCustomerDate: this.goodsCustomerDate,
 						customerId: this.customerId,
 						goodsIdStr: this.goodsIdStr,
+						businessTag: this.businessTag,
 						page: this.pagination.getCurrentPage(),
 						size: this.pagination.getCurrentSize()
 					}
@@ -218,9 +222,9 @@
 				if (res) {
 					let goodsArr = {}
 					let ids = []
-					if(this.multiple){
+					if (this.multiple) {
 						ids = ids.concat(this.goodsId.split(','))
-					}else{
+					} else {
 						ids.push(this.goodsId)
 					}
 					res.forEach(v => {
@@ -244,9 +248,9 @@
 			},
 			// 选择
 			chooseBox(index, key) {
-				if(this.multiple){
+				if (this.multiple) {
 					this.dataList[index].child[key].active = this.dataList[index].child[key].active == true ? false : true
-				}else{
+				} else {
 					this.dataList.forEach(v => {
 						v.child.forEach(i => {
 							i.active = false
@@ -254,7 +258,7 @@
 					})
 					this.dataList[index].child[key].active = true
 				}
-				
+
 			},
 			// 确定
 			chooseSave() {
@@ -263,9 +267,9 @@
 				this.dataList.forEach((item, index) => {
 					data = data.concat(item.child.filter(v => v.active === true))
 				})
-				if(this.multiple){
+				if (this.multiple) {
 					uni.$emit('chooseGoods', data)
-				}else{
+				} else {
 					uni.$emit('chooseGoods', data[0])
 				}
 				uni.navigateBack({
@@ -334,10 +338,11 @@
 						// align-items: center;
 						align-items: flex-start;
 						flex-wrap: wrap;
-						
+
 						text:first-child {
 							color: #666;
-							&::after{
+
+							&::after {
 								display: inline-block;
 								content: "：";
 							}
@@ -363,16 +368,18 @@
 						border-bottom: 1px solid #E5E5E5;
 						margin-top: 0;
 						// line-height: 58rpx;
-						
+
 						.item {
 							margin-bottom: 20rpx;
 							flex-wrap: wrap;
 							padding: 0 2rpx;
 							box-sizing: border-box;
-							&:nth-last-child(-n+3){
+
+							&:nth-last-child(-n+3) {
 								margin-bottom: 0;
 							}
-							.txt{
+
+							.txt {
 								word-break: break-all;
 							}
 						}

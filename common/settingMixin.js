@@ -10,6 +10,7 @@ import {
 	goodsClassifyFindList,
 	userCustomerFindList,
 	sysLinkBillFindList,
+	sysConfigGetCylinderSwitch,
 } from '@/api/lpgManageAppApi'
 import {
 	stockInoutReasonFindList,
@@ -49,6 +50,18 @@ export const settingMixin = {
 		}
 	},
 	methods: {
+		// 钢瓶溯源设置
+		async getConfigGetCylinder(fun) {
+			const {
+				returnValue: res
+			} = await sysConfigGetCylinderSwitch({
+				key: 'cylinder_service'
+			})
+			if (res) {
+				const arr = res.paraValue.Split(',')
+				fun && fun(arr)
+			}
+		},
 		// 获取出入库原因
 		async getBillType(obj = {}) {
 			const {

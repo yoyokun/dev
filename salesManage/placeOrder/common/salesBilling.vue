@@ -41,11 +41,12 @@
 							</view>
 						</view>
 					</view>
-					<u-checkbox 
-						v-if="templateDataObj.changePriceTag === 1" 
-						:disabled="isSettle" 
-						:checked="item.checked" 
-						@change="onChangePriceTag(index, item)"></u-checkbox>
+					<u-checkbox-group v-if="templateDataObj.changePriceTag === 1" >
+						<u-checkbox
+							:disabled="isSettle" 
+							:checked="item.checked" 
+							@change="onChangePriceTag(index, item)"></u-checkbox>
+					</u-checkbox-group>
 					<u-icon class="remove-goods" name="minus-circle-fill" @click="removeOrderGoods(index)">
 					</u-icon>
 				</view>
@@ -349,6 +350,7 @@
 				if (value === 'add') {
 					// 多个商品 合并
 					this.tableData = this.tableData.concat(data)
+					// 计算
 					this.setData(data, this.tableData.length - 1)
 				}
 				// 合计
@@ -506,11 +508,10 @@
 					this.tableData[index].unitPrice = res.unitPrice
 					this.tableData[index].oneSettleAmount = res.settleAmount
 					this.setData(row, index)
+					this.tableChange()
 				} else {
 					this.tableData[index].oneSettleAmount = ''
 				}
-				// 合计
-				this.getSummaries()
 			},
 			// 退瓶底
 			onBottleBumTag(netContent, amount, index) {

@@ -57,6 +57,9 @@
 			<u-button :text="$t('salesMg.common.btn.save')" @click="saveData(1)" type="primary" hairline shape="circle">
 			</u-button>
 		</view>
+		
+		<!-- 请求 toast 提示 -->
+		<u-toast ref='uToast'></u-toast>
 	</view>
 </template>
 
@@ -574,7 +577,7 @@
 					const objDiscount = this.$refs.discount.getDiscount()
 					const payData = this.$refs.delivery.getPayData()
 					// 提交
-					data.billTimeStr = UnixToDate(data.billTimeStr)
+					data.billTimeStr = data.billTimeSt ? UnixToDate(data.billTimeStr):''
 					data.id = this.editId || ''
 					data.linkId = this.linkId
 					data.linkType = this.linkTypes
@@ -636,7 +639,7 @@
 					data.salesOrderTransportData = {
 						id: this.pickModeId || '',
 						pickMode: payData.data.pickMode, // 提货方式（1 自提  ，3 车辆配送
-						bookingTime: UnixToDate(payData.data.bookingTime), // 预约时间
+						bookingTime: payData.data.bookingTime?UnixToDate(payData.data.bookingTime):'', // 预约时间
 						licenseNo: payData.data.chooseLicenseNum, // 车牌号，
 						deliverMan: payData.data.transportName, // 运输员，
 						province: objectValueEmpty(payData.data.addressObj, 'province'), // 省，

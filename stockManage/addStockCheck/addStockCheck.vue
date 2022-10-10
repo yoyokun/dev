@@ -130,13 +130,9 @@
 			<u-button v-permission="{ permission:'app_stockCheckList_revert'}" :text="$t('common.btn.withdraw')"
 				@click="handleUpdate(infos,7)" v-if="infos.checkState==2" type="warning" hairline shape="circle" plain>
 			</u-button>
-			<u-button v-permission="{ permission:'app_stockCheckList_delete'}" :text="$t('common.btn.delete')"
-				type="error" hairline shape="circle"
-				v-if="infos.checkState==1||infos.checkState==5||infos.checkState==4" plain @click="handleDelete(infos)">
+			<u-button v-permission="{ permission:'app_stockCheckList_delete'}" :text="$t('common.btn.delete')" type="error" hairline shape="circle" v-if="infos.checkState==1||infos.checkState==5||infos.checkState==4" plain @click="handleDelete(infos)">
 			</u-button>
-			<u-button v-permission="{ permission:'app_stockCheckList_invalid'}"
-				v-if="infos.checkState==3||infos.checkState==6" :text="$t('common.btn.toVoid')"
-				@click="handleVoid(infos)" type="error" hairline shape="circle" plain></u-button>
+			<u-button v-permission="{ permission:'app_stockCheckList_invalid'}" v-if="infos.checkState==3||infos.checkState==6" :text="$t('common.btn.toVoid')" @click="handleVoid(infos)" type="error" hairline shape="circle" plain></u-button>
 		</view>
 
 		<!-- 作废 -->
