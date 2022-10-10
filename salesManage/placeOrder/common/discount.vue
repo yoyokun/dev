@@ -177,7 +177,6 @@
 					this.couponMoney = data.goodsCouponMoney
 					this.discountCalculate()
 				}
-
 			})
 		},
 		methods: {
@@ -338,7 +337,7 @@
 			// 积分使用
 			// 计算积分
 			usePoint(type = '') {
-				this.isUse = typeof type === 'object' ? (this.isUse ? false : true) : type
+				this.isUse = typeof type === 'object' ? (!this.isUse) : type
 				this.integralValue = ''
 				this.integralMoney = ''
 				// 计算
@@ -346,7 +345,7 @@
 			},
 			// 积分填写计算
 			integralValueChange(e) {
-				let val = e.detail.value
+				const val = e.detail.value
 				// 抵扣金额=使用积分除积分规则
 				this.integralMoney = this.$bigDecimal.round(this.$bigDecimal.divide(val, this.paraValue), 2)
 				// 计算
@@ -477,7 +476,7 @@
 
 							.fee-input {
 								height: 60rpx;
-								width: 180rpx;
+								width: 200rpx;
 								background: rgba(247, 247, 247, 1);
 								border-radius: 10rpx;
 								font-size: 28rpx;

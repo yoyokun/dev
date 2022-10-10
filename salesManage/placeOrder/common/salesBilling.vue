@@ -41,6 +41,12 @@
 							</view>
 						</view>
 					</view>
+					<u-checkbox-group v-if="templateDataObj.changePriceTag === 1" >
+						<u-checkbox
+							:disabled="isSettle" 
+							:checked="item.checked" 
+							@change="onChangePriceTag(index, item)"></u-checkbox>
+					</u-checkbox-group>
 					<u-icon class="remove-goods" name="minus-circle-fill" @click="removeOrderGoods(index)">
 					</u-icon>
 				</view>
@@ -144,6 +150,7 @@
 		checkPrice,
 		integer
 	} from '@/utils'
+	import { salesOrderTemplateFindChangePriceGoods } from '@/api/lpgSalesManageApi'
 	export default {
 		name: 'SalesBilling',
 		props: {
@@ -213,6 +220,9 @@
 					this.tableColumn = this.templateDataObj.tableColumn
 					this.tableData = this.templateDataObj.tableData
 					if (this.tableData) {
+						this.tableData.forEach((v, i) => {
+							this.setData(v, i)
+						})
 						// 合计
 						this.getSummaries()
 					}
@@ -232,6 +242,9 @@
 				this.tableColumn = this.templateDataObj.tableColumn
 				this.tableData = this.templateDataObj.tableData
 				if (this.tableData) {
+					this.tableData.forEach((v, i) => {
+						this.setData(v, i)
+					})
 					// 合计
 					this.getSummaries()
 				}
@@ -274,6 +287,10 @@
 					// 商品辅助单位数据
 					v.templateGoodsAssistList = []
 					v.weight = 1 // 初始化重量值
+					v.changePriceTag = 2 // 价格不转换
+					v.checked = false
+					v.retreatState = 1 // 正常
+					v.amount = ''
 					// 遍历结算公式
 					this.settleData.forEach((l) => {
 						// 商品辅助单位值（通过所有结算公式，组装提交时辅助单位的值）
@@ -295,7 +312,6 @@
 						})
 					})
 					// 所有辅助单位遍历 根据 商品详情 显示表头 来填充默认值
-					let isWeight = false // 重量值是否匹配过，多条默认匹配第一条
 					v.defaultAssistUnitsList = v.assistUnitsList // 商品辅助单位默认值
 					// 删除，跟详情返回的字段重复了
 					delete v.assistUnitsList
@@ -311,13 +327,6 @@
 									if (m.propValue === 'netContent-' + n.assistUnitsId) {
 										v[m.propValue] = n.netContent // 回填商品辅助单位的 计量值
 										l.numValue = n.netContent // 表头辅助单位值（提交的时候用）
-										// 基本单位的id 等于 结算数量的单位 id
-										if (l.settleUnitsId === v.unitsId && !isWeight) {
-											isWeight = true
-											// 重量值 = 乘 转换值
-											v.weight = this.$bigDecimal.multiply(v[m
-												.propValue], l.changeValue)
-										}
 									}
 								})
 							}
@@ -341,6 +350,8 @@
 				if (value === 'add') {
 					// 多个商品 合并
 					this.tableData = this.tableData.concat(data)
+					// 计算
+					this.setData(data, this.tableData.length - 1)
 				}
 				// 合计
 				this.getSummaries()
@@ -348,7 +359,7 @@
 				this.$emit('changeTable', this.tableData)
 			},
 			// 合计
-			getSummaries(param) {
+			getSummaries() {
 				let totalMoney = 0 // 模板总金额
 				let totalNum = 0 // 模板总数量
 				// 合计
@@ -416,12 +427,23 @@
 							.templateGoodsAssistList[i].numValue : null
 						if (v.settleUnitsId === row.unitsId && numValue) {
 							// 单位相等 并有值
-							this.tableData[index].settleAmount = this.$bigDecimal.multiply(this.$bigDecimal.multiply(this
-								.tableData[index]['netContent-' + v.assistUnitsId],
-								this.tableData[index].amount), v.changeValue)
-							this.tableData[index].weight = this.$bigDecimal.multiply(this.tableData[index]['netContent-' +
-								v.assistUnitsId
-							], v.changeValue)
+							let amount = this.tableData[index].amount
+							const netContent = this.tableData[index]['netContent-' + v.assistUnitsId]
+							this.onBottleBumTag(netContent, amount, index)
+							if (this.templateDataObj.bottleBumTag === 1 && (amount === '' || amount === null)) {
+								amount = 1
+							}
+							if (this.tableData[index].changePriceTag === 1) {
+								// 单个的重量
+								this.tableData[index].weight = this.tableData[index].oneSettleAmount || 1
+								// 价格转换 结算数量=重量值* 数量
+								this.tableData[index].settleAmount = this.$bigDecimal.multiply(amount, this.tableData[index].weight)
+							} else {
+								// 单个的重量
+								this.tableData[index].weight = this.$bigDecimal.multiply(netContent, v.changeValue)
+								// 结算数量=重量值* 数量 * 单位转换值
+								this.tableData[index].settleAmount = this.$bigDecimal.multiply(amount, this.tableData[index].weight)
+							}
 							// 按照商品精度计算金额
 							this.tableData[index].totalMoney = this.$bigDecimal.round(this.$bigDecimal.multiply(this
 								.tableData[index].unitPrice,
@@ -435,22 +457,94 @@
 							continue
 						} else if (v.settleUnitsId !== row.unitsId) {
 							// 单位不相等
-							this.tableData[index].settleAmount = this.tableData[index].amount
-							this.tableData[index].weight = 1
+							const amount = this.tableData[index].amount
+							if (this.tableData[index].changePriceTag === 1) {
+								// 单个重量
+								this.tableData[index].weight = this.tableData[index].oneSettleAmount || 1
+								// 价格转换 结算数量=数量* 转换结算数量
+								this.tableData[index].settleAmount = this.$bigDecimal.multiply(amount, this.tableData[index].weight)
+							} else {
+								// 单个重量
+								this.tableData[index].weight = 1
+								this.tableData[index].settleAmount = amount
+							}
 							// 按照商品精度计算金额
-							this.tableData[index].totalMoney = this.$bigDecimal.round(this.$bigDecimal.multiply(this
-								.tableData[index].unitPrice, this.tableData[index].settleAmount), row.staffPre)
+							this.tableData[index].totalMoney = this.$bigDecimal.round(this.$bigDecimal.multiply(this.tableData[
+								index].unitPrice, this.tableData[index].settleAmount), row.staffPre)
 							this.tableData[index].totalMoney = this.$bigDecimal.round(this.tableData[index].totalMoney, 2)
 						}
 					}
 				} else {
 					// 没有辅助单位
-					this.tableData[index].settleAmount = this.tableData[index].amount
-					this.tableData[index].weight = 1
+					const amount = this.tableData[index].amount
+					if (this.tableData[index].changePriceTag === 1) {
+						// 单个重量
+						this.tableData[index].weight = this.tableData[index].oneSettleAmount || 1
+						// 价格转换 结算数量=数量* 转换结算数量
+						this.tableData[index].settleAmount = this.$bigDecimal.multiply(amount, this.tableData[index].weight)
+					} else {
+						// 单个重量
+						this.tableData[index].weight = 1
+						this.tableData[index].settleAmount = amount
+					}
 					// 按照商品精度计算金额
 					this.tableData[index].totalMoney = this.$bigDecimal.round(this.$bigDecimal.multiply(this.tableData[
 						index].unitPrice, this.tableData[index].settleAmount), row.staffPre)
 					this.tableData[index].totalMoney = this.$bigDecimal.round(this.tableData[index].totalMoney, 2)
+				}
+			},
+			// 价格转换
+			async onChangePriceTag(index, row) {
+				this.tableData[index].checked = !row.checked
+				this.tableData[index].changePriceTag = this.tableData[index].checked ? 1 : 2
+				// 查询转化价格
+				const { returnValue: res } = await salesOrderTemplateFindChangePriceGoods({
+					changePriceTag: this.tableData[index].changePriceTag,
+					goodsDetailId: row.goodsDetailId,
+					customerId: this.customerId,
+					goodsCustomerDate: this.goodsCustomerDate
+				})
+				if (res) {
+					this.tableData[index].unitPrice = res.unitPrice
+					this.tableData[index].oneSettleAmount = res.settleAmount
+					this.setData(row, index)
+					this.tableChange()
+				} else {
+					this.tableData[index].oneSettleAmount = ''
+				}
+			},
+			// 退瓶底
+			onBottleBumTag(netContent, amount, index) {
+				if (this.templateDataObj.bottleBumTag === 1) {
+					// 退瓶底
+					if (netContent < 0 && (amount === '' || amount === null)) {
+						// 净含量小于0，数量为空，瓶底
+						this.tableData[index].retreatState = 4
+						if (!this.tableData[index].remarks) {
+							this.tableData[index].remarks = '瓶底'
+						}
+					} else if (netContent < 0 && amount > 0) {
+						// 净含量小于0，数量大于0，退气
+						this.tableData[index].retreatState = 2
+						if (!this.tableData[index].remarks) {
+							this.tableData[index].remarks = '退气'
+						}
+					} else if (netContent > 0 && (amount === '' || amount === null)) {
+						// 净含量大于0，数量为空或0，补气
+						this.tableData[index].retreatState = 3
+						if (!this.tableData[index].remarks) {
+							this.tableData[index].remarks = '补气'
+						}
+					} else {
+						// 净含量大于0，数量大于0，正常
+						this.tableData[index].retreatState = 1
+						this.tableData[index].remarks = ''
+					}
+				} else {
+					const remarks = this.tableData[index].remarks
+					if (remarks.includes('瓶底') || remarks.includes('退气') || remarks.includes('补气')) {
+						this.tableData[index].remarks = ''
+					}
 				}
 			},
 			// 获取商品数据（给外部调用）
@@ -533,7 +627,10 @@
 			}
 		}
 	}
-
+	.refresh{
+		width: 50rpx;
+		height: 50rpx;
+	}
 	.list {
 		margin-top: 40rpx;
 

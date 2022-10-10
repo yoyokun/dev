@@ -226,7 +226,7 @@
 		},
 		onShow() {
 			// 选择客户
-			uni.$once('chooseCustomer', async (data) => {
+			uni.$once('chooseCustomer', async(data) => {
 				if (data.id === this.customerId) {
 					return
 				}
@@ -279,7 +279,6 @@
 					this.decimalMode = res.decimalMode // 保留小数方式，
 				}
 			},
-
 			// 选择客户
 			chooseCustomer() {
 				// 客户
@@ -288,7 +287,6 @@
 					orgId: this.userInfo.orgId
 				})
 			},
-
 			// 表单
 			async changeForm(obj) {
 				const queryParams = obj.queryParams
@@ -330,8 +328,8 @@
 					// 客户的默认值
 					this.collectionTypeId = res.userSettlement.collectionTypeId // 客户默认支付方式
 					this.pickMode = (res.userSettlement.pickMode ? res.userSettlement.pickMode : 4).toString() // 提货方式
-					this.licenseNumArr = res.userSettlement.licenseNum ? res.userSettlement.licenseNum.Split(',') :
-					[] // 车牌号码
+					this.licenseNumArr = res.userSettlement.licenseNum ? res.userSettlement.licenseNum.Split(',')
+					: [] // 车牌号码
 					this.integralUse = res.userSettlement.integralUse // 客户积分
 					// 客户属性参数
 					const propertyId = []
@@ -451,46 +449,24 @@
 						})
 					}
 					// 回填表头 有返回值，填返回值，否则填默认值
-					let isWeight = false // 重量值是否匹配过，多条默认匹配第一条
 					v.templateGoodsAssistList.forEach((l) => {
 						// 遍历商品辅助单位默认值
 						v.defaultAssistUnitsList.forEach((n) => {
 							if (l.assistUnitsId === n.assistUnitsId) {
 								// 遍历表头显示字段
 								o.tableColumn.forEach(m => {
-									if (m.propValue === 'assistName-' + n
-										.assistUnitsId) {
+									if (m.propValue === 'assistName-' + n.assistUnitsId) {
 										v[m.propValue] = n.unitsName // 回填商品辅助单位的 单位
 									}
-									if (m.propValue === 'netContent-' + n
-										.assistUnitsId) {
+									if (m.propValue === 'netContent-' + n.assistUnitsId) {
 										if (l.numValue) {
 											// 有保存的值
 											v[m.propValue] = l.numValue
-											// 基本单位的id 等于 结算数量的单位 id
-											if (l.settleUnitsId === v.unitsId && !
-												isWeight) {
-												isWeight = true
-												// 重量值 = 乘 转换值
-												v.weight = this.$bigDecimal.multiply(v[
-														m.propValue], l
-													.changeValue)
-											}
 										} else {
 											// 没有保存的值，回填默认值
 											v[m.propValue] = n.netContent
 											// 回填商品辅助单位的 计量值
-											l.numValue = n
-												.netContent // 表头辅助单位值（提交的时候用）
-											// 基本单位的id 等于 结算数量的单位 id
-											if (l.settleUnitsId === v.unitsId && !
-												isWeight) {
-												isWeight = true
-												// 重量值 = 乘 转换值
-												v.weight = this.$bigDecimal.multiply(v[
-														m.propValue], l
-													.changeValue)
-											}
+											l.numValue = n.netContent // 表头辅助单位值（提交的时候用）
 										}
 									}
 								})
@@ -538,7 +514,7 @@
 				// 遍历所有商品获取商品id
 				this.allShop.forEach((v) => {
 					v.data.forEach((m) => {
-						if (m.amount) {
+						if ((m.amount - 0) || (m.settleAmount - 0)) {
 							const findIndex = goodsDetailIdStr.findIndex(item => item.goodsId === m
 								.goodsId)
 							if (findIndex === -1) {
@@ -584,7 +560,7 @@
 			},
 			// 保存数据
 			saveData(state = 3) {
-				this.$refs.dialogForm.handleSubmit(async (obj) => {
+				this.$refs.dialogForm.handleSubmit(async(obj) => {
 					const payData = this.$refs.delivery.getPayData()
 					// 获取所有商品
 					this.getAllShop()
@@ -602,10 +578,10 @@
 						id: this.editId,
 						callRecordId: this.callRecordId ? this.callRecordId : (this.billType === 3 ? this
 							.telId : ''), // 电话id
-						recordType: this.recordType !== '' ? this.recordType : (this.billType === 1 ? 0 :
-							this.billType === 2 ? 1 : 0), // 是否是补录单（0 否  1 是）
-						orderSource: this.orderSource ? this.orderSource : (this.billType === 3 ? 'phone' :
-							'store'),
+						recordType: this.recordType !== '' ? this.recordType : (this.billType === 1 ? 0
+							: this.billType === 2 ? 1 : 0), // 是否是补录单（0 否  1 是）
+						orderSource: this.orderSource ? this.orderSource : (this.billType === 3 ? 'phone'
+							: 'store'),
 						orderTimeStr: this.orderTime, // 开单时间
 						customerId: this.customerId,
 						disCountMoney: objDiscount.disCountMoney, // 折扣金额
@@ -658,7 +634,7 @@
 							salesOrderDetailGoodsJson: []
 						}
 						v.data.forEach((m) => {
-							if (m.amount && m.settleAmount) {
+							if ((m.amount - 0) || (m.settleAmount - 0)) {
 								const templateGoodsAssistList = []
 								// 提交有值的
 								m.templateGoodsAssistList.forEach(v => {
@@ -670,7 +646,8 @@
 									goodsId: m.goodsId, // 商品id
 									id: this.editId ? m.id : '', // id
 									goodsDetailId: m.goodsDetailId, // 商品详情id
-									retreatState: 1, // 退气状态（1 正常   2 退气 3补气  4瓶底）
+									retreatState: m.retreatState || 1, // 退气状态（1 正常   2 退气 3补气  4瓶底）
+									changePriceTag: m.changePriceTag, // 是否转换
 									weight: m.weight,
 									unitPrice: m.unitPrice, // 商品销售价
 									standardId: m.standardId, // 商品规格

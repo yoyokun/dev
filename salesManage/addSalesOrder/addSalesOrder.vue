@@ -368,73 +368,67 @@
 							// 模板id等于商品模板id
 							if (obj.templateId === v.orderTemplateId) {
 								obj.id = v.id // 编辑的id
-								obj.tableData = []
+								// 复制模板的商品数据
+								const tableData = JSON.parse(JSON.stringify(obj.tableData))
+								obj.tableData = []							
 								obj.tableColumn = v.printSetVo.tableColumn // 防止表头发生改变
 								// 遍历订单商品数据
 								v.salesOrderDetailGoodsList.forEach((p) => {
-									console.log(p)
 									p.ids = createUniqueString()
-									// const index = tableData.findIndex(item => item.goodsDetailId === p.goodsDetailId)
-										// 把商品的默认辅助单位填进去
-										// p.defaultAssistUnitsList = tableData[index].defaultAssistUnitsList
-										// 商品的辅助单位
-										p.templateGoodsAssistList = []
-										// 遍历辅助单位初始值
-										res.templateAssistUnitsList.forEach((l) => {
-											// 商品辅助单位值
-											p.templateGoodsAssistList.push({
-												assistUnitsId: l.assistUnitsId,
-												salesUnitsId: l.salesUnitsId, // 销售单位id
-												settleUnitsId: l.settleUnitsId, // 结算单位id
-												numValue: '', // 辅助单位值
-												changeValue: l.changeValue
-											})
-											// 造model数据
-											obj.tableColumn.forEach(m => {
-												if (m.propValue === 'assistName-' + l.assistUnitsId) {
-													p[m.propValue] = ''
-												}
-												if (m.propValue === 'netContent-' + l.assistUnitsId) {
-													p[m.propValue] = ''
+									p.checked = p.changePriceTag !== 2
+									const index = tableData.findIndex(item => item.goodsDetailId === p.goodsDetailId)
+									// 把商品的默认辅助单位填进去
+									p.defaultAssistUnitsList = tableData[index].defaultAssistUnitsList
+									// 商品的辅助单位
+									p.templateGoodsAssistList = []
+									// 遍历辅助单位初始值
+									res.templateAssistUnitsList.forEach((l) => {
+										// 商品辅助单位值
+										p.templateGoodsAssistList.push({
+											assistUnitsId: l.assistUnitsId,
+											salesUnitsId: l.salesUnitsId, // 销售单位id
+											settleUnitsId: l.settleUnitsId, // 结算单位id
+											numValue: '', // 辅助单位值
+											changeValue: l.changeValue
+										})
+										// 造model数据
+										obj.tableColumn.forEach(m => {
+											if (m.propValue === 'assistName-' + l.assistUnitsId) {
+												p[m.propValue] = ''
+											}
+											if (m.propValue === 'netContent-' + l.assistUnitsId) {
+												p[m.propValue] = ''
+											}
+										})
+									})
+									// 有辅助单位数据，回填
+									if (p.assistUnitsList.length) {
+										p.templateGoodsAssistList.forEach((l) => {
+											// 遍历商品辅助单位默认值
+											p.assistUnitsList.forEach((n) => {
+												if (l.assistUnitsId === n.assistUnitsId) {
+													// 遍历表头显示字段
+													obj.tableColumn.forEach(m => {
+														if (m.propValue === 'assistName-' + n.assistUnitsId) {
+															p[m.propValue] = n.unitsName // 回填商品辅助单位的 单位
+														}
+														if (m.propValue === 'netContent-' + n.assistUnitsId) {
+															// 没有保存的值，回填默认值
+															p[m.propValue] = n.netContent
+															// 回填商品辅助单位的 计量值
+															l.numValue = n.netContent // 表头辅助单位值（提交的时候用）
+														}
+													})
 												}
 											})
 										})
-										// 有辅助单位数据，回填
-										let isWeight = false // 重量值是否匹配过，多条默认匹配第一条
-										if (p.assistUnitsList.length) {
-											p.templateGoodsAssistList.forEach((l) => {
-												// 遍历商品辅助单位默认值
-												p.assistUnitsList.forEach((n) => {
-													if (l.assistUnitsId === n.assistUnitsId) {
-														// 遍历表头显示字段
-														obj.tableColumn.forEach(m => {
-																	if (m.propValue === 'assistName-' + n.assistUnitsId) {
-																		p[m.propValue] = n.unitsName // 回填商品辅助单位的 单位
-																	}
-																	if (m.propValue === 'netContent-' + n.assistUnitsId) {
-																		// 没有保存的值，回填默认值
-																		p[m.propValue] = n.netContent
-																		// 回填商品辅助单位的 计量值
-																		l.numValue = n.netContent // 表头辅助单位值（提交的时候用）
-																		// 基本单位的id 等于 结算数量的单位 id
-																		if (l.settleUnitsId === v.unitsId && !isWeight) {
-																			isWeight = true
-																			// 重量值 = 乘 转换值
-																			p.weight = this.BigDecimal.multiply(v[m.propValue],l.changeValue)
-																		}
-																	}
-																})
-													}
-												})
-											})
-										}
-										obj.tableData.push(p)
+									}
+									obj.tableData.push(p)
 								})
 								this.templateObj[obj.templateId] = obj
 								this.$refs[`billTable-${obj.templateId}`][0].writeData(obj)
 							}
 						}
-						// 遍历模板
 					})
 				})
 			},
@@ -499,7 +493,7 @@
 					}
 					// 选择了模板
 					this.chooseTempalte = queryParams.templateId
-					setTimeout(()=>{
+					setTimeout(() => {
 						this.totalMoneyCalculate()
 					},1)
 				}
@@ -615,6 +609,7 @@
 				o.tableColumn = o.printSetVo.tableColumn
 				o.goodsVoList.forEach(v => {
 					v.ids = createUniqueString()
+					v.checked = v.changePriceTag !== 2
 					// 商品的结算辅助单位
 					v.templateGoodsAssistList = []
 					// 遍历辅助单位初始值
@@ -649,39 +644,24 @@
 						})
 					}
 					// 回填表头 有返回值，填返回值，否则填默认值
-					let isWeight = false // 重量值是否匹配过，多条默认匹配第一条
 					v.templateGoodsAssistList.forEach((l) => {
 						// 遍历商品辅助单位默认值
 						v.defaultAssistUnitsList.forEach((n) => {
 							if (l.assistUnitsId === n.assistUnitsId) {
 								// 遍历表头显示字段
 								o.tableColumn.forEach(m => {
-									if (m.propValue === 'assistName-' + n
-										.assistUnitsId) {
+									if (m.propValue === 'assistName-' + n.assistUnitsId) {
 										v[m.propValue] = n.unitsName // 回填商品辅助单位的 单位
 									}
-									if (m.propValue === 'netContent-' + n
-										.assistUnitsId) {
+									if (m.propValue === 'netContent-' + n.assistUnitsId) {
 										if (l.numValue) {
 											// 有保存的值
 											v[m.propValue] = l.numValue
-											// 基本单位的id 等于 结算数量的单位 id
-											if (l.settleUnitsId === v.unitsId && !isWeight) {
-												isWeight = true
-												// 重量值 = 乘 转换值
-												v.weight = this.$bigDecimal.multiply(v[m.propValue], l.changeValue)
-											}
 										} else {
 											// 没有保存的值，回填默认值
 											v[m.propValue] = n.netContent
 											// 回填商品辅助单位的 计量值
 											l.numValue = n.netContent // 表头辅助单位值（提交的时候用）
-											// 基本单位的id 等于 结算数量的单位 id
-											if (l.settleUnitsId === v.unitsId && !isWeight) {
-												isWeight = true
-												// 重量值 = 乘 转换值
-												v.weight = this.$bigDecimal.multiply(v[m.propValue], l.changeValue)
-											}
 										}
 									}
 								})
@@ -719,7 +699,6 @@
 				const goodsDetailIdStr = []
 				// 遍历选择的模板
 				this.chooseTempalte.forEach((v) => {
-					
 					if (this.$refs[`billTable-${v}`][0]) {
 						this.$refs[`billTable-${v}`][0].getShop((data) => {
 							allShop.push(data)
@@ -730,7 +709,7 @@
 				// 遍历所有商品获取商品id
 				this.allShop.forEach((v) => {
 					v.data.forEach((m) => {
-						if (m.amount) {
+						if ((m.amount - 0) || (m.settleAmount - 0)) {
 							const findIndex = goodsDetailIdStr.findIndex(item => item.goodsId === m
 								.goodsId)
 							if (findIndex === -1) {
@@ -850,7 +829,7 @@
 							salesOrderDetailGoodsJson: []
 						}
 						v.data.forEach((m) => {
-							if (m.amount && m.settleAmount) {
+							if ((m.amount - 0) || (m.settleAmount - 0)) {
 								const templateGoodsAssistList = []
 								// 提交有值的
 								m.templateGoodsAssistList.forEach(v => {
@@ -862,7 +841,8 @@
 									goodsId: m.goodsId, // 商品id
 									id: this.editId ? m.id : '', // id
 									goodsDetailId: m.goodsDetailId, // 商品详情id
-									retreatState: 1, // 退气状态（1 正常   2 退气 3补气  4瓶底）
+									retreatState: m.retreatState || 1, // 退气状态（1 正常   2 退气 3补气  4瓶底）
+									changePriceTag: m.changePriceTag, // 是否转换
 									weight: m.weight,
 									unitPrice: m.unitPrice, // 商品销售价
 									standardId: m.standardId, // 商品规格
