@@ -12,11 +12,13 @@
 				:customer-id="customerId" @changeTable="changeTable" @click.native="getTempKey(item)" />
 		</view>
 		<!-- ====运输信息==== -->
-		<delivery ref="delivery" type="biz" :pick-modes="pickMode" :addressObj="addressObj" @change="changeDelivery" charge-mode="1" />
+		<delivery ref="delivery" type="biz" :pick-modes="pickMode" :addressObj="addressObj" @change="changeDelivery"
+			charge-mode="1" />
 		<!-- 折扣 -->
 		<discount ref="discount" :org-id="orgIdShipment" :dis-count-tag="disCountTag" :integral-tag="integralTag"
 			:coupon-tag="couponTag" :customer-id="customerId" :goods-detail-id-str="goodsDetailIdStr"
-			:total-money-all="totalMoneyTwoAll" :integral-use="integralUse" @change="changeDiscount" />
+			:total-money-all="totalMoneyTwoAll" :integral-use="integralUse" @change="changeDiscount"
+			:form-type="formDataValue.formType" />
 		<!-- ==========结算信息=========== -->
 		<view class="block">
 			<view class="block-head">{{$t('salesMg.common.countInfoTle')}}</view>
@@ -52,7 +54,8 @@
 			</view>
 		</view>
 		<view class="btn">
-			<u-button :text="$t('salesMg.common.btn.save')" @click="saveData(1)" type="primary" hairline shape="circle"></u-button>
+			<u-button :text="$t('salesMg.common.btn.save')" @click="saveData(1)" type="primary" hairline shape="circle">
+			</u-button>
 		</view>
 	</view>
 </template>
@@ -61,14 +64,23 @@
 	import {
 		settingMixin
 	} from '@/common/settingMixin.js'
+	
 	import {
-		createUniqueString
+		createUniqueString,
+		objectValueEmpty
 	} from '@/utils'
 	import {
+		UnixToDate
+	} from '@/utils/util.js'
+	import {
 		salesTransferTemplateFindByOrgId,
-		purSupplierFindById
+		purSupplierFindById,
+		salesBusinessSaveOrEdit
 	} from '@/api/lpgSalesManageApi'
-	import { sysOrgFindById, userCustomerFindByIdList } from '@/api/lpgManageAppApi'
+	import {
+		sysOrgFindById,
+		userCustomerFindByIdList
+	} from '@/api/lpgManageAppApi'
 	import SalesBilling from '@/salesManage/placeOrder/common/salesBilling.vue'
 	import settlement from '@/salesManage/placeOrder/common/settlement.vue'
 	import Discount from '@/salesManage/placeOrder/common/discount.vue'
@@ -209,6 +221,8 @@
 				orgIdShipment: '',
 				integralUse: 0,
 				addressObj: {},
+				transferTemplateObj: {},
+				pickModeId: '',
 			}
 		},
 		// 过滤器
@@ -392,7 +406,6 @@
 				// 记录
 				this.totalChargeMoneyAll = totalChargeMoneyAll // 收费项
 				this.totalMoneyOrderAll = totalMoneyOrderAll // 订单合计
-				console.log(this.totalMoneyOrderAll)
 				this.totalMoneyTwoAll = this.$bigDecimal.round(this.$bigDecimal.add(totalChargeMoneyAll,
 					totalMoneyOrderAll), 2) // 总合计
 			},
@@ -552,9 +565,121 @@
 			},
 
 			// 保存数据
-			saveData() {
+			saveData(state) {
 				this.$refs.dialogForm.handleSubmit(async (data) => {
-
+					delete data.customerName
+					// 获取所有商品
+					this.getAllShop()
+					// 获取折扣
+					const objDiscount = this.$refs.discount.getDiscount()
+					const payData = this.$refs.delivery.getPayData()
+					// 提交
+					data.billTimeStr = UnixToDate(data.billTimeStr)
+					data.id = this.editId || ''
+					data.linkId = this.linkId
+					data.linkType = this.linkTypes
+					data.customerId = this.customerId
+					data.buttonValue = state
+					data.inOutType = this.stockInoutReason.filter((item) => item.value == data.inOutReasonId)[
+						0].type // 调出组织出入库原因类型
+					data.inOutName = this.stockInoutReason.filter((item) => item.value == data.inOutReasonId)[
+						0].reasonName // 调出组织出入库原因名称
+					data.recordType = 0 // 是否是补录单（0 否  1 是）
+					data.remarks = this.remarks
+					// 模板数据
+					data.printMode = this.transferTemplateObj.printMode
+					data.changeUnitsId = this.transferTemplateObj.changeUnitsId || ''
+					data.loseStockState = this.transferTemplateObj.loseStockState
+					data.printTemplateId = this.transferTemplateObj.printTemplateId
+					data.decimalMode = this.transferTemplateObj.decimalMode
+					data.decimalNum = this.transferTemplateObj.decimalNum
+					data.billsType = this.transferTemplateObj.billsType
+					// 折扣数据
+					data.disCountMoney = objDiscount.disCountMoney // 折扣金额
+					data.disCountRate = objDiscount.disCountRate // 折扣率
+					data.couponDetailId = objDiscount.couponDetailId // 优惠券id
+					data.integralValue = objDiscount.integralValue // 抵扣积分
+					data.integralMoney = objDiscount.integralMoney // 抵扣金额
+					// 订单信息
+					data.businessDetailData = []
+					// 遍历商品
+					this.allShop.forEach((v) => {
+						v.data.forEach((m) => {
+							if (m.amount && m.settleAmount) {
+								const templateGoodsAssistList = []
+								// 提交有值的
+								m.templateGoodsAssistList.forEach(v => {
+									if (v.numValue) {
+										templateGoodsAssistList.push(v)
+									}
+								})
+								const good = {
+									goodsId: m.goodsId, // 商品id
+									id: this.editId ? m.id : '', // id
+									goodsDetailId: m.goodsDetailId, // 商品详情id
+									changePriceTag: m.changePriceTag, // 是否转换
+									weight: m.weight,
+									unitPrice: m.unitPrice, // 商品销售价
+									standardId: m.standardId, // 商品规格
+									settleAmount: m.settleAmount,
+									templateGoodsAssistList: templateGoodsAssistList,
+									amount: m.amount, // 数量
+									isCostTag: m.isCostTag, // 费用标记
+									totalMoney: m.totalMoney, // 总金额
+									remarks: m.remarks // 备注
+								}
+								data.businessDetailData.push(good)
+							}
+						})
+					})
+					// 运输信息
+					data.salesOrderTransportData = {
+						id: this.pickModeId || '',
+						pickMode: payData.data.pickMode, // 提货方式（1 自提  ，3 车辆配送
+						bookingTime: UnixToDate(payData.data.bookingTime), // 预约时间
+						licenseNo: payData.data.chooseLicenseNum, // 车牌号，
+						deliverMan: payData.data.transportName, // 运输员，
+						province: objectValueEmpty(payData.data.addressObj, 'province'), // 省，
+						city: objectValueEmpty(payData.data.addressObj, 'city'), // 市，
+						area: objectValueEmpty(payData.data.addressObj, 'area'), // 区，
+						address: objectValueEmpty(payData.data.addressObj, 'address'), // 详细地址，
+						latitude: objectValueEmpty(payData.data.addressObj, 'latitude'), // 纬度，
+						longitude: objectValueEmpty(payData.data.addressObj, 'longitude') // 经度，
+					} // 运输信息
+					// 收费信息
+					data.salesOrderPayitemsData = []
+					// 遍历收费项
+					payData.choosePayItemsData.forEach((v) => {
+						if (v.isChoose) {
+							const obj = {
+								id: v.id || '', // id，
+								payItemsId: v.itemId, // 收费项id，
+								payItemsName: v.itemName, // 收费项名称，
+								payItemsMoney: v.chargeMoney, // 收费项金额
+								floor: v.floor,
+								payItemsTotalMoney: v.totalMoney,
+								payItemsDataStr: v.payItemsDataStr
+							}
+							data.salesOrderPayitemsData.push(obj)
+						}
+					})
+					data.businessDetailData = JSON.stringify(data.businessDetailData)
+					data.salesOrderTransportData = JSON.stringify(data.salesOrderTransportData)
+					data.salesOrderPayitemsData = JSON.stringify(data.salesOrderPayitemsData)
+					const {
+						returnValue: res,
+						returnObject: res1,
+						message
+					} = await salesBusinessSaveOrEdit(data)
+					if (res) {
+						this.$refs.uToast.show({
+							type: 'success',
+							message: message,
+						})
+						setTimeout(() => {
+							uni.navigateBack()
+						}, 3000)
+					}
 				})
 			},
 			// 选择客户
@@ -586,9 +711,8 @@
 			},
 			// 表单
 			async changeForm(e) {
-				console.log(e)
 				let params = e.queryParams
-				if(e.name == 'customerName'||e.name=='linkBillNo'){
+				if (e.name == 'customerName' || e.name == 'linkBillNo') {
 					this.getAddress()
 				}
 				if ((e.name == 'customerName' && (params.customerName != this.formDataValue.customerName)) || (e
@@ -629,15 +753,17 @@
 <style lang="scss" scoped>
 	.sk-info {
 		padding: 30rpx 20rpx;
+
 		>.btn {
 			width: 632rpx;
 			margin: 60rpx auto;
 			@include flexMixin();
-		
+
 			.u-button {
 				margin: 0rpx 10rpx;
 			}
 		}
+
 		::v-deep .normalForm {
 			.u-form {
 				background: rgba(255, 255, 255, 1);

@@ -7,9 +7,11 @@
 				<view class="item">
 					<view class="label">{{$t('salesMg.discount.couponNo')}}：</view>
 					<view class="content">
-						<input class="input" :placeholder="$t('salesMg.discount.couponNoPlaceholder')" type="text" @input="changeCoupon" v-model="couponNo"
-							:disabled="isSettle" />
-						<u-button size="small" class="choose-coupon" type="primary" @click="chooseCoupon">{{$t('salesMg.discount.chooseBtn')}}</u-button>
+						<input class="input" :placeholder="$t('salesMg.discount.couponNoPlaceholder')" type="text"
+							@input="changeCoupon" v-model="couponNo" :disabled="isSettle" />
+						<u-button size="small" class="choose-coupon" type="primary" @click="chooseCoupon">
+							{{$t('salesMg.discount.chooseBtn')}}
+						</u-button>
 					</view>
 				</view>
 			</view>
@@ -23,25 +25,29 @@
 					<view class="content dfee">
 						<view class="fee-item">
 							<view class="fee-label">{{$t('salesMg.discount.disCountMoney')}}</view>
-							<input class="fee-input" type="number" :placeholder="$t('salesMg.discount.disCountMoney')" v-model="disCountMoney"
-								:disabled="isSettle" @blur="orderDiscount(disCountMoney, 'disCountMoney')" />
+							<input class="fee-input" type="number" :placeholder="$t('salesMg.discount.disCountMoney')"
+								v-model="disCountMoney" :disabled="isSettle"
+								@blur="orderDiscount(disCountMoney, 'disCountMoney')" />
 						</view>
 						<view class="fee-item">
 							<view class="fee-label">{{$t('salesMg.discount.disCountRate')}}</view>
-							<input v-model="disCountRate" class="fee-input" type="number" :placeholder="$t('salesMg.discount.disCountRate')"
+							<input v-model="disCountRate" class="fee-input" type="number"
+								:placeholder="$t('salesMg.discount.disCountRate')"
 								@blur="orderDiscount(disCountRate, 'disCountRate')" />
 							<view class="fee-total">%</view>
 						</view>
 						<view class="fee-item">
 							<view class="fee-label">{{$t('salesMg.discount.discountDeal')}}</view>
-							<input v-model="discountDeal" class="fee-input" type="number" :placeholder="$t('salesMg.discount.discountDeal')" @blur="orderDiscount(discountDeal, 'discountDeal')" />
+							<input v-model="discountDeal" class="fee-input" type="number"
+								:placeholder="$t('salesMg.discount.discountDeal')"
+								@blur="orderDiscount(discountDeal, 'discountDeal')" />
 						</view>
 					</view>
 				</view>
 			</view>
 		</view>
 		<!-- ==========积分抵扣=========== -->
-		<view class="block" v-if="integralTag===1">
+		<view class="block" v-if="integralTag==1&&formType==1">
 			<view class="block-head">{{$t('salesMg.discount.pointName')}}</view>
 			<view class="block-box">
 				<view class="item">
@@ -57,7 +63,9 @@
 						<view class="fee-item" :class="isUse?'on':''" @click="usePoint">
 							<u-icon size="32rpx" class="fee-check" name="checkmark-circle-fill"></u-icon>
 							<view class="fee-label">{{$t('salesMg.discount.integralValue')}}</view>
-							<input @click.stop v-if="isUse" class="fee-input" type="number" :placeholder="$t('salesMg.discount.integralValue')" @input="integralValueChange" step="1" v-model="integralValue" />
+							<input @click.stop v-if="isUse" class="fee-input" type="number"
+								:placeholder="$t('salesMg.discount.integralValue')" @input="integralValueChange"
+								step="1" v-model="integralValue" />
 						</view>
 						<view class="fee-item" v-if="isUse">
 							<view class="fee-label">{{$t('salesMg.discount.integralMoney')}}：</view>
@@ -155,18 +163,21 @@
 		watch: {
 			totalMoneyAll() {
 				this.discountCalculate()
+			},
+			formType(){
+				this.usePoint(false)
 			}
 		},
 		mounted() {
 			this.getConfigGetCylinder()
 			uni.$on('chooseCoupon', (data) => {
-				if(data){
+				if (data) {
 					this.couponNo = data.couponNo
 					this.couponDetailId = data.couponDetailId
 					this.couponMoney = data.goodsCouponMoney
 					this.discountCalculate()
 				}
-				
+
 			})
 		},
 		methods: {
@@ -326,8 +337,8 @@
 			},
 			// 积分使用
 			// 计算积分
-			usePoint() {
-				this.isUse = this.isUse ? false : true
+			usePoint(type = '') {
+				this.isUse = typeof type === 'object' ? (this.isUse ? false : true) : type
 				this.integralValue = ''
 				this.integralMoney = ''
 				// 计算

@@ -819,3 +819,17 @@ export function purSupplierFindById(data = {}, message = '', custom = {}) {
 		}
 	})
 }
+// 业务单管理 保存或修改
+export function salesBusinessSaveOrEdit(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/salesBusiness/saveOrEdit',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
