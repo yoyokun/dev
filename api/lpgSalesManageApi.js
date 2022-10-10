@@ -861,3 +861,17 @@ export function salesOrderFindBackBottleData(data = {}, message = '', custom = {
 		}
 	})
 }
+// 销售订单管理 确认送达--回瓶商品添加 ，填充 出库数量
+export function salesOrderFindOrderStockData(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/salesOrder/findOrderStockData',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
