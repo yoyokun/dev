@@ -208,7 +208,9 @@
 			</view>
 		</view>
 		<view class="btn">
-			<u-button :text="$t('common.btn.edit')" type="primary" hairline shape="circle" @click="goto('/salesManage/addSalesOrder/addSalesOrder',{editId:info.id,orderSourceParam:info.orderSource})"></u-button>
+			<u-button :text="$t('common.btn.edit')" type="primary" hairline shape="circle"
+				@click="goto('/salesManage/addSalesOrder/addSalesOrder',{editId:info.id,orderSourceParam:info.orderSource})">
+			</u-button>
 			<u-button :text="$t('salesMg.salesOrderInfo.btn.receive')" type="primary" hairline plain shape="circle"
 				@click="handleReceiving(info)">
 			</u-button>
@@ -231,7 +233,7 @@
 			<u-button :text="$t('salesMg.salesOrderInfo.btn.delivery')" type="success" plain hairline shape="circle"
 				@click="handleAssign(info)"></u-button>
 			<u-button :text="$t('salesMg.salesOrderInfo.btn.conf')" type="success" plain hairline shape="circle"
-				@click=""></u-button>
+				@click="handleDelivery"></u-button>
 		</view>
 		<!-- 配送 -->
 		<u-modal :show="psShow" :title="'配送'" :closeOnClickOverlay="true" :showCancelButton="true" @cancel="closePs"
@@ -284,6 +286,8 @@
 		salesOrderUpdateHangUpType,
 		salesOrderToDistribution,
 		salesOrderDeleteByIds,
+		moduleCommonSetFindByOrgId,
+		salesOrderToArrived
 	} from '@/api/lpgSalesManageApi'
 	import ServiceCylinderInfo from '../../userCenter/auditInfo/common/serviceCylinderInfo'
 	import {
@@ -474,6 +478,13 @@
 				],
 				formDataValueVehicle: {},
 				psShow: false,
+				moduleType: 'sales',
+				subModuleType: 'salesOrder',
+				sendConfig: null,
+				backBottle: false, // 确认送达是否有回瓶单
+				cylinderScanCode: false, // 确认送达是否需要扫码
+				cylinderScanSetting: false, // 钢瓶溯源是否开启
+				cylinderPattern: '' // 模式 1 扫码模式 2 一对一置换模式
 			}
 		},
 		async onLoad(options) {
@@ -485,6 +496,25 @@
 			if (options.editId) {
 				this.getInfo(options.editId)
 			}
+			// 确认送达设置
+			const {
+				returnValue: res
+			} = await moduleCommonSetFindByOrgId({
+				subModuleType: this.subModuleType,
+				moduleType: this.moduleType
+			})
+			this.sendConfig = res
+			// 钢瓶溯源设置
+			await this.getConfigGetCylinder((res) => {
+				if (res[0] === '1') {
+					// 开启
+					this.cylinderScanSetting = true
+				} else {
+					this.cylinderScanSetting = false
+				}
+				// 模式
+				this.cylinderPattern = res[4]
+			})
 			await this.getOrgList()
 			this.formDataSourceManager[0].options = this.orgList
 			this.$set(this.formDataValueManager, 'deliverOrgId', this.userInfo.orgId)
@@ -493,6 +523,54 @@
 		},
 		onShow() {},
 		methods: {
+			// 确认送达
+			async handleDelivery() {
+				if (this.sendConfig) {
+					// 钢瓶溯源
+					this.cylinderScanCode = this.sendConfig.execCondition.includes('cylinderScanCode')
+					// 回瓶单
+					this.backBottle = this.sendConfig.execCondition.includes('backBottle')
+					console.log(this.backBottle)
+					if (this.backBottle || (this.cylinderScanCode && this.cylinderScanSetting)) {
+						this.$navigateTo('../confSend/confSend', {
+							editId: this.editId,
+							backBottle: this.backBottle,
+							cylinderScanCode: this.cylinderScanCode,
+							cylinderScanSetting: this.cylinderScanSetting,
+							cylinderPattern: this.cylinderPattern
+						})
+					} else {
+						this.getToArrived()
+					}
+				} else {
+					this.getToArrived()
+				}
+			},
+			getToArrived() {
+				uni.showModal({
+					title: '确认送达提示',
+					content: `真的要确认送达 ${this.info.billNo} 该条数据吗?`,
+					success: async (ret) => {
+						if (ret.confirm) {
+							const obj = {
+								ids: []
+							}
+							obj.ids.push(this.info.id)
+							const {
+								returnValue: res,
+								message
+							} = await salesOrderToArrived(obj)
+							if (res) {
+								this.$refs.uToast.show({
+									type: 'success',
+									message: message,
+								})
+								this.getInfo(this.editId)
+							}
+						}
+					},
+				})
+			},
 			// 配送
 			confPs() {
 				const temp = this.info.salesOrderTransport
@@ -627,8 +705,9 @@
 				uni.showModal({
 					title: this.$t('common.tipsTle')[2],
 					content: this.$t('common').delTxt(data.billNo),
-					title: type?this.$t('common.tipsTle')[6]:this.$t('common.tipsTle')[7],
-					content: type?this.$t('common').hangUpTxt(data.billNo):this.$t('common').hangDownTxt(data.billNo),
+					title: type ? this.$t('common.tipsTle')[6] : this.$t('common.tipsTle')[7],
+					content: type ? this.$t('common').hangUpTxt(data.billNo) : this.$t('common').hangDownTxt(data
+						.billNo),
 					success: async (ret) => {
 						if (ret.confirm) {
 							const obj = {

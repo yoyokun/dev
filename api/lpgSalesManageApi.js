@@ -833,3 +833,31 @@ export function salesBusinessSaveOrEdit(data = {}, message = '', custom = {}) {
 		}
 	})
 }
+// 销售订单管理 订单-确认送达
+export function salesOrderToArrived(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/salesOrder/toArrived',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 销售订单管理 确认送达查回瓶数据显示
+export function salesOrderFindBackBottleData(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/salesOrder/findBackBottleData',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}

@@ -3,73 +3,53 @@
 		<view class="list">
 			<view class="list-head">
 				<view class="head-tle">回单</view>
-				<view class="act-btn" @click="chooseGoods">
+				<view class="act-btn">
 					<u-icon class="add-icon" name="plus-circle"></u-icon>
-					<view class="add-txt">{{$t('stockMg.common.btn.addGoodsTxt')}}</view>
+					<view class="add-txt" @click="addList">添加</view>
 				</view>
 			</view>
-			<view class="goods">
-				<view class="goods-list" v-for="(val,key) in listGoods" :key="key">
-					<view class="goods-head">
-						<view class="goods-tle">{{val.goodsNo}} - {{val.goodsName}}</view>
-					</view>
-					<view class="attr-del">
-						<view class="attr">
-							<view class="attr-txt">
-								{{ val.goodsClassifyName ? val.goodsClassifyName + "," : "" }}
-								{{ val.propertyNames ? val.propertyNames + "," : "" }}
-								{{ val.standardName ? val.standardName + "," : "" }}
-								{{ val.brandName }}
-							</view>
-							<u-icon class="arrow-right" name="arrow-right"></u-icon>
-							<view class="attr-box">
-								<view class="attr-item">
-									<view class="item-tle">{{$t('chooseGoods.goodsClassifyName')}}：</view>
-									<view class="item-txt">{{val.goodsClassifyName}}</view>
-								</view>
-								<view class="attr-item" v-if="val.propertyNames">
-									<view class="item-tle">{{$t('chooseGoods.propertyNames')}}：</view>
-									<view class="item-txt">{{val.propertyNames}}</view>
-								</view>
-								<view class="attr-item" v-if="val.standardName">
-									<view class="item-tle">{{$t('chooseGoods.standardName')}}：</view>
-									<view class="item-txt">{{val.standardName}}</view>
-								</view>
-								<view class="attr-item" v-if="val.brandName">
-									<view class="item-tle">{{$t('chooseGoods.brandName')}}：</view>
-									<view class="item-txt">{{val.brandName}}</view>
-								</view>
-								<view class="attr-item" v-if="val.unitsName">
-									<view class="item-tle">{{$t('chooseGoods.unitsName')}}：</view>
-									<view class="item-txt">{{val.unitsName}}</view>
-								</view>
+			<view class="list-box" v-if="listGoods&&listGoods.length">
+				<view class="back-item" v-for="(item,index) in listGoods" :key="index">
+					<view class="goods-cell">
+						<view class="label">出库商品</view>
+						<view class="content">
+							<view class="goods-item" v-if="item.outGoodsDetailNames">
+								<text>{{item.outGoodsDetailNames}}</text>
+								<u-icon class="cross" name="close-circle-fill"></u-icon>
 							</view>
 						</view>
-						<u-icon class="remove-goods" name="minus-circle-fill" @click="removeOrderGoods(key)">
-						</u-icon>
+						<u-icon class="plus" name="plus-circle" @click="chooseGoods"></u-icon>
 					</view>
-
-					<view class="info-cell">
-						<view class="cell">
-							<view class="cell-label">出库数：</view>
-							<view class="cell-content">2</view>
-						</view>
-						<view class="cell">
-							<view class="cell-label">回瓶数：</view>
-							<view class="cell-content">
-								<input type="number" :placeholder="'回瓶数'" v-model="val.checkNums" @input="changeNums($event,key)" />
+					<view class="goods-cell">
+						<view class="label">回瓶商品</view>
+						<view class="content">
+							<view class="goods-item" v-if="item.backGoodsDetailNames">
+								<text>{{item.backGoodsDetailNames}}</text>
+								<u-icon class="cross" name="close-circle-fill"></u-icon>
 							</view>
 						</view>
+						<u-icon class="plus" name="plus-circle" @click="chooseGoods"></u-icon>
 					</view>
-					<view class="info-cell">
+					<view class="goods-act">
 						<view class="cell">
-							<view class="cell-label">借瓶数：</view>
-							<view class="cell-content">2</view>
+							<view class="name">出库数</view>
+							<view class="txt">{{item.outNum}}</view>
 						</view>
 						<view class="cell">
-							<view class="cell-label">还瓶数：</view>
-							<view class="cell-content">2</view>
+							<view class="name">回瓶数</view>
+							<input class="txt" step="1" type="number" v-model="item.backNum" />
 						</view>
+						<view class="cell">
+							<view class="name">借瓶数</view>
+							<view class="txt">{{item.lendNum}}</view>
+						</view>
+						<view class="cell">
+							<view class="name">还瓶数</view>
+							<view class="txt">{{item.returnNum}}</view>
+						</view>
+					</view>
+					<view class="goods-del">
+						<u-icon class="del" name="trash"></u-icon>
 					</view>
 				</view>
 			</view>
@@ -90,9 +70,163 @@
 					{{$t('cylinderMg.addCirculation.btn.conf')}}
 				</u-button>
 			</view>
+			<view class="code-info">
+				<view class="info-list" v-for="i in 2">
+					<view class="head">
+						<view class="item">
+							<view>瓶身编号：</view>
+							<view>22222</view>
+						</view>
+						<u-icon class="cross" name="minus-circle-fill"></u-icon>
+					</view>
+					<view class="content">
+						<view class="item">
+							<view>钢瓶二维码：</view>
+							<view>22222</view>
+						</view>
+						<view class="item">
+							<view>钢瓶型号：</view>
+							<view>22222</view>
+						</view>
+						<view class="item">
+							<view>充装状态：</view>
+							<view>22222</view>
+						</view>
+						<view class="item">
+							<view>持有人：</view>
+							<view>22222</view>
+						</view>
+						<view class="item">
+							<view>流转环节：</view>
+							<view>22222</view>
+						</view>
+						<view class="item">
+							<view>流转状态：</view>
+							<view>22222</view>
+						</view>
+					</view>
+				</view>
+			</view>
 		</view>
-		<view class="table">
-			<us-table :table-column="tableColumn" :table-data="tableData"></us-table>
+		<view class="list">
+			<view class="list-head">
+				<view class="head-tle">回收钢瓶</view>
+			</view>
+			<view class="code-box">
+				<view class="tle">钢瓶码：</view>
+				<u-input type="text" class="code-input" v-model="codeKey" shape="circle"
+					:placeholder="$t('cylinderMg.addCirculation.form.codeKey.placeholder')">
+					<view slot="suffix">
+						<u-icon @click="toScan" size="40rpx" color="#3c9cff" name="scan"></u-icon>
+					</view>
+				</u-input>
+				<u-button class="code-btn" type="primary" shape="circle" size="small" @click="searchCode">
+					{{$t('cylinderMg.addCirculation.btn.conf')}}
+				</u-button>
+			</view>
+			<view class="code-info">
+				<view class="info-list" v-for="i in 2">
+					<view class="head">
+						<view class="item">
+							<view>瓶身编号：</view>
+							<view>22222</view>
+						</view>
+						<u-icon class="cross" name="minus-circle-fill"></u-icon>
+					</view>
+					<view class="content">
+						<view class="item">
+							<view>钢瓶二维码：</view>
+							<view>22222</view>
+						</view>
+						<view class="item">
+							<view>钢瓶型号：</view>
+							<view>22222</view>
+						</view>
+						<view class="item">
+							<view>充装状态：</view>
+							<view>22222</view>
+						</view>
+						<view class="item">
+							<view>持有人：</view>
+							<view>22222</view>
+						</view>
+						<view class="item">
+							<view>流转环节：</view>
+							<view>22222</view>
+						</view>
+						<view class="item">
+							<view>流转状态：</view>
+							<view>22222</view>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+
+		<view class="list">
+			<view class="list-head">
+				<view class="head-tle">钢瓶溯源</view>
+				<view class="act-btn">
+					<u-icon class="add-icon" name="plus-circle"></u-icon>
+					<view class="add-txt">添加</view>
+				</view>
+			</view>
+			<view class="source-box">
+				<view class="source-list" v-for="i in 2">
+					<view class="source-head">
+						<view>
+							<text>操作</text>
+						</view>
+						<view>
+							<text>确认送达</text>
+						</view>
+						<view>
+							<text>钢瓶型号</text>
+						</view>
+					</view>
+					<view class="source-content">
+						<view class="source-del">
+							<u-icon class="cross" name="minus-circle-fill"></u-icon>
+						</view>
+						<view class="source-cell">
+							<view class="item">
+								<view>
+									<u-input type="text" class="code-input" v-model="codeKey" placeholder="钢瓶二维码"
+										inputAlign="center">
+										<view slot="suffix">
+											<u-icon @click="toScan" size="40rpx" color="#3c9cff" name="scan"></u-icon>
+										</view>
+									</u-input>
+								</view>
+								<view>
+									<text>jalwjegwaegk</text>
+								</view>
+							</view>
+							<view class="item gray">
+								<view>
+									<text>客户回瓶</text>
+								</view>
+								<view>
+									<text>钢瓶型号</text>
+								</view>
+							</view>
+							<view class="item">
+								<view>
+									<u-input type="text" class="code-input" v-model="codeKey" placeholder="钢瓶二维码"
+										inputAlign="center">
+										<view slot="suffix">
+											<u-icon @click="toScan" size="40rpx" color="#3c9cff" name="scan"></u-icon>
+										</view>
+									</u-input>
+								</view>
+								<view>
+									<text>jalwjegwaegk</text>
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
+			</view>
 		</view>
 		<!-- 请求 toast 提示 -->
 		<u-toast ref='uToast'></u-toast>
@@ -107,6 +241,12 @@
 		cylinderArchivesFindByCodeKey,
 		assetCodeFillingState
 	} from '@/api/lpgManageAppApi'
+	import {
+		salesOrderFindBackBottleData
+	} from '@/api/lpgSalesManageApi'
+	import {
+		createUniqueString,
+	} from '@/utils'
 	export default {
 		mixins: [settingMixin],
 		props: {
@@ -114,30 +254,13 @@
 		},
 		data() {
 			return {
-				listGoods:[{}],
 				codeKey: '',
-				tableColumn: [{
-					prop: 'cylinderNo',
-					label: this.$t('cylinderMg.addCirculation.tableColumn.cylinderNo'),
-					width: '160rpx',
-					align: 'center'
-				}, {
-					prop: 'codeKey',
-					label: this.$t('cylinderMg.addCirculation.tableColumn.codeKey'),
-					width: '210rpx',
-					align: 'center'
-				}, {
-					prop: 'modelName',
-					label: this.$t('cylinderMg.addCirculation.tableColumn.modelName'),
-					width: '160rpx',
-					align: 'center'
-				}, {
-					prop: 'holderName',
-					label: this.$t('cylinderMg.addCirculation.tableColumn.holderName'),
-					width: '170rpx',
-					align: 'center'
-				}],
-				tableData: []
+				editId: '',
+				backBottle: false, // 确认送达是否有回瓶单
+				cylinderScanCode: false, // 确认送达是否需要扫码
+				cylinderScanSetting: false, // 钢瓶溯源是否开启
+				cylinderPattern: '', // 模式 1 扫码模式 2 一对一置换模式
+				listGoods: [],
 			}
 		},
 		// 过滤器
@@ -152,6 +275,20 @@
 
 		},
 		async onLoad(options) {
+			this.backBottle = options.backBottle == 'true' ? true : false
+			this.cylinderScanCode = options.cylinderScanCode == 'true' ? true : false
+			this.cylinderScanSetting = options.cylinderScanSetting == 'true' ? true : false
+			this.cylinderPattern = options.cylinderPattern
+			this.editId = options.editId || ''
+			if (this.backBottle) {
+				// 回瓶单数据
+				const {
+					returnValue: res
+				} = await salesOrderFindBackBottleData({
+					id: this.editId
+				})
+				this.listGoods = res
+			}
 			uni.setNavigationBarTitle({
 				title: '确认送达'
 			});
@@ -163,6 +300,21 @@
 
 		},
 		methods: {
+			// 添加回单
+			addList() {
+				this.listGoods.push({
+					ids: createUniqueString(),
+					id: '',
+					outGoodsDetailNames: '', // 出库商品
+					outGoodsDetailId: '',
+					backGoodsDetailNames: '', // 回瓶商品
+					backGoodsDetailId: '',
+					backNum: 0,
+					outNum: 0,
+					lendNum: 0,
+					returnNum: 0
+				})
+			},
 			// 查询二维码
 			async searchCode(code = null) {
 				this.codeKey = code || this.codeKey
@@ -220,7 +372,7 @@
 			// 选择商品
 			chooseGoods() {
 				this.$navigateTo('/infoManage/chooseGoods/chooseGoods', {
-					multiple: true
+					businessTag: 'cylinder'
 				})
 			},
 		},
@@ -253,8 +405,95 @@
 			}
 		}
 
-		.table {
-			margin-top: 30rpx;
+		.source-box {
+			font-size: 30rpx;
+
+			.source-head {
+				display: flex;
+				align-items: center;
+				background: rgb(229, 229, 229);
+
+				>view {
+					border-right: 1px solid #fff;
+					min-height: 74rpx;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					flex: 1;
+					width: 1px;
+					color: rgb(56, 56, 56);
+					padding: 10rpx;
+					box-sizing: border-box;
+
+					&:last-child {
+						border-right: none;
+					}
+				}
+
+				view:first-child {
+					flex: none;
+					width: 140rpx;
+				}
+			}
+
+			.source-content {
+				display: flex;
+
+				.source-del {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					width: 140rpx;
+					border-right: 1px solid #eee;
+
+					.cross {
+						::v-deep .u-icon__icon {
+							color: red !important;
+							font-size: 40rpx !important;
+						}
+					}
+				}
+
+				.source-cell {
+					width: 1px;
+					flex: 1;
+
+					.item {
+						min-height: 74rpx;
+						display: flex;
+						border-bottom: 1px solid #eee;
+
+						&:last-child {
+							border-bottom: none;
+						}
+
+						&.gray {
+							background: rgb(247, 247, 247);
+						}
+
+						>view {
+							width: 1px;
+							flex: 1;
+							border-right: 1px solid #eee;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							color: rgb(56, 56, 56);
+							word-break: break-all;
+							padding: 10rpx;
+							box-sizing: border-box;
+
+							&:last-child {
+								border-right: none;
+							}
+
+							.code-input {
+								height: 34rpx;
+							}
+						}
+					}
+				}
+			}
 		}
 
 		.code-box {
@@ -263,9 +502,11 @@
 			align-items: center;
 			padding: 20rpx 30rpx;
 			box-sizing: border-box;
-			.tle{
+
+			.tle {
 				font-size: 28rpx;
 			}
+
 			.code-input {
 				flex: 1;
 				width: 1rpx;
@@ -274,6 +515,62 @@
 
 			.code-btn {
 				width: 100rpx !important;
+			}
+
+		}
+
+		.code-info {
+			padding: 0 30rpx;
+
+			.info-list {
+				border-bottom: 1px solid #eee;
+				padding: 28rpx 0;
+
+				.item {
+					display: flex;
+					color: #666;
+					font-size: 30rpx;
+					align-items: center;
+					line-height: 38rpx;
+
+					>view:last-child {
+						color: #000;
+						word-break: break-all;
+						width: 1px;
+						flex: 1;
+					}
+				}
+
+				.head {
+					display: flex;
+					align-items: center;
+
+					.item {
+						flex: 1;
+						width: 1px;
+					}
+
+					.cross {
+						::v-deep .u-icon__icon {
+							color: red !important;
+							font-size: 40rpx !important;
+						}
+					}
+				}
+
+				.content {
+					display: flex;
+					flex-wrap: wrap;
+
+					.item {
+						width: calc(50% - 3px);
+						margin-top: 18rpx;
+
+						&:nth-child(odd) {
+							margin-right: 6px;
+						}
+					}
+				}
 			}
 		}
 	}
@@ -287,6 +584,114 @@
 		background: rgba(255, 255, 255, 1);
 		box-shadow: 0rpx 4rpx 8rpx rgba(0, 0, 0, 0.04);
 		border-radius: 16rpx;
+
+		.list-box {
+			padding: 0 30rpx;
+
+			.back-item {
+				border-bottom: 1px dashed rgb(42, 130, 228);
+
+				&:last-child {
+					border-bottom: none;
+				}
+
+				.goods-cell {
+					display: flex;
+					padding: 28rpx 0;
+					border-bottom: 1px solid #eee;
+					align-items: center;
+
+					.label {
+						font-size: 30rpx;
+						margin-right: 30rpx;
+					}
+
+					.content {
+						flex: 1;
+
+						.goods-item {
+							display: flex;
+							align-items: center;
+							padding: 12rpx 22rpx;
+							min-height: 50rpx;
+							border-radius: 50rpx;
+							background: rgba(0, 0, 0, 0.08);
+							font-size: 28rpx;
+							word-break: break-all;
+							width: fit-content;
+							box-sizing: border-box;
+
+							.cross {
+								margin-left: 14rpx;
+							}
+						}
+					}
+
+					.plus {
+						margin-left: 30rpx;
+
+						::v-deep .u-icon__icon {
+							color: rgb(42, 130, 228) !important;
+							font-size: 40rpx !important;
+						}
+					}
+				}
+
+				.goods-act {
+					display: flex;
+					padding: 28rpx 0;
+					border-bottom: 1px solid #eee;
+
+					.cell {
+						flex: 1;
+						width: 1px;
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						justify-content: center;
+						border-right: 1px solid #eee;
+
+						&:last-child {
+							border-right: none;
+						}
+
+						.name {
+							font-size: 30rpx;
+							color: rgb(128, 128, 128);
+						}
+
+						input {
+							border: 1px solid #eee;
+
+						}
+
+						.txt {
+							height: 50rpx;
+							line-height: 50rpx;
+							margin-top: 14rpx;
+							font-size: 30rpx;
+							width: 100rpx;
+							text-align: center;
+							padding: 0 10rpx;
+							box-sizing: border-box;
+						}
+					}
+				}
+
+				.goods-del {
+					padding: 28rpx 0;
+					display: flex;
+					justify-content: flex-end;
+
+					.del {
+						::v-deep .u-icon__icon {
+							color: red !important;
+							font-size: 44rpx !important;
+						}
+					}
+				}
+			}
+		}
 
 		.list-head {
 			height: 90rpx;
@@ -337,155 +742,5 @@
 			}
 		}
 
-
-		.goods {
-			.goods-list {
-				padding: 30rpx 30rpx;
-				border-bottom: 1px solid #eee;
-
-				&:last-child {
-					border-bottom: none;
-				}
-
-				.goods-head {
-					display: flex;
-
-					.goods-tle {
-						flex: 1;
-						width: 1px;
-						word-break: break-all;
-						font-size: 32rpx;
-						color: #000;
-						line-height: 38rpx;
-					}
-
-					.goods-reason {
-						font-size: 28rpx;
-						line-height: 38rpx;
-						margin-left: 10rpx;
-						color: #666;
-
-						&.on {
-							color: rgba(42, 130, 228, 1);
-						}
-					}
-				}
-
-				.attr-del {
-					display: flex;
-					justify-content: space-between;
-					margin-top: 30rpx;
-					align-items: center;
-
-					.remove-goods {
-						::v-deep .u-icon__icon {
-							color: rgba(255, 79, 35, 1.0) !important;
-							font-size: 46rpx !important;
-						}
-					}
-				}
-
-				.attr {
-					padding: 0 10rpx;
-					height: 50rpx;
-					display: flex;
-					align-items: center;
-					width: 360rpx;
-					background: rgba(247, 247, 247, 1);
-					border-radius: 4rpx;
-					position: relative;
-
-					&:hover {
-						.arrow-right {
-							transform: rotate(90deg);
-						}
-
-						.attr-box {
-							display: block;
-						}
-					}
-
-					.attr-txt {
-						color: rgba(56, 56, 56, 1);
-						font-size: 28rpx;
-						width: 1px;
-						flex: 1;
-						text-overflow: ellipsis;
-						overflow: hidden;
-						white-space: nowrap;
-					}
-
-					.attr-box {
-						display: none;
-						z-index: 20;
-						position: absolute;
-						left: 0;
-						background: rgba(247, 247, 247, 1);
-						border-radius: 16rpx;
-						top: 74rpx;
-						width: 100%;
-						padding: 20rpx;
-						box-sizing: border-box;
-
-						.attr-item {
-							display: flex;
-							font-size: 24rpx;
-							margin-bottom: 10rpx;
-							color: #000;
-							font-weight: bold;
-
-							&:last-child {
-								margin-bottom: 0;
-							}
-
-							.item-tle {
-								color: rgba(56, 56, 56, 1);
-								font-weight: normal;
-							}
-						}
-
-						&::before {
-							content: '';
-							position: absolute;
-							top: -15rpx;
-							left: calc(50% - 15rpx);
-							transform: translate(-50%, 0%);
-							transform: rotate(45deg);
-							display: block;
-							width: 30rpx;
-							height: 30rpx;
-							background: rgba(247, 247, 247, 1);
-						}
-					}
-				}
-
-				.info-cell {
-					display: flex;
-					align-items: center;
-					font-size: 30rpx;
-					line-height: 30rpx;
-					margin-top: 30rpx;
-					justify-content: space-between;
-					flex-wrap: wrap;
-					.cell {
-						display: flex;
-						align-items: center;
-						width: 50%;
-						.cell-label {
-							color: rgba(128, 128, 128, 1);
-						}
-
-						.cell-content {
-							input {
-								width: 120rpx;
-								font-size: 30rpx;
-								text-align: center;
-								border-bottom: 1px solid #ccc;
-							}
-						}
-					}
-				}
-			}
-		}
 	}
 </style>
