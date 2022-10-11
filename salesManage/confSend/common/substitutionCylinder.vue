@@ -2,23 +2,23 @@
 	<view>
 		<view class="list">
 			<view class="list-head">
-				<view class="head-tle">钢瓶溯源</view>
+				<view class="head-tle">{{$t('salesMg.confSend.sourceTle')}}</view>
 				<view class="act-btn" @click="addData">
 					<u-icon class="add-icon" name="plus-circle"></u-icon>
-					<view class="add-txt">添加</view>
+					<view class="add-txt">{{$t('salesMg.common.btn.add')}}</view>
 				</view>
 			</view>
 			<view class="source-box" v-if="tableData&&tableData.length">
 				<view class="source-list" v-for="(item,index) in tableData" :key="index">
 					<view class="source-head">
 						<view>
-							<text>操作</text>
+							<text>{{$t('salesMg.confSend.table.act')}}</text>
 						</view>
 						<view>
-							<text>确认送达</text>
+							<text>{{$t('salesMg.confSend.table.send')}}</text>
 						</view>
 						<view>
-							<text>钢瓶型号</text>
+							<text>{{$t('salesMg.confSend.table.model')}}</text>
 						</view>
 					</view>
 					<view class="source-content">
@@ -28,8 +28,7 @@
 						<view class="source-cell">
 							<view class="item">
 								<view>
-									<u-input type="text" class="code-input" v-model="item.codeKeyGive"
-										placeholder="钢瓶二维码" inputAlign="center" @blur="searchCode(index,'give')">
+									<u-input type="text" class="code-input" v-model="item.codeKeyGive" :placeholder="$t('salesMg.confSend.table.placeholder')" inputAlign="center" @blur="searchCode(index,'give')">
 										<view slot="suffix">
 											<u-icon @click="toScan(index,'give')" size="40rpx" color="#3c9cff"
 												name="scan"></u-icon>
@@ -42,16 +41,15 @@
 							</view>
 							<view class="item gray">
 								<view>
-									<text>客户回瓶</text>
+									<text>{{$t('salesMg.confSend.table.back')}}</text>
 								</view>
 								<view>
-									<text>钢瓶型号</text>
+									<text>{{$t('salesMg.confSend.table.model')}}</text>
 								</view>
 							</view>
 							<view class="item">
 								<view>
-									<u-input type="text" class="code-input" v-model="item.codeKeyCollect"
-										placeholder="钢瓶二维码" inputAlign="center" @blur="searchCode(index,'collect')">
+									<u-input type="text" class="code-input" v-model="item.codeKeyCollect" :placeholder="$t('salesMg.confSend.table.placeholder')" inputAlign="center" @blur="searchCode(index,'collect')">
 										<view slot="suffix">
 											<u-icon @click="toScan(index,'collect')" size="40rpx" color="#3c9cff"
 												name="scan"></u-icon>
@@ -165,7 +163,7 @@
 					} else {
 						this.$refs.uToast.show({
 							type: 'error',
-							message: '该二维码已存在'
+							message: this.$t('salesMg.confSend.tips')
 						})
 					}
 				} else {

@@ -38,11 +38,13 @@ module.exports = {
 			placeholder: '请输入备注',
 		},
 		btn: {
-			save:'保存',
-			pay: '结算'
+			save: '保存',
+			pay: '结算',
+			add: '添加',
+			conf: '确认送达',
 		},
 		message: ['该客户无地址，请添加！', '配送员不能为空', '支付金额跟应收金额不一致', '无打印内容,请先设置打印模板'],
-		loading:'加载中...',
+		loading: '加载中...',
 	},
 	// 支付方式
 	settlement: {
@@ -54,39 +56,39 @@ module.exports = {
 		pricePlace: '请输入金额'
 	},
 	// 优惠券
-	discount:{
-		couponName:'优惠券',
-		couponNo:'优惠券号',
-		couponNoPlaceholder:'请输入优惠券号',
-		chooseBtn:'选择',
-		discountName:'订单折扣',
-		disCountMoney:'折扣金额',
-		disCountRate:'折扣率%',
-		discountDeal:'成交金额',
-		pointName:'积分抵扣',
-		integralUse:'客户积分',
-		maxIntegral:'可用积分',
-		integralValue:'抵扣积分',
-		integralMoney:'抵扣金额',
-		tips:'请选择客户',
+	discount: {
+		couponName: '优惠券',
+		couponNo: '优惠券号',
+		couponNoPlaceholder: '请输入优惠券号',
+		chooseBtn: '选择',
+		discountName: '订单折扣',
+		disCountMoney: '折扣金额',
+		disCountRate: '折扣率%',
+		discountDeal: '成交金额',
+		pointName: '积分抵扣',
+		integralUse: '客户积分',
+		maxIntegral: '可用积分',
+		integralValue: '抵扣积分',
+		integralMoney: '抵扣金额',
+		tips: '请选择客户',
 	},
 	// 运输信息
-	delivery:{
-		tle:'运输信息',
-		pickMode:'提货方式',
-		defDeliveryName:'配送点',
-		defDeliveryNamePlaceholder:'请选择配送点',
-		transportName:['配送员','运输员'],
-		transportNamePlaceholder:['请选择配送员','请输入运输员'],
-		chooseLicenseNum:'车牌号',
-		chooseLicenseNumPlaceholder:'请输入车牌号',
-		bookingTime:'预约时间',
-		address:'地址',
-		addressPlaceholder:'请选择地址',
-		floor:'楼',
-		feeName:['配送费','运费'],
-		feePlaceholder:'请输入费用',
-		total:'共',
+	delivery: {
+		tle: '运输信息',
+		pickMode: '提货方式',
+		defDeliveryName: '配送点',
+		defDeliveryNamePlaceholder: '请选择配送点',
+		transportName: ['配送员', '运输员'],
+		transportNamePlaceholder: ['请选择配送员', '请输入运输员'],
+		chooseLicenseNum: '车牌号',
+		chooseLicenseNumPlaceholder: '请输入车牌号',
+		bookingTime: '预约时间',
+		address: '地址',
+		addressPlaceholder: '请选择地址',
+		floor: '楼',
+		feeName: ['配送费', '运费'],
+		feePlaceholder: '请输入费用',
+		total: '共',
 	},
 	// 快速下单
 	placeOrder: {
@@ -487,7 +489,7 @@ module.exports = {
 	},
 	// 添加销售单
 	addSalesOrder: {
-		titleText:'销售开单',
+		titleText: '销售开单',
 	},
 	// 销售单详情
 	salesOrderInfo: {
@@ -643,6 +645,52 @@ module.exports = {
 				label: '运输员',
 				placeholder: '请输入运输员',
 			},
+		},
+		popup:{
+			tle:'',
+			address:''
+		},
+	},
+	// 确认送达
+	confSend: {
+		titleText: '确认送达',
+		backTle: '回单',
+		sendTle: '送达钢瓶',
+		collectTle: '回收钢瓶',
+		sourceTle: '钢瓶溯源',
+		outGoods: '出库商品',
+		inGoods: '回瓶商品',
+		outNum: '出库数',
+		backNum: '回瓶数',
+		lendNum: '借瓶数',
+		returnNum: '还瓶数',
+		codeKey: {
+			label: '钢瓶码',
+			placeholder: '请输入钢瓶二维码'
+		},
+		cylinderNo: '瓶身编号',
+		codeKeyNo: '钢瓶二维码',
+		modelName: '钢瓶型号',
+		fillingStateStr: '充装状态',
+		holderName: '持有人',
+		cylinderFlow: '流转环节',
+		stateStr: '流转状态',
+		tips: '该二维码已存在',
+		nodeTxt: {
+			1: '存放',
+			2: '充装',
+			3: '运输',
+			4: '配送',
+			5: '使用',
+			6: '回收',
+			7: '检测'
+		},
+		table:{
+			act:'操作',
+			send:'确认送达',
+			model:'钢瓶型号',
+			back:'客户回瓶',
+			placeholder:'钢瓶二维码',
 		},
 	},
 }

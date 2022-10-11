@@ -5,9 +5,8 @@
 				<view class="head-tle">{{title}}</view>
 			</view>
 			<view class="code-box">
-				<view class="tle">钢瓶码：</view>
-				<u-input type="text" class="code-input" v-model="codeKey" shape="circle"
-					:placeholder="$t('cylinderMg.addCirculation.form.codeKey.placeholder')">
+				<view class="tle">{{$t('salesMg.confSend.codeKey.label')}}：</view>
+				<u-input type="text" class="code-input" v-model="codeKey" shape="circle" :placeholder="$t('salesMg.confSend.codeKey.placeholder')">
 					<view slot="suffix">
 						<u-icon @click="toScan" size="40rpx" color="#3c9cff" name="scan"></u-icon>
 					</view>
@@ -20,34 +19,34 @@
 				<view class="info-list" v-for="(item,index) in tableData" :key="index">
 					<view class="head">
 						<view class="item">
-							<view>瓶身编号：</view>
+							<view>{{$t('salesMg.confSend.cylinderNo')}}：</view>
 							<view>{{item.cylinderNo}}</view>
 						</view>
 						<u-icon @click="removeData(index)" class="cross" name="minus-circle-fill"></u-icon>
 					</view>
 					<view class="content">
 						<view class="item">
-							<view>钢瓶二维码：</view>
+							<view>{{$t('salesMg.confSend.codeKeyNo')}}：</view>
 							<view>{{item.codeKey}}</view>
 						</view>
 						<view class="item">
-							<view>钢瓶型号：</view>
+							<view>{{$t('salesMg.confSend.modelName')}}：</view>
 							<view>{{item.modelName}}</view>
 						</view>
 						<view class="item">
-							<view>充装状态：</view>
+							<view>{{$t('salesMg.confSend.fillingStateStr')}}：</view>
 							<view>{{item.fillingStateStr}}</view>
 						</view>
 						<view class="item">
-							<view>持有人：</view>
+							<view>{{$t('salesMg.confSend.holderName')}}：</view>
 							<view>{{item.holderName}}</view>
 						</view>
 						<view class="item">
-							<view>流转环节：</view>
+							<view>{{$t('salesMg.confSend.cylinderFlow')}}：</view>
 							<view>{{item.cylinderFlow&&item.cylinderFlow.node | node}}</view>
 						</view>
 						<view class="item">
-							<view>流转状态：</view>
+							<view>{{$t('salesMg.confSend.stateStr')}}：</view>
 							<view>{{item.stateStr}}</view>
 						</view>
 					</view>
@@ -60,6 +59,7 @@
 </template>
 
 <script>
+	let that = null
 	import {
 		settingMixin
 	} from '@/common/settingMixin.js'
@@ -86,15 +86,7 @@
 		// 过滤器
 		filters: {
 			node(value) {
-				const stateObj = {
-					1: '存放',
-					2: '充装',
-					3: '运输',
-					4: '配送',
-					5: '使用',
-					6: '回收',
-					7: '检测'
-				}
+				const stateObj = that.$t('salesMg.confSend.nodeTxt')
 				return stateObj[value] || ''
 			}
 		},
@@ -102,7 +94,7 @@
 
 		},
 		async created() {
-
+			that = this
 		},
 		async mounted() {
 
@@ -140,7 +132,7 @@
 					} else {
 						this.$refs.uToast.show({
 							type: 'error',
-							message: '该二维码已存在'
+							message: this.$t('salesMg.confSend.tips')
 						})
 					}
 				} else {

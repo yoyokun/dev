@@ -2,16 +2,16 @@
 	<view class="sk-info">
 		<view class="list" v-if="backBottle">
 			<view class="list-head">
-				<view class="head-tle">回单</view>
+				<view class="head-tle">{{$t('salesMg.confSend.backTle')}}</view>
 				<view class="act-btn" @click="addList">
 					<u-icon class="add-icon" name="plus-circle"></u-icon>
-					<view class="add-txt">添加</view>
+					<view class="add-txt">{{$t('salesMg.common.btn.add')}}</view>
 				</view>
 			</view>
 			<view class="list-box" v-if="listGoods&&listGoods.length">
 				<view class="back-item" v-for="(item,index) in listGoods" :key="index">
 					<view class="goods-cell">
-						<view class="label">出库商品</view>
+						<view class="label">{{$t('salesMg.confSend.outGoods')}}</view>
 						<view class="content">
 							<view class="goods-item" v-if="item.outGoodsDetailNames">
 								<text>{{item.outGoodsDetailNames}}</text>
@@ -22,7 +22,7 @@
 						<u-icon class="plus" name="plus-circle" @click="chooseGoods(index,'out')"></u-icon>
 					</view>
 					<view class="goods-cell">
-						<view class="label">回瓶商品</view>
+						<view class="label">{{$t('salesMg.confSend.inGoods')}}</view>
 						<view class="content">
 							<view class="goods-item" v-if="item.backGoodsDetailNames">
 								<text>{{item.backGoodsDetailNames}}</text>
@@ -34,19 +34,19 @@
 					</view>
 					<view class="goods-act">
 						<view class="cell">
-							<view class="name">出库数</view>
+							<view class="name">{{$t('salesMg.confSend.outNum')}}</view>
 							<view class="txt">{{item.outNum}}</view>
 						</view>
 						<view class="cell">
-							<view class="name">回瓶数</view>
+							<view class="name">{{$t('salesMg.confSend.backNum')}}</view>
 							<input class="txt" step="1" type="number" v-model="item.backNum" />
 						</view>
 						<view class="cell">
-							<view class="name">借瓶数</view>
+							<view class="name">{{$t('salesMg.confSend.lendNum')}}</view>
 							<view class="txt">{{item.lendNum}}</view>
 						</view>
 						<view class="cell">
-							<view class="name">还瓶数</view>
+							<view class="name">{{$t('salesMg.confSend.returnNum')}}</view>
 							<view class="txt">{{item.returnNum}}</view>
 						</view>
 					</view>
@@ -58,14 +58,14 @@
 		</view>
 
 		<block v-if="cylinderScanCode && cylinderScanSetting && cylinderPattern == '1'">
-			<service-cylinder ref="serviceCylinder" title="送达钢瓶" />
-			<service-cylinder ref="recoveryCylinder" title="回收钢瓶" />
+			<service-cylinder ref="serviceCylinder" :title="$t('salesMg.confSend.sendTle')" />
+			<service-cylinder ref="recoveryCylinder" :title="$t('salesMg.confSend.collectTle')" />
 		</block>
-		<substitution-cylinder v-if="cylinderScanCode && cylinderScanSetting && cylinderPattern === '2'"
+		<substitution-cylinder v-if="cylinderScanCode && cylinderScanSetting && cylinderPattern == '2'"
 			ref="substitutionCylinder"></substitution-cylinder>
 
 		<view class="btn">
-			<u-button text="确认" type="primary" hairline shape="circle" @click="saveData">
+			<u-button :text="$t('salesMg.common.btn.conf')" type="primary" hairline shape="circle" @click="saveData">
 			</u-button>
 		</view>
 
@@ -140,7 +140,7 @@
 				this.listGoods = res
 			}
 			uni.setNavigationBarTitle({
-				title: '确认送达'
+				title: this.$t('salesMg.confSend.titleText')
 			});
 		},
 		onUnload() {
@@ -263,6 +263,9 @@
 						type: 'success',
 						message: message,
 					})
+					setTimeout(()=>{
+						uni.navigateBack()
+					},3000)
 				}
 			},
 			// 选择商品
