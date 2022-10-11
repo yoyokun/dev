@@ -7,7 +7,7 @@
 			<search :searchOptions="searchOptions" @search="search"></search>
 			<view class="total">
 				<view class="num">{{$t('salesMg.common.totalTxt')}}：<text>{{totals}}</text></view>
-				<view class="add" @click="goto('/salesManage/addSalesOrder/addSalesOrder')">
+				<view class="add" v-permission="{ permission:'app_salesOrder_add'}" @click="goto('/salesManage/addSalesOrder/addSalesOrder')">
 					<u-icon name="plus" color="#2A82E4" size="16" bold></u-icon>{{$t('common.btn.add')}}
 				</view>
 			</view>

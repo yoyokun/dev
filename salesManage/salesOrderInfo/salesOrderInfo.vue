@@ -208,37 +208,34 @@
 			</view>
 		</view>
 		<view class="btn">
-			<u-button v-if="!info.orderTime" :text="$t('common.btn.edit')" type="primary" hairline shape="circle"
+			<u-button v-permission="{ permission:'app_salesOrder_edit'}" v-if="!info.orderTime" :text="$t('common.btn.edit')" type="primary" hairline shape="circle"
 				@click="goto('/salesManage/addSalesOrder/addSalesOrder',{editId:info.id,orderSourceParam:info.orderSource})">
 			</u-button>
-			<u-button
-				v-if="(info.deliveryState == 1 && info.payType == 3) || (info.deliveryState == 1 && info.payType == 1 && (info.orderState == 1 || info.orderState == 2))"
+			<u-button v-permission="{ permission:'app_salesOrder_receive'}" v-if="(info.deliveryState == 1 && info.payType == 3) || (info.deliveryState == 1 && info.payType == 1 && (info.orderState == 1 || info.orderState == 2))"
 				:text="$t('salesMg.salesOrderInfo.btn.receive')" type="primary" hairline plain shape="circle"
 				@click="handleReceiving(info)">
 			</u-button>
-			<u-button
-				v-if="sendConfig.checkTag == 1 && info.orderSource == 'store' && (info.checkState == 1 || info.checkState == 4) && info.orderState == 3"
+			<u-button v-permission="{ permission:'app_salesOrder_submit'}" v-if="sendConfig.checkTag == 1 && info.orderSource == 'store' && (info.checkState == 1 || info.checkState == 4) && info.orderState == 3"
 				:text="$t('salesMg.salesOrderInfo.btn.sub')" type="success" plain hairline shape="circle"
 				@click="handleSubmit(info)">
 			</u-button>
-			<u-button v-if="info.orderTime && info.orderState!==5" :text="$t('salesMg.salesOrderInfo.btn.void')"
+			<u-button v-permission="{ permission:'app_salesOrder_invalid'}" v-if="info.orderTime && info.orderState!=5" :text="$t('salesMg.salesOrderInfo.btn.void')"
 				type="error" plain hairline shape="circle" @click="handleVoid(info)"></u-button>
-			<u-button
-				v-if="(info.orderSource == 'internet' && info.orderState == 4) || (info.orderState == 4 || info.orderState == 5) || !info.orderTime"
+			<u-button v-permission="{ permission:'app_salesOrder_delete'}" v-if="(info.orderSource == 'internet' && info.orderState == 4) || (info.orderState == 4 || info.orderState == 5) || !info.orderTime"
 				:text="$t('salesMg.salesOrderInfo.btn.del')" type="error" plain hairline shape="circle"
 				@click="handleDelete(info)">
 			</u-button>
-			<u-button v-if="!info.hangUpType && info.orderTime" :text="$t('salesMg.salesOrderInfo.btn.up')"
+			<u-button v-permission="{ permission:'app_salesOrder_hangUp'}" v-if="!info.hangUpType && info.orderTime" :text="$t('salesMg.salesOrderInfo.btn.up')"
 				type="success" plain hairline shape="circle" @click="handleHangUp(info,true)">
 			</u-button>
-			<u-button v-if="info.hangUpType && info.orderTime" :text="$t('salesMg.salesOrderInfo.btn.down')"
+			<u-button v-permission="{ permission:'app_salesOrder_hangUp'}" v-if="info.hangUpType && info.orderTime" :text="$t('salesMg.salesOrderInfo.btn.down')"
 				type="warning" plain hairline shape="circle" @click="handleHangUp(info,false)">
 			</u-button>
-			<u-button v-if="info.orderState != 4 && info.orderState != 5" :text="$t('salesMg.salesOrderInfo.btn.count')" type="primary" plain hairline shape="circle" @click=""></u-button>
-			<u-button v-if="info.orderTime && (info.pickMode == 3 || info.pickMode == 4) && ((info.deliveryState == 2 && info.orderState != 5) ||
+			<u-button v-permission="{ permission:'app_salesOrder_settle'}" v-if="info.orderState != 4 && info.orderState != 5" :text="$t('salesMg.salesOrderInfo.btn.count')" type="primary" plain hairline shape="circle" @click=""></u-button>
+			<u-button v-permission="{ permission:'app_salesOrder_delivery'}" v-if="info.orderTime && (info.pickMode == 3 || info.pickMode == 4) && ((info.deliveryState == 2 && info.orderState != 5) ||
             (info.deliveryState == 3 && (info.shipmentState == 1 || info.shipmentState == 4)))" :text="$t('salesMg.salesOrderInfo.btn.delivery')" type="success" plain hairline shape="circle"
 				@click="handleAssign(info)"></u-button>
-			<u-button v-if="(info.deliveryState == 2 || (info.deliveryState == 3 && info.shipmentState != 3))
+			<u-button v-permission="{ permission:'app_salesOrder_service'}" v-if="(info.deliveryState == 2 || (info.deliveryState == 3 && info.shipmentState != 3))
             && info.orderTime && sendConfig.execSwitch == 1" :text="$t('salesMg.salesOrderInfo.btn.conf')" type="success" plain hairline shape="circle"
 				@click="handleDelivery"></u-button>
 		</view>
