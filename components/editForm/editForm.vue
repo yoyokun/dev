@@ -236,7 +236,7 @@
 							<text class="confirm" @click="confirmMultiple(index,item.fieldName)">{{$t('common.editForm.confirmText')}}</text>
 						</view>
 						<scroll-view class="multipleBox" scroll-y="true">
-							<view class="box" v-for="(subItems,subIndex) in item.options" :key="subItems.id" @click="subItems.active = !subItems.active">
+							<view class="box" v-for="(subItems) in item.options" :key="subItems.id" @click="subItems.active = !subItems.active">
 								<view class="center">
 									<view class="name">{{ subItems.name }}</view>
 									<text class="desc" v-if="subItems.desc">{{ subItems.desc }}</text>
@@ -252,10 +252,11 @@
 					<u-upload
 						:fileList="formData[item.fieldName]"
 						:disabled="item.disabled"
+						:deletable="!item.disabled"
 						@afterRead="afterRead"
 						@delete="deletePic($event,item.disabled)"
 						:name="item.fieldName"
-						:maxCount="item.limit ? item.limit : 2"
+						:maxCount="item.disabled ? formData[item.fieldName].length : (item.limit ? item.limit : 2)"
 					></u-upload>
 				</view>
 			</u-form-item>
@@ -274,7 +275,7 @@ import { uploadFileImg } from '@/utils/request'
 import { CodeToText, TextToCode } from 'element-china-area-data'
 import { isNumber } from '@/utils/index.js'
 export default {
-	name: "EditForm",
+	name: 'EditForm',
 	props: {
 		classForm: {
 			type: String,
@@ -293,7 +294,7 @@ export default {
 		// 数据源
 		formDataSource: {
 			type: Array,
-			default: ()=>{
+			default: () => {
 				return [
 					{
 						type: 'text', // 必填
@@ -361,16 +362,16 @@ export default {
 					Object.keys(formDataValue).forEach(key => {
 						// 判断 key 是否存在
 						if (key in this.formData) {
-							const findIndex = this.renderDataSource.findIndex(item=>item.fieldName === key)
+							const findIndex = this.renderDataSource.findIndex(item => item.fieldName === key)
 							if(this.renderDataSource[findIndex].type === 'picker'){
 								// 选中
 								const options = this.renderDataSource[findIndex].options
-								const findIndex1 = options.findIndex(item=>item.value === formDataValue[key])
+								const findIndex1 = options.findIndex(item => item.value === formDataValue[key])
 								this.renderDataSource[findIndex].defaultIndex = [findIndex1]
 							} else if(this.renderDataSource[findIndex].type === 'multiple'){
 								// 多选
 								const options = this.renderDataSource[findIndex].options
-								options.forEach(v=>{
+								options.forEach(v => {
 									if(formDataValue[key].includes(v.value)) {
 										v.active = true
 									}else{
@@ -453,7 +454,7 @@ export default {
 				if (value && typeof value === 'string') {
 					value = value.trim()
 				}
-				const findIndex = this.renderDataSource.findIndex(item=>item.fieldName === key)
+				const findIndex = this.renderDataSource.findIndex(item => item.fieldName === key)
 				// 处理省市区数据
 				if (findIndex !== -1 && this.renderDataSource[findIndex].isProvinces) {
 					tempObj.province = value.length ? CodeToText[value[0]] : ''
@@ -470,7 +471,7 @@ export default {
 			this.$refs.form.validate().then(() => {
 				const queryParams = this.handleParams(this.formData)
 				fun && fun(queryParams)
-			}).catch(()=>{
+			}).catch(() => {
 				console.log('校验不通过')
 			})
 		},
@@ -595,7 +596,7 @@ export default {
 			// 获取选中的value
 			const options = this.renderDataSource[index].options
 			const newArr = options.filter(n => n.active === true)
-			this.formData[name] = newArr.map(v => {return v.value})
+			this.formData[name] = newArr.map(v => { return v.value })
 			// 对部分字段校验
 			this.$refs.form.validateField(name)
 			this.handleFiltrate(name)
@@ -605,12 +606,12 @@ export default {
 		cancelMultiple(index,name) {
 			// 重置数据
 			const options = this.renderDataSource[index].options
-			options.forEach(v=>{
+			options.forEach(v => {
 				v.active = false
 			})
 			const oldArr = this.formData[name] || []
-			options.forEach(v=>{
-				oldArr.forEach(m=>{
+			options.forEach(v => {
+				oldArr.forEach(m => {
 					if(v.value === m){
 						v.active = true
 					}
@@ -622,7 +623,7 @@ export default {
 		deleteMultiple(value,index,name,indexSub) {
 			this.formData[name].splice(indexSub,1)
 			const options = this.renderDataSource[index].options
-			options.forEach(v=>{
+			options.forEach(v => {
 				if(v.value === value){
 					v.active = false
 				}

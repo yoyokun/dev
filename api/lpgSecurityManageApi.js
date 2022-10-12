@@ -172,6 +172,20 @@ export function safeRectifySaveOrEdit(data = {}, message = '', custom = {}) {
 		}
 	})
 }
+// 整改记录 结算
+export function safeRectifySettlement(data = {}, message = '', custom = {}) {
+  return request({
+    url: baseURL + '/admin/sis/control/safeRectify/settlement',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
 // 整改记录 作废整改记录
 export function safeRectifyInvalidByIds(data = {}, message = '', custom = {}) {
 	return request({

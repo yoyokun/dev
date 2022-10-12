@@ -123,6 +123,7 @@ export default {
 								this.goto('/securityManage/addSecurityCheck/addSecurityCheck',{ editId: res.id })
 							} else if (this.info.formKey === 'rectify') {
 								// 跳转到整改
+								this.goto('/securityManage/addRectification/addRectification',{ editId: res.id })
 							} else if (this.info.formKey === 'polling') {
 								// 巡检
 								this.goto('/securityManage/addPatrolCheck/addPatrolCheck',{ editId: res.id })
@@ -166,8 +167,10 @@ export default {
 		handleJump() {
 			if (this.info.formKey === 'security') {
 				// 跳转到安检
+				this.goto('/securityManage/addSecurityCheck/addSecurityCheck',{ editId: this.info.linkId })
 			} else if (this.info.formKey === 'rectify') {
 				// 跳转到整改
+				this.goto('/securityManage/addRectification/addRectification',{ editId: this.info.linkId })
 			} else if (this.info.formKey === 'polling') {
 				// 巡检
 				this.goto('/securityManage/addPatrolCheck/addPatrolCheck',{ editId: this.info.linkId })
@@ -178,8 +181,10 @@ export default {
 			// 查看安检 整改 巡检 详情
 			if (this.info.formKey === 'security') {
 				// 跳转到安检
+				this.goto('/securityManage/securityCheckInfo/securityCheckInfo',{ editId: this.info.linkId })
 			} else if (this.info.formKey === 'rectify') {
 				// 跳转到整改
+				this.goto('/securityManage/rectificationInfo/rectificationInfo',{ editId: this.info.linkId })
 			} else if (this.info.formKey === 'polling') {
 				// 巡检
 				this.goto('/securityManage/addPatrolCheck/addPatrolCheck',{ editId: this.info.linkId })

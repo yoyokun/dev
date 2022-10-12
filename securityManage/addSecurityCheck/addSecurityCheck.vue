@@ -36,7 +36,7 @@
 							<text v-else class="text">{{$t('security.addPatrolCheck.sigin')}}</text>
 						</view>
 						<u-checkbox-group>
-							<u-checkbox v-model="customerSignRefuse" :label="$t('security.addSecurityCheck.form.customerSignRefuse.label')"></u-checkbox>
+							<u-checkbox :checked="customerSignRefuse" @change="customerSignRefuse = !customerSignRefuse" :label="$t('security.addSecurityCheck.form.customerSignRefuse.label')"></u-checkbox>
 						</u-checkbox-group>
 					</view>
 					<u-icon name="arrow-right" color="#666666" size="15" @click="signCanvas(1)"></u-icon> 
@@ -93,7 +93,7 @@ import { userCustomerFindByIdList, cylinderArchivesFindByCodeKey } from '@/api/l
 import { safeSecuritySaveOrEdit, safeSecurityFindById, safeSecurityDeleteByIds, safeTemplateFindById } from '@/api/lpgSecurityManageApi.js'
 import { settingMixin } from '@/common/settingMixin.js'
 import SecurityCheck from '@/securityManage/addSecurityCheck/common/securityCheck.vue'
-import permision from "@/common/wa-permission/permission.js"
+import permision from '@/common/wa-permission/permission.js'
 export default {
 	components: {
 		SecurityCheck
@@ -286,7 +286,7 @@ export default {
 			formDataValue1: {},
 			customerSign: '',
 			managerSign: '',
-			templateInfo: {},//模板详情
+			templateInfo: {},// 模板详情
 			cylinderNum: '',
 			codeKeysArr: [],
 			codeKey: '',
@@ -346,14 +346,14 @@ export default {
 		// 获取定位
 		async getLocation() {
 			// #ifdef APP-PLUS
-			var result = await permision.requestAndroidPermission("android.permission.ACCESS_FINE_LOCATION")
+			var result = await permision.requestAndroidPermission('android.permission.ACCESS_FINE_LOCATION')
 			if (result === 1) {
 				// 定位
 				uni.getLocation({
 					type: 'gcj02',
 					geocode: true,
 					success: (res) => {
-						console.log("定位成功");
+						console.log('定位成功');
 						const address = res.address
 						this.location = address.city + address.district + address.street + address
 							.streetNum +
@@ -363,12 +363,12 @@ export default {
 					},
 					fail: (err) => {
 						console.log(err)
-						console.log("定位失败")
+						console.log('定位失败')
 						this.location = err.errMsg
 					}
 				});
 			} else {
-				this.location = "定位失败，未开启定位服务"
+				this.location = '定位失败，未开启定位服务'
 			}
 			// #endif
 			// #ifdef H5
@@ -380,7 +380,7 @@ export default {
 				},
 				fail: (err) => {
 					console.log(err)
-					console.log("定位失败")
+					console.log('定位失败')
 					this.location = err.errMsg
 				}
 			});
@@ -392,7 +392,7 @@ export default {
 			  key: this.mapKey,
 			  callbackName: 'getJsonData',
 			  output: 'jsonp',
-			  location: latitude+','+longitude
+			  location: latitude + ',' + longitude
 			}).then(json => {
 				const result = json.result
 				this.location = result.address
@@ -550,8 +550,8 @@ export default {
 				if(res.state === 1) {
 					res.state = 2
 				}
+				res.picture = this.$options.filters.pictureJsonParse(res.picture)
 				this.state = res.state
-				res.picture = res.picture || []
 				this.formDataValue = res
 				this.formDataValue1 = res
 				this.info = res
@@ -564,7 +564,7 @@ export default {
 				this.$refs.dialogForm.handleSubmit(async(data) => {
 					this.$refs.dialogForm1.handleSubmit(async(parma) => {
 						const securityResultData = this.$refs.securityCheck.getSecurity()
-						const obj = Object.assign(data,parma,{securityResultData: JSON.stringify(securityResultData)})
+						const obj = Object.assign(data,parma,{ securityResultData: JSON.stringify(securityResultData) })
 						this.handleSave(obj)
 					})
 				})
@@ -609,7 +609,7 @@ export default {
 			uni.setNavigationBarTitle({
 				title: this.$t('security.addSecurityCheck.titleTextEdit')
 			});
-			this.formDataSource.forEach((v,i)=>{
+			this.formDataSource.forEach((v,i) => {
 				if(i === 0 || i === 2 || i === 3) {
 					v.disabled = true
 				} else {
@@ -633,7 +633,7 @@ export default {
 				})
 				return
 			}
-			const { returnValue: res } = await cylinderArchivesFindByCodeKey({codeKey: this.codeKey}, this.$t('cylinderMg.addCirculation.loadTxt.finding'))
+			const { returnValue: res } = await cylinderArchivesFindByCodeKey({ codeKey: this.codeKey }, this.$t('cylinderMg.addCirculation.loadTxt.finding'))
 			if (res) {
 				this.codeKeysArr.push(res.codeKey)
 			} else {

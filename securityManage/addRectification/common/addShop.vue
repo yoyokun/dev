@@ -139,6 +139,7 @@
 			shopData: {
 				async handler() {
 					this.tableData = this.shopData
+					this.getSummaries()
 				},
 				deep: true,
 				immediate: true
@@ -163,7 +164,7 @@
 					// 已存在不处理
 					if (findIndex === -1) {
 						// 不存在，添加
-						this.tableData.push({...v,...{
+						this.tableData.push({ ...v,...{
 							id: '',
 							amount: '',
 							weight: v.netContent,
