@@ -97,6 +97,7 @@
 					type="primary" 
 					hairline 
 					shape="circle" 
+					plain
 					@click="handleRectify"></u-button>
 			</view>
 		</view>
@@ -170,7 +171,7 @@ export default {
 		}
 	},
 	onShow() {
-		uni.$once('updateInfo',(data)=>{
+		uni.$once('updateInfo',(data) => {
 			if(data && this.editId) {
 				this.getInfo()
 			}

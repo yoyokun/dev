@@ -28,14 +28,12 @@
 				</description>
 			</description-list>
 		</view>
-		<!-- 安检项目 -->
-		<security-check
-			v-if="safeSecurityResultVo && info.state === 2"
-			ref="securityCheck"
-			:safe-template-item-vo="safeSecurityResultVo"
-			:disabled="true"
-			:isResult="true"
-		/>
+		<!-- 整改前整改后项目 -->
+		<security-info
+			v-if="safeSecurityResultVo.length"
+			:state="info.state" 
+			:safe-security-result-not="safeSecurityResultVo"
+		></security-info>
 		<!-- 按钮 -->
 		<view class="btn">
 			<!-- 去整改 -->
@@ -62,7 +60,7 @@
 				v-if="info.state === 1 || info.state === 2 || info.state === 3 || info.state === 6"
 				v-permission="{ permission:'app_rectification_void'}" 
 				:text="$t('common.btn.toVoid')" 
-				type="primary" 
+				type="error" 
 				hairline 
 				shape="circle" 
 				@click="handleVoid"></u-button>
@@ -74,7 +72,7 @@
 				type="primary" 
 				hairline 
 				shape="circle" 
-				@click="handleRectify"></u-button>
+				@click="handleSettle"></u-button>
 		</view>
 		<!-- 作废 -->
 		<u-modal :show="show" :title="$t('common.descTle')" :closeOnClickOverlay="true"
@@ -93,10 +91,10 @@
 <script>
 let that = null
 import { safeRectifyFindById, safeRectifyDeleteByIds, safeRectifyInvalidByIds } from '@/api/lpgSecurityManageApi.js'
-import SecurityCheck from '@/securityManage/addSecurityCheck/common/securityCheck.vue'
+import SecurityInfo from '@/securityManage/rectificationInfo/common/securityInfo.vue'
 export default {
 	components: {
-		SecurityCheck
+		SecurityInfo
 	},
 	data() {
 		return {
@@ -104,7 +102,7 @@ export default {
 			info: {},
 			userCustomerVo: {},
 			address: '',
-			safeSecurityResultVo: {},
+			safeSecurityResultVo: [],
 			show: false,
 			invalidNote: '',
 		}
@@ -137,7 +135,7 @@ export default {
 		}
 	},
 	onShow() {
-		uni.$once('updateInfo',(data)=>{
+		uni.$once('updateInfo',(data) => {
 			if(data && this.editId) {
 				this.getInfo()
 			}
@@ -193,7 +191,7 @@ export default {
 		},
 		// 作废确认
 		async confirm() {
-			const remarks = this.invalidNote.replace(/\s*/g, "")
+			const remarks = this.invalidNote.replace(/\s*/g, '')
 			if (!remarks) {
 				uni.$u.toast(this.$t('common.descPlaceholder'))
 				return false
@@ -201,7 +199,7 @@ export default {
 			const { returnValue: res, message } = await safeRectifyInvalidByIds({ 
 				ids: [this.editId],
 				invalidNote: remarks || '' ,
-			}).catch(err=>{
+			}).catch(err => {
 				this.closeModal()
 			})
 			if(res){
@@ -223,7 +221,7 @@ export default {
 		},
 		// 结算
 		handleSettle() {
-			this.goto('/securityManage/addRectification/addRectification',{ editId: this.editId, settle: true})
+			this.goto('/securityManage/addRectification/addRectification',{ editId: this.editId, settle: true })
 		}
 	}
 }

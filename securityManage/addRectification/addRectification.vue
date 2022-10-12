@@ -26,6 +26,8 @@
 			ref="securityCheck"
 			:safe-security-result-not="safeSecurityResultNot"
 			:isSafeSecurity="false"
+			:isResult="settle"
+			:disabled="settle"
 		/>
 		<!-- 整改结果 -->
 		<edit-form
@@ -43,17 +45,17 @@
 							<text v-else class="text">{{$t('security.addPatrolCheck.sigin')}}</text>
 						</view>
 						<u-checkbox-group>
-							<u-checkbox v-model="customerSignRefuse" :label="$t('security.addRectification.form.customerSignRefuse.label')"></u-checkbox>
+							<u-checkbox :disabled="settle" :checked="customerSignRefuse" @change="customerSignRefuse = !customerSignRefuse" :label="$t('security.addRectification.form.customerSignRefuse.label')"></u-checkbox>
 						</u-checkbox-group>
 					</view>
-					<u-icon name="arrow-right" color="#666666" size="15" @click="signCanvas(1)"></u-icon> 
+					<u-icon v-if="!settle" name="arrow-right" color="#666666" size="15" @click="signCanvas(1)"></u-icon> 
 				</u-form-item>
 				<u-form-item v-if="endDecide.includes('3')" :label="$t('security.addRectification.form.managerSign.label')" :borderBottom="false">
 					<view class="singnImg" @click="signCanvas(2)">
 						<image class="img" v-if="managerSign" :src="managerSign" mode="widthFix"></image>
 						<text v-else class="text">{{$t('security.addPatrolCheck.sigin')}}</text>
 					</view>
-					<u-icon name="arrow-right" color="#666666" size="15" @click="signCanvas(2)"></u-icon> 
+					<u-icon v-if="!settle" name="arrow-right" color="#666666" size="15" @click="signCanvas(2)"></u-icon> 
 				</u-form-item>
 			</template>
 		</edit-form>
@@ -70,8 +72,8 @@
 			/>
 		</view>
 		<view class="btn" v-if="isSave">
-			<u-button :text="$t('common.btn.rectification')" type="primary" hairline shape="circle" @click="submitForm(1)"></u-button>
-			<u-button :text="$t('common.btn.settle')" type="primary" hairline shape="circle" @click="submitForm(2)"></u-button>
+			<u-button v-if="!settle" :text="$t('common.btn.rectification')" type="primary" hairline shape="circle" @click="submitForm(1)"></u-button>
+			<u-button :text="$t('common.btn.settle')" type="primary" hairline shape="circle" plain @click="submitForm(2)"></u-button>
 		</view>
 		<!-- 请求 toast 提示 -->
 		<u-toast ref='uToast'></u-toast>
@@ -79,7 +81,7 @@
 </template>
 
 <script>
-import { safeSecurityFindById, safeRectifySaveOrEdit } from '@/api/lpgSecurityManageApi.js'
+import { safeSecurityFindById, safeRectifySaveOrEdit, safeRectifyFindById, safeRectifySettlement } from '@/api/lpgSecurityManageApi.js'
 import { settingMixin } from '@/common/settingMixin.js'
 import SecurityCheck from '@/securityManage/addSecurityCheck/common/securityCheck.vue'
 import AddShop from '@/securityManage/addRectification/common/addShop.vue'
@@ -297,6 +299,46 @@ export default {
 				}
 			}
 		},
+		// 查询整改详情
+		async getInfo(id) {
+			const { returnValue: res } = await safeRectifyFindById({ id })
+			if (res) {
+				this.userCustomerVo = res.userCustomerVo
+				this.address = this.$options.filters.addressSplicing(res.userCustomerVo.userAddress)
+				res.picture = this.$options.filters.pictureJsonParse(res.picture)
+				this.info = res
+				this.securityId = res.securityId
+				this.managerSign = res.managerSign
+				this.customerSign = res.customerSign
+				this.customerSignRefuse = res.customerSignRefuse === 1
+				this.endDecide = res.endDecideRectify ? res.endDecideRectify.Split(',') : []
+				if(this.endDecide.includes('1')) {
+					this.formDataSource1[0].borderBottom = true
+					this.formDataSource1[1].show = true
+					if(this.endDecide.includes('2') || this.endDecide.includes('3')) {
+						this.formDataSource1[1].borderBottom = true
+					} else {
+						this.formDataSource1[1].borderBottom = false
+					}
+				} else {
+					this.formDataSource1[1].show = false
+				}
+				if(this.endDecide.length === 0) {
+					this.formDataSource1[0].borderBottom = false
+				}
+				this.safeSecurityResultNot = res.safeSecurityResultNot
+				this.payData = res.safeRectifyPays
+				this.shopData = res.safeRectifyGoods
+				this.totalMoneyAll = res.totalMoney
+				// 未整改
+				if(res.state === 1) {
+					res.state = 2
+				}
+				this.state = res.state
+				this.formDataValue = res
+				this.formDataValue1 = res
+			}
+		},
 		// 表单改变
 		async changeForm(obj) {
 			const queryParams = obj.queryParams
@@ -343,7 +385,7 @@ export default {
 					this.$refs.dialogForm1.handleSubmit(async(parma) => {
 						const securityResultData = this.$refs.securityCheck.getSecurity()
 						const shop = this.$refs.addShop.getShop()
-						const obj = Object.assign(data,parma,{securityResultData: JSON.stringify(securityResultData)})
+						const obj = Object.assign(data,parma,{ securityResultData: JSON.stringify(securityResultData) })
 						// 商品信息
 						obj.rectifyGoodsData = []
 						obj.rectifyPaysData = [] // 支付
@@ -361,7 +403,7 @@ export default {
 									return false
 								}
 							}
-							paymentObj.payType.forEach(v=>{
+							paymentObj.payType.forEach(v => {
 								obj.rectifyPaysData.push({
 									collectionTypeName: v.name,
 									payMoney: v.value,
@@ -393,18 +435,39 @@ export default {
 			obj.picture = this.$options.filters.isArrayToString(obj.picture)
 			obj.customerSignRefuse = this.customerSignRefuse === true ? 1 : 2 // 客户拒签
 			obj.payState = payState // 支付状态
-			const { returnValue: res, message } = await safeRectifySaveOrEdit(obj,this.$t('security.addSecurityCheck.saveTit'))
-			if (res) {
-				this.$refs.uToast.show({
-					type: 'success',
-					message: message,
+			if (this.settle) {
+				// 从列表结算
+				const { returnValue: res, message } = await safeRectifySettlement({
+					rectifyPaysData: obj.rectifyPaysData,
+					rectifyGoodsData: obj.rectifyGoodsData,
+					id: obj.id
 				})
-				uni.$emit('updateInfo', true)
-				setTimeout(() => {
-					uni.navigateBack({
-						delta: 1
+				if (res) {
+					this.$refs.uToast.show({
+						type: 'success',
+						message: message,
 					})
-				}, 2000)
+					uni.$emit('updateInfo', true)
+					setTimeout(() => {
+						uni.navigateBack({
+							delta: 1
+						})
+					}, 2000)
+				}
+			} else {
+				const { returnValue: res, message } = await safeRectifySaveOrEdit(obj,this.$t('security.addSecurityCheck.saveTit'))
+				if (res) {
+					this.$refs.uToast.show({
+						type: 'success',
+						message: message,
+					})
+					uni.$emit('updateInfo', true)
+					setTimeout(() => {
+						uni.navigateBack({
+							delta: 1
+						})
+					}, 2000)
+				}
 			}
 		},
 		// 编辑
@@ -413,13 +476,19 @@ export default {
 			uni.setNavigationBarTitle({
 				title: this.$t('security.addRectification.titleTextEdit')
 			});
-			this.formDataSource.forEach((v,i)=>{
-				v.disabled = true
-			})
+			if(this.settle) {
+				// 结算
+				this.formDataSource.forEach((v,i) => {
+					v.disabled = true
+				})
+				this.formDataSource1.forEach((v,i) => {
+					v.disabled = true
+				})
+			}
 		},
 		// 签名
 		signCanvas(type) {
-			if(this.isSave) {
+			if(this.isSave && !this.settle) {
 				this.goto('/securityManage/signCanvas/signCanvas',{ type: type })
 			}
 		},
@@ -484,5 +553,8 @@ export default {
 	padding: 10rpx 10rpx;
 	box-sizing: border-box;
 	margin-top: 20rpx;
+}
+::v-deep .block-box .item:last-child{
+	border: none;
 }
 </style>

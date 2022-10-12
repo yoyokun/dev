@@ -94,10 +94,11 @@
 					<u-upload
 						:fileList="item.resultData"
 						:disabled="disabled"
+						:deletable="!disabled"
 						@afterRead="afterRead"
 						@delete="deletePic($event,disabled)"
 						:name="item.id"
-						:maxCount="item.limit"
+						:maxCount="disabled ? item.resultData : item.limit"
 					></u-upload>
 				</view>
 			</view>
@@ -105,22 +106,25 @@
 				<view class="itemName">{{$t('security.securityCheck.pictureName')}}</view>
 				<u-upload
 					:fileList="item.picture"
-					:disabled="disabled"
+					:disabled="disabled || (!isSafeSecurity && item.picture.length>0)"
+					:deletable="!(disabled || (!isSafeSecurity && item.picture.length>0))"
 					@afterRead="afterReadCheck"
-					@delete="deletePicCheck($event,disabled)"
+					@delete="deletePicCheck($event,(disabled || (!isSafeSecurity && item.picture.length>0)))"
 					:name="item.id"
-					:maxCount="5"
+					:maxCount="(disabled || (!isSafeSecurity && item.picture.length>0)) ? item.picture.length : 5"
 				></u-upload>
 			</view>
 			<view v-if="!isSafeSecurity" class="boxPic">
 				<view v-if="(disabled && item.rectifyPicture.length) || !disabled" class="itemName">{{$t('security.securityCheck.rectifyPicture')}}</view>
 				<u-upload
+					v-if="(disabled && item.rectifyPicture.length) || !disabled"
 					:fileList="item.rectifyPicture"
 					:disabled="disabled"
+					:deletable="!disabled"
 					@afterRead="afterReadRectify"
 					@delete="deletePicRectify($event,disabled)"
 					:name="item.id"
-					:maxCount="5"
+					:maxCount="disabled ? item.rectifyPicture.length : 5"
 				></u-upload>
 			</view>
 		</view>
@@ -197,10 +201,10 @@ export default{
 					if (obj.itemType === 1) {
 						const cehckData = obj.cehckData.Split(',')
 						const arr = []
-						cehckData.forEach(v=>{
+						cehckData.forEach(v => {
 							arr.push({
 								name: v,
-								disabled: this.isResult ? true : false
+								disabled: !!this.isResult
 							})
 						})
 						// 多选
@@ -222,10 +226,10 @@ export default{
 					} else if (obj.itemType === 2) {
 						const cehckData = obj.cehckData.Split(',')
 						const arr = []
-						cehckData.forEach(v=>{
+						cehckData.forEach(v => {
 							arr.push({
 								name: v,
-								disabled: this.isResult ? true : false
+								disabled: !!this.isResult
 							})
 						})
 						// 单选
@@ -287,10 +291,10 @@ export default{
 					if (obj.itemType === 1) {
 						const cehckData = obj.cehckData.Split(',')
 						const arr = []
-						cehckData.forEach(v=>{
+						cehckData.forEach(v => {
 							arr.push({
 								name: v,
-								disabled: this.isResult ? true : false
+								disabled: !!this.isResult
 							})
 						})
 						// 多选
@@ -306,16 +310,16 @@ export default{
 							resultData: obj.resultData.Split(','),
 							picture: this.$options.filters.pictureConversion(obj.picture),
 							score: obj.score,
-							result: 2, //  1 合格 2不合格
-							rectifyPicture: obj.rectifyPicture ? obj.rectifyPicture : []
+							result: this.isResult ? 1 : 2, //  1 合格 2不合格
+							rectifyPicture: this.isResult ? this.$options.filters.pictureConversion(obj.rectifyPicture) : []
 						})
 					} else if (obj.itemType === 2) {
 						const cehckData = obj.cehckData.Split(',')
 						const arr = []
-						cehckData.forEach(v=>{
+						cehckData.forEach(v => {
 							arr.push({
 								name: v,
-								disabled: this.isResult ? true : false
+								disabled: !!this.isResult
 							})
 						})
 						// 单选
@@ -331,8 +335,8 @@ export default{
 							resultData: obj.resultData,
 							picture: this.$options.filters.pictureConversion(obj.picture),
 							score: obj.score,
-							result: 2, //  1 合格 2不合格
-							rectifyPicture: obj.rectifyPicture ? obj.rectifyPicture : []
+							result: this.isResult ? 1 : 2, //  1 合格 2不合格
+							rectifyPicture: this.isResult ? this.$options.filters.pictureConversion(obj.rectifyPicture) : []
 						})
 					} else if (obj.itemType === 3 || obj.itemType === 4) {
 						// 文本  时间
@@ -348,8 +352,8 @@ export default{
 							resultData: obj.resultData, // 安检数据
 							picture: this.$options.filters.pictureConversion(obj.picture),
 							score: obj.score,
-							result: 2, //  1 合格 2不合格
-							rectifyPicture: obj.rectifyPicture ? obj.rectifyPicture : []
+							result: this.isResult ? 1 : 2, //  1 合格 2不合格
+							rectifyPicture: this.isResult ? this.$options.filters.pictureConversion(obj.rectifyPicture) : []
 						})
 					} else if (obj.itemType === 5) {
 						// 图片
@@ -364,15 +368,14 @@ export default{
 							templateItemId: obj.templateItemId,
 							resultData: this.$options.filters.pictureConversion(obj.resultData), // 安检数据
 							limit: 5,
-							picture: obj.picture,
+							picture: this.$options.filters.pictureConversion(obj.picture),
 							score: obj.score,
-							result: 2, //  1 合格 2不合格
-							rectifyPicture: obj.rectifyPicture ? obj.rectifyPicture : []
+							result: this.isResult ? 1 : 2, //  1 合格 2不合格
+							rectifyPicture: this.isResult ? this.$options.filters.pictureConversion(obj.rectifyPicture) : []
 						})
 					}
 				})
 			}
-			console.log(safeTemplateItemVoArr)
 			this.safeTemplateItemVoArr = safeTemplateItemVoArr
 		},
 		// 修改安检项目结果
@@ -385,18 +388,17 @@ export default{
 			if(result === 1) {
 				// 合格 回填默认值
 				if(itemType === 1 || itemType === 2) {
-					cehckData.forEach(v=>{
+					cehckData.forEach(v => {
 						v.disabled = false
 					})
 					this.safeTemplateItemVoArr[index].cehckData = cehckData
 					this.safeTemplateItemVoArr[index].resultData = this.safeTemplateItemVoArr[index].defData
 				}
-				
 			} else {
 				// 不合格
 				if(itemType === 1) {
-					cehckData.forEach(v=>{
-						defData.forEach(m=>{
+					cehckData.forEach(v => {
+						defData.forEach(m => {
 							if(v.name === m) {
 								v.disabled = true
 							}
@@ -405,7 +407,7 @@ export default{
 					this.safeTemplateItemVoArr[index].resultData = []
 					this.safeTemplateItemVoArr[index].cehckData = cehckData
 				} else if(itemType === 2) {
-					cehckData.forEach(v=>{
+					cehckData.forEach(v => {
 						if(v.name === defData) {
 							v.disabled = true
 						}
@@ -430,7 +432,7 @@ export default{
 			// 上传
 			const { returnValue: res } = await uploadFileImg(event.file.url)
 			if (res) {
-				const findIndex = this.safeTemplateItemVoArr.findIndex(item=>item.id === event.name)
+				const findIndex = this.safeTemplateItemVoArr.findIndex(item => item.id === event.name)
 				if(findIndex !== -1){
 					this.safeTemplateItemVoArr[findIndex].resultData.push({
 						name: event.name,
@@ -446,7 +448,7 @@ export default{
 		// 删除图片
 		deletePic(event,disabled) {
 			if(!disabled){
-				const findIndex = this.safeTemplateItemVoArr.findIndex(item=>item.id === event.name)
+				const findIndex = this.safeTemplateItemVoArr.findIndex(item => item.id === event.name)
 				this.safeTemplateItemVoArr[findIndex].resultData.splice(event.index, 1)
 			}
 		},
@@ -455,7 +457,7 @@ export default{
 			// 上传
 			const { returnValue: res } = await uploadFileImg(event.file.url)
 			if (res) {
-				const findIndex = this.safeTemplateItemVoArr.findIndex(item=>item.id === event.name)
+				const findIndex = this.safeTemplateItemVoArr.findIndex(item => item.id === event.name)
 				if(findIndex !== -1){
 					this.safeTemplateItemVoArr[findIndex].picture.push({
 						name: event.name,
@@ -471,7 +473,7 @@ export default{
 		// 删除安检照片
 		deletePicCheck(event,disabled) {
 			if(!disabled){
-				const findIndex = this.safeTemplateItemVoArr.findIndex(item=>item.id === event.name)
+				const findIndex = this.safeTemplateItemVoArr.findIndex(item => item.id === event.name)
 				this.safeTemplateItemVoArr[findIndex].picture.splice(event.index, 1)
 			}
 		},
@@ -480,7 +482,7 @@ export default{
 			// 上传
 			const { returnValue: res } = await uploadFileImg(event.file.url)
 			if (res) {
-				const findIndex = this.safeTemplateItemVoArr.findIndex(item=>item.id === event.name)
+				const findIndex = this.safeTemplateItemVoArr.findIndex(item => item.id === event.name)
 				if(findIndex !== -1){
 					this.safeTemplateItemVoArr[findIndex].rectifyPicture.push({
 						name: event.name,
@@ -496,7 +498,7 @@ export default{
 		// 删除整改照片
 		deletePicRectify(event,disabled) {
 			if(!disabled){
-				const findIndex = this.safeTemplateItemVoArr.findIndex(item=>item.id === event.name)
+				const findIndex = this.safeTemplateItemVoArr.findIndex(item => item.id === event.name)
 				this.safeTemplateItemVoArr[findIndex].rectifyPicture.splice(event.index, 1)
 			}
 		},
