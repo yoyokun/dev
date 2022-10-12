@@ -1,233 +1,74 @@
 <template>
 	<view class="sk-info">
-		<view class="list">
+		<view class="list" v-if="backBottle">
 			<view class="list-head">
-				<view class="head-tle">回单</view>
-				<view class="act-btn">
+				<view class="head-tle">{{$t('salesMg.confSend.backTle')}}</view>
+				<view class="act-btn" @click="addList">
 					<u-icon class="add-icon" name="plus-circle"></u-icon>
-					<view class="add-txt" @click="addList">添加</view>
+					<view class="add-txt">{{$t('salesMg.common.btn.add')}}</view>
 				</view>
 			</view>
 			<view class="list-box" v-if="listGoods&&listGoods.length">
 				<view class="back-item" v-for="(item,index) in listGoods" :key="index">
 					<view class="goods-cell">
-						<view class="label">出库商品</view>
+						<view class="label">{{$t('salesMg.confSend.outGoods')}}</view>
 						<view class="content">
 							<view class="goods-item" v-if="item.outGoodsDetailNames">
 								<text>{{item.outGoodsDetailNames}}</text>
-								<u-icon class="cross" name="close-circle-fill"></u-icon>
+								<u-icon class="cross" name="close-circle-fill" @click="removeGoods(index,'out')">
+								</u-icon>
 							</view>
 						</view>
-						<u-icon class="plus" name="plus-circle" @click="chooseGoods"></u-icon>
+						<u-icon class="plus" name="plus-circle" @click="chooseGoods(index,'out')"></u-icon>
 					</view>
 					<view class="goods-cell">
-						<view class="label">回瓶商品</view>
+						<view class="label">{{$t('salesMg.confSend.inGoods')}}</view>
 						<view class="content">
 							<view class="goods-item" v-if="item.backGoodsDetailNames">
 								<text>{{item.backGoodsDetailNames}}</text>
-								<u-icon class="cross" name="close-circle-fill"></u-icon>
+								<u-icon class="cross" name="close-circle-fill" @click="removeGoods(index,'in')">
+								</u-icon>
 							</view>
 						</view>
-						<u-icon class="plus" name="plus-circle" @click="chooseGoods"></u-icon>
+						<u-icon class="plus" name="plus-circle" @click="chooseGoods(index,'in')"></u-icon>
 					</view>
 					<view class="goods-act">
 						<view class="cell">
-							<view class="name">出库数</view>
+							<view class="name">{{$t('salesMg.confSend.outNum')}}</view>
 							<view class="txt">{{item.outNum}}</view>
 						</view>
 						<view class="cell">
-							<view class="name">回瓶数</view>
+							<view class="name">{{$t('salesMg.confSend.backNum')}}</view>
 							<input class="txt" step="1" type="number" v-model="item.backNum" />
 						</view>
 						<view class="cell">
-							<view class="name">借瓶数</view>
+							<view class="name">{{$t('salesMg.confSend.lendNum')}}</view>
 							<view class="txt">{{item.lendNum}}</view>
 						</view>
 						<view class="cell">
-							<view class="name">还瓶数</view>
+							<view class="name">{{$t('salesMg.confSend.returnNum')}}</view>
 							<view class="txt">{{item.returnNum}}</view>
 						</view>
 					</view>
 					<view class="goods-del">
-						<u-icon class="del" name="trash"></u-icon>
-					</view>
-				</view>
-			</view>
-		</view>
-		<view class="list">
-			<view class="list-head">
-				<view class="head-tle">送达钢瓶</view>
-			</view>
-			<view class="code-box">
-				<view class="tle">钢瓶码：</view>
-				<u-input type="text" class="code-input" v-model="codeKey" shape="circle"
-					:placeholder="$t('cylinderMg.addCirculation.form.codeKey.placeholder')">
-					<view slot="suffix">
-						<u-icon @click="toScan" size="40rpx" color="#3c9cff" name="scan"></u-icon>
-					</view>
-				</u-input>
-				<u-button class="code-btn" type="primary" shape="circle" size="small" @click="searchCode">
-					{{$t('cylinderMg.addCirculation.btn.conf')}}
-				</u-button>
-			</view>
-			<view class="code-info">
-				<view class="info-list" v-for="i in 2">
-					<view class="head">
-						<view class="item">
-							<view>瓶身编号：</view>
-							<view>22222</view>
-						</view>
-						<u-icon class="cross" name="minus-circle-fill"></u-icon>
-					</view>
-					<view class="content">
-						<view class="item">
-							<view>钢瓶二维码：</view>
-							<view>22222</view>
-						</view>
-						<view class="item">
-							<view>钢瓶型号：</view>
-							<view>22222</view>
-						</view>
-						<view class="item">
-							<view>充装状态：</view>
-							<view>22222</view>
-						</view>
-						<view class="item">
-							<view>持有人：</view>
-							<view>22222</view>
-						</view>
-						<view class="item">
-							<view>流转环节：</view>
-							<view>22222</view>
-						</view>
-						<view class="item">
-							<view>流转状态：</view>
-							<view>22222</view>
-						</view>
-					</view>
-				</view>
-			</view>
-		</view>
-		<view class="list">
-			<view class="list-head">
-				<view class="head-tle">回收钢瓶</view>
-			</view>
-			<view class="code-box">
-				<view class="tle">钢瓶码：</view>
-				<u-input type="text" class="code-input" v-model="codeKey" shape="circle"
-					:placeholder="$t('cylinderMg.addCirculation.form.codeKey.placeholder')">
-					<view slot="suffix">
-						<u-icon @click="toScan" size="40rpx" color="#3c9cff" name="scan"></u-icon>
-					</view>
-				</u-input>
-				<u-button class="code-btn" type="primary" shape="circle" size="small" @click="searchCode">
-					{{$t('cylinderMg.addCirculation.btn.conf')}}
-				</u-button>
-			</view>
-			<view class="code-info">
-				<view class="info-list" v-for="i in 2">
-					<view class="head">
-						<view class="item">
-							<view>瓶身编号：</view>
-							<view>22222</view>
-						</view>
-						<u-icon class="cross" name="minus-circle-fill"></u-icon>
-					</view>
-					<view class="content">
-						<view class="item">
-							<view>钢瓶二维码：</view>
-							<view>22222</view>
-						</view>
-						<view class="item">
-							<view>钢瓶型号：</view>
-							<view>22222</view>
-						</view>
-						<view class="item">
-							<view>充装状态：</view>
-							<view>22222</view>
-						</view>
-						<view class="item">
-							<view>持有人：</view>
-							<view>22222</view>
-						</view>
-						<view class="item">
-							<view>流转环节：</view>
-							<view>22222</view>
-						</view>
-						<view class="item">
-							<view>流转状态：</view>
-							<view>22222</view>
-						</view>
+						<u-icon class="del" name="trash" @click="removeList(index)"></u-icon>
 					</view>
 				</view>
 			</view>
 		</view>
 
-		<view class="list">
-			<view class="list-head">
-				<view class="head-tle">钢瓶溯源</view>
-				<view class="act-btn">
-					<u-icon class="add-icon" name="plus-circle"></u-icon>
-					<view class="add-txt">添加</view>
-				</view>
-			</view>
-			<view class="source-box">
-				<view class="source-list" v-for="i in 2">
-					<view class="source-head">
-						<view>
-							<text>操作</text>
-						</view>
-						<view>
-							<text>确认送达</text>
-						</view>
-						<view>
-							<text>钢瓶型号</text>
-						</view>
-					</view>
-					<view class="source-content">
-						<view class="source-del">
-							<u-icon class="cross" name="minus-circle-fill"></u-icon>
-						</view>
-						<view class="source-cell">
-							<view class="item">
-								<view>
-									<u-input type="text" class="code-input" v-model="codeKey" placeholder="钢瓶二维码"
-										inputAlign="center">
-										<view slot="suffix">
-											<u-icon @click="toScan" size="40rpx" color="#3c9cff" name="scan"></u-icon>
-										</view>
-									</u-input>
-								</view>
-								<view>
-									<text>jalwjegwaegk</text>
-								</view>
-							</view>
-							<view class="item gray">
-								<view>
-									<text>客户回瓶</text>
-								</view>
-								<view>
-									<text>钢瓶型号</text>
-								</view>
-							</view>
-							<view class="item">
-								<view>
-									<u-input type="text" class="code-input" v-model="codeKey" placeholder="钢瓶二维码"
-										inputAlign="center">
-										<view slot="suffix">
-											<u-icon @click="toScan" size="40rpx" color="#3c9cff" name="scan"></u-icon>
-										</view>
-									</u-input>
-								</view>
-								<view>
-									<text>jalwjegwaegk</text>
-								</view>
-							</view>
-						</view>
-					</view>
-				</view>
-			</view>
+		<block v-if="cylinderScanCode && cylinderScanSetting && cylinderPattern == '1'">
+			<service-cylinder ref="serviceCylinder" :title="$t('salesMg.confSend.sendTle')" />
+			<service-cylinder ref="recoveryCylinder" :title="$t('salesMg.confSend.collectTle')" />
+		</block>
+		<substitution-cylinder v-if="cylinderScanCode && cylinderScanSetting && cylinderPattern == '2'"
+			ref="substitutionCylinder"></substitution-cylinder>
+
+		<view class="btn">
+			<u-button :text="$t('salesMg.common.btn.conf')" type="primary" hairline shape="circle" @click="saveData">
+			</u-button>
 		</view>
+
 		<!-- 请求 toast 提示 -->
 		<u-toast ref='uToast'></u-toast>
 	</view>
@@ -242,25 +83,34 @@
 		assetCodeFillingState
 	} from '@/api/lpgManageAppApi'
 	import {
-		salesOrderFindBackBottleData
+		salesOrderFindBackBottleData,
+		salesOrderFindOrderStockData,
+		salesOrderToArrived,
 	} from '@/api/lpgSalesManageApi'
 	import {
 		createUniqueString,
 	} from '@/utils'
+	import ServiceCylinder from './common/serviceCylinder'
+	import SubstitutionCylinder from './common/substitutionCylinder'
 	export default {
 		mixins: [settingMixin],
+		components: {
+			ServiceCylinder,
+			SubstitutionCylinder
+		},
 		props: {
 
 		},
 		data() {
 			return {
-				codeKey: '',
 				editId: '',
 				backBottle: false, // 确认送达是否有回瓶单
 				cylinderScanCode: false, // 确认送达是否需要扫码
 				cylinderScanSetting: false, // 钢瓶溯源是否开启
 				cylinderPattern: '', // 模式 1 扫码模式 2 一对一置换模式
 				listGoods: [],
+				backIndex: null,
+				type: null,
 			}
 		},
 		// 过滤器
@@ -290,16 +140,50 @@
 				this.listGoods = res
 			}
 			uni.setNavigationBarTitle({
-				title: '确认送达'
+				title: this.$t('salesMg.confSend.titleText')
 			});
 		},
 		onUnload() {
 
 		},
 		onShow() {
-
+			uni.$once('chooseGoods', async (data) => {
+				if (this.type == 'out') {
+					// 出库商品
+					this.listGoods[this.backIndex].outGoodsDetailNames = data.goodsName + '-' + data
+						.propertyNames
+					this.listGoods[this.backIndex].outGoodsDetailId = data.goodsDetailId
+					const {
+						returnValue: res
+					} = await salesOrderFindOrderStockData({
+						id: this.editId,
+						goodsDetailId: data.goodsDetailId
+					})
+					if (res) {
+						this.listGoods[this.backIndex].outNum = res.outNum
+					}
+				} else if (this.type == 'in') {
+					this.listGoods[this.backIndex].backGoodsDetailNames = data.goodsName + '-' + data
+						.propertyNames
+					this.listGoods[this.backIndex].backGoodsDetailId = data.goodsDetailId
+				}
+			})
 		},
 		methods: {
+			// 移除回单
+			removeList(index) {
+				this.listGoods.splice(index, 1)
+			},
+			// 移除商品
+			removeGoods(index, type) {
+				if (type == 'out') {
+					this.listGoods[index].outGoodsDetailId = ''
+					this.listGoods[index].outGoodsDetailNames = ''
+				} else if (type == 'in') {
+					this.listGoods[index].backGoodsDetailId = ''
+					this.listGoods[index].backGoodsDetailNames = ''
+				}
+			},
 			// 添加回单
 			addList() {
 				this.listGoods.push({
@@ -315,62 +199,79 @@
 					returnNum: 0
 				})
 			},
-			// 查询二维码
-			async searchCode(code = null) {
-				this.codeKey = code || this.codeKey
-				if (!this.codeKey) {
-					this.$refs.uToast.show({
-						type: 'error',
-						message: this.$t('cylinderMg.addCirculation.tips.errCode')
-					})
-					return
-				}
-				const {
-					returnValue: res
-				} = await cylinderArchivesFindByCodeKey({
-					codeKey: this.codeKey
-				}, this.$t('cylinderMg.addCirculation.loadTxt.finding'))
-				if (res) {
-					if (res.securityState == 2) {
-						this.saveData(res)
-					} else {
-						this.$refs.uToast.show({
-							type: 'error',
-							message: this.$t('security.securityReset.tips.noSecurity')
+			// 保存数据
+			async saveData() {
+				const data = {}
+				const moduleCommonSetData = []
+				this.listGoods.forEach(v => {
+					if (v.outGoodsDetailId || v.backGoodsDetailId) {
+						moduleCommonSetData.push({
+							id: v.id,
+							outGoodsDetailId: v.outGoodsDetailId,
+							backGoodsDetailId: v.backGoodsDetailId,
+							backNum: v.backNum,
+							outNum: v.outNum,
+							lendNum: v.lendNum,
+							returnNum: v.returnNum
 						})
 					}
-				} else {
-					this.$refs.uToast.show({
-						type: 'error',
-						message: this.$t('cylinderMg.addCirculation.tips.errCode')
+				})
+				if (moduleCommonSetData.length > 0) {
+					data.backBottleData = JSON.stringify(moduleCommonSetData)
+				}
+				if (this.cylinderScanCode && this.cylinderScanSetting && this.cylinderPattern == '1') {
+					// 有钢瓶溯源 扫码模式
+					// 送达钢瓶
+					data.outCodeData = []
+					const serviceCylinderData = this.$refs.serviceCylinder.getCylinderData()
+					serviceCylinderData.forEach(v => {
+						data.outCodeData.push({
+							cylinderId: v.id // 钢瓶ID
+						})
 					})
+					data.outCodeData = JSON.stringify(data.outCodeData)
+					// 回收钢瓶
+					data.backCodeData = []
+					const recoveryCylinderData = this.$refs.recoveryCylinder.getCylinderData()
+					recoveryCylinderData.forEach(v => {
+						data.backCodeData.push({
+							cylinderId: v.id // 钢瓶ID
+						})
+					})
+					data.backCodeData = JSON.stringify(data.backCodeData)
+				} else if (this.cylinderScanCode && this.cylinderScanSetting && this.cylinderPattern == '2') {
+					// 有钢瓶溯源 置换模式
+					data.cylinderOwnerData = []
+					const substitutionCylinderData = this.$refs.substitutionCylinder.getCylinderData()
+					substitutionCylinderData.forEach(v => {
+						if (v.give.id && v.collect.id) {
+							data.cylinderOwnerData.push({
+								cylinderId: v.give.id, // 钢瓶ID
+								backCylinderId: v.collect.id // 钢瓶ID
+							})
+						}
+					})
+					data.cylinderOwnerData = JSON.stringify(data.cylinderOwnerData)
 				}
-			},
-			// 扫码
-			async toScan() {
-				const code = await this.decodeQr()
-				if (code) {
-					this.searchCode(code)
-				}
-			},
-			// 保存数据
-			async saveData(data) {
+				data.ids = this.editId || ''
 				const {
-					isSuccess: res,
+					returnValue: res,
 					message
-				} = await assetCodeFillingState({
-					codeKeys: this.codeKey
-				}, this.$t('cylinderMg.addCirculation.loadTxt.saving'))
+				} = await salesOrderToArrived(data)
 				if (res) {
-					this.tableData.push(data)
 					this.$refs.uToast.show({
 						type: 'success',
 						message: message,
 					})
+					setTimeout(()=>{
+						uni.navigateBack()
+					},3000)
 				}
 			},
 			// 选择商品
-			chooseGoods() {
+			chooseGoods(index, type) {
+				this.backIndex = index
+				this.type = type
 				this.$navigateTo('/infoManage/chooseGoods/chooseGoods', {
 					businessTag: 'cylinder'
 				})
@@ -405,172 +306,14 @@
 			}
 		}
 
-		.source-box {
-			font-size: 30rpx;
+		.btn {
+			width: 632rpx;
+			margin: 60rpx auto;
+			margin-top: 30rpx;
+			@include flexMixin();
 
-			.source-head {
-				display: flex;
-				align-items: center;
-				background: rgb(229, 229, 229);
-
-				>view {
-					border-right: 1px solid #fff;
-					min-height: 74rpx;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					flex: 1;
-					width: 1px;
-					color: rgb(56, 56, 56);
-					padding: 10rpx;
-					box-sizing: border-box;
-
-					&:last-child {
-						border-right: none;
-					}
-				}
-
-				view:first-child {
-					flex: none;
-					width: 140rpx;
-				}
-			}
-
-			.source-content {
-				display: flex;
-
-				.source-del {
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					width: 140rpx;
-					border-right: 1px solid #eee;
-
-					.cross {
-						::v-deep .u-icon__icon {
-							color: red !important;
-							font-size: 40rpx !important;
-						}
-					}
-				}
-
-				.source-cell {
-					width: 1px;
-					flex: 1;
-
-					.item {
-						min-height: 74rpx;
-						display: flex;
-						border-bottom: 1px solid #eee;
-
-						&:last-child {
-							border-bottom: none;
-						}
-
-						&.gray {
-							background: rgb(247, 247, 247);
-						}
-
-						>view {
-							width: 1px;
-							flex: 1;
-							border-right: 1px solid #eee;
-							display: flex;
-							align-items: center;
-							justify-content: center;
-							color: rgb(56, 56, 56);
-							word-break: break-all;
-							padding: 10rpx;
-							box-sizing: border-box;
-
-							&:last-child {
-								border-right: none;
-							}
-
-							.code-input {
-								height: 34rpx;
-							}
-						}
-					}
-				}
-			}
-		}
-
-		.code-box {
-			width: 100%;
-			display: flex;
-			align-items: center;
-			padding: 20rpx 30rpx;
-			box-sizing: border-box;
-
-			.tle {
-				font-size: 28rpx;
-			}
-
-			.code-input {
-				flex: 1;
-				width: 1rpx;
-				margin-right: 30rpx;
-			}
-
-			.code-btn {
-				width: 100rpx !important;
-			}
-
-		}
-
-		.code-info {
-			padding: 0 30rpx;
-
-			.info-list {
-				border-bottom: 1px solid #eee;
-				padding: 28rpx 0;
-
-				.item {
-					display: flex;
-					color: #666;
-					font-size: 30rpx;
-					align-items: center;
-					line-height: 38rpx;
-
-					>view:last-child {
-						color: #000;
-						word-break: break-all;
-						width: 1px;
-						flex: 1;
-					}
-				}
-
-				.head {
-					display: flex;
-					align-items: center;
-
-					.item {
-						flex: 1;
-						width: 1px;
-					}
-
-					.cross {
-						::v-deep .u-icon__icon {
-							color: red !important;
-							font-size: 40rpx !important;
-						}
-					}
-				}
-
-				.content {
-					display: flex;
-					flex-wrap: wrap;
-
-					.item {
-						width: calc(50% - 3px);
-						margin-top: 18rpx;
-
-						&:nth-child(odd) {
-							margin-right: 6px;
-						}
-					}
-				}
+			.u-button {
+				margin: 0rpx 10rpx;
 			}
 		}
 	}

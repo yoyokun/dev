@@ -112,10 +112,10 @@
 							{{ salesOrderTransport | addressSplicing }}
 						</description>
 						<description :label="$t('salesMg.salesOrderInfo.deliverOrgName')">
-							{{ salesOrderTransport.pickMode === 4 ? salesOrderTransport.deliverOrgName : '' }}
+							{{ salesOrderTransport.pickMode == 4 ? salesOrderTransport.deliverOrgName : '' }}
 						</description>
 						<description :label="$t('salesMg.salesOrderInfo.deliverMan')">
-							{{ (salesOrderTransport.pickMode === 3 || salesOrderTransport.pickMode === 4) ? salesOrderTransport.deliverMan : '' }}
+							{{ (salesOrderTransport.pickMode == 3 || salesOrderTransport.pickMode == 4) ? salesOrderTransport.deliverMan : '' }}
 						</description>
 						<description :label="$t('salesMg.salesOrderInfo.payItemsName')">{{ info.payItemsName }}
 						</description>
@@ -208,42 +208,46 @@
 			</view>
 		</view>
 		<view class="btn">
-			<u-button :text="$t('common.btn.edit')" type="primary" hairline shape="circle"
+			<u-button v-permission="{ permission:'app_salesOrder_edit'}" v-if="!info.orderTime" :text="$t('common.btn.edit')" type="primary" hairline shape="circle"
 				@click="goto('/salesManage/addSalesOrder/addSalesOrder',{editId:info.id,orderSourceParam:info.orderSource})">
 			</u-button>
-			<u-button :text="$t('salesMg.salesOrderInfo.btn.receive')" type="primary" hairline plain shape="circle"
+			<u-button v-permission="{ permission:'app_salesOrder_receive'}" v-if="(info.deliveryState == 1 && info.payType == 3) || (info.deliveryState == 1 && info.payType == 1 && (info.orderState == 1 || info.orderState == 2))"
+				:text="$t('salesMg.salesOrderInfo.btn.receive')" type="primary" hairline plain shape="circle"
 				@click="handleReceiving(info)">
 			</u-button>
-			<u-button :text="$t('salesMg.salesOrderInfo.btn.sub')" type="success" plain hairline shape="circle"
+			<u-button v-permission="{ permission:'app_salesOrder_submit'}" v-if="sendConfig.checkTag == 1 && info.orderSource == 'store' && (info.checkState == 1 || info.checkState == 4) && info.orderState == 3"
+				:text="$t('salesMg.salesOrderInfo.btn.sub')" type="success" plain hairline shape="circle"
 				@click="handleSubmit(info)">
 			</u-button>
-			<u-button :text="$t('salesMg.salesOrderInfo.btn.void')" type="error" plain hairline shape="circle"
-				@click="handleVoid(info)"></u-button>
-			<u-button :text="$t('salesMg.salesOrderInfo.btn.del')" type="error" plain hairline shape="circle"
+			<u-button v-permission="{ permission:'app_salesOrder_invalid'}" v-if="info.orderTime && info.orderState!=5" :text="$t('salesMg.salesOrderInfo.btn.void')"
+				type="error" plain hairline shape="circle" @click="handleVoid(info)"></u-button>
+			<u-button v-permission="{ permission:'app_salesOrder_delete'}" v-if="(info.orderSource == 'internet' && info.orderState == 4) || (info.orderState == 4 || info.orderState == 5) || !info.orderTime"
+				:text="$t('salesMg.salesOrderInfo.btn.del')" type="error" plain hairline shape="circle"
 				@click="handleDelete(info)">
 			</u-button>
-			<u-button :text="$t('salesMg.salesOrderInfo.btn.up')" type="success" plain hairline shape="circle"
-				@click="handleHangUp(info,true)">
+			<u-button v-permission="{ permission:'app_salesOrder_hangUp'}" v-if="!info.hangUpType && info.orderTime" :text="$t('salesMg.salesOrderInfo.btn.up')"
+				type="success" plain hairline shape="circle" @click="handleHangUp(info,true)">
 			</u-button>
-			<u-button :text="$t('salesMg.salesOrderInfo.btn.down')" type="warning" plain hairline shape="circle"
-				@click="handleHangUp(info,false)">
+			<u-button v-permission="{ permission:'app_salesOrder_hangUp'}" v-if="info.hangUpType && info.orderTime" :text="$t('salesMg.salesOrderInfo.btn.down')"
+				type="warning" plain hairline shape="circle" @click="handleHangUp(info,false)">
 			</u-button>
-			<u-button :text="$t('salesMg.salesOrderInfo.btn.count')" type="primary" plain hairline shape="circle"
-				@click=""></u-button>
-			<u-button :text="$t('salesMg.salesOrderInfo.btn.delivery')" type="success" plain hairline shape="circle"
+			<u-button v-permission="{ permission:'app_salesOrder_settle'}" v-if="info.orderState != 4 && info.orderState != 5" :text="$t('salesMg.salesOrderInfo.btn.count')" type="primary" plain hairline shape="circle" @click=""></u-button>
+			<u-button v-permission="{ permission:'app_salesOrder_delivery'}" v-if="info.orderTime && (info.pickMode == 3 || info.pickMode == 4) && ((info.deliveryState == 2 && info.orderState != 5) ||
+            (info.deliveryState == 3 && (info.shipmentState == 1 || info.shipmentState == 4)))" :text="$t('salesMg.salesOrderInfo.btn.delivery')" type="success" plain hairline shape="circle"
 				@click="handleAssign(info)"></u-button>
-			<u-button :text="$t('salesMg.salesOrderInfo.btn.conf')" type="success" plain hairline shape="circle"
+			<u-button v-permission="{ permission:'app_salesOrder_service'}" v-if="(info.deliveryState == 2 || (info.deliveryState == 3 && info.shipmentState != 3))
+            && info.orderTime && sendConfig.execSwitch == 1" :text="$t('salesMg.salesOrderInfo.btn.conf')" type="success" plain hairline shape="circle"
 				@click="handleDelivery"></u-button>
 		</view>
 		<!-- 配送 -->
-		<u-modal :show="psShow" :title="'配送'" :closeOnClickOverlay="true" :showCancelButton="true" @cancel="closePs"
-			@close="closePs" @confirm="confPs">
+		<u-modal :show="psShow" :title="$t('salesMg.confSend.popup.tle')" :closeOnClickOverlay="true"
+			:showCancelButton="true" @cancel="closePs" @close="closePs" @confirm="confPs">
 			<view class="ps-main">
 				<edit-form v-if="info.pickMode == 4" ref="dialogFormManager" form-width="100%"
 					:form-data-source="formDataSourceManager" :form-data-value="formDataValueManager"
 					@change="changeForm">
 					<template v-slot:other>
-						<u-form-item label="地址">
+						<u-form-item :label="$t('salesMg.confSend.popup.address')">
 							<view style="line-height: 40rpx;">{{ salesOrderTransport | addressSplicing }}</view>
 						</u-form-item>
 					</template>
@@ -251,7 +255,7 @@
 				<edit-form v-if="info.pickMode == 3" ref="dialogFormVehicle" form-width="100%"
 					:form-data-source="formDataSourceVehicle" :form-data-value="formDataValueVehicle">
 					<template v-slot:other>
-						<u-form-item label="地址">
+						<u-form-item :label="$t('salesMg.confSend.popup.address')">
 							<view style="line-height: 40rpx;">{{ salesOrderTransport | addressSplicing }}</view>
 						</u-form-item>
 					</template>
@@ -480,7 +484,7 @@
 				psShow: false,
 				moduleType: 'sales',
 				subModuleType: 'salesOrder',
-				sendConfig: null,
+				sendConfig: {},
 				backBottle: false, // 确认送达是否有回瓶单
 				cylinderScanCode: false, // 确认送达是否需要扫码
 				cylinderScanSetting: false, // 钢瓶溯源是否开启
@@ -506,7 +510,7 @@
 			this.sendConfig = res
 			// 钢瓶溯源设置
 			await this.getConfigGetCylinder((res) => {
-				if (res[0] === '1') {
+				if (res[0] == '1') {
 					// 开启
 					this.cylinderScanSetting = true
 				} else {
@@ -521,7 +525,11 @@
 			await this.getManagerDeliveryman()
 			this.formDataSourceManager[1].options = this.managerDeliveryman
 		},
-		onShow() {},
+		onShow() {
+			if(this.editId){
+				this.getInfo(this.editId)
+			}
+		},
 		methods: {
 			// 确认送达
 			async handleDelivery() {
@@ -530,7 +538,6 @@
 					this.cylinderScanCode = this.sendConfig.execCondition.includes('cylinderScanCode')
 					// 回瓶单
 					this.backBottle = this.sendConfig.execCondition.includes('backBottle')
-					console.log(this.backBottle)
 					if (this.backBottle || (this.cylinderScanCode && this.cylinderScanSetting)) {
 						this.$navigateTo('../confSend/confSend', {
 							editId: this.editId,
@@ -682,14 +689,13 @@
 								.bookingTime) : ''
 						}
 					}, 100)
-					console.log(this.formDataValueManager)
 				}
 			},
 			// 配送员form表单改变
 			async changeForm(obj) {
 				const queryParams = obj.queryParams
 				const name = obj.name // 改变的字段
-				if (name === 'deliverOrgId' && queryParams.deliverOrgId) {
+				if (name == 'deliverOrgId' && queryParams.deliverOrgId) {
 					// 配送点改变，重新查找配送员
 					await this.getManagerDeliveryman({
 						orgId: queryParams.deliverOrgId
@@ -861,7 +867,9 @@
 					res.payTypeName = payTypeName.join(',')
 					// 收费项
 					res.salesOrderPayitemsList.forEach((v) => {
-						payItemsName.push(`${v.payItemsName}:${v.payItemsMoney},共${v.payItemsTotalMoney} `)
+						payItemsName.push(
+							`${v.payItemsName}:${v.payItemsMoney},${this.$t('salesMg.salesOrderInfo.totalUnit')}${v.payItemsTotalMoney} `
+						)
 					})
 					res.payItemsName = payItemsName.join(',')
 					this.info = res
@@ -872,11 +880,11 @@
 								.parse(o.goodsPath)[0].url : '') : ''
 							o.assistUnitsList.forEach((n, j) => {
 								v.printSetVo.tableColumn.forEach(m => {
-									if (m.propValue === 'assistName-' + n
+									if (m.propValue == 'assistName-' + n
 										.assistUnitsId) {
 										o[m.propValue] = n.netContent
 									}
-									if (m.propValue === 'netContent-' + n
+									if (m.propValue == 'netContent-' + n
 										.assistUnitsId) {
 										o[m.propValue] = n.netContent
 									}

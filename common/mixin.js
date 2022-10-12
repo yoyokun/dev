@@ -44,7 +44,7 @@ export default {
 		},
 		// 扫码登录
 		async decodeQrLogin() {
-			return new Promise(async(resolved, rejected) => {
+			return new Promise(async (resolved, rejected) => {
 				// #ifdef APP-PLUS
 				var result = await permision.requestAndroidPermission("android.permission.CAMERA")
 				if (result === 1) {
@@ -58,7 +58,7 @@ export default {
 							rejected(err)
 						}
 					});
-				}else{
+				} else {
 					rejected('err')
 				}
 				// #endif
@@ -77,7 +77,7 @@ export default {
 									type: 'error',
 									message: this.$t(
 										'cylinderMg.addCirculation.tips.errImg'
-										)
+									)
 								})
 							} else {
 								// 解析出来是对象
@@ -93,19 +93,28 @@ export default {
 			})
 		},
 		// 扫码解析二维码
-		async decodeQr() {
-			return new Promise(async(resolved, rejected) => {
+		async decodeQr(type = null) {
+			return new Promise(async (resolved, rejected) => {
 				// #ifdef APP-PLUS
 				var result = await permision.requestAndroidPermission("android.permission.CAMERA")
 				if (result === 1) {
 					uni.scanCode({
 						success: async (res) => {
 							if (res.result) {
-								const {
-									returnValue: code
-								} = await sysConfigParsingCodeKey({
-									url: res.result,
-								}, this.$t('cylinderMg.addCirculation.loadTxt.finding'))
+								let code = null
+								if (type) {
+									code = res.result
+								} else {
+									const {
+										returnValue: res
+									} = await sysConfigParsingCodeKey({
+										url: res.result,
+									}, this.$t(
+										'cylinderMg.addCirculation.loadTxt.finding'
+									))
+									code = res
+								}
+
 								resolved(code)
 							}
 						},
@@ -113,7 +122,7 @@ export default {
 							rejected(err)
 						}
 					});
-				}else{
+				} else {
 					rejected('err')
 				}
 				// #endif
@@ -132,15 +141,24 @@ export default {
 									type: 'error',
 									message: this.$t(
 										'cylinderMg.addCirculation.tips.errImg'
-										)
+									)
 								})
 							} else {
-								// 解析出来是链接，通过链接查询二维码code
-								const {
-									returnValue: code
-								} = await sysConfigParsingCodeKey({
+								let code = null
+								if (type) {
+									code = imgRes
+								} else {
+									// 解析出来是链接，通过链接查询二维码code
+									const {
+										returnValue: res
+									} = await sysConfigParsingCodeKey({
 										url: imgRes,
-									}, this.$t('cylinderMg.addCirculation.loadTxt.finding'))
+									}, this.$t(
+										'cylinderMg.addCirculation.loadTxt.finding'
+									))
+									code = res
+								}
+
 								resolved(code)
 							}
 						}
