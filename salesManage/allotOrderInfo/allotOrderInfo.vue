@@ -39,9 +39,9 @@
 						</description>
 						<description :label="$t('salesMg.allotOrderInfo.billTime')">{{ info.billTime|dayjs}}
 						</description>
-						<!-- <description :label="$t('salesMg.allotOrderInfo.totalNum')">{{ info.totalNum }}</description>
+						<description :label="$t('salesMg.allotOrderInfo.totalNum')">{{ info.totalNum }}</description>
 						<description :label="$t('salesMg.allotOrderInfo.totalWeight')">{{ info.totalWeight }}
-						</description> -->
+						</description>
 						<description :label="$t('salesMg.allotOrderInfo.remarks')">{{ info.remarks }}</description>
 					</description-list>
 				</view>
