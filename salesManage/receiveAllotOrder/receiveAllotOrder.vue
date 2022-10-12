@@ -12,32 +12,67 @@
 					{{$t('salesMg.receiveAllotOrder.btn.conf')}}
 				</u-button>
 			</view>
-
 			<view class="info-box" v-if="info">
-				<description-list>
+				<description-list :title="$t('salesMg.receiveAllotOrder.baseTle')">
 					<description :label="$t('salesMg.receiveAllotOrder.billNo')">
 						{{info.billNo}}
 					</description>
-					<description :label="$t('salesMg.receiveAllotOrder.outOrgName')">
-						{{info.outOrgName}}
+					<description :label="$t('salesMg.receiveAllotOrder.state')">
+						{{ info.state | state }}
 					</description>
+					<description :label="$t('salesMg.receiveAllotOrder.outOrgName')">
+						<view class="text">
+							{{info.outOrgName}}
+						</view>
+					</description>
+					<description :label="$t('salesMg.receiveAllotOrder.orgAddress')">
+						<view class="text">
+							{{ info.outOrgAddress }}
+						</view>
+					</description>
+					<description :label="$t('salesMg.receiveAllotOrder.inOrgName')">
+						<view class="text">
+							{{info.inOrgName}}
+						</view>
+					</description>
+					<description :label="$t('salesMg.receiveAllotOrder.orgAddress')">
+						<view class="text">
+							{{ info.inOrgAddress }}
+						</view>
+					</description>
+					<description :label="$t('salesMg.receiveAllotOrder.billTime')">
+						{{ info.billTime | dayjs }}
+					</description>
+					<description :label="$t('salesMg.receiveAllotOrder.amount')">
+						{{ info.totalNum }}
+					</description>
+					<description :label="$t('salesMg.receiveAllotOrder.totalWeight')">
+						{{ info.totalWeight }}
+					</description>
+					<description :label="$t('salesMg.receiveAllotOrder.remarks')	">
+						<view class="text">
+							{{info.remarks}}
+						</view>
+					</description>
+				</description-list>
+			</view>
+
+			<view class="info-box" v-if="info">
+				<description-list :title="$t('salesMg.receiveAllotOrder.deliveryTle')">
 					<description :label="$t('salesMg.receiveAllotOrder.pickMode')">
 						{{ salesOrderTransport.pickMode | pickMode }}
 					</description>
 					<description :label="$t('salesMg.receiveAllotOrder.bookingTime')">
 						{{info.bookingTime|dayjs}}
 					</description>
-					<description :label="$t('salesMg.receiveAllotOrder.remarks')	">
-						<view class="remarks">
-							{{info.remarks}}
-						</view>
+					<description :label="$t('salesMg.receiveAllotOrder.licenseNo')">
+						{{ salesOrderTransport.licenseNo }}
 					</description>
-					<description :label="$t('salesMg.receiveAllotOrder.inReason.label')">
-						<view class="reason-picker" @click="openReason">
-							<text v-if="!inReason" class="gray">{{$t('salesMg.receiveAllotOrder.inReason.placeholder')}}</text>
-							<text v-else>{{inReason.name}}</text>
-							<u-icon name="arrow-right"></u-icon>
-						</view>
+					<description :label="$t('salesMg.receiveAllotOrder.deliverMan')">
+						{{ salesOrderTransport.deliverMan }}
+					</description>
+					<description :label="$t('salesMg.receiveAllotOrder.address')">
+						{{ salesOrderTransport | addressSplicing }}
 					</description>
 				</description-list>
 			</view>
@@ -85,7 +120,11 @@
 						<view class="info-cell">
 							<view class="cell">
 								<view class="cell-label">{{$t('salesMg.receiveAllotOrder.sku')}}：</view>
-								<view class="cell-content">3</view>
+								<view class="cell-content">{{item.standardName}}</view>
+							</view>
+							<view class="cell">
+								<view class="cell-label">{{$t('salesMg.receiveAllotOrder.unitsName')}}：</view>
+								<view class="cell-content">{{item.unitsName}}</view>
 							</view>
 							<block v-for="val in tableColumnUnit" :key="val.id">
 								<view class="cell"
@@ -134,6 +173,17 @@
 							</view>
 						</view>
 					</view>
+					<view class="reason">
+						<description :label="$t('salesMg.receiveAllotOrder.inReason.label')">
+							<view class="reason-picker" @click="openReason">
+								<text v-if="!inReason"
+									class="gray">{{$t('salesMg.receiveAllotOrder.inReason.placeholder')}}</text>
+								<text v-else>{{inReason.name}}</text>
+								<u-icon name="arrow-right"></u-icon>
+							</view>
+						</description>
+					</view>
+
 					<view class="total">
 						<view class="total-tle">
 							<text>{{$t('chooseGoods.total')}}：</text>
@@ -199,9 +249,11 @@
 			</view>
 
 			<view class="btn">
-				<u-button :text="$t('salesMg.receiveAllotOrder.btn.normal')" type="primary" hairline shape="circle" @click="saveData(3)">
+				<u-button :text="$t('salesMg.receiveAllotOrder.btn.normal')" type="primary" hairline shape="circle"
+					@click="saveData(3)">
 				</u-button>
-				<u-button :text="$t('salesMg.receiveAllotOrder.btn.error')" type="error" hairline shape="circle" plain @click="saveData(4)"></u-button>
+				<u-button :text="$t('salesMg.receiveAllotOrder.btn.error')" type="error" hairline shape="circle" plain
+					@click="saveData(4)"></u-button>
 			</view>
 		</block>
 
@@ -223,7 +275,7 @@
 	} from '@/common/settingMixin.js'
 	import {
 		salesTransferFindByBillNo,
-		salesTransferTransferReceipt ,
+		salesTransferTransferReceipt,
 	} from '@/api/lpgSalesManageApi'
 	import {
 		cylinderArchivesFindByCodeKey
@@ -239,7 +291,7 @@
 				codeKey: '',
 				tableColumn: [{
 					prop: 'remove',
-					label: '移除',
+					label: this.$t('salesMg.receiveAllotOrder.tableColumn.remove'),
 					width: '100rpx',
 					align: 'center',
 					slot: 'remove'
@@ -276,6 +328,10 @@
 		},
 		// 过滤器
 		filters: {
+			state(value) {
+				const stateObj = that.$t('salesMg.receiveAllotOrder.stateTxt')
+				return stateObj[value] || ''
+			},
 			pickMode(value) {
 				const stateObj = that.$t('salesMg.receiveAllotOrder.pickModeTxt')
 				return stateObj[value] || ''
@@ -313,7 +369,7 @@
 
 		},
 		methods: {
-			resetInfo(){
+			resetInfo() {
 				this.info = null
 				this.tableData = null
 				this.inReason = null
@@ -389,7 +445,7 @@
 			countNums(data, type = null) {
 				let nums = 0
 				let receiptNums = 0
-				this.salesTransferDetailList.forEach(i => {
+				data.forEach(i => {
 					nums += i.amount
 					receiptNums += i.receiptNum
 				})
@@ -678,8 +734,6 @@
 								}
 							}
 						}
-
-
 					}
 				}
 
@@ -805,34 +859,49 @@
 				}
 
 				.item {
-					min-height: 78rpx;
-					line-height: 78rpx;
+					min-height: 70rpx;
+					line-height: 70rpx;
 				}
 			}
 
-			.remarks {
+			.text {
 				word-break: break-all;
 				line-height: 40rpx;
-				padding: 19rpx 0;
+				padding: 14rpx 0;
 			}
-
+		}
+		.reason{
+			::v-deep .item {
+				min-height: 80rpx;
+				line-height: 80rpx;
+				.tle {
+					color: #666;
+					&::before{
+						display: inline-block;
+						content: '*';
+						color: red;
+					}
+				}
+				border-bottom: 1px solid #eee;
+			}
 			.reason-picker {
 				display: flex;
 				align-items: center;
-
+			
 				>text {
 					white-space: nowrap;
 					overflow: hidden;
 					text-overflow: ellipsis;
 					width: 1px;
 					flex: 1;
-
+			
 					&.gray {
 						color: #666;
 					}
 				}
 			}
 		}
+		
 
 		.code-box {
 			width: 100%;

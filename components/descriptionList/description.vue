@@ -34,6 +34,7 @@
 		line-height: 70rpx;
 		padding: 0 20rpx;
 		display: flex;
+		font-size: 28rpx;
 		&:last-child{
 			border-bottom: none;
 		}

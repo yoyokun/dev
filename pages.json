@@ -668,6 +668,13 @@
 					"style" : {
 						"navigationBarTitleText": "调拨单",
 						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path" : "allotOrderInfo/allotOrderInfo",
+					"style" : {
+						"navigationBarTitleText": "调拨单详情",
+						"enablePullDownRefresh": false
 					}	
 				},
 				{

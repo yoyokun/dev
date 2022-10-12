@@ -917,3 +917,17 @@ export function salesTransferTransferReceipt(data = {}, message = '', custom = {
 		}
 	})
 }
+// 调拨单管理 根据id查询信息
+export function salesTransferFindById(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/salesTransfer/findById',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}

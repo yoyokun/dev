@@ -11,7 +11,7 @@
 		</view>
 		<block v-if="empty">
 			<view class="gp-box" v-if="dataList.length">
-				<view class="gp-main" v-for="(item, index) in dataList" :key="index" @click="">
+				<view class="gp-main" v-for="(item, index) in dataList" :key="index" @click="goto('/salesManage/allotOrderInfo/allotOrderInfo',{editId:item.id})">
 					<view class="head">
 						<text>{{item.billNo}}</text>
 						<text class="status green" v-if="item.state==3">{{$t('salesMg.common.allotStateTxt')[0]}}</text>
