@@ -646,9 +646,9 @@ module.exports = {
 				placeholder: '请输入运输员',
 			},
 		},
-		popup:{
-			tle:'',
-			address:''
+		popup: {
+			tle: '',
+			address: ''
 		},
 	},
 	// 确认送达
@@ -685,12 +685,49 @@ module.exports = {
 			6: '回收',
 			7: '检测'
 		},
-		table:{
-			act:'操作',
-			send:'确认送达',
-			model:'钢瓶型号',
-			back:'客户回瓶',
-			placeholder:'钢瓶二维码',
+		table: {
+			act: '操作',
+			send: '确认送达',
+			model: '钢瓶型号',
+			back: '客户回瓶',
+			placeholder: '钢瓶二维码',
 		},
+	},
+	// 调拨接收
+	receiveAllotOrder: {
+		titleText: '调拨接收',
+		codeOrder: '请输入单号',
+		codeKey: '请输入钢瓶二维码',
+		btn: {
+			conf: '确定',
+			normal: '正常接收',
+			error: '异常接收',
+		},
+		billNo:'调拨单号',
+		outOrgName:'调出组织',
+		pickMode:'运输方式',
+		bookingTime:'预约时间',
+		remarks:'备注',
+		inReason:{
+			label:'出入库原因',
+			placeholder: '请选择出入库原因',
+		},
+		goodsTle:'商品信息',
+		sku:'规格',
+		amount:'数量',
+		receiptNum:'接收数量',
+		diff:'差异',
+		backTotalMoney:'回款金额',
+		payType:'支付方式',
+		pickModeTxt:{
+			1: '自提',
+			3: '车辆配送'
+		},
+		tableColumn:{
+			remove:'移除',
+			cylinderNo:'瓶身编号',
+			codeKey:'二维码',
+			modelName:'型号',
+		}
 	},
 }

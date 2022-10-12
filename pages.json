@@ -671,7 +671,7 @@
 					}	
 				},
 				{
-					"path" : "allotReciveList/allotReciveList",
+					"path" : "allotReceiveList/allotReceiveList",
 					"style" : {
 						"navigationBarTitleText": "接收列表",
 						"enablePullDownRefresh": false
@@ -688,6 +688,13 @@
 					"path" : "addBizOrder/addBizOrder",
 					"style" : {
 						"navigationBarTitleText": "业务开单",
+						"enablePullDownRefresh": false
+					}	
+				},
+				{
+					"path" : "receiveAllotOrder/receiveAllotOrder",
+					"style" : {
+						"navigationBarTitleText": "调拨接收",
 						"enablePullDownRefresh": false
 					}	
 				}

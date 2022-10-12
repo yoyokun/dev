@@ -835,8 +835,8 @@ export function salesBusinessSaveOrEdit(data = {}, message = '', custom = {}) {
 }
 // 价格转换
 export function salesOrderTemplateFindChangePriceGoods(data = {}, message = '', custom = {}) {
-  return request({
-    url: baseURL + '/admin/sales/salesOrderTemplate/findChangePriceGoods ',
+	return request({
+		url: baseURL + '/admin/sales/salesOrderTemplate/findChangePriceGoods ',
 		method: 'post',
 		data,
 		message,
@@ -879,6 +879,34 @@ export function salesOrderFindBackBottleData(data = {}, message = '', custom = {
 export function salesOrderFindOrderStockData(data = {}, message = '', custom = {}) {
 	return request({
 		url: baseURL + '/admin/sales/salesOrder/findOrderStockData',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 调拨单管理 根据单号查询信息
+export function salesTransferFindByBillNo(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/salesTransfer/findByBillNo',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 调拨单管理 调拨接收
+export function salesTransferTransferReceipt(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/salesTransfer/transferReceipt',
 		method: 'post',
 		data,
 		message,
