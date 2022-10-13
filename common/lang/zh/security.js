@@ -471,7 +471,19 @@ module.exports = {
 		managerSign: '整改员签名',
 		before: '整改前',
 		after: '整改后',
-		shopInfo: '商品信息'
+		shopInfo: '商品信息',
+		tableColumn: {
+			goodsNo: '商品编码',
+			goodsName: '商品名称',
+			standardName: '规格',
+			propertyNames: '属性参数',
+			unitsName: '单位',
+			amount: '数量',
+			weight: '重量',
+			unitPrice: '单价',
+			totalMoney: '金额',
+			remarks: '备注'
+		},
 	},
 	// 接收钢瓶列表
 	cylinderSecurityList: {

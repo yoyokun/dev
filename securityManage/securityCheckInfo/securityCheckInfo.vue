@@ -103,18 +103,60 @@
 		</view>
 		<!-- 整改信息 -->
 		<view class="detail" v-else>
-			
+			<view class="customerBox" v-for="item in tableData" :key="item.id">
+				<view class="title" @click="item.isShow = !item.isShow">
+					<text class="name">{{item.billNo}}</text>
+					<u-icon v-if="item.isShow" name="arrow-down" color="#666666" size="18"></u-icon>
+					<u-icon v-else name="arrow-right" color="#666666" size="18"></u-icon>
+				</view>
+				<view class="content" v-show="item.isShow">
+					<view v-if="item.info">
+						<description-list>
+							<description :label="$t('security.rectificationInfo.billNo')">{{ item.info.billNo }}</description>
+							<description :label="$t('security.rectificationInfo.state')">{{ item.info.state | state }}</description>
+							<description :label="$t('security.rectificationInfo.orgName')">{{ item.info.orgName }}</description>
+							<description :label="$t('security.rectificationInfo.managerName')">{{ item.info.managerName }}</description>
+							<description v-if="item.info.state === 2" :label="$t('security.rectificationInfo.payState')">{{ item.info.payState | payState }}</description>
+							<description v-if="item.info.state === 2" :label="$t('security.rectificationInfo.totalMoney')">{{ item.info.totalMoney }}</description>
+							<description v-if="item.info.state === 2" :label="$t('security.rectificationInfo.rectifyTime')">{{ item.info.rectifyTime | dayjs }}</description>
+							<description v-if="item.info.state === 2" :label="$t('security.rectificationInfo.safeRectifyPaysName')">{{ item.info.safeRectifyPaysName }}</description>
+							<description v-if="item.info.state === 2" :label="$t('security.rectificationInfo.remarks')">{{ item.info.remarks }}</description>
+							<description v-if="item.info.state === 2" :label="$t('security.rectificationInfo.customerSignRefuse')">{{ item.info.customerSignRefuse | customerSignRefuse }}</description>
+							<description v-if="item.info.state === 2" :label="$t('security.rectificationInfo.customerSign')">
+								<image class="img" v-if="item.info.customerSign" :src="item.info.customerSign" mode="widthFix"></image>
+							</description>
+							<description v-if="item.info.state === 2" :label="$t('security.rectificationInfo.managerSign')">
+								<image class="img" v-if="item.info.managerSign" :src="item.info.managerSign" mode="widthFix"></image>
+							</description>
+							<description v-if="item.info.state === 2" :label="$t('security.rectificationInfo.picture')">
+								<image class="picture" v-for="item in item.info.picture" :key="item.id" :src="item.url" mode="widthFix"></image>
+							</description>
+						</description-list>
+						<!-- 整改前整改后项目 -->
+						<security-info
+							v-if="item.safeSecurityResultVo"
+							:state="item.info.state" 
+							:safe-security-result-not="item.safeSecurityResultVo"
+						></security-info>
+						<us-table
+							:table-column="tableColumn"
+							:table-data="item.safeRectifyGoods"></us-table>
+					</view>
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
 
 <script>
 let that = null
-import { safeSecurityFindById, safeSecurityDeleteByIds } from '@/api/lpgSecurityManageApi.js'
+import { safeSecurityFindById, safeSecurityDeleteByIds, safeRectifyFindList, safeRectifyFindById } from '@/api/lpgSecurityManageApi.js'
 import SecurityCheck from '@/securityManage/addSecurityCheck/common/securityCheck.vue'
+import SecurityInfo from '@/securityManage/rectificationInfo/common/securityInfo.vue'
 export default {
 	components: {
-		SecurityCheck
+		SecurityCheck,
+		SecurityInfo
 	},
 	data() {
 		return {
@@ -124,7 +166,50 @@ export default {
 			info: {},
 			userCustomerVo: {},
 			address: '',
-			safeSecurityResultVo: {}
+			safeSecurityResultVo: {},
+			tableData: [],
+			tableColumn: [
+				{
+					prop: 'goodsNo',
+					label: this.$t('security.rectificationInfo.tableColumn.goodsNo')
+				},
+				{
+					prop: 'goodsName',
+					label: this.$t('security.rectificationInfo.tableColumn.goodsName')
+				},
+				{
+					prop: 'standardName',
+					label: this.$t('security.rectificationInfo.tableColumn.standardName')
+				},
+				{
+					prop: 'propertyNames',
+					label: this.$t('security.rectificationInfo.tableColumn.propertyNames')
+				},
+				{
+					prop: 'unitsName',
+					label: this.$t('security.rectificationInfo.tableColumn.unitsName')
+				},
+				{
+					prop: 'amount',
+					label: this.$t('security.rectificationInfo.tableColumn.amount')
+				},
+				{
+					prop: 'weight',
+					label: this.$t('security.rectificationInfo.tableColumn.weight')
+				},
+				{
+					prop: 'unitPrice',
+					label: this.$t('security.rectificationInfo.tableColumn.unitPrice')
+				},
+				{
+					prop: 'totalMoney',
+					label: this.$t('security.rectificationInfo.tableColumn.totalMoney')
+				},
+				{
+					prop: 'remarks',
+					label: this.$t('security.rectificationInfo.tableColumn.remarks')
+				}
+			],
 		}
 	},
 	// 过滤器
@@ -168,6 +253,7 @@ export default {
 				title: this.$t('security.securityCheckInfo.titleTextInfo')
 			});
 			this.getInfo()
+			this.getInfoRectify()
 		}
 	},
 	onShow() {
@@ -200,6 +286,39 @@ export default {
 		// 切换
 		onTabSwitch(item) {
 			this.current = item.index
+		},
+		// 整改列表
+		async getInfoRectify() {
+			// 查询整改列表
+			const { returnValue: resRectify } = await safeRectifyFindList({ securityId: this.editId, stateStr: '2,3,6' })
+			if (resRectify.length) {
+				resRectify.forEach(v => {
+					v.isShow = false
+					v.info = ''
+					v.safeSecurityResultVo = ''
+					v.safeRectifyGoods = ''
+				})
+				this.tableData = resRectify
+				// 查询第一个
+				this.tableData.forEach((v,i) => {
+					this.handleCurrent(v, i)
+				})
+				console.log(this.tableData)
+			}
+		},
+		async handleCurrent(data, index) {
+			const { returnValue: res } = await safeRectifyFindById({ id: data.id })
+			if (res) {
+				res.picture = this.$options.filters.pictureConversion(res.picture)
+				const safeRectifyPaysName = []
+				res.safeRectifyPays.forEach((v) => {
+					safeRectifyPaysName.push(v.collectionTypeName + '-' + v.payMoney)
+				})
+				res.safeRectifyPaysName = safeRectifyPaysName.join(',')
+				this.tableData[index].info = res
+				this.tableData[index].safeSecurityResultVo = res.safeSecurityResultNot
+				this.tableData[index].safeRectifyGoods = res.safeRectifyGoods
+			}
 		},
 		// 删除
 		handleDelete() {
@@ -266,6 +385,15 @@ export default {
 	@include flexMixin(column);
 	.u-button{
 		margin: 20rpx 10rpx;
+	}
+}
+::v-deep .customerBox .content .customerBox{
+	margin: 0rpx;
+	width: 700rpx;
+	padding: 0rpx;
+	box-shadow: none;
+	.title .name:before{
+		background: #e4d62a;
 	}
 }
 </style>
