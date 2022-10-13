@@ -42,6 +42,7 @@ module.exports = {
 			pay: '结算',
 			add: '添加',
 			conf: '确认送达',
+			submit: '保存提交',
 		},
 		message: ['该客户无地址，请添加！', '配送员不能为空', '支付金额跟应收金额不一致', '无打印内容,请先设置打印模板'],
 		loading: '加载中...',
@@ -211,6 +212,54 @@ module.exports = {
 				label: '更新日期',
 				placeholder: ['开始日期', '结束日期']
 			},
+		},
+	},
+	// 业务开单
+	addBizOrder: {
+		titleText: '业务开单',
+		titleTextEdit: '编辑业务开单',
+		form:{
+			orgId:{
+				label:'业务组织',
+				placeholder:'请选择业务组织'
+			},
+			billTimeStr:{
+				label:'开单时间',
+				placeholder:'选择开单时间'
+			},
+			inOutReasonId:{
+				label:'出入库原因',
+				placeholder:'选择出入库原因'
+			},
+			businessTypeId:{
+				label:'业务类型',
+				placeholder:'选择业务类型'
+			},
+			formType:{
+				label:'往来类型',
+				placeholder:'请选择往来类型',
+				options: [{
+						name: '客户',
+						value: '1'
+					},
+					{
+						name: '供应商',
+						value: '2'
+					},
+					{
+						name: '组织',
+						value: '3'
+					}
+				],
+			},
+			customerName:{
+				label:'来源名称',
+				placeholder:'请选择来源名称',
+			},
+			linkBillNo:{
+				label:'关联单号',
+				placeholder:'请选择关联单号'
+			}
 		},
 	},
 	// 业务单列表
@@ -700,6 +749,7 @@ module.exports = {
 		codeKey: '请输入钢瓶二维码',
 		baseTle: '基础信息',
 		deliveryTle: '运输信息',
+		sourceTle: '钢瓶溯源',
 		state:'单据状态',
 		orgAddress:'组织地址',
 		inOrgName:'调入组织',

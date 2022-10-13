@@ -63,7 +63,7 @@
 						{{ salesOrderTransport.pickMode | pickMode }}
 					</description>
 					<description :label="$t('salesMg.receiveAllotOrder.bookingTime')">
-						{{info.bookingTime|dayjs}}
+						{{salesOrderTransport.bookingTime | dayjs}}
 					</description>
 					<description :label="$t('salesMg.receiveAllotOrder.licenseNo')">
 						{{ salesOrderTransport.licenseNo }}
@@ -189,10 +189,10 @@
 							<text>{{$t('chooseGoods.total')}}：</text>
 						</view>
 						<view class="total-main">
-							<view class="item" v-for="(item,index) in totalUnitCount">
+							<!-- <view class="item" v-for="(item,index) in totalUnitCount" :key="index">
 								<text>{{index}}：</text>
 								<text>{{item}}</text>
-							</view>
+							</view> -->
 							<view class="item">
 								<text>{{$t('salesMg.receiveAllotOrder.amount')}}：</text>
 								<text>{{countNums(salesTransferDetailList)}}</text>
@@ -215,38 +215,9 @@
 						</view>
 					</view>
 				</view>
-
 			</view>
-
-			<view class="list">
-				<view class="code-box">
-					<u-input prefixIcon="search" type="text" class="code-input" v-model="codeKey" shape="circle"
-						:placeholder="$t('salesMg.confSend.codeKey.placeholder')">
-						<view slot="suffix">
-							<u-icon @click="toScan" size="40rpx" color="#3c9cff" name="scan"></u-icon>
-						</view>
-					</u-input>
-					<u-button class="code-btn" type="primary" shape="circle" size="small" @click="searchCode">
-						{{$t('salesMg.receiveAllotOrder.btn.conf')}}
-					</u-button>
-				</view>
-
-				<view class="table">
-					<us-table :table-column="tableColumn" :table-data="tableData">
-						<!-- #ifdef H5 || APP-PLUS -->
-						<view slot="remove" slot-scope="row" @click="romveData(row)">
-							<u-icon class="remove-list" name="minus-circle-fill"></u-icon>
-						</view>
-						<!-- #endif -->
-						<!-- #ifdef MP-->
-						<view slot="remove" slot-scope="{row}" @click="romveData(row)">
-							<u-icon class="remove-list" name="minus-circle-fill"></u-icon>
-						</view>
-						<!-- #endif -->
-					</us-table>
-				</view>
-
-			</view>
+			
+			<service-cylinder v-if="cylinderScanSetting" ref="serviceCylinder" :title="$t('salesMg.receiveAllotOrder.sourceTle')"/>
 
 			<view class="btn">
 				<u-button :text="$t('salesMg.receiveAllotOrder.btn.normal')" type="primary" hairline shape="circle"
@@ -280,38 +251,18 @@
 	import {
 		cylinderArchivesFindByCodeKey
 	} from '@/api/lpgManageAppApi'
+	import ServiceCylinder from '../confSend/common/serviceCylinder'
 	export default {
 		mixins: [settingMixin],
+		components: {
+			ServiceCylinder
+		},
 		props: {
 
 		},
 		data() {
 			return {
 				codeOrder: '',
-				codeKey: '',
-				tableColumn: [{
-					prop: 'remove',
-					label: this.$t('salesMg.receiveAllotOrder.tableColumn.remove'),
-					width: '100rpx',
-					align: 'center',
-					slot: 'remove'
-				}, {
-					prop: 'cylinderNo',
-					label: this.$t('salesMg.receiveAllotOrder.tableColumn.cylinderNo'),
-					width: '160rpx',
-					align: 'center'
-				}, {
-					prop: 'codeKey',
-					label: this.$t('salesMg.receiveAllotOrder.tableColumn.codeKey'),
-					width: '210rpx',
-					align: 'center'
-				}, {
-					prop: 'modelName',
-					label: this.$t('salesMg.receiveAllotOrder.tableColumn.modelName'),
-					width: '160rpx',
-					align: 'center'
-				}],
-				tableData: [],
 				cylinderScanSetting: '',
 				info: null,
 				tableColumnUnit: [],
@@ -322,7 +273,7 @@
 				stockInoutReason: [],
 				nums: 0,
 				receptNums: 0,
-				totalUnitCount: {},
+				// totalUnitCount: {},
 				salesOrderPayDetailList: [],
 			}
 		},
@@ -371,10 +322,8 @@
 		methods: {
 			resetInfo() {
 				this.info = null
-				this.tableData = null
 				this.inReason = null
 				this.codeOrder = null
-				this.codeKey = null
 			},
 			// 保存
 			async saveData(state) {
@@ -403,7 +352,7 @@
 				if (this.cylinderScanSetting) {
 					// 有钢瓶溯源
 					data.transferCodeData = []
-					const serviceCylinderData = this.tableData
+					const serviceCylinderData = this.$refs.serviceCylinder.getCylinderData()
 					serviceCylinderData.forEach(v => {
 						data.transferCodeData.push({
 							cylinderId: v.id // 钢瓶ID
@@ -479,31 +428,31 @@
 				if (res) {
 					this.info = res
 					this.tableColumnUnit = res.printSetVo.tableColumn
-					let totalUnitCount = {}
+					// let totalUnitCount = {}
 					res.salesTransferDetailList.forEach(v => {
 						v.goodsPath = this.$options.filters.pictureJson(v.goodsPath)
 						v.assistUnitsList.forEach((n, j) => {
 							this.tableColumnUnit.forEach(m => {
 								if (m.propValue == 'assistName-' + n.assistUnitsId) {
-									let ele = totalUnitCount[m
-										.labelName] || 0
-									ele += parseFloat(n.netContent)
-									totalUnitCount[m.labelName] = ele
+									// let ele = totalUnitCount[m
+									// 	.labelName] || 0
+									// ele += parseFloat(n.netContent)
+									// totalUnitCount[m.labelName] = ele
 									v[m.propValue] = n.netContent
 								}
 								if (m.propValue == 'netContent-' + n.assistUnitsId) {
-									let ele = totalUnitCount[m
-										.labelName] || 0
-									ele += parseFloat(n.netContent)
-									totalUnitCount[m.labelName] = ele
+									// let ele = totalUnitCount[m
+									// 	.labelName] || 0
+									// ele += parseFloat(n.netContent)
+									// totalUnitCount[m.labelName] = ele
 									v[m.propValue] = n.netContent
 								}
 							})
 						})
 					})
-					this.totalUnitCount = totalUnitCount
+					// this.totalUnitCount = totalUnitCount
 					this.salesTransferDetailList = res.salesTransferDetailList
-					this.salesOrderTransport = res.salesOrderTransport
+					this.salesOrderTransport = res.salesOrderTransport || {}
 					this.salesOrderPayDetailList = res.salesOrderPayDetailList
 				} else {
 					this.$refs.uToast.show({
@@ -543,7 +492,6 @@
 						type: 'error',
 						message: this.$t('cylinderMg.addCirculation.tips.errCode')
 					})
-
 				}
 			},
 			// 扫码
@@ -555,7 +503,6 @@
 					} else {
 						this.searchCode(code)
 					}
-
 				}
 			},
 		},

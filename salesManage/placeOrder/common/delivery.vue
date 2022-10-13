@@ -7,7 +7,7 @@
 					<view class="label">{{$t('salesMg.delivery.pickMode')}}：</view>
 					<view class="content fill">
 						<view class="fill-box">
-							<u-radio-group class="radio-group" size="14" v-model="pickMode" placement="row"
+							<u-radio-group :disabled="isSettle" class="radio-group" size="14" v-model="pickMode" placement="row"
 								@change="pickModeChange">
 								<u-radio class="radio-item" labelSize="13" label="送气员配送" name="4" v-if="type=='sales'"></u-radio>
 								<u-radio class="radio-item" labelSize="13" label="车辆配送" name="3"></u-radio>
@@ -21,14 +21,14 @@
 				<block v-if="pickMode == 4">
 					<view class="item">
 						<view class="label">{{$t('salesMg.delivery.defDeliveryName')}}：</view>
-						<view class="content" @click="chooseOrg">
+						<view class="content" @click="!isSettle&&chooseOrg()">
 							<input class="input" :placeholder="$t('salesMg.delivery.defDeliveryNamePlaceholder')" type="text" disabled :value="defDeliveryName" />
 							<u-icon name="arrow-right"></u-icon>
 						</view>
 					</view>
 					<view class="item">
 						<view class="label">{{$t('salesMg.delivery.transportName')[0]}}：</view>
-						<view class="content" @click="chooseItem('choosePSY')">
+						<view class="content" @click="!isSettle&&chooseItem('choosePSY')">
 							<input class="input" :placeholder="$t('salesMg.delivery.transportNamePlaceholder')[0]" type="text" disabled :value="transportName" />
 							<u-icon name="arrow-right"></u-icon>
 						</view>
@@ -57,7 +57,7 @@
 				</view>
 				<view class="item" v-if="pickMode != 1">
 					<view class="label">{{$t('salesMg.delivery.address')}}：</view>
-					<view class="content" @click="chooseAddress">
+					<view class="content" @click="!isSettle&&chooseAddress">
 						<input class="input" :placeholder="$t('salesMg.delivery.addressPlaceholder')" type="text" disabled v-if="!address" />
 						<view class="choose-address" v-else>{{ address }}</view>
 						<u-icon name="arrow-right" v-if="type=='sales'"></u-icon>
@@ -67,7 +67,7 @@
 					<view class="label">{{pickMode==4?$t('salesMg.delivery.feeName')[0]:$t('salesMg.delivery.feeName')[1]}}：</view>
 					<view class="content dfee">
 						<view class="fee-item" :class="item.check?'on':''" v-for="(item,index) in choosePayItemsData"
-							:key="index" @click="checkFee(index)">
+							:key="index" @click="!isSettle&&checkFee(index)">
 							<u-icon size="32rpx" class="fee-check" name="checkmark-circle-fill"></u-icon>
 							<view class="fee-label">{{ item.itemName }}</view>
 							<block v-if="item.chargeMode == 2">

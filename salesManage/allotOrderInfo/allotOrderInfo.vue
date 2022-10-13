@@ -143,10 +143,10 @@
 							<text>{{$t('chooseGoods.total')}}：</text>
 						</view>
 						<view class="total-main">
-							<view class="item" v-for="(item,index) in totalUnitCount">
+							<!-- <view class="item" v-for="(item,index) in totalUnitCount" :key="index">
 								<text>{{index}}：</text>
 								<text>{{item}}</text>
-							</view>
+							</view> -->
 							<view class="item">
 								<text>{{$t('salesMg.receiveAllotOrder.amount')}}：</text>
 								<text>{{countNums(salesTransferDetailList)}}</text>
@@ -231,7 +231,7 @@
 				info: {},
 				salesTransferDetailList: [],
 				salesOrderTransport: {},
-				totalUnitCount: {},
+				// totalUnitCount: {},
 			}
 		},
 		async onLoad(options) {
@@ -276,29 +276,29 @@
 					res.payTypeName = payTypeName.join(',')
 					this.info = res
 					this.tableColumn = res.printSetVo.tableColumn
-					let totalUnitCount = {}
+					// let totalUnitCount = {}
 					res.salesTransferDetailList.forEach(v => {
 						v.goodsPath = this.$options.filters.pictureJson(v.goodsPath)
 						v.assistUnitsList.forEach((n, j) => {
 							this.tableColumn.forEach(m => {
 								if (m.propValue == 'assistName-' + n.assistUnitsId) {
-									let ele = totalUnitCount[m
-										.labelName] || 0
-									ele += parseFloat(n.netContent)
-									totalUnitCount[m.labelName] = ele
+									// let ele = totalUnitCount[m
+									// 	.labelName] || 0
+									// ele += parseFloat(n.netContent)
+									// totalUnitCount[m.labelName] = ele
 									v[m.propValue] = n.netContent
 								}
 								if (m.propValue == 'netContent-' + n.assistUnitsId) {
-									let ele = totalUnitCount[m
-										.labelName] || 0
-									ele += parseFloat(n.netContent)
-									totalUnitCount[m.labelName] = ele
+									// let ele = totalUnitCount[m
+									// 	.labelName] || 0
+									// ele += parseFloat(n.netContent)
+									// totalUnitCount[m.labelName] = ele
 									v[m.propValue] = n.netContent
 								}
 							})
 						})
 					})
-					this.totalUnitCount = totalUnitCount
+					// this.totalUnitCount = totalUnitCount
 					this.salesTransferDetailList = res.salesTransferDetailList
 					this.salesOrderTransport = res.salesOrderTransport
 				}
