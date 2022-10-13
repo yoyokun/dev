@@ -28,6 +28,7 @@
 		<!-- ====运输信息==== -->
 		<delivery
 			ref="delivery"
+			:is-settle="isSettle"
 			:customer-id="customerId"
 			:pick-modes="pickMode"
 			:address-obj="addressObj"
@@ -246,7 +247,12 @@
 			this.orderSourceParam = options.orderSourceParam || ''
 			this.editId = options.editId || ''
 			this.billType = options.billType || 1
-			this.isSettle = options.isSettle || false
+			this.isSettle = options.isSettle == 'true' ? true : false
+			if(this.isSettle){
+				this.formDataSource.forEach(i=>{
+					i.disabled = true
+				})
+			}
 			uni.setNavigationBarTitle({
 				title: this.$t(this.$t('salesMg.addSalesOrder.titleText'))
 			})

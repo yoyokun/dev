@@ -9,7 +9,7 @@
 					<view class="content">
 						<input class="input" :placeholder="$t('salesMg.discount.couponNoPlaceholder')" type="text"
 							@input="changeCoupon" v-model="couponNo" :disabled="isSettle" />
-						<u-button size="small" class="choose-coupon" type="primary" @click="chooseCoupon">
+						<u-button :disabled="isSettle" size="small" class="choose-coupon" type="primary" @click="chooseCoupon">
 							{{$t('salesMg.discount.chooseBtn')}}
 						</u-button>
 					</view>
@@ -31,14 +31,14 @@
 						</view>
 						<view class="fee-item">
 							<view class="fee-label">{{$t('salesMg.discount.disCountRate')}}</view>
-							<input v-model="disCountRate" class="fee-input" type="number"
+							<input v-model="disCountRate" :disabled="isSettle" class="fee-input" type="number"
 								:placeholder="$t('salesMg.discount.disCountRate')"
 								@blur="orderDiscount(disCountRate, 'disCountRate')" />
 							<view class="fee-total">%</view>
 						</view>
 						<view class="fee-item">
 							<view class="fee-label">{{$t('salesMg.discount.discountDeal')}}</view>
-							<input v-model="discountDeal" class="fee-input" type="number"
+							<input v-model="discountDeal" :disabled="isSettle" class="fee-input" type="number"
 								:placeholder="$t('salesMg.discount.discountDeal')"
 								@blur="orderDiscount(discountDeal, 'discountDeal')" />
 						</view>
@@ -60,10 +60,10 @@
 				</view>
 				<view class="item">
 					<view class="content dfee">
-						<view class="fee-item" :class="isUse?'on':''" @click="usePoint">
+						<view class="fee-item" :class="isUse?'on':''" @click="!isSettle&&usePoint">
 							<u-icon size="32rpx" class="fee-check" name="checkmark-circle-fill"></u-icon>
 							<view class="fee-label">{{$t('salesMg.discount.integralValue')}}</view>
-							<input @click.stop v-if="isUse" class="fee-input" type="number"
+							<input @click.stop :disabled="isSettle" v-if="isUse" class="fee-input" type="number"
 								:placeholder="$t('salesMg.discount.integralValue')" @input="integralValueChange"
 								step="1" v-model="integralValue" />
 						</view>

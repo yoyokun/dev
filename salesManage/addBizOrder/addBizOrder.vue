@@ -56,8 +56,11 @@
 		<view class="btn">
 			<u-button :text="$t('salesMg.common.btn.save')" @click="saveData(1)" type="primary" hairline shape="circle">
 			</u-button>
+			<u-button :text="$t('salesMg.common.btn.submit')" @click="saveData(2)" type="success" plain hairline
+				shape="circle">
+			</u-button>
 		</view>
-		
+
 		<!-- 请求 toast 提示 -->
 		<u-toast ref='uToast'></u-toast>
 	</view>
@@ -67,7 +70,7 @@
 	import {
 		settingMixin
 	} from '@/common/settingMixin.js'
-	
+
 	import {
 		createUniqueString,
 		objectValueEmpty
@@ -78,7 +81,8 @@
 	import {
 		salesTransferTemplateFindByOrgId,
 		purSupplierFindById,
-		salesBusinessSaveOrEdit
+		salesBusinessSaveOrEdit,
+		salesBusinessFindById
 	} from '@/api/lpgSalesManageApi'
 	import {
 		sysOrgFindById,
@@ -103,97 +107,85 @@
 			return {
 				formDataSource: [{
 						type: 'picker',
-						labelText: '业务组织',
+						labelText: this.$t('salesMg.addBizOrder.form.orgId.label'),
 						fieldName: 'orgId',
-						placeholder: '请选择业务组织',
+						placeholder: this.$t('salesMg.addBizOrder.form.orgId.placeholder'),
 						options: [],
 						required: true,
 						rules: [{
 							required: true,
-							message: '请选择业务组织',
+							message: this.$t('salesMg.addBizOrder.form.orgId.placeholder'),
 							trigger: ['change', 'blur']
 						}]
 					}, {
 						type: 'datetime',
-						labelText: '开单时间',
+						labelText: this.$t('salesMg.addBizOrder.form.billTimeStr.label'),
 						fieldName: 'billTimeStr',
-						placeholder: '选择开单时间',
+						placeholder: this.$t('salesMg.addBizOrder.form.billTimeStr.placeholder'),
 						options: [],
 						required: true,
 						rules: [{
 							required: true,
-							message: '选择开单时间',
+							message: this.$t('salesMg.addBizOrder.form.billTimeStr.placeholder'),
 							trigger: ['change', 'blur']
 						}]
 					}, {
 						type: 'picker',
-						labelText: '出入库原因',
+						labelText: this.$t('salesMg.addBizOrder.form.inOutReasonId.label'),
 						fieldName: 'inOutReasonId',
-						placeholder: '选择出入库原因',
+						placeholder: this.$t('salesMg.addBizOrder.form.inOutReasonId.placeholder'),
 						options: [],
 						required: true,
 						rules: [{
 							required: true,
-							message: '选择出入库原因',
+							message: this.$t('salesMg.addBizOrder.form.inOutReasonId.placeholder'),
 							trigger: ['change', 'blur']
 						}]
 					}, {
 						type: 'picker',
-						labelText: '业务类型',
+						labelText: this.$t('salesMg.addBizOrder.form.businessTypeId.label'),
 						fieldName: 'businessTypeId',
-						placeholder: '选择业务类型',
+						placeholder: this.$t('salesMg.addBizOrder.form.businessTypeId.placeholder'),
 						options: [],
 						required: true,
 						rules: [{
 							required: true,
-							message: '选择业务类型',
+							message: this.$t('salesMg.addBizOrder.form.businessTypeId.placeholder'),
 							trigger: ['change', 'blur']
 						}]
 					},
 					{
 						type: 'actionSheet',
-						labelText: '往来类型',
+						labelText: this.$t('salesMg.addBizOrder.form.formType.label'),
 						fieldName: 'formType',
-						placeholder: '请选择往来类型',
+						placeholder: this.$t('salesMg.addBizOrder.form.formType.placeholder'),
 						required: true,
-						options: [{
-								name: '客户',
-								value: '1'
-							},
-							{
-								name: '供应商',
-								value: '2'
-							},
-							{
-								name: '组织',
-								value: '3'
-							}
-						],
+						options: this.$t('salesMg.addBizOrder.form.formType.options'),
 						rules: [{
 							required: true,
-							message: '请选择往来类型',
+							message: this.$t('salesMg.addBizOrder.form.formType.placeholder'),
 							trigger: ['change', 'blur']
 						}]
 					},
 					{
 						type: 'chooseBtn',
-						labelText: '来源名称',
+						labelText: this.$t('salesMg.addBizOrder.form.customerName.label'),
 						fieldName: 'customerName',
-						placeholder: '请选择来源名称',
+						placeholder: this.$t('salesMg.addBizOrder.form.customerName.placeholder'),
 						required: true,
 						func: 'chooseCustomer',
 						rules: [{
 							required: true,
-							message: '请选择来源名称',
+							message: this.$t('salesMg.addBizOrder.form.customerName.placeholder'),
 							trigger: ['change', 'blur']
 						}],
 						show: false,
 					},
 					{
 						type: 'chooseBtn',
-						labelText: '关联单号',
+						labelText: this.$t('salesMg.addBizOrder.form.linkBillNo.label'),
 						fieldName: 'linkBillNo',
-						placeholder: '请选择关联单号',
+						placeholder: this.$t('salesMg.addBizOrder.form.linkBillNo.placeholder'),
 						func: 'chooseBill',
 						borderBottom: false,
 					}
@@ -248,7 +240,7 @@
 				// await this.getInfo(this.editId)
 			} else {
 				uni.setNavigationBarTitle({
-					title: this.$t('业务开单')
+					title: this.$t('salesMg.addBizOrder.titleText')
 				});
 			}
 			// 子单添加商品
@@ -256,6 +248,9 @@
 				this.$refs[`billTable-${this.tempKey}`][0].initGoodData(data)
 			})
 			await this.init()
+			if (this.editId) {
+				this.getInfo(this.editId)
+			}
 		},
 		onUnload() {},
 		onShow() {
@@ -292,6 +287,146 @@
 			})
 		},
 		methods: {
+			// 回填商品数据
+			renderShop(res) {
+				const salesBusinessDetailList = res.salesBusinessDetailList
+				const tableColumn = res.printSetVo.tableColumn // 防止表头发生改变
+				const templateData = Object.values(this.templateObj)
+				this.$nextTick(() => {
+					// 遍历模板
+					templateData.forEach((o) => {
+						const tableData = o.tableData // 原商品数据
+						o.tableData = []
+						o.tableColumn = tableColumn // 防止表头发生改变
+						// 遍历订单商品数据
+						salesBusinessDetailList.forEach((p) => {
+							p.ids = createUniqueString()
+							p.goodsPath = p.goodsPath.length ? (JSON.parse(p.goodsPath).length ?
+								JSON.parse(p.goodsPath)[0].url : '') : ''
+							const index = tableData.findIndex(item => item.goodsDetailId === p
+								.goodsDetailId)
+							// 把商品的默认辅助单位填进去
+							p.defaultAssistUnitsList = tableData[index].defaultAssistUnitsList
+							// 商品的辅助单位
+							p.templateGoodsAssistList = []
+							// 遍历辅助单位初始值
+							this.transferTemplateObj.templateAssistUnitsList.forEach((l) => {
+								// 商品辅助单位值
+								p.templateGoodsAssistList.push({
+									assistUnitsId: l.assistUnitsId,
+									salesUnitsId: l.salesUnitsId, // 销售单位id
+									settleUnitsId: l.settleUnitsId, // 结算单位id
+									numValue: '', // 辅助单位值
+									changeValue: l.changeValue
+								})
+								// 造model数据
+								o.tableColumn.forEach(m => {
+									if (m.propValue === 'assistName-' + l
+										.assistUnitsId) {
+										p[m.propValue] = ''
+									}
+									if (m.propValue === 'netContent-' + l
+										.assistUnitsId) {
+										p[m.propValue] = ''
+									}
+								})
+							})
+							// 有辅助单位数据，回填
+							if (p.assistUnitsList.length) {
+								p.templateGoodsAssistList.forEach((l) => {
+									// 遍历商品辅助单位默认值
+									p.assistUnitsList.forEach((n) => {
+										if (l.assistUnitsId === n.assistUnitsId) {
+											// 遍历表头显示字段
+											o.tableColumn.forEach(m => {
+												if (m.propValue ===
+													'assistName-' + n
+													.assistUnitsId) {
+													p[m.propValue] = n
+														.unitsName // 回填商品辅助单位的 单位
+												}
+												if (m.propValue ===
+													'netContent-' + n
+													.assistUnitsId) {
+													// 没有保存的值，回填默认值
+													p[m.propValue] = n
+														.netContent
+													// 回填商品辅助单位的 计量值
+													l.numValue = n
+														.netContent // 表头辅助单位值（提交的时候用）
+												}
+											})
+										}
+									})
+								})
+							}
+							o.tableData.push(p)
+						})
+						this.templateObj[this.chooseTempalte[0]] = o
+						this.$refs[`billTable-${this.chooseTempalte[0]}`][0].writeData(o)
+					})
+				})
+			},
+			// 回填运输信息
+			async renderTransport(res) {
+				const salesOrderTransport = res.salesOrderTransport || {}
+				this.pickModeId = salesOrderTransport.id
+				this.pickMode = salesOrderTransport.pickMode // 提货方式（1 自提 ，3 车辆配送
+				const addressObj = {}
+				addressObj.bookingTime = salesOrderTransport.bookingTime ? UnixToDate(salesOrderTransport.bookingTime) :
+					'' // 预约时间
+				addressObj.chooseLicenseNum = salesOrderTransport.licenseNo // 车牌号，
+				addressObj.province = salesOrderTransport.province
+				addressObj.city = salesOrderTransport.city
+				addressObj.area = salesOrderTransport.area
+				addressObj.address = salesOrderTransport.address
+				addressObj.latitude = salesOrderTransport.latitude
+				addressObj.longitude = salesOrderTransport.longitude
+				addressObj.deliverMan = salesOrderTransport.deliverMan // 运输员/配送员
+				this.addressObj = addressObj
+			},
+			// 回填收费项
+			renderPayItemsData(res) {
+				this.$refs.delivery.writeData(res)
+			},
+			// 获取详情
+			async getInfo(id) {
+				const {
+					returnValue: res
+				} = await salesBusinessFindById({
+					id
+				})
+				if (res) {
+					// 回填商品信息
+					this.renderShop(res)
+					// 回填运输信息
+					await this.renderTransport(res)
+					// 回填收费项
+					this.renderPayItemsData(res)
+					// 写入折扣金额
+					this.$refs.discount.getWrite(res)
+					// 回填合计
+					this.totalChargeMoneyAll = res.payItemsMoney // 收费项
+					this.totalMoneyOrderAll = res.goodsTotalMoney // 订单合计
+					this.totalMoneyTwoAll = this.$bigDecimal.round(this.$bigDecimal.add(res.payItemsMoney, res
+						.goodsTotalMoney), 2) // 总合计
+					// 回填信息
+					this.remarks = res.remarks
+					this.formDataSource[2].show = true
+					let data = {}
+					data.orgId = res.orgId
+					data.billTimeStr = res.billTimeStr
+					data.inOutReasonId = res.inOutReasonId
+					data.businessTypeId = res.businessTypeId
+					data.formType = res.formType.toString()
+					data.customerName = res.customerName
+					data.linkBillNo = res.linkBillNo
+					this.linkId = res.linkId || ''
+					this.linkTypes = res.linkType || ''
+					this.customerId = res.customerId
+					this.formDataValue = data
+				}
+			},
 			// 查询地址
 			async getAddress() {
 				if (this.formDataValue.formType == 1) {
@@ -577,7 +712,7 @@
 					const objDiscount = this.$refs.discount.getDiscount()
 					const payData = this.$refs.delivery.getPayData()
 					// 提交
-					data.billTimeStr = data.billTimeSt ? UnixToDate(data.billTimeStr):''
+					data.billTimeStr = data.billTimeSt ? UnixToDate(data.billTimeStr) : ''
 					data.id = this.editId || ''
 					data.linkId = this.linkId
 					data.linkType = this.linkTypes
@@ -639,7 +774,8 @@
 					data.salesOrderTransportData = {
 						id: this.pickModeId || '',
 						pickMode: payData.data.pickMode, // 提货方式（1 自提  ，3 车辆配送
-						bookingTime: payData.data.bookingTime?UnixToDate(payData.data.bookingTime):'', // 预约时间
+						bookingTime: payData.data.bookingTime ? UnixToDate(payData.data.bookingTime) :
+						'', // 预约时间
 						licenseNo: payData.data.chooseLicenseNum, // 车牌号，
 						deliverMan: payData.data.transportName, // 运输员，
 						province: objectValueEmpty(payData.data.addressObj, 'province'), // 省，

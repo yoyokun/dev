@@ -275,7 +275,7 @@
 
 			view:first-child {
 				flex: none;
-				width: 140rpx;
+				width: 100rpx;
 			}
 		}
 
@@ -286,7 +286,7 @@
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				width: 140rpx;
+				width: 100rpx;
 				border-right: 1px solid #eee;
 
 				.cross {

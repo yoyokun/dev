@@ -98,6 +98,9 @@
 			payData: {
 				handler: function(val, oldVal) {
 					this.payType.forEach((v) => {
+						v.value = 0
+						v.id = ''
+						v.checked = false
 						val.forEach((m) => {
 							if (v.collectionTypeId === m.collectionTypeId) {
 								v.checked = true

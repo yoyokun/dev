@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="list">
-			<view class="list-head">
+			<view class="list-head" v-if="title">
 				<view class="head-tle">{{title}}</view>
 			</view>
 			<view class="code-box">

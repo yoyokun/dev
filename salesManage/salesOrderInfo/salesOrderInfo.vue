@@ -231,7 +231,7 @@
 			<u-button v-permission="{ permission:'app_salesOrder_hangUp'}" v-if="info.hangUpType && info.orderTime" :text="$t('salesMg.salesOrderInfo.btn.down')"
 				type="warning" plain hairline shape="circle" @click="handleHangUp(info,false)">
 			</u-button>
-			<u-button v-permission="{ permission:'app_salesOrder_settle'}" v-if="info.orderState != 4 && info.orderState != 5" :text="$t('salesMg.salesOrderInfo.btn.count')" type="primary" plain hairline shape="circle" @click=""></u-button>
+			<u-button v-permission="{ permission:'app_salesOrder_settle'}" v-if="info.orderState != 4 && info.orderState != 5" :text="$t('salesMg.salesOrderInfo.btn.count')" type="primary" plain hairline shape="circle" @click="goto('/salesManage/addSalesOrder/addSalesOrder',{editId:info.id,orderSourceParam:info.orderSource,isSettle:true})"></u-button>
 			<u-button v-permission="{ permission:'app_salesOrder_delivery'}" v-if="info.orderTime && (info.pickMode == 3 || info.pickMode == 4) && ((info.deliveryState == 2 && info.orderState != 5) ||
             (info.deliveryState == 3 && (info.shipmentState == 1 || info.shipmentState == 4)))" :text="$t('salesMg.salesOrderInfo.btn.delivery')" type="success" plain hairline shape="circle"
 				@click="handleAssign(info)"></u-button>
@@ -1009,10 +1009,14 @@
 	.btn {
 		width: 632rpx;
 		margin: 60rpx auto;
+		margin-top: 40rpx;
 		@include flexMixin();
-
+		flex-wrap: wrap;
+		justify-content: center;
 		.u-button {
 			margin: 0rpx 10rpx;
+			width: calc(100% / 2 - 20rpx);
+			margin-top: 20rpx;
 		}
 	}
 </style>

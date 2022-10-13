@@ -124,6 +124,7 @@ page{
 	position: absolute;
 	top: 20rpx;
 	right: 20rpx;
+	padding-top: var(--status-bar-height);
 }
 .logo{
 	width: 100%;
