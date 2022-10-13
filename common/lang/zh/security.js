@@ -2,6 +2,15 @@ module.exports = {
 	signCanvas: {
 		isEmptyMsg: '请签名'
 	},
+	userSecurityList: {
+		titleText: '我的安检',
+	},
+	userPatrolCheck: {
+		titleText: '我的巡检',
+	},
+	userRectificationList: {
+		titleText: '我的整改',
+	},
 	securityCheckList: {
 		titleText: '安检记录',
 		totalNum: '安检总数',
@@ -459,7 +468,10 @@ module.exports = {
 		picture: '整改照片',
 		customerSign: '客户签名',
 		customerSignRefuse: '客户拒签',
-		managerSign: '整改员签名'
+		managerSign: '整改员签名',
+		before: '整改前',
+		after: '整改后',
+		shopInfo: '商品信息'
 	},
 	// 接收钢瓶列表
 	cylinderSecurityList: {

@@ -2,7 +2,7 @@
   <view>
 		<view class="customerBox">
 			<view class="title">
-				<text class="name">整改前</text>
+				<text class="name">{{$t('security.rectificationInfo.before')}}</text>
 			</view>
 			<view class="content">
 				<security-check
@@ -17,7 +17,7 @@
 		</view>
 		<view class="customerBox">
 			<view class="title">
-				<text class="name">整改后</text>
+				<text class="name">{{$t('security.rectificationInfo.after')}}</text>
 			</view>
 			<view class="content">
 				<!-- 整改后 -->
