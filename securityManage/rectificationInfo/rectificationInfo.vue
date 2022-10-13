@@ -34,6 +34,16 @@
 			:state="info.state" 
 			:safe-security-result-not="safeSecurityResultVo"
 		></security-info>
+		<view class="customerBox">
+			<view class="title">
+				<text class="name">{{$t('security.rectificationInfo.shopInfo')}}</text>
+			</view>
+			<view class="content">
+				<us-table 
+					:table-column="tableColumn"
+					:table-data="tableData"></us-table>
+			</view>
+		</view>
 		<!-- 按钮 -->
 		<view class="btn">
 			<!-- 去整改 -->
@@ -105,6 +115,49 @@ export default {
 			safeSecurityResultVo: [],
 			show: false,
 			invalidNote: '',
+			tableColumn: [
+				{
+					prop: 'goodsNo',
+					label: '商品编码'
+				},
+				{
+					prop: 'goodsName',
+					label: '商品名称'
+				},
+				{
+					prop: 'standardName',
+					label: '规格'
+				},
+				{
+					prop: 'propertyNames',
+					label: '属性参数'
+				},
+				{
+					prop: 'unitsName',
+					label: '单位'
+				},
+				{
+					prop: 'amount',
+					label: '数量'
+				},
+				{
+					prop: 'weight',
+					label: '重量'
+				},
+				{
+					prop: 'unitPrice',
+					label: '单价'
+				},
+				{
+					prop: 'totalMoney',
+					label: '金额'
+				},
+				{
+					prop: 'remarks',
+					label: '备注'
+				}
+			],
+			tableData: [],
 		}
 	},
 	// 过滤器
@@ -159,6 +212,7 @@ export default {
 				this.address = this.$options.filters.addressSplicing(res.userCustomerVo.userAddress)
 				this.info = res
 				this.safeSecurityResultVo = res.safeSecurityResultNot
+				this.tableData = res.safeRectifyGoods
 			}
 		},
 		// 删除

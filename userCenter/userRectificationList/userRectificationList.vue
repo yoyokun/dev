@@ -75,7 +75,7 @@ export default {
   },
 	onShow() {
 		uni.setNavigationBarTitle({
-			title: this.$t('security.rectificationList.titleText')
+			title: this.$t('security.userRectificationList.titleText')
 		})
 	},
   methods: {
@@ -87,7 +87,7 @@ export default {
     // 获取列表
     async findDataList() {
       const data = {
-				...(this.params||{}),
+				...(this.params || {}),
 				...{
 					page: this.pagination.getCurrentPage(),
 					size: this.pagination.getCurrentSize()

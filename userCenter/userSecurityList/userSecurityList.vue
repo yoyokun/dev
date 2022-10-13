@@ -101,7 +101,7 @@ export default {
   },
 	onShow() {
 		uni.setNavigationBarTitle({
-			title: this.$t('security.securityCheckList.titleText')
+			title: this.$t('security.userSecurityList.titleText')
 		})
 	},
   methods: {
@@ -118,7 +118,7 @@ export default {
     // 获取列表
     async findDataList() {
       const data = {
-				...(this.params||{}),
+				...(this.params || {}),
 				...{
 					page: this.pagination.getCurrentPage(),
 					size: this.pagination.getCurrentSize()
