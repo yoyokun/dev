@@ -1,12 +1,14 @@
 <script>
 	export default {
 		onLaunch: function() {
+			// #ifdef APP-PLUS
 			plus.nativeUI.toast = (function(str) {
 				if (str) {
 					return false;
 				}
 			});
-		 //检查语言类型
+			// #endif
+			//检查语言类型
 			var lan = 'zh'
 			try {
 				const res = uni.getSystemInfoSync();
