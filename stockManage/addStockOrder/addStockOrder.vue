@@ -78,7 +78,6 @@
 										<view class="cell-content">{{o.netContent}}</view>
 									</view>
 								</block>
-								
 							</view>
 
 							<view class="nums"><text>x</text><input maxlength="4" type="number"

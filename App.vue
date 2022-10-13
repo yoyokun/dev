@@ -27,7 +27,8 @@
 				// 存储到缓存
 				uni.setStorageSync('locale', 'en-US')
 			}
-		}
+		},
+		onBackPress() { this.$Router.back(); return false }
 	}
 </script>
 

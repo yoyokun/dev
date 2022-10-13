@@ -6,7 +6,7 @@
 	"id": "uview-ui",
 	"scripts": {
 		"test": "eslint . --fix",
-    "lint": "eslint --ext .js,.vue ./"
+		"lint": "eslint --ext .js,.vue ./"
 	},
 	"dependencies": {
 		"element-china-area-data": "^5.0.2",
