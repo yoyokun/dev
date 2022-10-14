@@ -218,26 +218,26 @@ module.exports = {
 	addBizOrder: {
 		titleText: '业务开单',
 		titleTextEdit: '编辑业务开单',
-		form:{
-			orgId:{
-				label:'业务组织',
-				placeholder:'请选择业务组织'
+		form: {
+			orgId: {
+				label: '业务组织',
+				placeholder: '请选择业务组织'
 			},
-			billTimeStr:{
-				label:'开单时间',
-				placeholder:'选择开单时间'
+			billTimeStr: {
+				label: '开单时间',
+				placeholder: '选择开单时间'
 			},
-			inOutReasonId:{
-				label:'出入库原因',
-				placeholder:'选择出入库原因'
+			inOutReasonId: {
+				label: '出入库原因',
+				placeholder: '选择出入库原因'
 			},
-			businessTypeId:{
-				label:'业务类型',
-				placeholder:'选择业务类型'
+			businessTypeId: {
+				label: '业务类型',
+				placeholder: '选择业务类型'
 			},
-			formType:{
-				label:'往来类型',
-				placeholder:'请选择往来类型',
+			formType: {
+				label: '往来类型',
+				placeholder: '请选择往来类型',
 				options: [{
 						name: '客户',
 						value: '1'
@@ -252,13 +252,13 @@ module.exports = {
 					}
 				],
 			},
-			customerName:{
-				label:'来源名称',
-				placeholder:'请选择来源名称',
+			customerName: {
+				label: '来源名称',
+				placeholder: '请选择来源名称',
 			},
-			linkBillNo:{
-				label:'关联单号',
-				placeholder:'请选择关联单号'
+			linkBillNo: {
+				label: '关联单号',
+				placeholder: '请选择关联单号'
 			}
 		},
 	},
@@ -328,6 +328,86 @@ module.exports = {
 				placeholder: ['开始时间', '结束时间']
 			},
 		},
+	},
+	bizOrderInfo: {
+		titleText: '业务单详情',
+		baseTle: '基础信息',
+		goodsTle: '商品信息',
+		deliveryTle: '运输信息',
+		discountTle: '订单折扣',
+		sourceTle: '溯源信息',
+		sendTle: '送达钢瓶',
+		recycleTle: '回收钢瓶',
+		tabs: [{
+			name: '基本信息',
+		}, {
+			name: '溯源信息',
+		}],
+		orgName: '业务组织',
+		billNo: '单号',
+		businessTypeName: '业务类型',
+		formType: '往来类型',
+		customerNo: '往来编号',
+		customerName: '往来名称',
+		checkState: '订单状态',
+		goodsTotalMoney: '订单金额',
+		payItemsMoney: '收费项金额',
+		couponTotalMoney: '优惠金额',
+		totalMoney: '应收金额',
+		creator: '开单人',
+		billTime: '开单时间',
+		totalMoney: '金额（元）',
+		totalWeight: '重量（KG）',
+		totalNum: '数量',
+		linkBillNo: '关联单号',
+		linkType: '单据类型',
+		remarks: '备注',
+		operator: '操作人',
+		operationTime: '操作时间',
+		pickMode: '运输方式',
+		bookingTime: '预约时间',
+		licenseNo: '车牌号',
+		deliverMan: '配送员/运输员',
+		address: '收货地址',
+		payItemsMoney: '物流费用',
+		payItemsName: '费用详细',
+		coupon: '优惠券号',
+		couponMoney: '优惠券金额',
+		integralValue: '抵扣积分',
+		integralMoney: '抵扣金额',
+		disCountMoney: '折扣金额',
+		disCountRate: '折扣率（%）',
+		couponTotalMoney: '合计优惠',
+		totalMoney: '成交金额（元）',
+		linkTypeTxt: {
+			order: '订单',
+			transfer: '调拨单',
+			purchase: '采购 '
+		},
+		checkStateTxt: {
+			1: '待提交',
+			2: '待审核',
+			3: '已审核',
+			4: '未通过',
+			5: '已作废'
+		},
+		formTypeTxt: {
+			1: '客户',
+			2: '供应商',
+			3: '组织 '
+		},
+		pickModeTxt: {
+			1: '自提',
+			2: '车辆自提',
+			3: '车辆配送'
+		},
+		btn:{
+			conf:'送达扫码'
+		},
+	},
+	// 扫码送达
+	scanSend:{
+		titleText:'扫码送达',
 	},
 	// 销售单列表
 	salesOrderList: {
@@ -750,14 +830,14 @@ module.exports = {
 		baseTle: '基础信息',
 		deliveryTle: '运输信息',
 		sourceTle: '钢瓶溯源',
-		state:'单据状态',
-		orgAddress:'组织地址',
-		inOrgName:'调入组织',
-		billTime:'开单时间',
-		totalWeight:'重量(KG)',
-		licenseNo:'车牌号',
-		deliverMan:'配送员/运输员',
-		address:'收货地址',
+		state: '单据状态',
+		orgAddress: '组织地址',
+		inOrgName: '调入组织',
+		billTime: '开单时间',
+		totalWeight: '重量(KG)',
+		licenseNo: '车牌号',
+		deliverMan: '配送员/运输员',
+		address: '收货地址',
 		btn: {
 			conf: '确定',
 			normal: '正常接收',

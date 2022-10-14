@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="info">
 		<view class="tab">
 			<u-tabs :scrollable="false" :list="tabSwitch" :current="current" @click="onTabSwitch" lineWidth="60"
 				lineColor="#2A82E4" :activeStyle="{
@@ -13,34 +13,44 @@
 		<view class="container" v-show="current==0">
 			<view class="customerBox">
 				<view class="title" @click="isShow = !isShow">
-					<text class="name">{{$t('salesMg.allotOrderInfo.baseTle')}}</text>
+					<text class="name">{{$t('salesMg.bizOrderInfo.baseTle')}}</text>
 					<u-icon v-if="isShow" name="arrow-down" color="#666666" size="18"></u-icon>
 					<u-icon v-else name="arrow-right" color="#666666" size="18"></u-icon>
 				</view>
 				<view class="content" v-show="isShow">
 					<description-list>
-						<description label="业务组织">{{ info.orgName }}</description>
-						<description label="单号">{{ info.billNo }}</description>
-						<description label="业务类型">{{ info.businessTypeName }}</description>
-						<description label="往来类型">{{ info.formType | formType }}</description>
-						<description label="往来编号">{{ info.customerNo }}</description>
-						<description label="往来名称">{{ info.customerName }}</description>
-						<description label="订单状态">{{ info.checkState | checkState }}</description>
-						<description label="订单金额">{{ info.goodsTotalMoney }}</description>
-						<description label="收费项金额">{{ info.payItemsMoney }}</description>
-						<description label="优惠金额">{{ info.couponTotalMoney }}</description>
-						<description label="应收金额">{{ info.totalMoney }}</description>
-						<description label="开单人">{{ info.creator }}</description>
-						<description label="开单时间">{{ info.billTime | dayjs }}</description>
-						<description label="金额（元）">{{ info.totalMoney }}</description>
-						<description label="重量">{{ info.totalWeight }}</description>
-						<description label="数量">{{ info.totalNum }}</description>
-						<description label="关联单号">{{ info.linkBillNo }}</description>
-						<description label="单据类型">{{ info.linkType | linkType }}</description>
-						<description label="打印">{{ info.printCount }}</description>
-						<description label="备注">{{ info.remarks }}</description>
-						<description label="操作人">{{ info.operator }}</description>
-						<description label="操作时间">{{ info.operationTime | dayjs }}</description>
+						<description :label="$t('salesMg.bizOrderInfo.orgName')">{{ info.orgName }}</description>
+						<description :label="$t('salesMg.bizOrderInfo.billNo')">{{ info.billNo }}</description>
+						<description :label="$t('salesMg.bizOrderInfo.businessTypeName')">{{ info.businessTypeName }}
+						</description>
+						<description :label="$t('salesMg.bizOrderInfo.formType')">{{ info.formType | formType }}
+						</description>
+						<description :label="$t('salesMg.bizOrderInfo.customerNo')">{{ info.customerNo }}</description>
+						<description :label="$t('salesMg.bizOrderInfo.customerName')">{{ info.customerName }}
+						</description>
+						<description :label="$t('salesMg.bizOrderInfo.checkState')">{{ info.checkState | checkState }}
+						</description>
+						<description :label="$t('salesMg.bizOrderInfo.goodsTotalMoney')">{{ info.goodsTotalMoney }}
+						</description>
+						<description :label="$t('salesMg.bizOrderInfo.payItemsMoney')">{{ info.payItemsMoney }}
+						</description>
+						<description :label="$t('salesMg.bizOrderInfo.couponTotalMoney')">{{ info.couponTotalMoney }}
+						</description>
+						<description :label="$t('salesMg.bizOrderInfo.totalMoney')">{{ info.totalMoney }}</description>
+						<description :label="$t('salesMg.bizOrderInfo.creator')">{{ info.creator }}</description>
+						<description :label="$t('salesMg.bizOrderInfo.billTime')">{{ info.billTime | dayjs }}
+						</description>
+						<description :label="$t('salesMg.bizOrderInfo.totalMoney')">{{ info.totalMoney }}</description>
+						<description :label="$t('salesMg.bizOrderInfo.totalWeight')">{{ info.totalWeight }}
+						</description>
+						<description :label="$t('salesMg.bizOrderInfo.totalNum')">{{ info.totalNum }}</description>
+						<description :label="$t('salesMg.bizOrderInfo.linkBillNo')">{{ info.linkBillNo }}</description>
+						<description :label="$t('salesMg.bizOrderInfo.linkType')">{{ info.linkType | linkType }}
+						</description>
+						<description :label="$t('salesMg.bizOrderInfo.remarks')">{{ info.remarks }}</description>
+						<description :label="$t('salesMg.bizOrderInfo.operator')">{{ info.operator }}</description>
+						<description :label="$t('salesMg.bizOrderInfo.operationTime')">{{ info.operationTime | dayjs }}
+						</description>
 					</description-list>
 				</view>
 			</view>
@@ -48,7 +58,7 @@
 			<view class="customerBox" style="padding: 0;">
 				<view class="title" @click="isShow1 = !isShow1"
 					:style="isShow1?'padding: 10rpx 20rpx 0 20rpx;':'padding:10rpx 20rpx 10rpx 20rpx;'">
-					<text class="name">{{$t('salesMg.allotOrderInfo.goodsTle')}}</text>
+					<text class="name">{{$t('salesMg.bizOrderInfo.goodsTle')}}</text>
 					<u-icon v-if="isShow1" name="arrow-down" color="#666666" size="18"></u-icon>
 					<u-icon v-else name="arrow-right" color="#666666" size="18"></u-icon>
 				</view>
@@ -56,6 +66,7 @@
 					<view class="goods-list" v-for="(item,index) in salesTransferDetailList" :key="item.ids">
 						<view class="goods-head">
 							<view class="goods-tle">{{item.goodsNo}} - {{item.goodsName}}</view>
+							<view class="goods-price">￥{{item.unitPrice}}</view>
 						</view>
 						<view class="attr-del">
 							<view class="attr">
@@ -88,25 +99,43 @@
 						</view>
 						<view class="info-cell">
 							<view class="cell">
-								<view class="cell-label">{{$t('salesMg.receiveAllotOrder.sku')}}：</view>
+								<view class="cell-label">{{$t('chooseGoods.standardName')}}：</view>
 								<view class="cell-content">{{item.standardName}}</view>
 							</view>
 							<view class="cell">
-								<view class="cell-label">{{$t('salesMg.receiveAllotOrder.unitsName')}}：</view>
+								<view class="cell-label">{{$t('chooseGoods.unitsName')}}：</view>
 								<view class="cell-content">{{item.unitsName}}</view>
 							</view>
+						</view>
+						<view class="info-cell">
 							<block v-for="val in tableColumn" :key="val.id">
 								<view class="cell"
 									v-if="val.supType === 'assistUnits' && val.propValue.includes('netContent')">
 									<view class="cell-label">{{val.labelName}}：</view>
-									<view class="cell-content">{{item[val.propValue]}}</view>
+									<!-- 显示 -->
+									<view class="cell-content" v-if="item.unitsType === 1">{{item[val.propValue]}}
+									</view>
+									<!-- 编辑 -->
+									<view class="cell-content" v-if="item.unitsType === 2">
+										<view class="nums">{{item[val.propValue]}}</view>
+									</view>
 								</view>
 							</block>
+							<view class="cell">
+								<view class="cell-label">{{$t('chooseGoods.amount')}}：</view>
+								<view class="cell-content">
+									<view class="nums">{{item.amount}}</view>
+								</view>
+							</view>
 						</view>
 						<view class="info-cell">
 							<view class="cell">
-								<view class="cell-label">{{$t('salesMg.receiveAllotOrder.amount')}}：</view>
-								<view class="cell-content">{{item.amount}}</view>
+								<view class="cell-label">{{$t('chooseGoods.settleAmount')}}：</view>
+								<view class="cell-content">{{item.settleAmount}}</view>
+							</view>
+							<view class="cell">
+								<view class="cell-label">{{$t('chooseGoods.totalMoney')}}：</view>
+								<view class="cell-content">{{item.totalMoney}}</view>
 							</view>
 						</view>
 						<view class="info-cell">
@@ -124,8 +153,12 @@
 						</view>
 						<view class="total-main">
 							<view class="item">
-								<text>{{$t('salesMg.receiveAllotOrder.amount')}}：</text>
-								<text>{{countNums(salesTransferDetailList)}}</text>
+								<text>{{$t('chooseGoods.amount')}}：</text>
+								<text>{{info.totalNum}}</text>
+							</view>
+							<view class="item">
+								<text>{{$t('chooseGoods.totalMoney')}}：</text>
+								<text class="red">{{info.goodsTotalMoney}}</text>
 							</view>
 						</view>
 					</view>
@@ -133,40 +166,56 @@
 			</view>
 			<view class="customerBox">
 				<view class="title" @click="isShow2 = !isShow2">
-					<text class="name">运输信息</text>
+					<text class="name">{{$t('salesMg.bizOrderInfo.deliveryTle')}}</text>
 					<u-icon v-if="isShow2" name="arrow-down" color="#666666" size="18"></u-icon>
 					<u-icon v-else name="arrow-right" color="#666666" size="18"></u-icon>
 				</view>
 				<view class="content" v-show="isShow2">
 					<description-list>
-						<description label="运输方式">{{ salesOrderTransport.pickMode | pickMode }}</description>
-						<description label="预约时间">
+						<description :label="$t('salesMg.bizOrderInfo.pickMode')">
+							{{ salesOrderTransport.pickMode | pickMode }}
+						</description>
+						<description :label="$t('salesMg.bizOrderInfo.bookingTime')">
 							{{ salesOrderTransport.bookingTime | dayjs }}
 						</description>
-						<description label="车牌号">{{ salesOrderTransport.licenseNo }}</description>
-						<description label="配送员/运输员">{{ salesOrderTransport.deliverMan }}</description>
-						<description label="收货地址">{{ salesOrderTransport | addressSplicing }}</description>
-						<description label="物流费用">{{ info.payItemsMoney }}</description>
-						<description label="费用详细">{{ info.payItemsName }}</description>
+						<description :label="$t('salesMg.bizOrderInfo.licenseNo')">{{ salesOrderTransport.licenseNo }}
+						</description>
+						<description :label="$t('salesMg.bizOrderInfo.deliverMan')">{{ salesOrderTransport.deliverMan }}
+						</description>
+						<description :label="$t('salesMg.bizOrderInfo.address')">
+							{{ salesOrderTransport | addressSplicing }}
+						</description>
+						<description :label="$t('salesMg.bizOrderInfo.payItemsMoney')">{{ info.payItemsMoney }}
+						</description>
+						<description :label="$t('salesMg.bizOrderInfo.payItemsName')">{{ info.payItemsName }}
+						</description>
 					</description-list>
 				</view>
 			</view>
 			<view class="customerBox">
 				<view class="title" @click="isShow3 = !isShow3">
-					<text class="name">订单折扣</text>
+					<text class="name">{{$t('salesMg.bizOrderInfo.discountTle')}}</text>
 					<u-icon v-if="isShow3" name="arrow-down" color="#666666" size="18"></u-icon>
 					<u-icon v-else name="arrow-right" color="#666666" size="18"></u-icon>
 				</view>
 				<view class="content" v-show="isShow3">
 					<description-list>
-						<description label="优惠券号">{{ info.coupon ? info.coupon.couponNo : '' }}</description>
-						<description label="优惠券金额">{{ info.couponMoney }}</description>
-						<description label="抵扣积分">{{ info.integralValue }}</description>
-						<description label="抵扣金额">{{ info.integralMoney }}</description>
-						<description label="折扣金额">{{ info.disCountMoney }}</description>
-						<description label="折扣率（%）">{{ info.disCountRate }}%</description>
-						<description label="合计优惠">{{ info.couponTotalMoney }}</description>
-						<description label="成交金额（元）">{{ info.totalMoney }}</description>
+						<description :label="$t('salesMg.bizOrderInfo.coupon')">
+							{{ info.coupon ? info.coupon.couponNo : '' }}
+						</description>
+						<description :label="$t('salesMg.bizOrderInfo.couponMoney')">{{ info.couponMoney }}
+						</description>
+						<description :label="$t('salesMg.bizOrderInfo.integralValue')">{{ info.integralValue }}
+						</description>
+						<description :label="$t('salesMg.bizOrderInfo.integralMoney')">{{ info.integralMoney }}
+						</description>
+						<description :label="$t('salesMg.bizOrderInfo.disCountMoney')">{{ info.disCountMoney }}
+						</description>
+						<description :label="$t('salesMg.bizOrderInfo.disCountRate')">{{ info.disCountRate }}%
+						</description>
+						<description :label="$t('salesMg.bizOrderInfo.couponTotalMoney')">{{ info.couponTotalMoney }}
+						</description>
+						<description :label="$t('salesMg.bizOrderInfo.totalMoney')">{{ info.totalMoney }}</description>
 					</description-list>
 				</view>
 			</view>
@@ -174,62 +223,75 @@
 		<view class="container" v-show="current==1">
 			<view class="customerBox">
 				<view class="title">
-					<text class="name">{{$t('salesMg.salesOrderInfo.sourceTle')}}</text>
+					<text class="name">{{$t('salesMg.bizOrderInfo.sourceTle')}}</text>
 				</view>
 				<view class="content">
-					<description-list v-if="editId" :title="$t('salesMg.salesOrderInfo.sendTle')">
+					<description-list v-if="editId" :title="$t('salesMg.bizOrderInfo.sendTle')">
 						<service-cylinder-info node-type="confirmDelivery" :link-id="editId" />
 					</description-list>
-					<description-list v-if="editId" :title="$t('salesMg.salesOrderInfo.recycleTle')">
+					<description-list v-if="editId" :title="$t('salesMg.bizOrderInfo.recycleTle')">
 						<service-cylinder-info node-type="recycleCylinder" :link-id="editId" />
 					</description-list>
 				</view>
 			</view>
 		</view>
+		<view class="btn">
+			<u-button v-permission="{ permission:'app_bizList_edit'}" v-if="info.checkState===1 || info.checkState===4" @click="goto('/salesManage/addBizOrder/addBizOrder',{editId: editId})" :text="$t('common.btn.edit')" type="primary" hairline shape="circle"></u-button>
+			<u-button v-permission="{ permission:'app_bizList_delete'}" v-if="info.checkState===1 || info.checkState===4 || info.checkState===5" @click="handleDelete(info)" :text="$t('common.btn.delete')" type="error" plain hairline shape="circle"></u-button>
+			<u-button v-permission="{ permission:'app_bizList_submit'}" v-if="info.checkState===1" @click="handleUpdate(info,2)" :text="$t('common.btn.submit')" type="success" plain hairline shape="circle"></u-button>
+			<u-button v-permission="{ permission:'app_bizList_revert'}" v-if="info.checkState===2" @click="handleUpdate(info,7)" :text="$t('common.btn.withdraw')" type="warning" plain hairline shape="circle"></u-button>
+			<u-button v-permission="{ permission:'app_bizList_invalid'}" v-if="info.checkState===3" @click="handleVoid(info)" :text="$t('common.btn.toVoid')" type="error" plain hairline shape="circle"></u-button>
+			<u-button v-permission="{ permission:'app_bizList_send'}" v-if="info.checkState===3 && cylinderScanSetting" @click="goto('/salesManage/scanSend/scanSend',{editId:editId,cylinderScanSetting:cylinderScanSetting,cylinderPattern:cylinderPattern})" :text="$t('salesMg.bizOrderInfo.btn.conf')" type="success" plain hairline shape="circle">
+			</u-button>
+		</view>
+
+		<!-- 作废 -->
+		<u-modal :show="showModal" :title="$t('common.descTle')" :closeOnClickOverlay="true" :showCancelButton="true"
+			@cancel="closeModal" @close="closeModal" @confirm="confVoid">
+			<view class="modal-main">
+				<view>{{$t('common.descTips')}}</view>
+				<u-textarea v-model="modalParams.value" maxlength="100" class="modal-text" confirmType="done"
+					:placeholder="$t('common.descPlaceholder')"></u-textarea>
+			</view>
+		</u-modal>
+		<!-- 请求 toast 提示 -->
+		<u-toast ref='uToast'></u-toast>
 	</view>
 </template>
 
 <script>
 	let that = null
 	import {
-		salesBusinessFindById
+		salesBusinessFindById,
+		salesBusinessToVoid,
+		salesBusinessDeleteByIds,
+		salesBusinessUpdateState
 	} from '@/api/lpgSalesManageApi'
+	import {
+		auditTaskRecallTaskByLinkId
+	} from '@/api/lpgManageAppApi'
+	import {
+		settingMixin
+	} from '@/common/settingMixin.js'
 	import ServiceCylinderInfo from '../../userCenter/auditInfo/common/serviceCylinderInfo'
 	export default {
+		mixins: [settingMixin],
 		// 过滤器
 		filters: {
 			linkType(value) {
-				const stateObj = {
-					order: '订单',
-					transfer: '调拨单',
-					purchase: '采购 '
-				}
+				const stateObj = that.$t('salesMg.bizOrderInfo.linkTypeTxt')
 				return stateObj[value] || ''
 			},
 			checkState(value) {
-				const stateObj = {
-					1: '待提交',
-					2: '待审核',
-					3: '已审核',
-					4: '未通过',
-					5: '已作废'
-				}
+				const stateObj = that.$t('salesMg.bizOrderInfo.checkStateTxt')
 				return stateObj[value] || ''
 			},
 			formType(value) {
-				const stateObj = {
-					1: '客户',
-					2: '供应商',
-					3: '组织 '
-				}
+				const stateObj = that.$t('salesMg.bizOrderInfo.formTypeTxt')
 				return stateObj[value] || ''
 			},
 			pickMode(value) {
-				const stateObj = {
-					1: '自提',
-					2: '车辆自提',
-					3: '车辆配送'
-				}
+				const stateObj = that.$t('salesMg.bizOrderInfo.pickModeTxt')
 				return stateObj[value] || ''
 			}
 		},
@@ -238,8 +300,10 @@
 		},
 		data() {
 			return {
+				showModal: false,
+				modalParams: {},
 				editId: '',
-				tabSwitch: this.$t('salesMg.allotOrderInfo.tabs'),
+				tabSwitch: this.$t('salesMg.bizOrderInfo.tabs'),
 				current: 0,
 				isShow: true,
 				isShow1: true,
@@ -249,13 +313,25 @@
 				info: {},
 				salesTransferDetailList: [],
 				salesOrderTransport: {},
-				// totalUnitCount: {},
+				cylinderScanSetting: false,
+				cylinderPattern: '',
 			}
 		},
 		async onLoad(options) {
 			that = this
 			uni.setNavigationBarTitle({
-				title: this.$t('业务单详情')
+				title: this.$t('salesMg.bizOrderInfo.titleText')
+			})
+			// 钢瓶溯源
+			await this.getConfigGetCylinder((res) => {
+				if (res[0] === '1') {
+					// 开启
+					this.cylinderScanSetting = true
+				} else {
+					this.cylinderScanSetting = false
+				}
+				// 模式
+				this.cylinderPattern = res[4]
 			})
 			this.editId = options.editId || ''
 			if (options.editId) {
@@ -263,21 +339,123 @@
 			}
 		},
 		onShow() {
-
+			if (this.editId) {
+				this.getInfo(this.editId)
+			}
 		},
 		methods: {
-			countNums(data, type = null) {
-				let nums = 0
-				let receiptNums = 0
-				data.forEach(i => {
-					nums += i.amount
-					receiptNums += i.receiptNum
-				})
-				if (type) {
-					return receiptNums
+			// 提交 撤回
+			handleUpdate(data, type) {
+				if (type == 7) {
+					uni.showModal({
+						title: this.$t('common.tipsTle')[0],
+						content: this.$t('common').backTxt(data.billNo),
+						success: async (res) => {
+							if (res.confirm) {
+								const {
+									returnValue: res,
+									message
+								} = await auditTaskRecallTaskByLinkId({
+									linkId: data.id
+								})
+								if (res) {
+									this.$refs.uToast.show({
+										type: 'success',
+										message: message,
+									})
+									this.getInfo(this.editId)
+								}
+							}
+						}
+					})
 				} else {
-					return nums
+					uni.showModal({
+						title: this.$t('common.tipsTle')[1],
+						content: this.$t('common').subTxt(data.billNo),
+						success: async (res) => {
+							if (res.confirm) {
+								const {
+									returnValue: res,
+									message
+								} = await salesBusinessUpdateState({
+									ids: [data.id],
+									state: type
+								})
+								if (res) {
+									this.$refs.uToast.show({
+										type: 'success',
+										message: message,
+									})
+									this.getInfo(this.editId)
+								}
+							}
+						}
+					})
 				}
+			},
+			// 删除
+			handleDelete(data) {
+				uni.showModal({
+					title: this.$t('common.tipsTle')[2],
+					content: this.$t('common').delTxt(data.billNo),
+					success: async (ret) => {
+						if (ret.confirm) {
+							const {
+								returnValue: res,
+								message
+							} = await salesBusinessDeleteByIds({
+								ids: [data.id]
+							})
+							if (res) {
+								this.$refs.uToast.show({
+									type: 'success',
+									message: message,
+								})
+								setTimeout(function() {
+									uni.navigateBack({
+										delta: 1
+									})
+								}, 1500)
+							}
+						}
+					},
+				})
+			},
+			// 作废
+			async confVoid() {
+				const remarks = this.modalParams.value && this.modalParams.value.replace(/\s*/g, "")
+				if (!remarks) {
+					this.$refs.uToast.show({
+						type: 'error',
+						message: this.$t('common.descPlaceholder'),
+					})
+					return
+				}
+				const {
+					returnValue: res,
+					message
+				} = await salesBusinessToVoid({
+					ids: [this.modalParams.voidData.id],
+					invalidRemarks: remarks || ''
+				}).catch(err => {
+					this.closeModal()
+				})
+				if (res) {
+					this.$refs.uToast.show({
+						type: 'success',
+						message: message,
+					})
+					this.getInfo(this.editId)
+				}
+				this.closeModal()
+			},
+			closeModal() {
+				this.showModal = false
+				this.modalParams = {}
+			},
+			handleVoid(data) {
+				this.showModal = true
+				this.modalParams.voidData = data
 			},
 			// 详情
 			async getInfo(id) {
@@ -342,7 +520,7 @@
 
 	.container {
 		padding: 48px 0;
-		padding-bottom: 60px;
+		padding-bottom: 0px;
 	}
 
 	.total {
@@ -576,6 +754,24 @@
 
 		::v-deep .u-upload__button {
 			margin: 0rpx;
+		}
+	}
+
+	.info {
+		.btn {
+			width: 100%;
+			padding: 60rpx 20rpx;
+			padding-top: 40rpx;
+			box-sizing: border-box;
+			@include flexMixin();
+			flex-wrap: wrap;
+			justify-content: center;
+
+			.u-button {
+				margin: 0rpx 10rpx;
+				width: calc(100% / 2 - 40rpx);
+				margin-top: 20rpx;
+			}
 		}
 	}
 </style>

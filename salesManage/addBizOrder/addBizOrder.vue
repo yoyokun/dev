@@ -232,7 +232,7 @@
 			this.editId = options.editId || ''
 			if (this.editId) {
 				uni.setNavigationBarTitle({
-					title: this.$t('stockMg.addStockOrder.titleTextEdit')
+					title: this.$t('salesMg.addBizOrder.titleTextEdit')
 				});
 				// await this.getInfo(this.editId)
 			} else {
@@ -368,7 +368,7 @@
 			async renderTransport(res) {
 				const salesOrderTransport = res.salesOrderTransport || {}
 				this.pickModeId = salesOrderTransport.id
-				this.pickMode = salesOrderTransport.pickMode // 提货方式（1 自提 ，3 车辆配送
+				this.pickMode = salesOrderTransport && salesOrderTransport.pickMode.toString() // 提货方式（1 自提 ，3 车辆配送
 				const addressObj = {}
 				addressObj.bookingTime = salesOrderTransport.bookingTime ? UnixToDate(salesOrderTransport.bookingTime) :
 					'' // 预约时间
@@ -412,7 +412,7 @@
 					this.formDataSource[2].show = true
 					let data = {}
 					data.orgId = res.orgId
-					data.billTimeStr = res.billTimeStr
+					data.billTimeStr = res.billTime ? UnixToDate(res.billTime) :  ''
 					data.inOutReasonId = res.inOutReasonId
 					data.businessTypeId = res.businessTypeId
 					data.formType = res.formType.toString()
@@ -709,7 +709,7 @@
 					const objDiscount = this.$refs.discount.getDiscount()
 					const payData = this.$refs.delivery.getPayData()
 					// 提交
-					data.billTimeStr = data.billTimeSt ? UnixToDate(data.billTimeStr) : ''
+					data.billTimeStr = data.billTimeStr ? UnixToDate(data.billTimeStr) : ''
 					data.id = this.editId || ''
 					data.linkId = this.linkId
 					data.linkType = this.linkTypes
@@ -732,7 +732,7 @@
 					// 折扣数据
 					data.disCountMoney = objDiscount.disCountMoney // 折扣金额
 					data.disCountRate = objDiscount.disCountRate // 折扣率
-					data.couponDetailId = objDiscount.couponDetailId // 优惠券id
+					data.couponDetailId = objDiscount.couponDetailId||'' // 优惠券id
 					data.integralValue = objDiscount.integralValue // 抵扣积分
 					data.integralMoney = objDiscount.integralMoney // 抵扣金额
 					// 订单信息

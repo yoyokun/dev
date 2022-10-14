@@ -931,3 +931,59 @@ export function salesTransferFindById(data = {}, message = '', custom = {}) {
 		}
 	})
 }
+// 业务单管理 退款单--作废
+export function salesBusinessToVoid(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/salesBusiness/toVoid',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 业务单管理 删除
+export function salesBusinessDeleteByIds(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/salesBusiness/deleteByIds',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 业务单管理 修改状态
+export function salesBusinessUpdateState(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/salesBusiness/updateState',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}
+// 业务单管理 扫码送达
+export function salesBusinessToScanCylinderCode(data = {}, message = '', custom = {}) {
+	return request({
+		url: baseURL + '/admin/sales/control/salesBusiness/toScanCylinderCode',
+		method: 'post',
+		data,
+		message,
+		custom: {
+			auth: custom?.auth || true, // 是否需要token
+			toast: custom?.toast || true, // 弹框
+			catch: custom?.catch || true // catch返回
+		}
+	})
+}

@@ -321,9 +321,9 @@
 			},
 			// 回填运输信息
 			async renderTransport(res) {
-				const salesOrderTransport = res.salesOrderTransport
+				const salesOrderTransport = res.salesOrderTransport || {}
 				this.pickModeId = salesOrderTransport.id
-				this.pickMode = salesOrderTransport.pickMode.toString() // 提货方式（1 自提 ，2 车辆自提 ，3 车辆配送 ，4 送气员配送
+				this.pickMode = salesOrderTransport && salesOrderTransport.pickMode.toString() // 提货方式（1 自提 ，2 车辆自提 ，3 车辆配送 ，4 送气员配送
 				const addressObj = {}
 				addressObj.province = salesOrderTransport.province
 				addressObj.city = salesOrderTransport.city
@@ -767,7 +767,7 @@
 					this.getAllShop()
 					// 获取折扣
 					const objDiscount = this.$refs.discount.getDiscount()
-					if (payData.data.pickMode === 4 && !payData.data.deliverManId) {
+					if (payData.data.pickMode == 4 && !payData.data.deliverManId) {
 						this.$refs.uToast.show({
 							type: 'error',
 							message: this.$t('salesMg.common.message')[1],

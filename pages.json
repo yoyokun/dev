@@ -706,6 +706,13 @@
 					}	
 				},
 				{
+					"path" : "scanSend/scanSend",
+					"style" : {
+						"navigationBarTitleText": "扫码送达",
+						"enablePullDownRefresh": false
+					}	
+				},
+				{
 					"path" : "receiveAllotOrder/receiveAllotOrder",
 					"style" : {
 						"navigationBarTitleText": "调拨接收",
