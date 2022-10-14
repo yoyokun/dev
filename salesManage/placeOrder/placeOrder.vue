@@ -2,8 +2,7 @@
 	<view class="sk-info">
 		<view class="form">
 			<edit-form ref="dialogForm" labelWidth="100" classForm="normalForm" :form-data-source="formDataSource"
-				:form-data-value="formDataValue" @change="changeForm" @chooseAddress="chooseAddress"
-				@chooseCustomer="chooseCustomer">
+				:form-data-value="formDataValue" @change="changeForm" @chooseCustomer="chooseCustomer">
 			</edit-form>
 		</view>
 		<view v-if="chooseTempalte.length">

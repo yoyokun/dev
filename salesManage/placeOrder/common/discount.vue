@@ -60,7 +60,7 @@
 				</view>
 				<view class="item">
 					<view class="content dfee">
-						<view class="fee-item" :class="isUse?'on':''" @click="!isSettle&&usePoint">
+						<view class="fee-item" :class="isUse?'on':''" @click="!isSettle&&usePoint($event)">
 							<u-icon size="32rpx" class="fee-check" name="checkmark-circle-fill"></u-icon>
 							<view class="fee-label">{{$t('salesMg.discount.integralValue')}}</view>
 							<input @click.stop :disabled="isSettle" v-if="isUse" class="fee-input" type="number"

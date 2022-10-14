@@ -346,18 +346,24 @@
 				this.addressObj = addressObj
 			},
 			// 回填商品数据
-			renderShop(res) {
+			async renderShop(res) {
 				const salesOrderDetailList = res.salesOrderDetailList
-				const templateData = this.templateObj
 				// 选中模板
 				let chooseTempalte = []
 				salesOrderDetailList.forEach((v) => {
-					if (this.chooseTempalte.indexOf(v.orderTemplateId) > -1) {
+					// if (this.chooseTempalte.indexOf(v.orderTemplateId) > -1) {
 						// 添加已经有的商品模板
 						chooseTempalte.push(v.orderTemplateId)
-					}
+					// }
 				})
 				chooseTempalte = [...new Set(chooseTempalte)]
+				for(const key of chooseTempalte) {
+					if(!this.templateObj[key]) {
+						// 查询模板详情
+						await this.getTemplateDetail(key)
+					}
+				}
+				const templateData = this.templateObj
 				// 选中的模板
 				this.chooseTempalte = chooseTempalte
 				this.formDataValue = {

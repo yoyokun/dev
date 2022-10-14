@@ -57,7 +57,7 @@
 				</view>
 				<view class="item" v-if="pickMode != 1">
 					<view class="label">{{$t('salesMg.delivery.address')}}：</view>
-					<view class="content" @click="!isSettle&&chooseAddress">
+					<view class="content" @click="!isSettle&&chooseAddress()">
 						<input class="input" :placeholder="$t('salesMg.delivery.addressPlaceholder')" type="text" disabled v-if="!address" />
 						<view class="choose-address" v-else>{{ address }}</view>
 						<u-icon name="arrow-right" v-if="type=='sales'"></u-icon>
@@ -71,7 +71,7 @@
 							<u-icon size="32rpx" class="fee-check" name="checkmark-circle-fill"></u-icon>
 							<view class="fee-label">{{ item.itemName }}</view>
 							<block v-if="item.chargeMode == 2">
-								<view class="fee-flr" v-show="item.check" @click.stop="chooseItem('floorFee',index)">
+								<view class="fee-flr" v-show="item.check" @click.stop="!isSettle&&chooseItem('floorFee',index)">
 									<view class="flr">{{item.floor}}{{$t('salesMg.delivery.floor')}}</view>
 									<u-icon size="32rpx" class="" name="arrow-down"></u-icon>
 								</view>

@@ -18,7 +18,7 @@
 				:leftIcon="item.lIcon"
 				>
 				<!--文本框-->
-				<view class="chooseBtnText" v-if="item.type === 'chooseBtn'" @click.native="chooseChange(item)">
+				<view class="chooseBtnText" @click="chooseChange(item)" v-if="item.type === 'chooseBtn'">
 					<u--textarea
 						v-model="formData[item.fieldName]" 
 						:disabled="true"

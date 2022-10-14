@@ -25,9 +25,7 @@
 							<view class="tle">{{item.labelText}}</view>
 							<view class="cell-box">
 								<view class="item"
-									:class="(params[item.fieldName]==val.value)||(typeof params[item.fieldName] == 'object'&&params[item.fieldName].indexOf(val.value) > -1)?'on':''"
-									v-for="(val,key) in item.options" :key="key"
-									@click="selectItem(val.value,item.fieldName,item.multiple)">{{val.name}}</view>
+									:class="(params[item.fieldName]==val.value)||(typeof params[item.fieldName] == 'object'&&params[item.fieldName].indexOf(val.value) > -1)?'on':''" v-for="(val,key) in item.options" :key="key" @click="selectItem(val.value,item.fieldName,item.multiple)">{{val.name}}</view>
 							</view>
 						</view>
 						<!-- 日期时间选择 -->

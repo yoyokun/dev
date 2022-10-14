@@ -2,7 +2,7 @@
 	<view class="list">
 		<view class="list-head">
 			<view class="head-tle">{{templateDataObj.templateName}}</view>
-			<view class="act-btn" @click="chooseGoods">
+			<view class="act-btn" v-if="!isSettle" @click="chooseGoods()">
 				<u-icon class="add-icon" name="plus-circle"></u-icon>
 				<view class="add-txt">{{$t('chooseGoods.addShop')}}</view>
 			</view>
@@ -47,14 +47,14 @@
 							:checked="item.checked" 
 							@change="onChangePriceTag(index, item)"></u-checkbox>
 					</u-checkbox-group>
-					<u-icon class="remove-goods" name="minus-circle-fill" @click="removeOrderGoods(index)">
+					<u-icon v-if="!isSettle" class="remove-goods" name="minus-circle-fill" @click="removeOrderGoods(index)">
 					</u-icon>
 				</view>
 				<view class="info-cell">
 					<view class="cell">
 						<view class="cell-label">{{$t('chooseGoods.standardName')}}：</view>
 						<view class="cell-content" v-if="item.unitsType === 1">{{item.standardName}}</view>
-						<view class="cell-content" v-if="item.unitsType === 2" @click="chooseSku(item, index)">
+						<view class="cell-content" v-if="item.unitsType === 2" @click="!isSettle&&chooseSku(item, index)">
 							<text>{{item.standardName}}</text>
 							<u-icon class="arrow-right" name="arrow-right"></u-icon>
 						</view>
@@ -73,7 +73,7 @@
 							<!-- 编辑 -->
 							<view class="cell-content" v-if="item.unitsType === 2">
 								<view class="nums">
-									<input v-model="item[val.propValue]" :placeholder="val.labelName"
+									<input :disabled="isSettle" v-model="item[val.propValue]" :placeholder="val.labelName"
 										@input="validateInput(index,item,val.propValue)" />
 								</view>
 							</view>
@@ -83,7 +83,7 @@
 						<view class="cell-label">{{$t('chooseGoods.amount')}}：</view>
 						<view class="cell-content">
 							<view class="nums">
-								<input min="1" maxlength="4" type="number" v-model="item.amount"
+								<input min="1" :disabled="isSettle" maxlength="4" type="number" v-model="item.amount"
 									:placeholder="$t('chooseGoods.amount')" step="1"
 									@input="validateInput(index,item,'amount')" />
 							</view>
@@ -104,7 +104,7 @@
 					<view class="cell remarks">
 						<view class="cell-label">{{$t('chooseGoods.remarks')}}：</view>
 						<view class="cell-content">
-							<textarea v-model="item.remarks" :placeholder="$t('chooseGoods.remarksPlace')"></textarea>
+							<textarea :disabled="isSettle" v-model="item.remarks" :placeholder="$t('chooseGoods.remarksPlace')"></textarea>
 						</view>
 					</view>
 				</view>
