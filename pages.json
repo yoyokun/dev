@@ -699,6 +699,13 @@
 					}	
 				},
 				{
+					"path" : "bizOrderInfo/bizOrderInfo",
+					"style" : {
+						"navigationBarTitleText": "业务开单",
+						"enablePullDownRefresh": false
+					}	
+				},
+				{
 					"path" : "receiveAllotOrder/receiveAllotOrder",
 					"style" : {
 						"navigationBarTitleText": "调拨接收",

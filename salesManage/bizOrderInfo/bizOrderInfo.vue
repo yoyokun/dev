@@ -19,55 +19,40 @@
 				</view>
 				<view class="content" v-show="isShow">
 					<description-list>
-						<description :label="$t('salesMg.allotOrderInfo.billNo')">{{ info.billNo }}</description>
-						<description :label="$t('salesMg.allotOrderInfo.state')">{{ info.state | state }}</description>
-						<description :label="$t('salesMg.allotOrderInfo.outOrgName')">{{ info.outOrgName }}
-						</description>
-						<description :label="$t('salesMg.allotOrderInfo.outName')">
-							{{ info.outName }}{{ info.outType == 1 ? $t('salesMg.allotOrderInfo.in') : $t('salesMg.allotOrderInfo.out') }}
-						</description>
-						<description :label="$t('salesMg.allotOrderInfo.outOrgAddress')">{{ info.outOrgAddress }}
-						</description>
-						<description :label="$t('salesMg.allotOrderInfo.inOrgName')">{{ info.inOrgName }}</description>
-						<description v-if="info.inName" :label="$t('salesMg.allotOrderInfo.inName')">
-							{{ info.inName }}{{ info.inType == 1 ? $t('salesMg.allotOrderInfo.in') : $t('salesMg.allotOrderInfo.out') }}
-						</description>
-						<description :label="$t('salesMg.allotOrderInfo.inOrgAddress')">{{ info.inOrgAddress }}
-						</description>
-						<description :label="$t('salesMg.allotOrderInfo.creator')">{{ info.creator }}</description>
-						<description :label="$t('salesMg.allotOrderInfo.operationTime')">{{ info.operationTime|dayjs }}
-						</description>
-						<description :label="$t('salesMg.allotOrderInfo.billTime')">{{ info.billTime|dayjs}}
-						</description>
-						<description :label="$t('salesMg.allotOrderInfo.totalNum')">{{ info.totalNum }}</description>
-						<description :label="$t('salesMg.allotOrderInfo.totalWeight')">{{ info.totalWeight }}
-						</description>
-						<description :label="$t('salesMg.allotOrderInfo.remarks')">{{ info.remarks }}</description>
+						<description label="业务组织">{{ info.orgName }}</description>
+						<description label="单号">{{ info.billNo }}</description>
+						<description label="业务类型">{{ info.businessTypeName }}</description>
+						<description label="往来类型">{{ info.formType | formType }}</description>
+						<description label="往来编号">{{ info.customerNo }}</description>
+						<description label="往来名称">{{ info.customerName }}</description>
+						<description label="订单状态">{{ info.checkState | checkState }}</description>
+						<description label="订单金额">{{ info.goodsTotalMoney }}</description>
+						<description label="收费项金额">{{ info.payItemsMoney }}</description>
+						<description label="优惠金额">{{ info.couponTotalMoney }}</description>
+						<description label="应收金额">{{ info.totalMoney }}</description>
+						<description label="开单人">{{ info.creator }}</description>
+						<description label="开单时间">{{ info.billTime | dayjs }}</description>
+						<description label="金额（元）">{{ info.totalMoney }}</description>
+						<description label="重量">{{ info.totalWeight }}</description>
+						<description label="数量">{{ info.totalNum }}</description>
+						<description label="关联单号">{{ info.linkBillNo }}</description>
+						<description label="单据类型">{{ info.linkType | linkType }}</description>
+						<description label="打印">{{ info.printCount }}</description>
+						<description label="备注">{{ info.remarks }}</description>
+						<description label="操作人">{{ info.operator }}</description>
+						<description label="操作时间">{{ info.operationTime | dayjs }}</description>
 					</description-list>
 				</view>
 			</view>
-			<view class="customerBox">
-				<view class="title" @click="isShow1 = !isShow1">
-					<text class="name">{{$t('salesMg.allotOrderInfo.payTle')}}</text>
+
+			<view class="customerBox" style="padding: 0;">
+				<view class="title" @click="isShow1 = !isShow1"
+					:style="isShow1?'padding: 10rpx 20rpx 0 20rpx;':'padding:10rpx 20rpx 10rpx 20rpx;'">
+					<text class="name">{{$t('salesMg.allotOrderInfo.goodsTle')}}</text>
 					<u-icon v-if="isShow1" name="arrow-down" color="#666666" size="18"></u-icon>
 					<u-icon v-else name="arrow-right" color="#666666" size="18"></u-icon>
 				</view>
 				<view class="content" v-show="isShow1">
-					<description-list>
-						<description :label="$t('salesMg.allotOrderInfo.payTypeName')">{{ info.payTypeName }}
-						</description>
-						<description :label="$t('salesMg.allotOrderInfo.backTotalMoney')">{{ info.backTotalMoney }}
-						</description>
-					</description-list>
-				</view>
-			</view>
-			<view class="customerBox" style="padding: 0;">
-				<view class="title" @click="isShow2 = !isShow2" :style="isShow2?'padding: 10rpx 20rpx 0 20rpx;':'padding:10rpx 20rpx 10rpx 20rpx;'">
-					<text class="name">{{$t('salesMg.allotOrderInfo.goodsTle')}}</text>
-					<u-icon v-if="isShow2" name="arrow-down" color="#666666" size="18"></u-icon>
-					<u-icon v-else name="arrow-right" color="#666666" size="18"></u-icon>
-				</view>
-				<view class="content" v-show="isShow2">
 					<view class="goods-list" v-for="(item,index) in salesTransferDetailList" :key="item.ids">
 						<view class="goods-head">
 							<view class="goods-tle">{{item.goodsNo}} - {{item.goodsName}}</view>
@@ -123,16 +108,12 @@
 								<view class="cell-label">{{$t('salesMg.receiveAllotOrder.amount')}}：</view>
 								<view class="cell-content">{{item.amount}}</view>
 							</view>
-							<view class="cell">
-								<view class="cell-label">{{$t('salesMg.receiveAllotOrder.receiptNum')}}：</view>
-								<view class="cell-content">{{item.receiptNum}}</view>
-							</view>
 						</view>
 						<view class="info-cell">
 							<view class="cell remarks">
 								<view class="cell-label">{{$t('chooseGoods.remarks')}}：</view>
 								<view class="cell-content">
-									<textarea disabled v-model="item.remarks" ></textarea>
+									<textarea disabled v-model="item.remarks"></textarea>
 								</view>
 							</view>
 						</view>
@@ -142,41 +123,50 @@
 							<text>{{$t('chooseGoods.total')}}：</text>
 						</view>
 						<view class="total-main">
-							<!-- <view class="item" v-for="(item,index) in totalUnitCount" :key="index">
-								<text>{{index}}：</text>
-								<text>{{item}}</text>
-							</view> -->
 							<view class="item">
 								<text>{{$t('salesMg.receiveAllotOrder.amount')}}：</text>
 								<text>{{countNums(salesTransferDetailList)}}</text>
-							</view>
-							<view class="item">
-								<text>{{$t('salesMg.receiveAllotOrder.receiptNum')}}：</text>
-								<text>{{countNums(salesTransferDetailList,1)}}</text>
 							</view>
 						</view>
 					</view>
 				</view>
 			</view>
 			<view class="customerBox">
+				<view class="title" @click="isShow2 = !isShow2">
+					<text class="name">运输信息</text>
+					<u-icon v-if="isShow2" name="arrow-down" color="#666666" size="18"></u-icon>
+					<u-icon v-else name="arrow-right" color="#666666" size="18"></u-icon>
+				</view>
+				<view class="content" v-show="isShow2">
+					<description-list>
+						<description label="运输方式">{{ salesOrderTransport.pickMode | pickMode }}</description>
+						<description label="预约时间">
+							{{ salesOrderTransport.bookingTime | dayjs }}
+						</description>
+						<description label="车牌号">{{ salesOrderTransport.licenseNo }}</description>
+						<description label="配送员/运输员">{{ salesOrderTransport.deliverMan }}</description>
+						<description label="收货地址">{{ salesOrderTransport | addressSplicing }}</description>
+						<description label="物流费用">{{ info.payItemsMoney }}</description>
+						<description label="费用详细">{{ info.payItemsName }}</description>
+					</description-list>
+				</view>
+			</view>
+			<view class="customerBox">
 				<view class="title" @click="isShow3 = !isShow3">
-					<text class="name">{{$t('salesMg.allotOrderInfo.deliveryTle')}}</text>
+					<text class="name">订单折扣</text>
 					<u-icon v-if="isShow3" name="arrow-down" color="#666666" size="18"></u-icon>
 					<u-icon v-else name="arrow-right" color="#666666" size="18"></u-icon>
 				</view>
 				<view class="content" v-show="isShow3">
 					<description-list>
-						<description :label="$t('salesMg.allotOrderInfo.pickMode')">
-							{{ salesOrderTransport.pickMode | pickMode }}</description>
-						<description :label="$t('salesMg.allotOrderInfo.bookingTime')">
-							{{ salesOrderTransport.bookingTime | dayjs}}
-						</description>
-						<description :label="$t('salesMg.allotOrderInfo.licenseNo')">{{ salesOrderTransport.licenseNo }}
-						</description>
-						<description :label="$t('salesMg.allotOrderInfo.deliverMan')">
-							{{ salesOrderTransport.deliverMan }}</description>
-						<description :label="$t('salesMg.allotOrderInfo.address')" col="24">
-							{{ salesOrderTransport | addressSplicing }}</description>
+						<description label="优惠券号">{{ info.coupon ? info.coupon.couponNo : '' }}</description>
+						<description label="优惠券金额">{{ info.couponMoney }}</description>
+						<description label="抵扣积分">{{ info.integralValue }}</description>
+						<description label="抵扣金额">{{ info.integralMoney }}</description>
+						<description label="折扣金额">{{ info.disCountMoney }}</description>
+						<description label="折扣率（%）">{{ info.disCountRate }}%</description>
+						<description label="合计优惠">{{ info.couponTotalMoney }}</description>
+						<description label="成交金额（元）">{{ info.totalMoney }}</description>
 					</description-list>
 				</view>
 			</view>
@@ -184,11 +174,14 @@
 		<view class="container" v-show="current==1">
 			<view class="customerBox">
 				<view class="title">
-					<text class="name">{{$t('salesMg.allotOrderInfo.sourceTle')}}</text>
+					<text class="name">{{$t('salesMg.salesOrderInfo.sourceTle')}}</text>
 				</view>
 				<view class="content">
-					<description-list v-if="editId">
-						<service-cylinder-info node-type="transferReceive" :link-id="editId" />
+					<description-list v-if="editId" :title="$t('salesMg.salesOrderInfo.sendTle')">
+						<service-cylinder-info node-type="confirmDelivery" :link-id="editId" />
+					</description-list>
+					<description-list v-if="editId" :title="$t('salesMg.salesOrderInfo.recycleTle')">
+						<service-cylinder-info node-type="recycleCylinder" :link-id="editId" />
 					</description-list>
 				</view>
 			</view>
@@ -199,18 +192,44 @@
 <script>
 	let that = null
 	import {
-		salesTransferFindById
+		salesBusinessFindById
 	} from '@/api/lpgSalesManageApi'
 	import ServiceCylinderInfo from '../../userCenter/auditInfo/common/serviceCylinderInfo'
 	export default {
 		// 过滤器
 		filters: {
-			state(value) {
-				const stateObj = that.$t('salesMg.allotOrderInfo.stateTxt')
+			linkType(value) {
+				const stateObj = {
+					order: '订单',
+					transfer: '调拨单',
+					purchase: '采购 '
+				}
+				return stateObj[value] || ''
+			},
+			checkState(value) {
+				const stateObj = {
+					1: '待提交',
+					2: '待审核',
+					3: '已审核',
+					4: '未通过',
+					5: '已作废'
+				}
+				return stateObj[value] || ''
+			},
+			formType(value) {
+				const stateObj = {
+					1: '客户',
+					2: '供应商',
+					3: '组织 '
+				}
 				return stateObj[value] || ''
 			},
 			pickMode(value) {
-				const stateObj = that.$t('salesMg.allotOrderInfo.pickModeTxt')
+				const stateObj = {
+					1: '自提',
+					2: '车辆自提',
+					3: '车辆配送'
+				}
 				return stateObj[value] || ''
 			}
 		},
@@ -236,7 +255,7 @@
 		async onLoad(options) {
 			that = this
 			uni.setNavigationBarTitle({
-				title: this.$t('salesMg.allotOrderInfo.titleText')
+				title: this.$t('业务单详情')
 			})
 			this.editId = options.editId || ''
 			if (options.editId) {
@@ -264,42 +283,34 @@
 			async getInfo(id) {
 				const {
 					returnValue: res
-				} = await salesTransferFindById({
+				} = await salesBusinessFindById({
 					id
 				})
 				if (res) {
-					const payTypeName = []
-					res.salesOrderPayDetailList.forEach((v) => {
-						payTypeName.push(`${v.collectionTypeName}:${v.payMoney}`)
+					const payItemsName = []
+					// 收费项
+					res.salesOrderPayitemsList.forEach((v) => {
+						payItemsName.push(`${v.payItemsName}:${v.payItemsMoney},共${v.payItemsTotalMoney} `)
 					})
-					res.payTypeName = payTypeName.join(',')
+					res.payItemsName = payItemsName.join(',')
 					this.info = res
 					this.tableColumn = res.printSetVo.tableColumn
-					// let totalUnitCount = {}
-					res.salesTransferDetailList.forEach(v => {
+					res.salesBusinessDetailList.forEach(v => {
 						v.goodsPath = this.$options.filters.pictureJson(v.goodsPath)
 						v.assistUnitsList.forEach((n, j) => {
 							this.tableColumn.forEach(m => {
-								if (m.propValue == 'assistName-' + n.assistUnitsId) {
-									// let ele = totalUnitCount[m
-									// 	.labelName] || 0
-									// ele += parseFloat(n.netContent)
-									// totalUnitCount[m.labelName] = ele
+								if (m.propValue === 'assistName-' + n.assistUnitsId) {
 									v[m.propValue] = n.netContent
 								}
-								if (m.propValue == 'netContent-' + n.assistUnitsId) {
-									// let ele = totalUnitCount[m
-									// 	.labelName] || 0
-									// ele += parseFloat(n.netContent)
-									// totalUnitCount[m.labelName] = ele
+								if (m.propValue === 'netContent-' + n.assistUnitsId) {
 									v[m.propValue] = n.netContent
 								}
 							})
 						})
 					})
-					// this.totalUnitCount = totalUnitCount
-					this.salesTransferDetailList = res.salesTransferDetailList
-					this.salesOrderTransport = res.salesOrderTransport
+					this.salesTransferDetailList = res.salesBusinessDetailList
+					this.salesOrderTransport = res.salesOrderTransport || {}
+					this.salesOrderPayitemsList = res.salesOrderPayitemsList
 				}
 			},
 			// 切换
@@ -382,6 +393,7 @@
 		box-sizing: border-box;
 		margin: 20rpx 20rpx 10rpx 20rpx;
 		overflow: hidden;
+
 		.title {
 			@include flexMixin();
 			padding: 0rpx 10rpx;

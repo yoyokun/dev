@@ -295,7 +295,8 @@ page{
 			font-weight: 400;
 			padding: 8rpx 24rpx;
 			border-radius: 200rpx;
-			width: 140rpx;
+			// width: 140rpx;
+			width: fit-content;
 			box-sizing: border-box;
 		}
 	}

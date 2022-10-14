@@ -1,15 +1,12 @@
 <template>
 	<view class="sk-info">
 		<view class="form">
-			<edit-form ref="dialogForm" labelWidth="80" classForm="normalForm" :form-data-source="formDataSource"
-				:form-data-value="formDataValue" @change="changeForm" @chooseBill="chooseBill"
+			<edit-form ref="dialogForm" labelWidth="80" classForm="normalForm" :form-data-source="formDataSource" :form-data-value="formDataValue" @change="changeForm" @chooseBill="chooseBill"
 				@chooseCustomer="chooseCustomer">
 			</edit-form>
 		</view>
 		<view v-if="chooseTempalte.length">
-			<sales-billing v-for="item in chooseTempalte" :id="item" :ref="`billTable-${item}`" :key="item"
-				:template-data="templateObj[item]" :sysSpecificationClassifyData="sysSpecificationClassifyData"
-				:customer-id="customerId" @changeTable="changeTable" @click.native="getTempKey(item)" />
+			<sales-billing v-for="item in chooseTempalte" :id="item" :ref="`billTable-${item}`" :key="item" :template-data="templateObj[item]" :sysSpecificationClassifyData="sysSpecificationClassifyData" :customer-id="customerId" @changeTable="changeTable" @click.native="getTempKey(item)" />
 		</view>
 		<!-- ====运输信息==== -->
 		<delivery ref="delivery" type="biz" :pick-modes="pickMode" :addressObj="addressObj" @change="changeDelivery"
