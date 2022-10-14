@@ -118,43 +118,43 @@ export default {
 			tableColumn: [
 				{
 					prop: 'goodsNo',
-					label: '商品编码'
+					label: this.$t('security.rectificationInfo.tableColumn.goodsNo')
 				},
 				{
 					prop: 'goodsName',
-					label: '商品名称'
+					label: this.$t('security.rectificationInfo.tableColumn.goodsName')
 				},
 				{
 					prop: 'standardName',
-					label: '规格'
+					label: this.$t('security.rectificationInfo.tableColumn.standardName')
 				},
 				{
 					prop: 'propertyNames',
-					label: '属性参数'
+					label: this.$t('security.rectificationInfo.tableColumn.propertyNames')
 				},
 				{
 					prop: 'unitsName',
-					label: '单位'
+					label: this.$t('security.rectificationInfo.tableColumn.unitsName')
 				},
 				{
 					prop: 'amount',
-					label: '数量'
+					label: this.$t('security.rectificationInfo.tableColumn.amount')
 				},
 				{
 					prop: 'weight',
-					label: '重量'
+					label: this.$t('security.rectificationInfo.tableColumn.weight')
 				},
 				{
 					prop: 'unitPrice',
-					label: '单价'
+					label: this.$t('security.rectificationInfo.tableColumn.unitPrice')
 				},
 				{
 					prop: 'totalMoney',
-					label: '金额'
+					label: this.$t('security.rectificationInfo.tableColumn.totalMoney')
 				},
 				{
 					prop: 'remarks',
-					label: '备注'
+					label: this.$t('security.rectificationInfo.tableColumn.remarks')
 				}
 			],
 			tableData: [],

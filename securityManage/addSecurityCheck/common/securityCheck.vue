@@ -98,7 +98,7 @@
 						@afterRead="afterRead"
 						@delete="deletePic($event,disabled)"
 						:name="item.id"
-						:maxCount="disabled ? item.resultData : item.limit"
+						:maxCount="disabled ? item.resultData.length : item.limit"
 					></u-upload>
 				</view>
 			</view>
